@@ -13,7 +13,13 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->statefulApi();
+        $middleware->api(prepend: [
+            \App\Http\Middleware\ForceJsonResponse::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        // API routes always answer in JSON (401 instead of a missing "login" route).
+        $exceptions->shouldRenderJsonWhen(function ($request) {
+            return $request->is('api/*') || $request->expectsJson();
+        });
     })->create();
