@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Frozen Accounts | Admin</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen" data-page="adminFrozenList">
+
+<aside class="w-64 bg-slate-950 text-slate-400 flex flex-col shrink-0 border-r border-slate-800 fixed h-screen">
+    <div class="p-6 border-b border-slate-800/50">
+        <div class="text-2xl font-bold tracking-tight text-white">
+            Conch<span class="text-[#10B981]">Capital</span>
+        </div>
+        <p class="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500 mt-1">Admin Portal</p>
+    </div>
+    <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+        <a href="#" data-route="adminDashboard" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-chart-pie text-sm"></i>
+            <span class="text-sm font-medium">Overview</span>
+        </a>
+        <a href="#" data-route="adminUsers" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-users-gear text-sm"></i>
+            <span class="text-sm font-medium">User Management</span>
+        </a>
+        <a href="#" data-route="adminTransactions" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-file-invoice-dollar text-sm"></i>
+            <span class="text-sm font-medium">Transactions</span>
+        </a>
+        <a href="#" data-route="adminCredits" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-money-bill-transfer text-sm"></i>
+            <span class="text-sm font-medium">Credits</span>
+        </a>
+        <a href="#" data-route="adminFrozenList" class="flex items-center space-x-3 p-3 bg-slate-900 text-white rounded-xl transition">
+            <i class="fa-solid fa-snowflake text-sm"></i>
+            <span class="text-sm font-medium">Freezes</span>
+        </a>
+        <div class="pt-4 mt-4 border-t border-slate-800/50">
+            <a href="#" data-route="adminSettings" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+                <i class="fa-solid fa-gear text-sm"></i>
+                <span class="text-sm font-medium">Settings</span>
+            </a>
+        </div>
+    </nav>
+</aside>
+
+<main class="ml-64 flex-1 p-8">
+    
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+            <h1 class="text-3xl font-extrabold text-slate-900 mb-2">Frozen Accounts</h1>
+            <p class="text-slate-500">Manage and review all frozen user accounts</p>
+        </div>
+    </div>
+
+    <!-- Search and Export -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 mb-6">
+        <div class="flex flex-col md:flex-row gap-4">
+            <div class="flex-1 relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+                <input 
+                    type="text" 
+                    placeholder="Search by username, email, or freeze reason..."
+                    class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-slate-800 focus:border-slate-800 outline-none"
+                    id="searchInput"
+                >
+            </div>
+            <button class="px-6 py-3 bg-white border-2 border-gray-200 text-slate-600 rounded-xl font-bold hover:bg-gray-50 transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-file-csv"></i> Export CSV
+            </button>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-6">
+        <h3 class="text-sm font-bold text-slate-700 uppercase tracking-widest mb-4">Filters</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Freeze Type Filter -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Freeze Type</label>
+                <select class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-slate-800 outline-none text-sm">
+                    <option>All Types</option>
+                    <option>Full Freeze</option>
+                    <option>Partial Freeze</option>
+                </select>
+            </div>
+            
+            <!-- Reason Filter -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Reason</label>
+                <select class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-slate-800 outline-none text-sm">
+                    <option>All Reasons</option>
+                    <option>Suspicious Activity</option>
+                    <option>KYC/AML Review</option>
+                    <option>Compliance Investigation</option>
+                    <option>Fraud Prevention</option>
+                    <option>User Request</option>
+                </select>
+            </div>
+            
+            <!-- Date Range -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Date Range</label>
+                <select class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-slate-800 outline-none text-sm">
+                    <option>All time</option>
+                    <option>Last 7 days</option>
+                    <option>Last 30 days</option>
+                    <option>Last 90 days</option>
+                    <option>Custom range</option>
+                </select>
+            </div>
+        </div>
+        <div class="mt-4 flex gap-2">
+            <button class="px-4 py-2 bg-slate-800 text-white rounded-lg text-sm font-bold hover:opacity-90 transition">
+                Apply Filters
+            </button>
+            <button class="px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-gray-50 transition">
+                Clear Filters
+            </button>
+        </div>
+    </div>
+
+    <!-- Summary Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white rounded-xl border border-gray-200 p-4">
+            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Total Frozen</p>
+            <p class="text-2xl font-extrabold text-slate-800">23</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 p-4">
+            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Full Freezes</p>
+            <p class="text-2xl font-extrabold text-red-600">15</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 p-4">
+            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Partial Freezes</p>
+            <p class="text-2xl font-extrabold text-amber-600">8</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 p-4">
+            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Needs Review</p>
+            <p class="text-2xl font-extrabold text-blue-600">5</p>
+        </div>
+    </div>
+
+    <!-- Frozen Accounts Table -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <!-- Desktop Table View -->
+        <div class="hidden md:block overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">User</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Freeze Type</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Reason</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Date</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="frozenBody" class="divide-y divide-gray-100">
+                    <!-- Account 1: Full Freeze -->
+                    <tr class="hover:bg-gray-50 transition bg-red-50/30">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold">
+                                    U1
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">@user123</p>
+                                    <p class="text-xs text-slate-500">user@example.com</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-2">
+                                <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-bold">Full Freeze</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-1">All activities blocked</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-sm font-medium text-slate-800">Suspicious Activity</p>
+                            <p class="text-xs text-slate-500">Frozen by: @admin_user</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-sm font-medium text-slate-800">Jan 10, 2025</p>
+                            <p class="text-xs text-slate-500">10:15 AM</p>
+                            <p class="text-xs text-amber-600 font-bold mt-1">⚠️ Needs review</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex gap-2">
+                                <button data-route="adminUserDetail" class="px-3 py-1.5 bg-white border border-gray-200 text-slate-600 rounded-lg text-xs font-bold hover:bg-gray-50 transition">
+                                    View
+                                </button>
+                                <button data-route="adminUnfreeze" class="px-3 py-1.5 bg-green-600 text-white rounded-lg text-xs font-bold hover:opacity-90 transition">
+                                    Unfreeze
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <!-- Account 2: Partial Freeze -->
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs font-bold">
+                                    U2
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">@user456</p>
+                                    <p class="text-xs text-slate-500">user2@example.com</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-2">
+                                <span class="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-bold">Partial Freeze</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-1">Withdrawals blocked</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-sm font-medium text-slate-800">KYC/AML Review</p>
+                            <p class="text-xs text-slate-500">Frozen by: @admin_support</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-sm font-medium text-slate-800">Jan 8, 2025</p>
+                            <p class="text-xs text-slate-500">2:30 PM</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex gap-2">
+                                <button data-route="adminUserDetail" class="px-3 py-1.5 bg-white border border-gray-200 text-slate-600 rounded-lg text-xs font-bold hover:bg-gray-50 transition">
+                                    View
+                                </button>
+                                <button data-route="adminUnfreeze" class="px-3 py-1.5 bg-green-600 text-white rounded-lg text-xs font-bold hover:opacity-90 transition">
+                                    Unfreeze
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <!-- Account 3: Full Freeze with Auto-unfreeze -->
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white text-xs font-bold">
+                                    U3
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">@user789</p>
+                                    <p class="text-xs text-slate-500">user3@example.com</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-2">
+                                <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-bold">Full Freeze</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-1">All activities blocked</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-sm font-medium text-slate-800">Compliance Investigation</p>
+                            <p class="text-xs text-slate-500">Frozen by: @admin_security</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-sm font-medium text-slate-800">Jan 5, 2025</p>
+                            <p class="text-xs text-slate-500">9:00 AM</p>
+                            <p class="text-xs text-green-600 font-bold mt-1">
+                                <i class="fa-solid fa-clock"></i> Auto-unfreeze: Jan 20, 2025
+                            </p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex gap-2">
+                                <button data-route="adminUserDetail" class="px-3 py-1.5 bg-white border border-gray-200 text-slate-600 rounded-lg text-xs font-bold hover:bg-gray-50 transition">
+                                    View
+                                </button>
+                                <button data-route="adminUnfreeze" class="px-3 py-1.5 bg-green-600 text-white rounded-lg text-xs font-bold hover:opacity-90 transition">
+                                    Unfreeze
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <!-- Account 4: Partial Freeze -->
+                    <tr class="hover:bg-gray-50 transition bg-blue-50/30">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white text-xs font-bold">
+                                    U4
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">@user101</p>
+                                    <p class="text-xs text-slate-500">user4@example.com</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-2">
+                                <span class="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-bold">Partial Freeze</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-1">Deposits, Simulations blocked</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-sm font-medium text-slate-800">Fraud Prevention</p>
+                            <p class="text-xs text-slate-500">Frozen by: @admin_user</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-sm font-medium text-slate-800">Jan 3, 2025</p>
+                            <p class="text-xs text-slate-500">11:20 AM</p>
+                            <p class="text-xs text-amber-600 font-bold mt-1">⚠️ Needs review</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex gap-2">
+                                <button data-route="adminUserDetail" class="px-3 py-1.5 bg-white border border-gray-200 text-slate-600 rounded-lg text-xs font-bold hover:bg-gray-50 transition">
+                                    View
+                                </button>
+                                <button data-route="adminUnfreeze" class="px-3 py-1.5 bg-green-600 text-white rounded-lg text-xs font-bold hover:opacity-90 transition">
+                                    Unfreeze
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Mobile Card View -->
+        <div class="md:hidden divide-y divide-gray-100">
+            <!-- Account Card 1 -->
+            <div class="p-4 bg-red-50/30">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold">
+                            U1
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-800">@user123</p>
+                            <span class="px-2 py-0.5 bg-red-100 text-red-700 rounded text-xs font-bold">Full Freeze</span>
+                        </div>
+                    </div>
+                    <span class="px-2 py-0.5 bg-amber-100 text-amber-700 rounded text-xs font-bold">⚠️ Review</span>
+                </div>
+                <p class="text-xs text-slate-500 mb-2">Suspicious Activity • Jan 10, 2025</p>
+                <div class="flex gap-2">
+                    <button data-route="adminUserDetail" class="flex-1 px-3 py-1.5 bg-white border border-gray-200 text-slate-600 rounded-lg text-xs font-bold">View</button>
+                    <button data-route="adminUnfreeze" class="flex-1 px-3 py-1.5 bg-green-600 text-white rounded-lg text-xs font-bold">Unfreeze</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex items-center justify-between mt-6">
+        <p class="text-sm text-slate-500">Showing 1-20 of 23 frozen accounts</p>
+        <div class="flex items-center gap-2">
+            <button class="px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-bold hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                <i class="fa-solid fa-chevron-left"></i> Previous
+            </button>
+            <div class="flex gap-1">
+                <button class="px-3 py-2 bg-slate-800 text-white rounded-lg text-sm font-bold">1</button>
+                <button class="px-3 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-bold hover:bg-gray-50">2</button>
+            </div>
+            <button class="px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-bold hover:bg-gray-50 transition">
+                Next <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Review Reminders -->
+    <div class="mt-6 bg-blue-50 border border-blue-200 rounded-2xl p-6">
+        <div class="flex items-start gap-4">
+            <i class="fa-solid fa-bell text-blue-600 text-xl shrink-0 mt-1"></i>
+            <div>
+                <h3 class="text-sm font-bold text-blue-900 mb-2">Review Reminders</h3>
+                <p class="text-xs text-blue-800 leading-relaxed mb-3">
+                    The following accounts have been frozen for more than 7 days and may need review:
+                </p>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between p-2 bg-white rounded-lg">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white text-[10px] font-bold">
+                                U1
+                            </div>
+                            <span class="text-sm font-bold text-slate-800">@user123</span>
+                            <span class="text-xs text-slate-500">• Frozen 10 days ago</span>
+                        </div>
+                        <button data-route="adminUserDetail" class="text-xs font-bold text-blue-600 hover:underline">Review</button>
+                    </div>
+                    <div class="flex items-center justify-between p-2 bg-white rounded-lg">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-white text-[10px] font-bold">
+                                U4
+                            </div>
+                            <span class="text-sm font-bold text-slate-800">@user101</span>
+                            <span class="text-xs text-slate-500">• Frozen 12 days ago</span>
+                        </div>
+                        <button data-route="adminUserDetail" class="text-xs font-bold text-blue-600 hover:underline">Review</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<script>
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', function() {
+        const query = this.value.toLowerCase();
+        // In production, this would filter frozen accounts
+        console.log('Searching for:', query);
+    });
+
+    // Quick unfreeze functionality
+    document.querySelectorAll('button:contains("Unfreeze")').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const row = this.closest('tr');
+            const username = row.querySelector('p:first-of-type').textContent;
+            // In production, this would navigate to unfreeze page or open modal
+            if (confirm(`Unfreeze account ${username}?`)) {
+                console.log('Unfreezing account:', username);
+                // Navigate to unfreeze page with user pre-filled
+            }
+        });
+    });
+</script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/forms.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+
+<script>
+(function () {
+    const body = document.getElementById('frozenBody');
+    if (!body) return;
+    const esc = (v) => window.Utils?.escapeHtml ? Utils.escapeHtml(v ?? '') : (v ?? '');
+    const money = (n) => '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    async function load() {
+        body.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-slate-500">Loading frozen accounts...</td></tr>';
+        try {
+            const res = await API.admin.getFrozenAccounts({ per_page: 50 });
+            const users = res.users || [];
+            if (!users.length) {
+                body.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-slate-500">No frozen accounts.</td></tr>';
+                return;
+            }
+            body.innerHTML = users.map(u => `
+                <tr class="hover:bg-gray-50/50 transition">
+                    <td class="px-6 py-4">
+                        <p class="font-bold text-slate-900">${esc(u.display_name || u.name || u.username)}</p>
+                        <p class="text-xs text-slate-500">@${esc(u.username)}</p>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-slate-600">${esc(u.email)}</td>
+                    <td class="px-6 py-4 font-mono font-bold text-slate-700">${money(u.real_balance)}</td>
+                    <td class="px-6 py-4 text-sm text-slate-600">${u.frozen_at ? new Date(u.frozen_at).toLocaleDateString() : '-'}</td>
+                    <td class="px-6 py-4 text-xs text-slate-600 max-w-[240px]">${esc(u.freeze_reason || '-')}</td>
+                    <td class="px-6 py-4 text-right">
+                        <div class="flex items-center justify-end gap-2">
+                            <a href="admin-user-detail.html?user_id=${u.id}" class="px-3 py-1.5 bg-white border border-gray-200 text-slate-600 rounded-lg text-xs font-bold hover:bg-gray-50">View</a>
+                            <button data-unfreeze="${u.id}" class="px-3 py-1.5 bg-green-600 text-white rounded-lg text-xs font-bold hover:opacity-90">Unfreeze</button>
+                        </div>
+                    </td>
+                </tr>`).join('');
+
+            body.querySelectorAll('[data-unfreeze]').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    btn.disabled = true;
+                    try {
+                        await API.admin.unfreezeAccount(btn.dataset.unfreeze, { reason: 'Unfrozen from frozen accounts list' });
+                        Utils?.showToast?.('Account unfrozen', 'success');
+                        load();
+                    } catch (e) { Utils?.showToast?.('Failed to unfreeze', 'error'); btn.disabled = false; }
+                });
+            });
+        } catch (e) {
+            console.error(e);
+            body.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-red-500">Failed to load frozen accounts.</td></tr>';
+        }
+    }
+    load();
+})();
+</script>
+</body>
+</html>

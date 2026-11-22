@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Deposit Management | Admin</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .text-real { color: #10B981; }
+        .bg-real { background-color: #10B981; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen" data-page="adminDeposits">
+
+<aside class="w-64 bg-slate-950 text-slate-400 flex flex-col shrink-0 border-r border-slate-800 fixed h-screen">
+    <div class="p-6 border-b border-slate-800/50">
+        <div class="text-2xl font-bold tracking-tight text-white">
+            Conch<span class="text-[#10B981]">Capital</span>
+        </div>
+        <p class="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500 mt-1">Admin Portal</p>
+    </div>
+    <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+        <a href="#" data-route="adminDashboard" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-chart-pie text-sm"></i>
+            <span class="text-sm font-medium">Overview</span>
+        </a>
+        <a href="#" data-route="adminUsers" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-users-gear text-sm"></i>
+            <span class="text-sm font-medium">User Management</span>
+        </a>
+        <a href="#" data-route="adminTransactions" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-file-invoice-dollar text-sm"></i>
+            <span class="text-sm font-medium">Transactions</span>
+        </a>
+        <a href="#" data-route="adminDeposits" class="flex items-center space-x-3 p-3 bg-slate-900 text-white rounded-xl transition">
+            <i class="fa-solid fa-wallet text-sm"></i>
+            <span class="text-sm font-medium">Deposits</span>
+        </a>
+        <a href="#" data-route="adminCredits" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-money-bill-transfer text-sm"></i>
+            <span class="text-sm font-medium">Credits</span>
+        </a>
+        <a href="#" data-route="adminFreezes" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-snowflake text-sm"></i>
+            <span class="text-sm font-medium">Freezes</span>
+        </a>
+        <div class="pt-4 mt-4 border-t border-slate-800/50">
+            <a href="#" data-route="adminSettings" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+                <i class="fa-solid fa-gear text-sm"></i>
+                <span class="text-sm font-medium">Settings</span>
+            </a>
+        </div>
+    </nav>
+</aside>
+
+<main class="ml-64 flex-1 p-8">
+    
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+            <h1 class="text-3xl font-extrabold text-slate-900 mb-2">Deposit Management</h1>
+            <p class="text-slate-500">Review and confirm pending crypto deposits</p>
+        </div>
+        <div class="flex gap-3">
+            <button onclick="refreshDeposits()" class="px-4 py-2 bg-white border-2 border-gray-200 text-slate-600 rounded-xl font-bold hover:bg-gray-50 transition flex items-center gap-2">
+                <i class="fa-solid fa-rotate"></i> Refresh
+            </button>
+            <button onclick="checkAllDeposits()" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition flex items-center gap-2">
+                <i class="fa-solid fa-search"></i> Check All Blockchain
+            </button>
+            <button onclick="cleanupPendingDepositActivityLogs()" class="px-4 py-2 bg-amber-600 text-white rounded-xl font-bold hover:bg-amber-700 transition flex items-center gap-2">
+                <i class="fa-solid fa-broom"></i> Cleanup Activity Logs
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Pending Deposits</p>
+                    <h2 class="text-3xl font-bold text-slate-900" id="pendingCount">0</h2>
+                </div>
+                <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
+                    <i class="fa-solid fa-clock text-amber-600 text-xl"></i>
+                </div>
+            </div>
+            <p class="text-xs text-slate-500">Awaiting confirmation</p>
+        </div>
+        
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Total Pending Amount</p>
+                    <h2 class="text-3xl font-bold text-slate-900" id="pendingAmount">$0.00</h2>
+                </div>
+                <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                    <i class="fa-solid fa-dollar-sign text-blue-600 text-xl"></i>
+                </div>
+            </div>
+            <p class="text-xs text-slate-500">In pending deposits</p>
+        </div>
+        
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Today's Deposits</p>
+                    <h2 class="text-3xl font-bold text-slate-900" id="todayCount">0</h2>
+                </div>
+                <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                    <i class="fa-solid fa-calendar-day text-green-600 text-xl"></i>
+                </div>
+            </div>
+            <p class="text-xs text-slate-500">Deposits today</p>
+        </div>
+    </div>
+
+    <!-- Pending Deposits Table -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+            <h3 class="font-bold text-slate-900">Pending Deposits</h3>
+            <div class="flex items-center gap-2">
+                <span class="text-xs text-slate-500">Auto-refresh:</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="autoRefresh" class="sr-only peer" checked>
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
+            </div>
+        </div>
+        
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead class="bg-gray-50 text-slate-400 font-bold uppercase text-[10px] tracking-widest">
+                    <tr>
+                        <th class="px-6 py-4">User</th>
+                        <th class="px-4 py-4">Amount</th>
+                        <th class="px-4 py-4">Crypto</th>
+                        <th class="px-4 py-4">Address</th>
+                        <th class="px-4 py-4">Reference</th>
+                        <th class="px-4 py-4">Status</th>
+                        <th class="px-4 py-4">Date</th>
+                        <th class="px-6 py-4 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="depositsTableBody" class="divide-y divide-gray-50">
+                    <tr>
+                        <td colspan="8" class="px-6 py-12 text-center text-slate-400">
+                            <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
+                            <p>Loading deposits...</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div id="noDeposits" class="hidden px-6 py-12 text-center text-slate-400">
+            <i class="fa-solid fa-check-circle text-4xl mb-2"></i>
+            <p class="font-bold">No pending deposits</p>
+            <p class="text-sm">All deposits have been processed</p>
+        </div>
+    </div>
+</main>
+
+<!-- Confirm Deposit Modal -->
+<div id="confirmModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-slate-900">Confirm Deposit</h2>
+            <button onclick="closeConfirmModal()" class="text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-times text-xl"></i>
+            </button>
+        </div>
+        
+        <div class="space-y-4 mb-6">
+            <div>
+                <p class="text-sm text-slate-500 mb-1">User</p>
+                <p class="font-bold text-slate-900" id="confirmUser"></p>
+            </div>
+            <div>
+                <p class="text-sm text-slate-500 mb-1">Amount</p>
+                <p class="font-bold text-slate-900" id="confirmAmount"></p>
+            </div>
+            <div>
+                <p class="text-sm text-slate-500 mb-1">Crypto Address</p>
+                <p class="font-mono text-xs text-slate-600 break-all" id="confirmAddress"></p>
+            </div>
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                <p class="text-sm text-amber-800">
+                    <i class="fa-solid fa-exclamation-triangle mr-2"></i>
+                    <strong>Verify</strong> that the funds have been received in your Trezor wallet before confirming.
+                </p>
+            </div>
+        </div>
+        
+        <div class="flex gap-3">
+            <button onclick="closeConfirmModal()" class="flex-1 px-6 py-3 bg-white border-2 border-gray-200 text-slate-600 rounded-xl font-bold hover:bg-gray-50 transition">
+                Cancel
+            </button>
+            <button onclick="confirmDeposit()" id="confirmBtn" class="flex-1 px-6 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition">
+                <i class="fa-solid fa-check mr-2"></i> Confirm Deposit
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Blockchain Check Result Modal -->
+<div id="checkResultModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-slate-900">Blockchain Check Result</h2>
+            <button onclick="closeCheckResultModal()" class="text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-times text-xl"></i>
+            </button>
+        </div>
+        
+        <div id="checkResultContent" class="space-y-4">
+            <!-- Content will be inserted here -->
+        </div>
+        
+        <button onclick="closeCheckResultModal()" class="w-full mt-6 px-6 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-black transition">
+            Close
+        </button>
+    </div>
+</div>
+
+<script>
+    let deposits = [];
+    let currentDepositId = null;
+    let autoRefreshInterval = null;
+
+    // Load deposits on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        loadDeposits();
+        
+        // Setup auto-refresh
+        document.getElementById('autoRefresh').addEventListener('change', function() {
+            if (this.checked) {
+                startAutoRefresh();
+            } else {
+                stopAutoRefresh();
+            }
+        });
+        
+        startAutoRefresh();
+    });
+
+    // Load pending deposits
+    async function loadDeposits() {
+        try {
+            const response = await API.admin.getPendingDeposits();
+            deposits = response.deposits || [];
+            
+            updateStats(deposits);
+            renderDeposits(deposits);
+        } catch (error) {
+            console.error('Failed to load deposits:', error);
+            document.getElementById('depositsTableBody').innerHTML = `
+                <tr>
+                    <td colspan="8" class="px-6 py-12 text-center text-red-400">
+                        <i class="fa-solid fa-exclamation-triangle text-2xl mb-2"></i>
+                        <p>Failed to load deposits</p>
+                    </td>
+                </tr>
+            `;
+        }
+    }
+
+    // Update statistics
+    function updateStats(deposits) {
+        const pendingCount = deposits.length;
+        const pendingAmount = deposits.reduce((sum, d) => sum + parseFloat(d.amount || 0), 0);
+        const today = new Date().toDateString();
+        const todayCount = deposits.filter(d => new Date(d.created_at).toDateString() === today).length;
+        
+        document.getElementById('pendingCount').textContent = pendingCount;
+        document.getElementById('pendingAmount').textContent = `$${pendingAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        document.getElementById('todayCount').textContent = todayCount;
+    }
+
+    // Render deposits table
+    function renderDeposits(deposits) {
+        const tbody = document.getElementById('depositsTableBody');
+        const noDeposits = document.getElementById('noDeposits');
+        
+        if (deposits.length === 0) {
+            tbody.innerHTML = '';
+            noDeposits.classList.remove('hidden');
+            return;
+        }
+        
+        noDeposits.classList.add('hidden');
+        
+        tbody.innerHTML = deposits.map(deposit => {
+            const user = deposit.user || {};
+            const metadata = deposit.metadata || {};
+            const cryptoCurrency = metadata.crypto_currency || 'BTC';
+            const cryptoAmount = parseFloat(metadata.crypto_amount || 0).toFixed(8);
+            const cryptoAddress = metadata.crypto_address || 'N/A';
+            const date = new Date(deposit.created_at).toLocaleString();
+            
+            return `
+                <tr class="hover:bg-gray-50/50 transition">
+                    <td class="px-6 py-4">
+                        <div>
+                            <p class="font-bold text-slate-900">${Utils.escapeHtml(user.display_name || user.name || user.username || 'N/A')}</p>
+                            <p class="text-xs text-slate-500">@${Utils.escapeHtml(user.username || 'N/A')}</p>
+                        </div>
+                    </td>
+                    <td class="px-4 py-4">
+                        <p class="font-bold text-slate-900">$${parseFloat(deposit.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                        <p class="text-xs text-slate-500">${deposit.currency || 'USD'}</p>
+                    </td>
+                    <td class="px-4 py-4">
+                        <p class="font-bold text-slate-900">${cryptoAmount} ${cryptoCurrency}</p>
+                    </td>
+                    <td class="px-4 py-4">
+                        <div class="flex items-center gap-2">
+                            <p class="font-mono text-xs text-slate-600 max-w-[150px] truncate" title="${cryptoAddress}">${cryptoAddress}</p>
+                            <button onclick="copyAddress('${cryptoAddress}')" class="text-slate-400 hover:text-slate-600">
+                                <i class="fa-solid fa-copy text-xs"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td class="px-4 py-4">
+                        <p class="font-mono text-xs font-bold text-slate-700">${deposit.reference || metadata.bank_reference || '—'}</p>
+                    </td>
+                    <td class="px-4 py-4">
+                        <span class="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-1 rounded-full">Pending</span>
+                    </td>
+                    <td class="px-4 py-4">
+                        <p class="text-sm text-slate-600">${date}</p>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <div class="flex items-center justify-end gap-2">
+                            <button onclick="checkDepositStatus(${deposit.id})" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 transition">
+                                <i class="fa-solid fa-search mr-1"></i> Check
+                            </button>
+                            <button onclick="openConfirmModal(${deposit.id})" class="px-3 py-1.5 bg-green-600 text-white rounded-lg text-xs font-bold hover:bg-green-700 transition">
+                                <i class="fa-solid fa-check mr-1"></i> Confirm
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    // Open confirm modal
+    function openConfirmModal(depositId) {
+        const deposit = deposits.find(d => d.id === depositId);
+        if (!deposit) return;
+        
+        currentDepositId = depositId;
+        const user = deposit.user || {};
+        const metadata = deposit.metadata || {};
+        
+        document.getElementById('confirmUser').textContent = `${user.display_name || user.name || user.username} (@${user.username})`;
+        document.getElementById('confirmAmount').textContent = `$${parseFloat(deposit.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${deposit.currency || 'USD'} (${parseFloat(metadata.crypto_amount || 0).toFixed(8)} ${metadata.crypto_currency || 'BTC'})`;
+        document.getElementById('confirmAddress').textContent = metadata.crypto_address || 'N/A';
+        
+        document.getElementById('confirmModal').classList.remove('hidden');
+    }
+
+    // Close confirm modal
+    function closeConfirmModal() {
+        document.getElementById('confirmModal').classList.add('hidden');
+        currentDepositId = null;
+    }
+
+    // Confirm deposit
+    async function confirmDeposit() {
+        if (!currentDepositId) return;
+        
+        const btn = document.getElementById('confirmBtn');
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Confirming...';
+        
+        try {
+            await API.admin.confirmDeposit(currentDepositId);
+            
+            Utils?.showToast?.('Deposit confirmed successfully!', 'success');
+            closeConfirmModal();
+            loadDeposits();
+        } catch (error) {
+            console.error('Failed to confirm deposit:', error);
+            const message = error.response?.message || error.message || 'Failed to confirm deposit';
+            Utils?.showToast?.(message, 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+        }
+    }
+
+    // Check deposit status on blockchain
+    async function checkDepositStatus(depositId) {
+        try {
+            const response = await API.admin.checkDepositStatus(depositId);
+            
+            const modal = document.getElementById('checkResultModal');
+            const content = document.getElementById('checkResultContent');
+            
+            if (response.found) {
+                content.innerHTML = `
+                    <div class="bg-green-50 border border-green-200 rounded-xl p-4">
+                        <div class="flex items-center gap-3 mb-3">
+                            <i class="fa-solid fa-check-circle text-green-600 text-2xl"></i>
+                            <h3 class="font-bold text-green-900">Transaction Found</h3>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <p><strong>Confirmations:</strong> ${response.confirmations}</p>
+                            <p><strong>Status:</strong> ${response.confirmed ? '<span class="text-green-600 font-bold">Confirmed (2+)</span>' : '<span class="text-amber-600">Waiting for more confirmations</span>'}</p>
+                            ${response.tx_hash ? `<p><strong>Transaction Hash:</strong> <span class="font-mono text-xs">${response.tx_hash}</span></p>` : ''}
+                        </div>
+                        ${response.confirmed ? '<p class="mt-3 text-sm text-green-700 font-bold">✓ Ready to confirm deposit</p>' : '<p class="mt-3 text-sm text-amber-700">Wait for 2+ confirmations before confirming</p>'}
+                    </div>
+                `;
+            } else {
+                content.innerHTML = `
+                    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                        <div class="flex items-center gap-3 mb-3">
+                            <i class="fa-solid fa-exclamation-triangle text-amber-600 text-2xl"></i>
+                            <h3 class="font-bold text-amber-900">Transaction Not Found</h3>
+                        </div>
+                        <p class="text-sm text-amber-800">${response.message || 'No matching transaction found on the blockchain. Please verify manually.'}</p>
+                        ${response.explorer_url ? `<a href="${response.explorer_url}" target="_blank" class="mt-3 inline-block text-sm text-blue-600 hover:underline">View on Explorer →</a>` : ''}
+                    </div>
+                `;
+            }
+            
+            modal.classList.remove('hidden');
+        } catch (error) {
+            console.error('Failed to check deposit status:', error);
+            const message = error.response?.message || error.message || 'Failed to check blockchain status';
+            Utils?.showToast?.(message, 'error');
+        }
+    }
+
+    // Close check result modal
+    function closeCheckResultModal() {
+        document.getElementById('checkResultModal').classList.add('hidden');
+    }
+
+    // Copy address
+    function copyAddress(address) {
+        navigator.clipboard.writeText(address).then(() => {
+            Utils?.showToast?.('Address copied to clipboard!', 'success');
+        }).catch(() => {
+            Utils?.showToast?.('Failed to copy address', 'error');
+        });
+    }
+
+    // Check all deposits
+    async function checkAllDeposits() {
+        if (deposits.length === 0) {
+            Utils?.showToast?.('No deposits to check', 'info');
+            return;
+        }
+        
+        Utils?.showToast?.(`Checking ${deposits.length} deposits...`, 'info');
+        
+        for (const deposit of deposits) {
+            try {
+                await API.admin.checkDepositStatus(deposit.id);
+                await new Promise(resolve => setTimeout(resolve, 500)); // Rate limiting
+            } catch (error) {
+                console.error(`Failed to check deposit ${deposit.id}:`, error);
+            }
+        }
+        
+        Utils?.showToast?.('Finished checking all deposits', 'success');
+        loadDeposits();
+    }
+
+    // Refresh deposits
+    function refreshDeposits() {
+        loadDeposits();
+        Utils?.showToast?.('Deposits refreshed', 'success');
+    }
+
+    // Auto-refresh
+    function startAutoRefresh() {
+        if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+        autoRefreshInterval = setInterval(loadDeposits, 30000); // Every 30 seconds
+    }
+
+    function stopAutoRefresh() {
+        if (autoRefreshInterval) {
+            clearInterval(autoRefreshInterval);
+            autoRefreshInterval = null;
+        }
+    }
+
+    // Cleanup pending deposit activity logs
+    async function cleanupPendingDepositActivityLogs() {
+        if (!confirm('This will remove activity logs for all pending deposits from users\' recent activity. This action cannot be undone. Continue?')) {
+            return;
+        }
+
+        try {
+            Utils?.showToast?.('Cleaning up pending deposit activity logs...', 'info');
+            
+            const response = await API.admin.cleanupPendingDepositActivityLogs();
+            
+            const message = `Cleanup complete! Removed ${response.deleted_count} pending deposit activity log(s). ${response.kept_count} completed deposit logs were kept.`;
+            Utils?.showToast?.(message, 'success');
+            
+            // Show details if any were deleted
+            if (response.deleted_count > 0 && response.deleted_details && response.deleted_details.length > 0) {
+                console.log('Deleted activity logs:', response.deleted_details);
+            }
+        } catch (error) {
+            console.error('Failed to cleanup activity logs:', error);
+            const message = error.response?.data?.message || error.message || 'Failed to cleanup activity logs';
+            Utils?.showToast?.(message, 'error');
+        }
+    }
+</script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,2069 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConchCapital | Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F9FAFB;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .bg-slate-900-brand {
+            background-color: #0F172A;
+        }
+
+        .text-real {
+            color: #10B981;
+        }
+
+        .bg-real {
+            background-color: #10B981;
+        }
+
+        .text-sim {
+            color: #3B82F6;
+        }
+
+        .bg-sim {
+            background-color: #3B82F6;
+        }
+
+        /* Mobile Bottom Navigation Styles */
+        .mobile-nav-item {
+            color: #6B7280;
+            transition: all 0.2s;
+        }
+
+        .mobile-nav-item.active {
+            color: #10B981;
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+
+        .mobile-nav-item:active {
+            transform: scale(0.95);
+        }
+
+        /* Ensure content doesn't get hidden behind bottom nav */
+        @media (max-width: 1023px) {
+            body {
+                padding-bottom: 0;
+            }
+        }
+    </style>
+</head>
+
+<body class="flex min-h-screen" data-page="dashboard">
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 shadow-lg">
+        <div class="flex items-center justify-around px-2 py-2">
+            <a href="#" data-route="dashboard" class="mobile-nav-item flex flex-col items-center gap-1 px-2 py-2 rounded-lg transition active">
+                <i class="fa-solid fa-house text-base"></i>
+                <span class="text-[9px] font-medium">Dashboard</span>
+            </a>
+            <a href="#" data-route="profitGrowths" class="mobile-nav-item flex flex-col items-center gap-1 px-2 py-2 rounded-lg transition">
+                <i class="fa-solid fa-chart-line text-base"></i>
+                <span class="text-[9px] font-medium">Growth</span>
+            </a>
+            <a href="#" data-route="transactions" class="mobile-nav-item flex flex-col items-center gap-1 px-2 py-2 rounded-lg transition">
+                <i class="fa-solid fa-file-invoice-dollar text-base"></i>
+                <span class="text-[9px] font-medium">Transactions</span>
+            </a>
+            <a href="#" data-route="profileSearch" class="mobile-nav-item flex flex-col items-center gap-1 px-2 py-2 rounded-lg transition">
+                <i class="fa-solid fa-users text-base"></i>
+                <span class="text-[9px] font-medium">Find Users</span>
+            </a>
+            <a href="#" data-route="profile" class="mobile-nav-item flex flex-col items-center gap-1 px-2 py-2 rounded-lg transition">
+                <i class="fa-solid fa-user text-base"></i>
+                <span class="text-[9px] font-medium">Profile</span>
+            </a>
+            <a href="#" data-route="settings" class="mobile-nav-item flex flex-col items-center gap-1 px-2 py-2 rounded-lg transition">
+                <i class="fa-solid fa-gear text-base"></i>
+                <span class="text-[9px] font-medium">Settings</span>
+            </a>
+        </div>
+    </nav>
+
+    <aside id="sidebar" class="hidden lg:flex w-64 bg-slate-900-brand text-white flex-col shrink-0 sticky top-0 h-screen z-40">
+        <div class="p-6">
+            <a href="#" data-route="home"
+                class="text-2xl font-bold tracking-tight hover:opacity-80 transition cursor-pointer block">Conch<span
+                    class="text-real">Capital</span></a>
+        </div>
+
+        <nav class="flex-1 px-4 space-y-2 mt-4">
+            <a href="#" data-route="dashboard"
+                class="flex items-center space-x-3 p-3 bg-slate-800 rounded-xl transition">
+                <i class="fa-solid fa-house text-sm"></i>
+                <span class="font-medium">Dashboard</span>
+            </a>
+            <a href="#" data-route="profitGrowths"
+                class="flex items-center space-x-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition">
+                <i class="fa-solid fa-chart-line text-sm"></i>
+                <span class="font-medium">Profit Growth</span>
+            </a>
+            <a href="#" data-route="transactions"
+                class="flex items-center space-x-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition">
+                <i class="fa-solid fa-file-invoice-dollar text-sm"></i>
+                <span class="font-medium">Transactions</span>
+            </a>
+            <a href="#" data-route="profileSearch"
+                class="flex items-center space-x-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition">
+                <i class="fa-solid fa-users text-sm"></i>
+                <span class="font-medium">Find Users</span>
+            </a>
+            <a href="#" data-route="profile"
+                class="flex items-center space-x-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition">
+                <i class="fa-solid fa-user text-sm"></i>
+                <span class="font-medium">Profile</span>
+            </a>
+            <a href="#" data-route="settings"
+                class="flex items-center space-x-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-xl transition">
+                <i class="fa-solid fa-gear text-sm"></i>
+                <span class="font-medium">Settings</span>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-slate-800">
+            <div class="relative">
+                <div id="sidebarUserMenu"
+                    class="flex items-center space-x-3 p-2 rounded-lg hover:bg-slate-800 cursor-pointer transition"
+                    onclick="toggleUserMenu()">
+                    <div id="sidebarAvatarContainer"
+                        class="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white font-bold shrink-0 overflow-hidden">
+                        <span id="sidebarAvatarInitials" class="text-sm">JD</span>
+                        <img id="sidebarAvatarImage" src="" alt="Avatar"
+                            class="hidden w-10 h-10 rounded-full object-cover">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p id="sidebarUserName" class="text-sm font-bold truncate">John Doe</p>
+                        <p id="sidebarUserStatus" class="text-xs text-slate-500 truncate">Pro Member</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-up text-xs text-slate-400" id="userMenuChevron"></i>
+                </div>
+
+                <!-- User Menu Dropdown -->
+                <div id="userMenuDropdown"
+                    class="hidden absolute bottom-full left-0 right-0 mb-2 bg-slate-800 rounded-lg shadow-lg border border-slate-700 overflow-hidden">
+                    <a href="#" data-route="profile"
+                        class="flex items-center space-x-3 px-4 py-3 text-sm text-slate-300 hover:bg-slate-700 transition">
+                        <i class="fa-solid fa-user text-sm w-5"></i>
+                        <span>View Profile</span>
+                    </a>
+                    <a href="#" data-route="settings"
+                        class="flex items-center space-x-3 px-4 py-3 text-sm text-slate-300 hover:bg-slate-700 transition">
+                        <i class="fa-solid fa-gear text-sm w-5"></i>
+                        <span>Settings</span>
+                    </a>
+                    <div class="border-t border-slate-700"></div>
+                    <button onclick="handleLogout()"
+                        class="w-full flex items-center space-x-3 px-4 py-3 text-sm text-red-400 hover:bg-slate-700 transition">
+                        <i class="fa-solid fa-right-from-bracket text-sm w-5"></i>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto lg:ml-0 pb-20 lg:pb-0">
+        <header
+            class="h-16 lg:h-20 flex items-center justify-between px-4 lg:px-10 bg-white border-b border-gray-100 sticky top-0 z-10">
+            <h1 class="text-xl lg:text-2xl font-bold text-slate-900">Overview</h1>
+            <div class="flex items-center space-x-2 lg:space-x-6">
+                <div class="relative">
+                    <button onclick="toggleNotificationDropdown()"
+                        class="relative text-slate-400 hover:text-slate-600 transition">
+                        <i class="fa-regular fa-bell text-xl"></i>
+                        <span id="notificationBadge"
+                            class="hidden absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
+                    </button>
+                    <!-- Notification Dropdown -->
+                    <div id="notificationDropdown"
+                        class="hidden absolute right-0 top-full mt-2 w-80 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden z-50 max-h-96 overflow-y-auto">
+                        <div
+                            class="p-4 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white">
+                            <h3 class="text-sm font-bold text-slate-900">Notifications</h3>
+                            <a href="#" data-route="notifications"
+                                class="text-xs font-bold text-blue-600 hover:text-blue-800">View All</a>
+                        </div>
+                        <div id="notificationDropdownList" class="divide-y divide-gray-100">
+                            <div class="p-4 text-center text-slate-500">
+                                <i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i>
+                                <p class="text-sm">Loading notifications...</p>
+                            </div>
+                        </div>
+                        <div class="p-3 border-t border-gray-200 bg-gray-50 text-center">
+                            <a href="#" data-route="notifications"
+                                class="text-xs font-bold text-blue-600 hover:text-blue-800">View All Notifications</a>
+                        </div>
+                    </div>
+                </div>
+                <button data-route="settings"
+                    class="hidden md:flex items-center space-x-2 px-3 lg:px-4 py-2 border border-gray-200 rounded-xl text-sm font-bold text-slate-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-sliders"></i>
+                    <span class="hidden lg:inline">Settings</span>
+                </button>
+                <div class="relative">
+                    <button onclick="toggleHeaderUserMenu()"
+                        class="flex items-center space-x-2 px-3 lg:px-4 py-2 border border-gray-200 rounded-xl text-sm font-bold text-slate-600 hover:bg-gray-50 transition">
+                        <i class="fa-solid fa-user-circle"></i>
+                        <span class="hidden lg:inline">Account</span>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <!-- User Menu Dropdown -->
+                    <div id="headerUserMenuDropdown"
+                        class="hidden absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden z-50">
+                        <a href="#" data-route="profile"
+                            class="flex items-center space-x-3 px-4 py-3 text-sm text-slate-700 hover:bg-gray-50 transition">
+                            <i class="fa-solid fa-user text-sm w-5"></i>
+                            <span>View Profile</span>
+                        </a>
+                        <a href="#" data-route="settings"
+                            class="flex items-center space-x-3 px-4 py-3 text-sm text-slate-700 hover:bg-gray-50 transition">
+                            <i class="fa-solid fa-gear text-sm w-5"></i>
+                            <span>Settings</span>
+                        </a>
+                        <div class="border-t border-gray-200"></div>
+                        <button onclick="handleLogout()"
+                            class="w-full flex items-center space-x-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition">
+                            <i class="fa-solid fa-right-from-bracket text-sm w-5"></i>
+                            <span>Logout</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="p-4 lg:p-10 space-y-6 lg:space-y-10">
+            <!-- Recent Payouts ticker -->
+            <div id="payoutsTicker" class="hidden">
+                <div class="payout-label"><span class="payout-live-dot"></span> Recent Payouts</div>
+                <div class="payout-viewport">
+                    <div class="payout-track"></div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
+                <div class="bg-white border-2 border-real rounded-2xl lg:rounded-[2rem] p-6 lg:p-8 shadow-sm relative overflow-hidden">
+                    <div class="flex justify-between items-start mb-4 lg:mb-6">
+                        <div>
+                            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Real Wallet
+                                Balance</p>
+                            <span
+                                class="bg-green-100 text-real text-[10px] font-bold px-2 py-0.5 rounded uppercase">Withdrawable</span>
+                        </div>
+                        <div class="w-10 h-10 lg:w-12 lg:h-12 bg-real/10 rounded-xl lg:rounded-2xl flex items-center justify-center text-real">
+                            <i class="fa-solid fa-wallet text-xl lg:text-2xl"></i>
+                        </div>
+                    </div>
+                    <div class="mb-6 lg:mb-10">
+                        <h2 id="realWalletBalance" class="text-3xl lg:text-4xl font-bold text-slate-900 mb-1">$0.00</h2>
+                        <p id="realWalletBalanceBTC" class="text-sm lg:text-base text-real font-semibold">≈ 0.00000000 BTC</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 lg:gap-4">
+                        <button data-route="deposits"
+                            class="bg-real text-white py-3.5 rounded-xl font-bold hover:opacity-90 transition shadow-lg shadow-green-900/10">Deposit</button>
+                        <button data-route="withdrawals"
+                            class="border-2 border-real text-real py-3.5 rounded-xl font-bold hover:bg-green-50 transition">Withdraw</button>
+                    </div>
+                </div>
+
+                <div
+                    class="bg-white border-2 border-dashed border-sim rounded-2xl lg:rounded-[2rem] p-6 lg:p-8 shadow-sm relative overflow-hidden">
+                    <div class="flex justify-between items-start mb-4 lg:mb-6">
+                        <div>
+                            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Profit Growth
+                                Account</p>
+                            <span
+                                class="bg-blue-100 text-sim text-[10px] font-bold px-2 py-0.5 rounded uppercase">Active
+                                Portfolio</span>
+                        </div>
+                        <div class="w-10 h-10 lg:w-12 lg:h-12 bg-sim/10 rounded-xl lg:rounded-2xl flex items-center justify-center text-sim">
+                            <i class="fa-solid fa-chart-line text-xl lg:text-2xl"></i>
+                        </div>
+                    </div>
+                    <div class="mb-4 lg:mb-6">
+                        <h2 id="totalProfitGrowthBalance" class="text-3xl lg:text-4xl font-bold text-sim mb-1">$0.00</h2>
+                        <p class="text-xs text-slate-400 font-medium">Total Profit Growth Balance</p>
+                    </div>
+                    <div class="bg-blue-50 border border-blue-200 p-3 lg:p-4 rounded-xl lg:rounded-2xl flex gap-2 lg:gap-3 mb-6 lg:mb-8">
+                        <i class="fa-solid fa-info-circle text-blue-600 mt-1"></i>
+                        <p class="text-xs font-bold text-blue-900 leading-relaxed">💡 Your funds earn returns daily
+                            based on your account's growth rate and frequency</p>
+                    </div>
+                    <div class="grid grid-cols-1 gap-4">
+                        <button data-route="profitGrowths"
+                            class="border-2 border-sim text-sim py-3.5 rounded-xl font-bold hover:bg-blue-50 transition">View
+                            All</button>
+                        <p class="text-xs text-slate-500 text-center mt-2">Transfer funds from your Real Wallet to start
+                            earning returns automatically</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transfer Funds Section Between Wallets -->
+            <div id="transferSection"
+                class="bg-gradient-to-br from-slate-50 to-gray-100 border-2 border-dashed border-gray-300 rounded-2xl lg:rounded-[2rem] p-4 lg:p-6 shadow-sm">
+                <div class="text-center mb-4 lg:mb-6">
+                    <h3 class="text-base lg:text-lg font-bold text-slate-800 mb-2">Transfer Funds Between Wallets</h3>
+                    <p class="text-xs text-slate-600">Move funds between your Real Wallet and Profit Growth accounts</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                    <!-- Transfer to Profit Growth -->
+                    <button onclick="openTransferToProfitGrowthModal()"
+                        class="group relative bg-white border-2 border-sim/30 rounded-2xl p-6 hover:border-sim hover:shadow-lg transition-all duration-300">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-12 h-12 bg-real/10 rounded-xl flex items-center justify-center text-real group-hover:bg-real/20 transition">
+                                    <i class="fa-solid fa-wallet text-xl"></i>
+                                </div>
+                                <div class="text-left">
+                                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">From</p>
+                                    <p class="text-sm font-bold text-slate-800">Real Wallet</p>
+                                </div>
+                            </div>
+                            <div class="text-sim text-2xl group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="text-left">
+                                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">To</p>
+                                <p class="text-sm font-bold text-sim">Profit Growth</p>
+                            </div>
+                            <div
+                                class="w-12 h-12 bg-sim/10 rounded-xl flex items-center justify-center text-sim group-hover:bg-sim/20 transition">
+                                <i class="fa-solid fa-chart-line text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-gray-200">
+                            <p class="text-xs text-slate-600 text-left">
+                                <i class="fa-solid fa-info-circle text-sim mr-1"></i>
+                                Add funds to your profit growth to start earning
+                            </p>
+                        </div>
+                    </button>
+
+                    <!-- Withdraw from Profit Growth -->
+                    <button onclick="openWithdrawFromProfitGrowthModal()"
+                        class="group relative bg-white border-2 border-real/30 rounded-2xl p-6 hover:border-real hover:shadow-lg transition-all duration-300">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-12 h-12 bg-sim/10 rounded-xl flex items-center justify-center text-sim group-hover:bg-sim/20 transition">
+                                    <i class="fa-solid fa-chart-line text-xl"></i>
+                                </div>
+                                <div class="text-left">
+                                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">From</p>
+                                    <p class="text-sm font-bold text-slate-800">Profit Growth</p>
+                                </div>
+                            </div>
+                            <div class="text-real text-2xl group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="text-left">
+                                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">To</p>
+                                <p class="text-sm font-bold text-real">Real Wallet</p>
+                            </div>
+                            <div
+                                class="w-12 h-12 bg-real/10 rounded-xl flex items-center justify-center text-real group-hover:bg-real/20 transition">
+                                <i class="fa-solid fa-wallet text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-gray-200">
+                            <p class="text-xs text-slate-600 text-left">
+                                <i class="fa-solid fa-info-circle text-real mr-1"></i>
+                                Withdraw profits back to your withdrawable balance
+                            </p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Referral Program Section -->
+            <div id="referralSection"
+                class="bg-white border border-gray-100 rounded-2xl lg:rounded-[2rem] p-4 lg:p-6 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                    <div>
+                        <h3 class="text-base lg:text-lg font-bold text-slate-800">Invite Friends, Earn Bonuses</h3>
+                        <p class="text-xs text-slate-600 mt-1">Share your code — new members get a bonus on signup.</p>
+                    </div>
+                    <div class="text-left sm:text-right">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Bonus per signup</p>
+                        <p id="referralBonus" class="text-xl font-black text-real">$0.00</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <div class="flex-1">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Your code</label>
+                        <div class="flex items-center gap-2">
+                            <input id="referralCode" type="text" readonly value="—"
+                                class="flex-1 px-3 py-2.5 bg-slate-50 border border-gray-200 rounded-xl font-mono font-bold tracking-widest text-slate-800 text-sm">
+                            <button id="copyReferralCode" type="button"
+                                class="px-4 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-black transition">Copy</button>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Invite link</label>
+                        <div class="flex items-center gap-2">
+                            <input id="referralLink" type="text" readonly value="—"
+                                class="flex-1 px-3 py-2.5 bg-slate-50 border border-gray-200 rounded-xl text-slate-600 text-xs">
+                            <button id="copyReferralLink" type="button"
+                                class="px-4 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-black transition">Copy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mt-4">
+                    <div class="bg-slate-50 rounded-xl p-3 border border-gray-100">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">People referred</p>
+                        <p id="referralCount" class="text-lg font-black text-slate-800">0</p>
+                    </div>
+                    <div class="bg-slate-50 rounded-xl p-3 border border-gray-100">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Bonus awarded</p>
+                        <p id="referralTotal" class="text-lg font-black text-slate-800">$0.00</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Personalized growth projection -->
+            <div class="bg-gradient-to-br from-emerald-50 to-white border border-emerald-100 rounded-2xl lg:rounded-[2rem] p-4 lg:p-6 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div>
+                        <h3 class="text-base lg:text-lg font-bold text-slate-800">Your Growth Potential</h3>
+                        <p id="projectionBasis" class="text-xs text-slate-600 mt-1">Calculating your projection…</p>
+                    </div>
+                    <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full uppercase tracking-widest self-start">2.8% daily</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mt-4">
+                    <div class="bg-white rounded-xl p-4 border border-emerald-100">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">In 30 days</p>
+                        <p id="projection30" class="text-xl lg:text-2xl font-black text-emerald-600">—</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-4 border border-emerald-100">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">In 90 days</p>
+                        <p id="projection90" class="text-xl lg:text-2xl font-black text-emerald-600">—</p>
+                    </div>
+                </div>
+
+                <p class="text-[10px] text-slate-500 mt-3">Projection assumes daily compounding at 2.8% on your profit growth balance. Illustrative only — not a guarantee.</p>
+            </div>
+
+            <!-- Portfolio allocation + relationship manager -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
+                <div class="bg-white rounded-2xl lg:rounded-[2rem] p-4 lg:p-6 shadow-sm border border-gray-100">
+                    <h3 class="text-base lg:text-lg font-bold text-slate-800 mb-4">Portfolio Allocation</h3>
+                    <div class="flex items-center gap-6">
+                        <div id="allocationDonut" class="relative shrink-0" style="width:128px;height:128px;">
+                            <div class="absolute inset-0 rounded-full" style="background: conic-gradient(#10B981 0deg, #10B981 0deg, #3B82F6 0deg, #3B82F6 360deg);"></div>
+                            <div class="absolute rounded-full bg-white" style="inset:16px;"></div>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Total</span>
+                                <span id="allocationTotal" class="text-sm font-black text-slate-900">$0</span>
+                            </div>
+                        </div>
+                        <div class="flex-1 space-y-3 text-sm">
+                            <div class="flex items-center justify-between">
+                                <span class="flex items-center gap-2 text-slate-600"><span class="w-3 h-3 rounded-full" style="background:#10B981"></span> Real Wallet</span>
+                                <span id="allocReal" class="font-bold text-slate-900">$0.00</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="flex items-center gap-2 text-slate-600"><span class="w-3 h-3 rounded-full" style="background:#3B82F6"></span> Profit Growth</span>
+                                <span id="allocGrowth" class="font-bold text-slate-900">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl lg:rounded-[2rem] p-4 lg:p-6 shadow-sm border border-gray-100">
+                    <h3 class="text-base lg:text-lg font-bold text-slate-800 mb-4">Your Relationship Manager</h3>
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-black shrink-0" id="rmInitial">A</div>
+                        <div class="flex-1">
+                            <p id="dashRmName" class="font-bold text-slate-900">—</p>
+                            <p id="dashRmTitle" class="text-xs text-slate-500 mb-3">—</p>
+                            <div class="space-y-1.5 text-xs">
+                                <p><i class="fa-solid fa-envelope text-slate-400 mr-2"></i><a id="dashRmEmail" class="text-emerald-600 font-semibold hover:underline" href="#">—</a></p>
+                                <p><i class="fa-solid fa-phone text-slate-400 mr-2"></i><span id="dashRmPhone" class="text-slate-700">—</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="bank-details.html" class="mt-4 inline-flex items-center gap-2 text-xs font-bold text-emerald-600 hover:underline">
+                        <i class="fa-solid fa-building-columns"></i> View banking details &amp; deposit reference
+                    </a>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8">
+                <div class="lg:col-span-2 bg-white rounded-2xl lg:rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+                    <div class="px-4 lg:px-8 py-4 lg:py-6 border-b border-gray-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <h3 class="font-bold text-slate-900 text-base lg:text-lg">Recent Activity</h3>
+                        <a href="#" data-route="transactions" class="text-xs lg:text-sm font-bold text-sim hover:underline">View
+                            All Transactions</a>
+                    </div>
+                    <div class="overflow-x-auto -mx-4 lg:mx-0 px-4 lg:px-0">
+                        <table class="w-full text-left text-sm min-w-[600px]">
+                            <thead class="bg-gray-50 text-slate-400 font-bold uppercase text-[10px] tracking-widest">
+                                <tr>
+                                    <th class="px-4 lg:px-8 py-3 lg:py-4">Activity</th>
+                                    <th class="px-3 lg:px-4 py-3 lg:py-4">Type</th>
+                                    <th class="px-3 lg:px-4 py-3 lg:py-4">Amount</th>
+                                    <th class="px-4 lg:px-8 py-3 lg:py-4 text-right">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-50">
+                                <tr class="hover:bg-gray-50/50 transition">
+                                    <td class="px-4 lg:px-8 py-4 lg:py-5">
+                                        <p class="font-bold text-slate-900 text-sm">Deposit</p>
+                                        <p class="text-xs text-slate-500">0.001 BTC wallet transfer</p>
+                                    </td>
+                                    <td class="px-3 lg:px-4 py-4 lg:py-5"><span
+                                            class="bg-green-100 text-real text-[9px] font-black px-2 py-1 rounded uppercase">Real</span>
+                                    </td>
+                                    <td class="px-3 lg:px-4 py-4 lg:py-5 mono font-bold text-real text-sm">+0.001 BTC</td>
+                                    <td class="px-4 lg:px-8 py-4 lg:py-5 text-right"><span
+                                            class="bg-green-100 text-real text-[10px] font-bold px-2 lg:px-3 py-1 rounded-full">Confirmed</span>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50/50 transition">
+                                    <td class="px-4 lg:px-8 py-4 lg:py-5">
+                                        <p class="font-bold text-slate-900 text-sm">Profit Growth Created</p>
+                                        <p class="text-xs text-slate-500">Growth Strategy #1</p>
+                                    </td>
+                                    <td class="px-3 lg:px-4 py-4 lg:py-5"><span
+                                            class="bg-blue-100 text-sim text-[9px] font-black px-2 py-1 rounded uppercase">Profit
+                                            Growth</span></td>
+                                    <td class="px-3 lg:px-4 py-4 lg:py-5 mono font-bold text-sim text-sm">$10.00</td>
+                                    <td class="px-4 lg:px-8 py-4 lg:py-5 text-right"><span
+                                            class="bg-green-100 text-real text-[10px] font-bold px-2 lg:px-3 py-1 rounded-full">Active</span>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50/50 transition">
+                                    <td class="px-4 lg:px-8 py-4 lg:py-5">
+                                        <p class="font-bold text-slate-900 text-sm">Funds Received</p>
+                                        <p class="text-xs text-slate-500">From @user123</p>
+                                    </td>
+                                    <td class="px-3 lg:px-4 py-4 lg:py-5"><span
+                                            class="bg-blue-100 text-sim text-[9px] font-black px-2 py-1 rounded uppercase">Profit
+                                            Growth</span></td>
+                                    <td class="px-3 lg:px-4 py-4 lg:py-5 mono font-bold text-sim text-sm">+$10.00</td>
+                                    <td class="px-4 lg:px-8 py-4 lg:py-5 text-right"><span
+                                            class="bg-green-100 text-real text-[10px] font-bold px-2 lg:px-3 py-1 rounded-full">Received</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl lg:rounded-3xl border border-gray-100 shadow-sm p-4 lg:p-8 flex flex-col">
+                    <div class="flex justify-between items-center mb-4 lg:mb-6">
+                        <h3 class="font-bold text-slate-900 text-base lg:text-lg">Peer Transfers</h3>
+                        <a href="#" data-route="receivedSimFunds"
+                            class="text-xs font-bold text-sim hover:underline">View All</a>
+                    </div>
+                    <div id="communityTransfers" class="space-y-4 lg:space-y-6 flex-1">
+                        <div class="text-center text-slate-400 py-4">
+                            <i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i>
+                            <p class="text-sm">Loading transfers...</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 lg:space-y-3 mt-6 lg:mt-10">
+                        <button data-route="sendSimFunds"
+                            class="w-full bg-real text-white py-2.5 lg:py-3 rounded-xl font-bold text-xs lg:text-sm hover:opacity-90 transition">
+                            <i class="fa-solid fa-paper-plane mr-2"></i> Send Funds
+                        </button>
+                        <button data-route="receivedSimFunds"
+                            class="w-full bg-blue-50 border-2 border-sim text-sim py-2.5 lg:py-3 rounded-xl font-bold text-xs lg:text-sm hover:bg-blue-100 transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-download"></i> View Received Transfers
+                        </button>
+                        <button data-route="sentSimFunds"
+                            class="w-full border-2 border-sim text-sim py-2.5 lg:py-3 rounded-xl font-bold text-xs lg:text-sm hover:bg-blue-50 transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-upload"></i> View Sent Transfers
+                        </button>
+                    </div>
+
+                    <div class="bg-blue-50 border border-blue-200 p-2.5 lg:p-3 rounded-xl flex gap-2 mt-4 lg:mt-6">
+                        <i class="fa-solid fa-info-circle text-blue-600 text-[10px] mt-0.5"></i>
+                        <p class="text-[10px] font-bold text-blue-900">ℹ️ You can send real funds to other users</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Transfer to Profit Growth Modal -->
+    <div id="transferToProfitGrowthModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-4 lg:p-8 animate-fade-in max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-slate-900">Transfer to Profit Growth</h2>
+                <button onclick="closeTransferToProfitGrowthModal()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <p class="text-sm text-slate-600 mb-6">Move funds from your Real Wallet to a Profit Growth account to start
+                earning.</p>
+
+            <!-- 7-Day Lock Warning -->
+            <div class="bg-amber-50 border-2 border-amber-300 rounded-xl p-4 mb-6">
+                <div class="flex items-start gap-3">
+                    <div class="flex-shrink-0 mt-0.5">
+                        <i class="fa-solid fa-lock text-amber-600 text-xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="text-sm font-bold text-amber-900 mb-1">⚠️ Important: 7-Day Lock Period</h4>
+                        <p class="text-xs text-amber-800 leading-relaxed">
+                            <strong>Funds will be locked for 7 days</strong> after transfer while they grow. During this
+                            period, you cannot withdraw these funds. Growth will be calculated daily (20% weekly =
+                            ~2.857% per day). You can only make one transfer per week.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Real Wallet Balance -->
+                <div class="bg-green-50 border-2 border-green-200 rounded-xl p-4">
+                    <p class="text-xs font-bold text-green-600 uppercase tracking-widest mb-1">Available Balance</p>
+                    <p id="transferRealBalance" class="text-2xl font-bold text-green-700">$0.00</p>
+                </div>
+
+                <!-- Profit Growth Selector -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-3">Select Profit Growth <span
+                            class="text-slate-400 font-normal">(Optional)</span></label>
+                    <select id="transferProfitGrowthSelect"
+                        class="w-full p-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-sim focus:border-sim outline-none transition-all duration-300">
+                        <option value="">Loading profit growths...</option>
+                    </select>
+                    <!-- Info Box for Auto-Create -->
+                    <div id="transferAutoCreateInfo"
+                        class="hidden mt-3 bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+                        <div class="flex items-start gap-3">
+                            <div class="flex-shrink-0 mt-0.5">
+                                <i class="fa-solid fa-info-circle text-blue-600 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-sm font-bold text-blue-900 mb-1">New Profit Growth Account</h4>
+                                <p class="text-xs text-blue-800 leading-relaxed">
+                                    You don't have a profit growth account yet. A new account will be created
+                                    automatically when you transfer funds with default settings (20% weekly growth).
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Styled Warning Box for No Profit Growths (legacy - kept for backward compatibility) -->
+                    <div id="transferNoProfitGrowths"
+                        class="hidden mt-3 bg-amber-50 border-2 border-amber-300 rounded-xl p-4">
+                        <div class="flex items-start gap-3">
+                            <div class="flex-shrink-0 mt-0.5">
+                                <i class="fa-solid fa-exclamation-triangle text-amber-600 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-sm font-bold text-amber-900 mb-1">No Profit Growth Accounts Available
+                                </h4>
+                                <p class="text-xs text-amber-800 leading-relaxed">
+                                    You don't have any profit growth accounts yet. Only administrators can create profit
+                                    growth accounts. Please contact an administrator to get started.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Inline Error Message -->
+                    <p id="transferSelectionError"
+                        class="hidden mt-3 text-sm text-red-600 bg-red-50 border-2 border-red-200 rounded-xl p-4">
+                        <i class="fa-solid fa-exclamation-circle mr-2"></i>
+                        <strong>Please select a profit growth account</strong> to transfer funds to.
+                    </p>
+
+                    <!-- Amount Error Message -->
+                    <p id="transferAmountError"
+                        class="hidden mt-3 text-sm text-red-600 bg-red-50 border-2 border-red-200 rounded-xl p-4">
+                        <i class="fa-solid fa-exclamation-circle mr-2"></i>
+                        <strong id="transferAmountErrorMessage">Please enter a valid transfer amount.</strong>
+                    </p>
+                </div>
+
+                <!-- Amount Input -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-3">Amount (USD) *</label>
+                    <div class="relative">
+                        <span
+                            class="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 font-bold">$</span>
+                        <input type="number" id="transferAmountInput" step="0.01" min="0.01" required
+                            class="w-full pl-8 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-sim focus:border-sim outline-none transition-all duration-300"
+                            placeholder="0.00">
+                    </div>
+                    <button type="button" onclick="setTransferMaxAmount()"
+                        class="mt-2 text-xs font-bold text-sim hover:underline">
+                        Use Max Available
+                    </button>
+                </div>
+
+                <!-- Info Box -->
+                <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+                    <p class="text-xs text-blue-800">
+                        <i class="fa-solid fa-info-circle mr-1"></i>
+                        <strong>Note:</strong> Funds will be locked for 7 days and will grow at 20% weekly. You can only
+                        transfer once per week.
+                    </p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-3 pt-4">
+                    <button onclick="closeTransferToProfitGrowthModal()"
+                        class="flex-1 px-6 py-3 bg-white border-2 border-gray-200 text-slate-600 rounded-xl font-bold hover:bg-gray-50 transition">
+                        Cancel
+                    </button>
+                    <button onclick="executeTransferToProfitGrowth()" id="transferSubmitBtn"
+                        class="flex-1 px-6 py-3 bg-sim text-white rounded-xl font-bold hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled title="Please select a profit growth account to transfer funds">
+                        Transfer Funds
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdraw from Profit Growth Modal -->
+    <div id="withdrawFromProfitGrowthModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-4 lg:p-8 animate-fade-in max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-slate-900">Withdraw from Profit Growth</h2>
+                <button onclick="closeWithdrawFromProfitGrowthModal()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <p class="text-sm text-slate-600 mb-6">Move funds from a Profit Growth account back to your Real Wallet
+                (withdrawable).</p>
+
+            <div class="space-y-6">
+                <!-- Profit Growth Selector -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-3">Select Profit Growth *</label>
+                    <select id="withdrawProfitGrowthSelect"
+                        class="w-full p-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-real focus:border-real outline-none transition-all duration-300">
+                        <option value="">Loading profit growths...</option>
+                    </select>
+                    <!-- Styled Warning Box for No Profit Growths with Balance -->
+                    <div id="withdrawNoProfitGrowths"
+                        class="hidden mt-3 bg-amber-50 border-2 border-amber-300 rounded-xl p-4">
+                        <div class="flex items-start gap-3">
+                            <div class="flex-shrink-0 mt-0.5">
+                                <i class="fa-solid fa-exclamation-triangle text-amber-600 text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-sm font-bold text-amber-900 mb-1">No Withdrawable Balance Available</h4>
+                                <p class="text-xs text-amber-800 leading-relaxed">
+                                    You don't have any profit growth accounts with available balance to withdraw from
+                                    yet. Transfer funds to a profit growth account first to start earning.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Selection Error Message -->
+                    <div id="withdrawSelectionError"
+                        class="hidden mt-3 bg-red-50 border-2 border-red-200 rounded-xl p-4">
+                        <div class="flex items-start gap-3">
+                            <i class="fa-solid fa-exclamation-circle text-red-600 text-lg mt-0.5"></i>
+                            <p class="text-sm text-red-800">
+                                <strong>Please select a profit growth account</strong> to withdraw funds from.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Amount Error Message -->
+                    <div id="withdrawAmountError" class="hidden mt-3 bg-red-50 border-2 border-red-200 rounded-xl p-4">
+                        <div class="flex items-start gap-3">
+                            <i class="fa-solid fa-exclamation-circle text-red-600 text-lg mt-0.5"></i>
+                            <p class="text-sm text-red-800">
+                                <strong id="withdrawAmountErrorMessage">Please enter a valid withdrawal amount.</strong>
+                            </p>
+                        </div>
+                    </div>
+                    <div id="withdrawProfitGrowthInfo"
+                        class="hidden mt-3 bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+                        <p class="text-xs font-bold text-blue-600 uppercase tracking-widest mb-1">Available Balance</p>
+                        <p id="withdrawAvailableBalance" class="text-xl font-bold text-blue-700">$0.00</p>
+                        <p class="text-xs text-blue-600 mt-1" id="withdrawGrowthInfo"></p>
+                    </div>
+                </div>
+
+                <!-- Amount Input -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-3">Amount (USD) *</label>
+                    <div class="relative">
+                        <span
+                            class="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 font-bold">$</span>
+                        <input type="number" id="withdrawAmountInput" step="0.01" min="0.01" required
+                            class="w-full pl-8 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-real focus:border-real outline-none transition-all duration-300"
+                            placeholder="0.00">
+                    </div>
+                    <button type="button" onclick="setWithdrawMaxAmount()"
+                        class="mt-2 text-xs font-bold text-real hover:underline">
+                        Use Max Available
+                    </button>
+                </div>
+
+                <!-- Real Wallet Balance Preview -->
+                <div id="withdrawRealBalancePreview"
+                    class="hidden bg-green-50 border-2 border-green-200 rounded-xl p-4">
+                    <p class="text-xs font-bold text-green-600 uppercase tracking-widest mb-1">Your Real Wallet Balance
+                    </p>
+                    <p id="withdrawRealBalance" class="text-2xl font-bold text-green-700">$0.00</p>
+                </div>
+
+                <!-- Info Box -->
+                <div class="bg-green-50 border-2 border-green-200 rounded-xl p-4">
+                    <p class="text-xs text-green-800">
+                        <i class="fa-solid fa-check-circle mr-1"></i>
+                        <strong>Withdrawable:</strong> Funds will be moved to your Real Wallet and can be withdrawn.
+                    </p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-3 pt-4">
+                    <button onclick="closeWithdrawFromProfitGrowthModal()"
+                        class="flex-1 px-6 py-3 bg-white border-2 border-gray-200 text-slate-600 rounded-xl font-bold hover:bg-gray-50 transition">
+                        Cancel
+                    </button>
+                    <button onclick="executeWithdrawFromProfitGrowth()" id="withdrawSubmitBtn"
+                        class="flex-1 px-6 py-3 bg-real text-white rounded-xl font-bold hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        Withdraw Funds
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transfer Success Modal -->
+    <div id="transferSuccessModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-4 lg:p-8 animate-fade-in max-h-[90vh] overflow-y-auto">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fa-solid fa-check text-green-600 text-3xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-900 mb-2">Transfer Successful!</h2>
+                <p class="text-sm text-slate-600">Your funds have been transferred to your profit growth account</p>
+            </div>
+
+            <div class="bg-green-50 border-2 border-green-200 rounded-xl p-6 mb-6">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-sm font-medium text-green-800">Amount Transferred:</span>
+                    <span class="text-lg font-bold text-green-900" id="transferSuccessAmount">$0.00</span>
+                </div>
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-sm font-medium text-green-800">To Profit Growth:</span>
+                    <span class="text-sm font-bold text-green-900" id="transferSuccessProfitGrowth">-</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-sm font-medium text-green-800">New Real Balance:</span>
+                    <span class="text-sm font-bold text-green-900" id="transferSuccessNewBalance">$0.00</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3">
+                <button onclick="closeTransferSuccessModal()"
+                    class="w-full px-6 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition">
+                    <i class="fa-solid fa-check mr-2"></i> Done
+                </button>
+                <button onclick="transferMoreFunds()"
+                    class="w-full px-6 py-3 bg-white border-2 border-gray-200 text-slate-600 rounded-xl font-bold hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-wallet mr-2"></i> Transfer More Funds
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdraw Success Modal -->
+    <div id="withdrawSuccessModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-4 lg:p-8 animate-fade-in max-h-[90vh] overflow-y-auto">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fa-solid fa-check text-green-600 text-3xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-900 mb-2">Withdrawal Successful!</h2>
+                <p class="text-sm text-slate-600">Your funds have been withdrawn to your real wallet</p>
+            </div>
+
+            <div class="bg-green-50 border-2 border-green-200 rounded-xl p-6 mb-6">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-sm font-medium text-green-800">Amount Withdrawn:</span>
+                    <span class="text-lg font-bold text-green-900" id="withdrawSuccessAmount">$0.00</span>
+                </div>
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-sm font-medium text-green-800">From Profit Growth:</span>
+                    <span class="text-sm font-bold text-green-900" id="withdrawSuccessProfitGrowth">-</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-sm font-medium text-green-800">New Real Balance:</span>
+                    <span class="text-sm font-bold text-green-900" id="withdrawSuccessNewBalance">$0.00</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3">
+                <button onclick="closeWithdrawSuccessModal()"
+                    class="w-full px-6 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition">
+                    <i class="fa-solid fa-check mr-2"></i> Done
+                </button>
+                <button onclick="withdrawMoreFunds()"
+                    class="w-full px-6 py-3 bg-white border-2 border-gray-200 text-slate-600 rounded-xl font-bold hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-wallet mr-2"></i> Withdraw More Funds
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fade-in 0.3s ease-out;
+        }
+    </style>
+
+    <script>
+        // Toggle user menu dropdown (sidebar)
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userMenuDropdown');
+            const chevron = document.getElementById('userMenuChevron');
+            if (dropdown && chevron) {
+                dropdown.classList.toggle('hidden');
+                chevron.classList.toggle('fa-chevron-up');
+                chevron.classList.toggle('fa-chevron-down');
+            }
+        }
+
+        // Toggle header user menu dropdown
+        function toggleHeaderUserMenu() {
+            const dropdown = document.getElementById('headerUserMenuDropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('hidden');
+            }
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function (event) {
+            // Sidebar menu
+            const sidebarMenu = document.getElementById('sidebarUserMenu');
+            const sidebarDropdown = document.getElementById('userMenuDropdown');
+            if (sidebarMenu && sidebarDropdown && !sidebarMenu.contains(event.target) && !sidebarDropdown.contains(event.target)) {
+                sidebarDropdown.classList.add('hidden');
+                const chevron = document.getElementById('userMenuChevron');
+                if (chevron) {
+                    chevron.classList.remove('fa-chevron-down');
+                    chevron.classList.add('fa-chevron-up');
+                }
+            }
+
+            // Header menu
+            const headerDropdown = document.getElementById('headerUserMenuDropdown');
+            const headerButton = document.querySelector('button[onclick="toggleHeaderUserMenu()"]');
+            if (headerButton && headerDropdown && !headerButton.contains(event.target) && !headerDropdown.contains(event.target)) {
+                headerDropdown.classList.add('hidden');
+            }
+        });
+
+        // Handle logout
+        async function handleLogout() {
+            try {
+                await API.auth.logout();
+                // Clear any stored tokens
+                localStorage.removeItem('auth_token');
+                // Redirect to login
+                window.location.href = '/login.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+                // Even if logout fails, clear local storage and redirect
+                localStorage.removeItem('auth_token');
+                window.location.href = '/login.html';
+            }
+        }
+
+        // Mobile bottom navigation active state
+        function updateMobileNavActive() {
+            const currentPage = document.body.getAttribute('data-page');
+            const navItems = document.querySelectorAll('.mobile-nav-item');
+            
+            navItems.forEach(item => {
+                const route = item.getAttribute('data-route');
+                item.classList.remove('active', 'text-[#10B981]', 'bg-green-50');
+                item.classList.add('text-gray-600');
+                
+                // Map page to route
+                const pageRouteMap = {
+                    'dashboard': 'dashboard',
+                    'profitGrowths': 'profitGrowths',
+                    'transactions': 'transactions',
+                    'profileSearch': 'profileSearch',
+                    'profile': 'profile',
+                    'settings': 'settings'
+                };
+                
+                if (route === pageRouteMap[currentPage] || (currentPage === 'dashboard' && route === 'dashboard')) {
+                    item.classList.add('active', 'text-[#10B981]', 'bg-green-50');
+                    item.classList.remove('text-gray-600');
+                }
+            });
+        }
+        
+        // Update on page load
+        updateMobileNavActive();
+
+        // Make functions available globally
+        window.handleLogout = handleLogout;
+        window.toggleUserMenu = toggleUserMenu;
+        window.toggleHeaderUserMenu = toggleHeaderUserMenu;
+        window.updateMobileNavActive = updateMobileNavActive;
+
+        // Transfer Funds Functions
+        let profitGrowths = [];
+        let realBalance = 0;
+        let userProfile = null;
+
+        // Open Transfer to Profit Growth Modal
+        window.openTransferToProfitGrowthModal = async function () {
+            const modal = document.getElementById('transferToProfitGrowthModal');
+            modal.classList.remove('hidden');
+
+            // Reset button state
+            const submitBtn = document.getElementById('transferSubmitBtn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                submitBtn.textContent = 'Transfer Funds';
+            }
+
+            // Clear form
+            const amountInput = document.getElementById('transferAmountInput');
+            if (amountInput) {
+                amountInput.value = '';
+            }
+
+            // Load user balance
+            try {
+                userProfile = await API.user.getProfile();
+                if (userProfile.user) {
+                    realBalance = parseFloat(userProfile.user.real_balance || 0);
+                    document.getElementById('transferRealBalance').textContent = `$${realBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                }
+            } catch (error) {
+                console.error('Failed to load balance:', error);
+            }
+
+            // Load profit growths
+            await loadProfitGrowthsForTransfer('transferProfitGrowthSelect', 'transferNoProfitGrowths');
+
+            // Clear errors when user selects a profit growth
+            const transferSelect = document.getElementById('transferProfitGrowthSelect');
+            if (transferSelect) {
+                transferSelect.addEventListener('change', function () {
+                    if (this.value) {
+                        this.classList.remove('border-red-400', 'bg-red-50', 'ring-2', 'ring-red-200');
+                        this.classList.add('border-gray-200');
+                    }
+                });
+            }
+        };
+
+        // Close Transfer to Profit Growth Modal
+        window.closeTransferToProfitGrowthModal = function () {
+            document.getElementById('transferToProfitGrowthModal').classList.add('hidden');
+            document.getElementById('transferAmountInput').value = '';
+            document.getElementById('transferProfitGrowthSelect').value = '';
+        };
+
+        // Open Withdraw from Profit Growth Modal
+        window.openWithdrawFromProfitGrowthModal = async function () {
+            const modal = document.getElementById('withdrawFromProfitGrowthModal');
+            modal.classList.remove('hidden');
+
+            // Load user balance
+            try {
+                userProfile = await API.user.getProfile();
+                if (userProfile.user) {
+                    realBalance = parseFloat(userProfile.user.real_balance || 0);
+                    document.getElementById('withdrawRealBalance').textContent = `$${realBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                    document.getElementById('withdrawRealBalancePreview').classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Failed to load balance:', error);
+            }
+
+            // Load profit growths with balance > 0
+            await loadProfitGrowthsForWithdraw('withdrawProfitGrowthSelect', 'withdrawNoProfitGrowths');
+
+            // Clear errors when user selects a profit growth
+            const withdrawSelect = document.getElementById('withdrawProfitGrowthSelect');
+            const selectionError = document.getElementById('withdrawSelectionError');
+            if (withdrawSelect) {
+                withdrawSelect.addEventListener('change', function () {
+                    if (this.value) {
+                        this.classList.remove('border-red-400', 'bg-red-50', 'ring-2', 'ring-red-200');
+                        this.classList.add('border-gray-200');
+                        if (selectionError) {
+                            selectionError.classList.add('hidden');
+                        }
+                    }
+                });
+            }
+
+            // Clear amount input errors when user types
+            const withdrawAmountInput = document.getElementById('withdrawAmountInput');
+            if (withdrawAmountInput) {
+                withdrawAmountInput.addEventListener('input', function () {
+                    if (this.value && parseFloat(this.value) > 0) {
+                        this.classList.remove('border-red-400', 'bg-red-50', 'ring-2', 'ring-red-200');
+                        this.classList.add('border-gray-200');
+                        // Hide amount error
+                        const amountError = document.getElementById('withdrawAmountError');
+                        if (amountError) amountError.classList.add('hidden');
+                    }
+                });
+            }
+
+            // Also clear amount input errors in transfer modal
+            const transferAmountInput = document.getElementById('transferAmountInput');
+            if (transferAmountInput) {
+                transferAmountInput.addEventListener('input', function () {
+                    if (this.value && parseFloat(this.value) > 0) {
+                        this.classList.remove('border-red-400', 'bg-red-50', 'ring-2', 'ring-red-200');
+                        this.classList.add('border-gray-200');
+                    }
+                });
+            }
+        };
+
+        // Close Withdraw from Profit Growth Modal
+        window.closeWithdrawFromProfitGrowthModal = function () {
+            document.getElementById('withdrawFromProfitGrowthModal').classList.add('hidden');
+            document.getElementById('withdrawAmountInput').value = '';
+            document.getElementById('withdrawProfitGrowthSelect').value = '';
+            document.getElementById('withdrawProfitGrowthInfo').classList.add('hidden');
+        };
+
+        // Load profit growths for transfer
+        async function loadProfitGrowthsForTransfer(selectId, noItemsId) {
+            const select = document.getElementById(selectId);
+            const noItems = document.getElementById(noItemsId);
+
+            select.innerHTML = '<option value="">Loading...</option>';
+
+            try {
+                const response = await API.user.getProfitGrowths({ per_page: 100 });
+                console.log('Profit Growths API Response:', response);
+
+                // Handle both paginated and non-paginated responses
+                let profitGrowthsList = [];
+                if (response && typeof response === 'object') {
+                    if (Array.isArray(response)) {
+                        // Direct array response
+                        profitGrowthsList = response;
+                    } else if (response.data && Array.isArray(response.data)) {
+                        // Paginated response with data property
+                        profitGrowthsList = response.data;
+                    } else if (response.profit_growths && Array.isArray(response.profit_growths)) {
+                        // Alternative response format
+                        profitGrowthsList = response.profit_growths;
+                    }
+                }
+
+                profitGrowths = profitGrowthsList;
+                console.log('Parsed profit growths:', profitGrowths);
+
+                // Filter only active/paused profit growths
+                const activeProfitGrowths = profitGrowths.filter(pg => {
+                    const status = pg.status || pg.status_type;
+                    return status === 'active' || status === 'paused';
+                });
+
+                console.log('Active/Paused profit growths:', activeProfitGrowths);
+
+                if (activeProfitGrowths.length === 0) {
+                    // Allow transfer even without profit growths - will auto-create
+                    select.innerHTML = '<option value="" selected>Create new profit growth account (auto)</option>';
+                    select.disabled = false;
+                    if (noItems) {
+                        noItems.classList.add('hidden');
+                    }
+                    // Show info about auto-creation
+                    const autoCreateInfo = document.getElementById('transferAutoCreateInfo');
+                    if (autoCreateInfo) {
+                        autoCreateInfo.classList.remove('hidden');
+                    }
+                    // Hide the old warning message
+                    if (noItems) {
+                        noItems.classList.add('hidden');
+                    }
+                    // Enable transfer button - will auto-create profit growth
+                    const transferBtn = document.getElementById('transferSubmitBtn');
+                    if (transferBtn) {
+                        transferBtn.disabled = false;
+                        transferBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                        transferBtn.removeAttribute('title');
+                    }
+                    // Hide selection error
+                    const selectionError = document.getElementById('transferSelectionError');
+                    if (selectionError) {
+                        selectionError.classList.add('hidden');
+                    }
+                } else {
+                    select.innerHTML = '<option value="">Select a profit growth...</option>';
+                    select.disabled = false;
+                    activeProfitGrowths.forEach(pg => {
+                        const option = document.createElement('option');
+                        option.value = pg.id;
+                        const growthPercentage = pg.growth_percentage || pg.growth_rate || 20.0; // Default to 20% if not set
+                        const growthFrequency = pg.growth_frequency || pg.frequency || 'weekly'; // Default to weekly if not set
+                        option.textContent = `${pg.name || 'Unnamed'} (${growthPercentage}% ${growthFrequency})`;
+                        option.dataset.percentage = growthPercentage;
+                        option.dataset.frequency = growthFrequency;
+                        select.appendChild(option);
+                    });
+                    if (noItems) {
+                        noItems.classList.add('hidden');
+                    }
+                    // Hide auto-create info since profit growths exist
+                    const autoCreateInfo = document.getElementById('transferAutoCreateInfo');
+                    if (autoCreateInfo) {
+                        autoCreateInfo.classList.add('hidden');
+                    }
+                    // Enable transfer button when profit growths are available
+                    const transferBtn = document.getElementById('transferSubmitBtn');
+                    if (transferBtn) {
+                        transferBtn.disabled = false;
+                        transferBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                        transferBtn.removeAttribute('title');
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to load profit growths:', error);
+                console.error('Error details:', {
+                    message: error.message,
+                    response: error.response,
+                    status: error.status
+                });
+                select.innerHTML = '<option value="">Error loading profit growths</option>';
+                select.disabled = true;
+                if (noItems) {
+                    noItems.classList.remove('hidden');
+                }
+
+                // Show error message
+                const errorBox = document.createElement('div');
+                errorBox.className = 'mt-3 bg-red-50 border-2 border-red-200 rounded-xl p-4';
+                errorBox.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <i class="fa-solid fa-exclamation-circle text-red-600 text-lg mt-0.5"></i>
+                        <div>
+                            <h4 class="text-sm font-bold text-red-900 mb-1">Error Loading Profit Growths</h4>
+                            <p class="text-xs text-red-800">${error.message || 'Failed to load profit growth accounts. Please try again.'}</p>
+                        </div>
+                    </div>
+                `;
+                const selectParent = select.parentElement;
+                if (selectParent && !selectParent.querySelector('.error-box')) {
+                    errorBox.classList.add('error-box');
+                    selectParent.appendChild(errorBox);
+                    setTimeout(() => errorBox.remove(), 10000);
+                }
+            }
+        }
+
+        // Load profit growths for withdrawal (only those with balance > 0)
+        async function loadProfitGrowthsForWithdraw(selectId, noItemsId) {
+            const select = document.getElementById(selectId);
+            const noItems = document.getElementById(noItemsId);
+
+            select.innerHTML = '<option value="">Loading...</option>';
+
+            try {
+                const response = await API.user.getProfitGrowths({ per_page: 100 });
+                profitGrowths = response.data || response || [];
+
+                // Filter only active/paused profit growths with balance > 0
+                const withdrawableProfitGrowths = profitGrowths.filter(pg =>
+                    (pg.status === 'active' || pg.status === 'paused') &&
+                    parseFloat(pg.current_balance || 0) > 0
+                );
+
+                if (withdrawableProfitGrowths.length === 0) {
+                    select.innerHTML = '<option value="">No profit growths with available balance</option>';
+                    noItems.classList.remove('hidden');
+                    document.getElementById('withdrawProfitGrowthInfo').classList.add('hidden');
+                } else {
+                    select.innerHTML = '<option value="">Select a profit growth...</option>';
+                    withdrawableProfitGrowths.forEach(pg => {
+                        const option = document.createElement('option');
+                        option.value = pg.id;
+                        const balance = parseFloat(pg.current_balance || 0);
+                        option.textContent = `${pg.name} ($${balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })})`;
+                        option.dataset.balance = balance;
+                        option.dataset.growthInfo = `${pg.growth_percentage}% ${pg.growth_frequency}`;
+                        select.appendChild(option);
+                    });
+                    noItems.classList.add('hidden');
+                }
+
+                // Add change listener to show balance when selected
+                select.addEventListener('change', function () {
+                    const selectedOption = this.options[this.selectedIndex];
+                    if (selectedOption.value && selectedOption.dataset.balance) {
+                        const balance = parseFloat(selectedOption.dataset.balance);
+                        document.getElementById('withdrawAvailableBalance').textContent = `$${balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                        document.getElementById('withdrawGrowthInfo').textContent = `Growth: ${selectedOption.dataset.growthInfo}`;
+                        document.getElementById('withdrawProfitGrowthInfo').classList.remove('hidden');
+                        document.getElementById('withdrawAmountInput').max = balance;
+                    } else {
+                        document.getElementById('withdrawProfitGrowthInfo').classList.add('hidden');
+                    }
+                });
+            } catch (error) {
+                console.error('Failed to load profit growths:', error);
+                select.innerHTML = '<option value="">Error loading profit growths</option>';
+                noItems.classList.remove('hidden');
+            }
+        }
+
+        // Set max amount for transfer
+        window.setTransferMaxAmount = function () {
+            document.getElementById('transferAmountInput').value = realBalance.toFixed(2);
+        };
+
+        // Set max amount for withdrawal
+        window.setWithdrawMaxAmount = function () {
+            const select = document.getElementById('withdrawProfitGrowthSelect');
+            const selectedOption = select.options[select.selectedIndex];
+            if (selectedOption.value && selectedOption.dataset.balance) {
+                const maxBalance = parseFloat(selectedOption.dataset.balance);
+                document.getElementById('withdrawAmountInput').value = maxBalance.toFixed(2);
+            }
+        };
+
+        // Execute transfer to profit growth
+        window.executeTransferToProfitGrowth = async function () {
+            const select = document.getElementById('transferProfitGrowthSelect');
+            const amountInput = document.getElementById('transferAmountInput');
+            const submitBtn = document.getElementById('transferSubmitBtn');
+
+            // Check if button is disabled (shouldn't happen, but safety check)
+            if (submitBtn && submitBtn.disabled) {
+                console.log('Transfer button is disabled - no profit growths available');
+                return;
+            }
+
+            const profitGrowthId = select.value;
+            const amount = parseFloat(amountInput.value);
+
+            // Clear previous errors
+            const transferSelectionError = document.getElementById('transferSelectionError');
+            const transferAmountError = document.getElementById('transferAmountError');
+            if (transferSelectionError) transferSelectionError.classList.add('hidden');
+            if (transferAmountError) transferAmountError.classList.add('hidden');
+
+            // Check if we should allow auto-creation
+            // If select is disabled, that means there was an error loading profit growths
+            if (select.disabled && select.options[0]?.textContent?.includes('Error')) {
+                console.error('Error loading profit growths');
+                if (transferSelectionError) {
+                    transferSelectionError.classList.remove('hidden');
+                }
+                return;
+            }
+
+            // Check if profit growths exist but none selected
+            // If no profit growths exist, empty profitGrowthId is fine (will auto-create)
+            const hasExistingProfitGrowths = select.options.length > 1 &&
+                !select.options[0]?.textContent?.includes('Create new profit growth account');
+
+            if (!profitGrowthId && hasExistingProfitGrowths) {
+                // Profit growths are available but user didn't select one
+                // Highlight the select field
+                select.classList.add('border-red-400', 'bg-red-50', 'ring-2', 'ring-red-200');
+                select.classList.remove('border-gray-200');
+                select.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                // Show styled error message
+                if (transferSelectionError) {
+                    transferSelectionError.classList.remove('hidden');
+                }
+
+                setTimeout(() => {
+                    select.classList.remove('border-red-400', 'bg-red-50', 'ring-2', 'ring-red-200');
+                    select.classList.add('border-gray-200');
+                }, 4000);
+                return;
+            }
+
+            // If no profit growth selected and no profit growths exist, allow auto-creation
+            // profitGrowthId will be empty string, which triggers auto-creation in the API
+
+            if (!amount || amount <= 0) {
+                amountInput.classList.add('border-red-400', 'bg-red-50', 'ring-2', 'ring-red-200');
+                amountInput.classList.remove('border-gray-200');
+
+                // Show styled error message
+                const errorMessage = document.getElementById('transferAmountErrorMessage');
+                if (errorMessage) {
+                    errorMessage.textContent = 'Please enter a valid transfer amount greater than $0.00';
+                }
+                if (transferAmountError) {
+                    transferAmountError.classList.remove('hidden');
+                }
+
+                setTimeout(() => {
+                    amountInput.classList.remove('border-red-400', 'bg-red-50', 'ring-2', 'ring-red-200');
+                    amountInput.classList.add('border-gray-200');
+                }, 4000);
+                return;
+            }
+
+            if (amount > realBalance) {
+                amountInput.classList.add('border-red-400', 'bg-red-50', 'ring-2', 'ring-red-200');
+                amountInput.classList.remove('border-gray-200');
+
+                // Show styled error message
+                const errorMessage = document.getElementById('transferAmountErrorMessage');
+                if (errorMessage) {
+                    errorMessage.textContent = `Insufficient balance. Available: $${realBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                }
+                if (transferAmountError) {
+                    transferAmountError.classList.remove('hidden');
+                }
+
+                setTimeout(() => {
+                    amountInput.classList.remove('border-red-400', 'bg-red-50', 'ring-2', 'ring-red-200');
+                    amountInput.classList.add('border-gray-200');
+                }, 4000);
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Transferring...';
+
+            try {
+                // Use empty string for profitGrowthId if no selection (will auto-create)
+                const response = await API.user.transferFundsToProfitGrowth(profitGrowthId || '', amount);
+
+                // Get profit growth name from response or selected option
+                let profitGrowthName = 'Profit Growth Account';
+                if (response.profit_growth && response.profit_growth.name) {
+                    profitGrowthName = response.profit_growth.name;
+                } else {
+                    const selectedOption = select.options[select.selectedIndex];
+                    if (selectedOption) {
+                        profitGrowthName = selectedOption.textContent || 'Profit Growth Account';
+                    }
+                }
+
+                // If profit growth was just created, show a message
+                if (response.created) {
+                    console.log('New profit growth account created:', response.profit_growth);
+                }
+
+                // Calculate new balance
+                const newBalance = realBalance - amount;
+
+                // Update success modal with details
+                document.getElementById('transferSuccessAmount').textContent = `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                document.getElementById('transferSuccessProfitGrowth').textContent = profitGrowthName;
+                document.getElementById('transferSuccessNewBalance').textContent = `$${newBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+                // Close transfer modal and show success modal
+                closeTransferToProfitGrowthModal();
+                document.getElementById('transferSuccessModal').classList.remove('hidden');
+
+                // Update local balance
+                realBalance = newBalance;
+
+                // Reload dashboard data in background
+                if (typeof initDashboard === 'function') {
+                    initDashboard();
+                } else {
+                    setTimeout(() => window.location.reload(), 2000);
+                }
+            } catch (error) {
+                console.error('Transfer error:', error);
+                const message = error.response?.message || error.message || 'Failed to transfer funds. Please try again.';
+
+                // Show styled error message
+                const errorMessage = document.getElementById('transferAmountErrorMessage');
+                if (errorMessage) {
+                    errorMessage.textContent = message;
+                }
+                const transferAmountError = document.getElementById('transferAmountError');
+                if (transferAmountError) {
+                    transferAmountError.classList.remove('hidden');
+                    transferAmountError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            } finally {
+                // Only re-enable if profit growths are available
+                const select = document.getElementById('transferProfitGrowthSelect');
+                if (select && !select.disabled && select.value) {
+                    submitBtn.disabled = false;
+                } else {
+                    submitBtn.disabled = true;
+                    submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+                submitBtn.textContent = 'Transfer Funds';
+            }
+        };
+
+        // Execute withdraw from profit growth
+        window.executeWithdrawFromProfitGrowth = async function () {
+            const select = document.getElementById('withdrawProfitGrowthSelect');
+            const amountInput = document.getElementById('withdrawAmountInput');
+            const submitBtn = document.getElementById('withdrawSubmitBtn');
+
+            const profitGrowthId = select.value;
+            const amount = parseFloat(amountInput.value);
+            const maxBalance = parseFloat(select.options[select.selectedIndex].dataset.balance || 0);
+
+            // Hide previous error messages
+            const selectionError = document.getElementById('withdrawSelectionError');
+            const withdrawAmountError = document.getElementById('withdrawAmountError');
+            if (selectionError) selectionError.classList.add('hidden');
+            if (withdrawAmountError) withdrawAmountError.classList.add('hidden');
+
+            if (!profitGrowthId) {
+                // Highlight the select field with animation
+                select.classList.add('border-red-400', 'bg-red-50', 'ring-2', 'ring-red-200');
+                select.classList.remove('border-gray-200');
+
+                // Show styled error message
+                if (selectionError) {
+                    selectionError.classList.remove('hidden');
+                }
+
+                // Scroll to error if needed
+                select.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                // Remove highlight after 4 seconds
+                setTimeout(() => {
+                    select.classList.remove('border-red-400', 'bg-red-50', 'ring-2', 'ring-red-200');
+                    select.classList.add('border-gray-200');
+                    if (selectionError) {
+                        selectionError.classList.add('hidden');
+                    }
+                }, 4000);
+                return;
+            }
+
+            if (!amount || amount <= 0) {
+                amountInput.classList.add('border-red-400', 'bg-red-50', 'ring-2', 'ring-red-200');
+                amountInput.classList.remove('border-gray-200');
+
+                // Show styled error message
+                const errorMessage = document.getElementById('withdrawAmountErrorMessage');
+                if (errorMessage) {
+                    errorMessage.textContent = 'Please enter a valid withdrawal amount greater than $0.00';
+                }
+                if (withdrawAmountError) {
+                    withdrawAmountError.classList.remove('hidden');
+                }
+
+                setTimeout(() => {
+                    amountInput.classList.remove('border-red-400', 'bg-red-50', 'ring-2', 'ring-red-200');
+                    amountInput.classList.add('border-gray-200');
+                }, 4000);
+                return;
+            }
+
+            if (amount > maxBalance) {
+                amountInput.classList.add('border-red-400', 'bg-red-50', 'ring-2', 'ring-red-200');
+                amountInput.classList.remove('border-gray-200');
+
+                // Show styled error message
+                const errorMessage = document.getElementById('withdrawAmountErrorMessage');
+                if (errorMessage) {
+                    errorMessage.textContent = `Insufficient balance. Maximum available: $${maxBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                }
+                if (withdrawAmountError) {
+                    withdrawAmountError.classList.remove('hidden');
+                }
+
+                setTimeout(() => {
+                    amountInput.classList.remove('border-red-400', 'bg-red-50', 'ring-2', 'ring-red-200');
+                    amountInput.classList.add('border-gray-200');
+                }, 4000);
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Withdrawing...';
+
+            try {
+                const response = await API.user.withdrawFundsFromProfitGrowth(profitGrowthId, amount);
+
+                // Get selected profit growth name
+                const selectedOption = select.options[select.selectedIndex];
+                const profitGrowthName = selectedOption.textContent || 'Profit Growth Account';
+
+                // Get updated user balance
+                try {
+                    userProfile = await API.user.getProfile();
+                    if (userProfile.user) {
+                        realBalance = parseFloat(userProfile.user.real_balance || 0);
+                    }
+                } catch (e) {
+                    console.error('Failed to fetch updated balance:', e);
+                }
+
+                // Update success modal with details
+                document.getElementById('withdrawSuccessAmount').textContent = `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                document.getElementById('withdrawSuccessProfitGrowth').textContent = profitGrowthName;
+                document.getElementById('withdrawSuccessNewBalance').textContent = `$${realBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+                // Close withdraw modal and show success modal
+                closeWithdrawFromProfitGrowthModal();
+                document.getElementById('withdrawSuccessModal').classList.remove('hidden');
+
+                // Reload dashboard data in background
+                if (typeof initDashboard === 'function') {
+                    initDashboard();
+                } else {
+                    setTimeout(() => window.location.reload(), 2000);
+                }
+            } catch (error) {
+                console.error('Withdraw error:', error);
+                const message = error.response?.message || error.message || 'Failed to withdraw funds. Please try again.';
+
+                // Show styled error message
+                const errorMessage = document.getElementById('withdrawAmountErrorMessage');
+                if (errorMessage) {
+                    errorMessage.textContent = message;
+                }
+                const withdrawAmountError = document.getElementById('withdrawAmountError');
+                if (withdrawAmountError) {
+                    withdrawAmountError.classList.remove('hidden');
+                    withdrawAmountError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Withdraw Funds';
+            }
+        };
+
+        // Transfer Success Modal Functions
+        window.closeTransferSuccessModal = function () {
+            document.getElementById('transferSuccessModal').classList.add('hidden');
+        };
+
+        window.transferMoreFunds = function () {
+            closeTransferSuccessModal();
+            setTimeout(() => {
+                openTransferToProfitGrowthModal();
+            }, 300);
+        };
+
+        // Withdraw Success Modal Functions
+        window.closeWithdrawSuccessModal = function () {
+            document.getElementById('withdrawSuccessModal').classList.add('hidden');
+        };
+
+        window.withdrawMoreFunds = function () {
+            closeWithdrawSuccessModal();
+            setTimeout(() => {
+                openWithdrawFromProfitGrowthModal();
+            }, 300);
+        };
+
+        // Close modals when clicking outside
+        document.addEventListener('click', function (event) {
+            const transferModal = document.getElementById('transferToProfitGrowthModal');
+            const withdrawModal = document.getElementById('withdrawFromProfitGrowthModal');
+
+            if (transferModal && event.target === transferModal) {
+                closeTransferToProfitGrowthModal();
+            }
+
+            if (withdrawModal && event.target === withdrawModal) {
+                closeWithdrawFromProfitGrowthModal();
+            }
+        });
+
+        // Notification Dropdown Functions
+        window.toggleNotificationDropdown = function () {
+            const dropdown = document.getElementById('notificationDropdown');
+            if (dropdown) {
+                const isHidden = dropdown.classList.contains('hidden');
+                dropdown.classList.toggle('hidden');
+
+                // Load notifications when opening dropdown
+                if (isHidden) {
+                    loadNotificationDropdown();
+                }
+            }
+        };
+
+        // Load notifications for dropdown
+        async function loadNotificationDropdown() {
+            const dropdownList = document.getElementById('notificationDropdownList');
+            if (!dropdownList) return;
+
+            try {
+                dropdownList.innerHTML = '<div class="p-4 text-center text-slate-500"><i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i><p class="text-sm">Loading notifications...</p></div>';
+
+                const dashboardData = await API.user.getDashboard();
+                const transactions = dashboardData.recent_transactions || [];
+                const activityLogs = dashboardData.recent_activity || [];
+
+                // Combine and sort by date (most recent first)
+                const allNotifications = [];
+
+                // Add transactions as notifications (exclude pending deposits)
+                transactions
+                    .filter(tx => {
+                        // Don't show pending deposits - they shouldn't appear until admin confirms
+                        if (tx.type === 'deposit' && tx.status === 'pending') {
+                            return false;
+                        }
+                        return true;
+                    })
+                    .slice(0, 10)
+                    .forEach(tx => {
+                        allNotifications.push({
+                            type: 'transaction',
+                            id: tx.id,
+                            action: tx.type,
+                            amount: tx.amount,
+                            currency: tx.currency || 'USD',
+                            description: tx.description || '',
+                            status: tx.status,
+                            date: tx.created_at,
+                            created_at: tx.created_at
+                        });
+                    });
+
+                // Add activity logs as notifications
+                activityLogs.slice(0, 10).forEach(activity => {
+                    allNotifications.push({
+                        type: 'activity',
+                        id: activity.id,
+                        action: activity.action,
+                        description: activity.description || '',
+                        date: activity.created_at,
+                        created_at: activity.created_at
+                    });
+                });
+
+                // Sort by date (most recent first)
+                allNotifications.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+                // Get first 5 notifications for dropdown
+                const recentNotifications = allNotifications.slice(0, 5);
+
+                // Update badge
+                const badge = document.getElementById('notificationBadge');
+                if (badge) {
+                    if (recentNotifications.length > 0) {
+                        badge.classList.remove('hidden');
+                    } else {
+                        badge.classList.add('hidden');
+                    }
+                }
+
+                // Render notifications
+                if (recentNotifications.length === 0) {
+                    dropdownList.innerHTML = '<div class="p-4 text-center text-slate-500"><p class="text-sm">No notifications</p></div>';
+                    return;
+                }
+
+                dropdownList.innerHTML = recentNotifications.map(notif => {
+                    const date = formatNotificationDate(notif.created_at);
+                    const icon = getNotificationIcon(notif.action || notif.type);
+                    const title = getNotificationTitle(notif);
+                    const description = notif.description || '';
+
+                    return `
+                        <div class="p-4 hover:bg-gray-50 transition cursor-pointer" onclick="handleNotificationClick('${notif.type}', ${notif.id})">
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-full ${icon.bg} flex items-center justify-center shrink-0">
+                                    <i class="fa-solid ${icon.icon} ${icon.color} text-sm"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-bold text-slate-800 mb-1">${title}</p>
+                                    ${description ? `<p class="text-xs text-slate-500 line-clamp-2 mb-1">${description}</p>` : ''}
+                                    <p class="text-xs text-slate-400">${date}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error('Failed to load notifications:', error);
+                dropdownList.innerHTML = '<div class="p-4 text-center text-red-500"><p class="text-sm">Failed to load notifications</p></div>';
+            }
+        }
+
+        // Format notification date
+        function formatNotificationDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins}m ago`;
+            if (diffHours < 24) return `${diffHours}h ago`;
+            if (diffDays < 7) return `${diffDays}d ago`;
+
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+
+        // Get notification icon
+        function getNotificationIcon(action) {
+            const icons = {
+                'deposit': { icon: 'fa-arrow-down', color: 'text-green-600', bg: 'bg-green-100' },
+                'withdrawal': { icon: 'fa-arrow-up', color: 'text-red-600', bg: 'bg-red-100' },
+                'credit': { icon: 'fa-gift', color: 'text-blue-600', bg: 'bg-blue-100' },
+                'debit': { icon: 'fa-minus', color: 'text-orange-600', bg: 'bg-orange-100' },
+                'transfer_sent': { icon: 'fa-paper-plane', color: 'text-blue-600', bg: 'bg-blue-100' },
+                'transfer_received': { icon: 'fa-inbox', color: 'text-green-600', bg: 'bg-green-100' },
+                'profit_growth_created': { icon: 'fa-chart-line', color: 'text-purple-600', bg: 'bg-purple-100' },
+                'profit_growth_updated': { icon: 'fa-sync', color: 'text-blue-600', bg: 'bg-blue-100' }
+            };
+
+            return icons[action] || { icon: 'fa-bell', color: 'text-slate-600', bg: 'bg-slate-100' };
+        }
+
+        // Get notification title
+        function getNotificationTitle(notif) {
+            const action = notif.action || notif.type;
+            const actionNames = {
+                'deposit': 'Deposit',
+                'withdrawal': 'Withdrawal',
+                'credit': 'Credit',
+                'debit': 'Debit',
+                'transfer_sent': 'Funds Sent',
+                'transfer_received': 'Funds Received',
+                'profit_growth_created': 'Profit Growth Created',
+                'profit_growth_updated': 'Profit Growth Updated'
+            };
+
+            const actionName = actionNames[action] || action.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
+            if (notif.amount) {
+                const amount = parseFloat(notif.amount);
+                const sign = action === 'deposit' || action === 'credit' || action === 'transfer_received' ? '+' : '-';
+                return `${actionName}: ${sign}$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            }
+
+            return actionName;
+        }
+
+        // Handle notification click
+        window.handleNotificationClick = function (type, id) {
+            if (type === 'transaction') {
+                // Navigate to transaction history or show transaction detail
+                window.location.href = '#transactions';
+            } else {
+                // Navigate to notifications page
+                window.location.href = '#notifications';
+            }
+        };
+
+        // Close notification dropdown when clicking outside
+        document.addEventListener('click', function (event) {
+            const dropdown = document.getElementById('notificationDropdown');
+            const button = event.target.closest('[onclick="toggleNotificationDropdown()"]');
+
+            if (dropdown && !dropdown.contains(event.target) && !button) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    </script>
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/forms.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/routes.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/payouts.js"></script>
+    <script>
+        // Referral program card
+        (async function loadReferralCard() {
+            const codeEl = document.getElementById('referralCode');
+            if (!codeEl) return;
+
+            function copyText(value, btn) {
+                if (!value) return;
+                navigator.clipboard?.writeText(value).then(() => {
+                    const original = btn.textContent;
+                    btn.textContent = 'Copied';
+                    setTimeout(() => { btn.textContent = original; }, 1500);
+                }).catch(() => {
+                    codeEl.select?.();
+                    Utils?.showToast?.('Copy failed — select and copy manually', 'error');
+                });
+            }
+
+            try {
+                const data = await API.get('/api/referrals');
+
+                const linkEl = document.getElementById('referralLink');
+                codeEl.value = data.referral_code || '—';
+                if (linkEl) linkEl.value = data.referral_link || '—';
+
+                const bonus = Number(data.bonus_per_signup || 0);
+                document.getElementById('referralBonus').textContent = `$${bonus.toFixed(2)}`;
+                document.getElementById('referralCount').textContent = data.total_referrals ?? 0;
+                document.getElementById('referralTotal').textContent = `$${Number(data.total_bonus_awarded || 0).toFixed(2)}`;
+
+                document.getElementById('copyReferralCode')?.addEventListener('click', (e) => copyText(codeEl.value, e.currentTarget));
+                document.getElementById('copyReferralLink')?.addEventListener('click', (e) => copyText(document.getElementById('referralLink')?.value, e.currentTarget));
+            } catch (err) {
+                console.error('Failed to load referrals:', err);
+            }
+        })();
+
+        // Personalized growth projection
+        (async function loadProjection() {
+            const basisEl = document.getElementById('projectionBasis');
+            if (!basisEl) return;
+
+            const DAILY_RATE = 20.0 / 7 / 100; // 2.857% per day
+
+            function fmt(n) {
+                return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            }
+            function grow(base, days) {
+                return base * Math.pow(1 + DAILY_RATE, days);
+            }
+
+            try {
+                const res = await API.user.getProfile();
+                const user = res?.user || res || {};
+
+                let base = parseFloat(user.simulated_balance || 0);
+                let isExample = false;
+
+                if (!base || base <= 0) {
+                    base = parseFloat(user.real_balance || 0);
+                }
+                if (!base || base <= 0) {
+                    base = 100;
+                    isExample = true;
+                }
+
+                basisEl.textContent = isExample
+                    ? `Example based on ${fmt(base)} — transfer funds to see your own figures.`
+                    : `Based on your ${fmt(base)} in profit growth.`;
+
+                document.getElementById('projection30').textContent = fmt(grow(base, 30));
+                document.getElementById('projection90').textContent = fmt(grow(base, 90));
+            } catch (err) {
+                console.error('Failed to load projection:', err);
+                basisEl.textContent = 'Projection unavailable right now.';
+            }
+        })();
+
+        // Portfolio allocation donut + relationship manager
+        (async function loadPortfolioAndRm() {
+            const donut = document.getElementById('allocationDonut');
+            if (!donut) return;
+
+            const money = (n) => '$' + (Number(n) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            try {
+                const [bank, profile, pgs] = await Promise.all([
+                    API.get('/api/bank-details').catch(() => null),
+                    API.user.getProfile().catch(() => null),
+                    API.user.getProfitGrowths({ per_page: 100 }).catch(() => null),
+                ]);
+
+                const real = parseFloat(profile?.user?.real_balance || 0) || 0;
+
+                const list = pgs?.data || (Array.isArray(pgs) ? pgs : (pgs?.profit_growths || []));
+                const growth = (Array.isArray(list) ? list : [])
+                    .filter(pg => pg && (pg.status === 'active' || pg.status === 'paused'))
+                    .reduce((sum, pg) => sum + (parseFloat(pg.current_balance || 0) || 0), 0);
+
+                const total = real + growth;
+                const realDeg = total > 0 ? (real / total) * 360 : 0;
+
+                const fill = donut.querySelector('div');
+                if (fill) {
+                    fill.style.background = `conic-gradient(#10B981 ${realDeg}deg, #10B981 ${realDeg}deg, #3B82F6 ${realDeg}deg, #3B82F6 360deg)`;
+                }
+
+                const totalEl = document.getElementById('allocationTotal');
+                if (totalEl) totalEl.textContent = '$' + total.toLocaleString('en-US', { maximumFractionDigits: 0 });
+
+                document.getElementById('allocReal').textContent = money(real);
+                document.getElementById('allocGrowth').textContent = money(growth);
+
+                if (bank && bank.relationship_manager) {
+                    const rm = bank.relationship_manager;
+                    const nameEl = document.getElementById('dashRmName');
+                    if (nameEl) nameEl.textContent = rm.name || '—';
+                    document.getElementById('dashRmTitle').textContent = rm.title || '—';
+                    document.getElementById('dashRmPhone').textContent = rm.phone || '—';
+
+                    const emailEl = document.getElementById('dashRmEmail');
+                    if (emailEl && rm.email) { emailEl.textContent = rm.email; emailEl.href = 'mailto:' + rm.email; }
+
+                    const initialEl = document.getElementById('rmInitial');
+                    if (initialEl && rm.name) initialEl.textContent = rm.name.trim().charAt(0).toUpperCase();
+                }
+            } catch (err) {
+                console.error('Failed to load portfolio/RM:', err);
+            }
+        })();
+    </script>
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/697274b44e6a21197c2ff10d/1jfjhfop2';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
+</body>
+
+</html>

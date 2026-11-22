@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Settings | ConchCapital</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+
+        /* Mobile Bottom Navigation Styles */
+        .mobile-nav-item {
+            color: #6B7280;
+            transition: all 0.2s;
+        }
+
+        .mobile-nav-item.active {
+            color: #10B981;
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+
+        .mobile-nav-item:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen pb-20 lg:pb-0" data-page="settings">
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 shadow-lg">
+        <div class="flex items-center justify-around px-2 py-2">
+            <a href="#" data-route="dashboard" class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition">
+                <i class="fa-solid fa-house text-lg"></i>
+                <span class="text-[10px] font-medium">Dashboard</span>
+            </a>
+            <a href="#" data-route="profitGrowths" class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition">
+                <i class="fa-solid fa-chart-line text-lg"></i>
+                <span class="text-[10px] font-medium">Growth</span>
+            </a>
+            <a href="#" data-route="transactions" class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition">
+                <i class="fa-solid fa-file-invoice-dollar text-lg"></i>
+                <span class="text-[10px] font-medium">Transactions</span>
+            </a>
+            <a href="#" data-route="profile" class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition">
+                <i class="fa-solid fa-user text-lg"></i>
+                <span class="text-[10px] font-medium">Profile</span>
+            </a>
+            <a href="#" data-route="settings" class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition active">
+                <i class="fa-solid fa-gear text-lg"></i>
+                <span class="text-[10px] font-medium">Settings</span>
+            </a>
+        </div>
+    </nav>
+
+<nav class="hidden lg:flex bg-white border-b border-gray-200 px-8 py-4 items-center justify-between">
+    <div class="text-xl font-bold tracking-tight text-slate-800">Conch<span class="text-[#10B981]">Capital</span></div>
+    <div class="flex items-center gap-6">
+        <a href="#" data-route="dashboard" class="text-sm font-medium text-slate-500 hover:text-slate-800">Dashboard</a>
+        <a href="#" data-route="profitGrowths" class="text-sm font-medium text-slate-500 hover:text-slate-800">Profit Growth</a>
+        <a href="#" data-route="profile" class="text-sm font-medium text-slate-500 hover:text-slate-800">Profile</a>
+        <a href="#" data-route="settings" class="text-sm font-bold text-slate-800 border-b-2 border-slate-800 pb-4 mt-4">Settings</a>
+        <div class="flex items-center gap-4">
+            <div class="relative">
+                <button onclick="toggleNotificationDropdown()" class="relative text-slate-400 hover:text-slate-600 transition">
+                    <i class="fa-solid fa-bell text-xl"></i>
+                    <span id="notificationBadge" class="hidden absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
+                </button>
+                <!-- Notification Dropdown -->
+                <div id="notificationDropdown" class="hidden absolute right-0 top-full mt-2 w-80 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden z-50 max-h-96 overflow-y-auto">
+                    <div class="p-4 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white">
+                        <h3 class="text-sm font-bold text-slate-900">Notifications</h3>
+                        <a href="#" data-route="notifications" class="text-xs font-bold text-blue-600 hover:text-blue-800">View All</a>
+                    </div>
+                    <div id="notificationDropdownList" class="divide-y divide-gray-100">
+                        <div class="p-4 text-center text-slate-500">
+                            <i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i>
+                            <p class="text-sm">Loading notifications...</p>
+                        </div>
+                    </div>
+                    <div class="p-3 border-t border-gray-200 bg-gray-50 text-center">
+                        <a href="#" data-route="notifications" class="text-xs font-bold text-blue-600 hover:text-blue-800">View All Notifications</a>
+                    </div>
+                </div>
+            </div>
+            <div class="w-8 h-8 rounded-full bg-slate-200"></div>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-4xl mx-auto py-6 lg:py-10 px-4 lg:px-6">
+    
+    <div class="mb-6 lg:mb-8">
+        <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-900 mb-1 lg:mb-2">Settings</h1>
+        <p class="text-xs lg:text-sm text-slate-500">Manage your account settings and preferences</p>
+    </div>
+
+    <!-- Settings Sections -->
+    <div class="space-y-4 lg:space-y-6">
+        
+        <!-- Account Settings -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 lg:p-6">
+            <h2 class="text-base lg:text-lg font-bold text-slate-900 mb-4 lg:mb-6">Account Settings</h2>
+            
+            <div class="space-y-4 lg:space-y-6">
+                <!-- Email -->
+                <div>
+                    <label class="block text-xs lg:text-sm font-bold text-slate-700 uppercase tracking-widest mb-2">Email Address</label>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <input 
+                            type="email" 
+                            id="userEmailInput"
+                            value="user@example.com"
+                            disabled
+                            class="flex-1 p-3 lg:p-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-slate-600 cursor-not-allowed"
+                        >
+                        <button id="changeEmailBtn" class="w-full sm:w-auto px-5 lg:px-6 py-2.5 lg:py-3.5 bg-white border-2 border-gray-200 text-slate-600 rounded-xl text-sm lg:text-base font-bold hover:bg-gray-50 transition">
+                            Change Email
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Language -->
+                <div>
+                    <label class="block text-xs lg:text-sm font-bold text-slate-700 uppercase tracking-widest mb-2">Language</label>
+                    <select id="languageSelect" class="w-full p-3 lg:p-3.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-800 outline-none">
+                        <option>English (US)</option>
+                        <option>English (UK)</option>
+                        <option>Spanish</option>
+                        <option>French</option>
+                        <option>German</option>
+                    </select>
+                </div>
+
+                <!-- Timezone -->
+                <div>
+                    <label class="block text-xs lg:text-sm font-bold text-slate-700 uppercase tracking-widest mb-2">Timezone</label>
+                    <select id="timezoneSelect" class="w-full p-3 lg:p-3.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-slate-800 outline-none">
+                        <option>UTC-5 (Eastern Time)</option>
+                        <option>UTC-6 (Central Time)</option>
+                        <option>UTC-7 (Mountain Time)</option>
+                        <option>UTC-8 (Pacific Time)</option>
+                        <option>UTC+0 (GMT)</option>
+                    </select>
+                </div>
+
+                <button id="saveAccountSettingsBtn" class="w-full md:w-auto px-5 lg:px-6 py-2.5 lg:py-3 bg-slate-800 text-white rounded-xl text-sm lg:text-base font-bold hover:opacity-90 transition">
+                    Save Changes
+                </button>
+            </div>
+        </div>
+
+        <!-- Security Settings -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 lg:p-6">
+            <h2 class="text-base lg:text-lg font-bold text-slate-900 mb-4 lg:mb-6">Security Settings</h2>
+            
+            <div class="space-y-4 lg:space-y-6">
+                <!-- Password -->
+                <div>
+                    <label class="block text-xs lg:text-sm font-bold text-slate-700 uppercase tracking-widest mb-2">Password</label>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <input 
+                            type="password" 
+                            value="••••••••••••"
+                            disabled
+                            class="flex-1 p-3 lg:p-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-slate-600 cursor-not-allowed"
+                        >
+                        <button id="changePasswordBtn" class="w-full sm:w-auto px-5 lg:px-6 py-2.5 lg:py-3.5 bg-white border-2 border-gray-200 text-slate-600 rounded-xl text-sm lg:text-base font-bold hover:bg-gray-50 transition">
+                            Change Password
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Two-Factor Authentication -->
+                <div>
+                    <label class="block text-xs lg:text-sm font-bold text-slate-700 uppercase tracking-widest mb-2">Two-Factor Authentication</label>
+                    <div class="flex items-center justify-between p-3 lg:p-4 bg-gray-50 rounded-xl">
+                        <div class="flex-1 min-w-0 pr-3">
+                            <p class="text-xs lg:text-sm font-bold text-slate-800">Enable 2FA</p>
+                            <p class="text-[10px] lg:text-xs text-slate-500">Add an extra layer of security to your account</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                            <input type="checkbox" class="sr-only peer">
+                            <div class="w-10 h-5 lg:w-11 lg:h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-slate-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 lg:after:h-5 lg:after:w-5 after:transition-all peer-checked:bg-slate-800"></div>
+                        </label>
+                    </div>
+                    <button id="setup2FABtn" class="mt-3 px-5 lg:px-6 py-2 lg:py-2.5 bg-white border border-gray-200 text-slate-600 rounded-xl text-xs lg:text-sm font-bold hover:bg-gray-50 transition">
+                        Set Up 2FA
+                    </button>
+                </div>
+
+                <!-- Active Sessions -->
+                <div>
+                    <label class="block text-xs lg:text-sm font-bold text-slate-700 uppercase tracking-widest mb-2">Active Sessions</label>
+                    <div class="p-3 lg:p-4 bg-gray-50 rounded-xl">
+                        <p class="text-xs lg:text-sm text-slate-600 mb-3">Manage your active login sessions</p>
+                        <button id="viewActiveSessionsBtn" class="w-full sm:w-auto px-5 lg:px-6 py-2 lg:py-2.5 bg-white border border-gray-200 text-slate-600 rounded-xl text-xs lg:text-sm font-bold hover:bg-gray-50 transition">
+                            View Active Sessions
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification Preferences -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 lg:p-6">
+            <h2 class="text-base lg:text-lg font-bold text-slate-900 mb-4 lg:mb-6">Notification Preferences</h2>
+            
+            <div class="space-y-3 lg:space-y-4">
+                <label class="flex items-center justify-between p-3 lg:p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer">
+                    <div class="flex-1 min-w-0 pr-3">
+                        <p class="text-xs lg:text-sm font-bold text-slate-800">Email Notifications</p>
+                        <p class="text-[10px] lg:text-xs text-slate-500">Receive notifications via email</p>
+                    </div>
+                    <input type="checkbox" id="emailNotificationsCheckbox" checked class="w-4 h-4 lg:w-5 lg:h-5 rounded border-gray-300 text-slate-800 focus:ring-slate-800 cursor-pointer shrink-0">
+                </label>
+
+                <label class="flex items-center justify-between p-3 lg:p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer">
+                    <div class="flex-1 min-w-0 pr-3">
+                        <p class="text-xs lg:text-sm font-bold text-slate-800">Push Notifications</p>
+                        <p class="text-[10px] lg:text-xs text-slate-500">Receive browser push notifications</p>
+                    </div>
+                    <input type="checkbox" id="pushNotificationsCheckbox" checked class="w-4 h-4 lg:w-5 lg:h-5 rounded border-gray-300 text-slate-800 focus:ring-slate-800 cursor-pointer shrink-0">
+                </label>
+
+                <label class="flex items-center justify-between p-3 lg:p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer">
+                    <div class="flex-1 min-w-0 pr-3">
+                        <p class="text-xs lg:text-sm font-bold text-slate-800">Marketing Emails</p>
+                        <p class="text-[10px] lg:text-xs text-slate-500">Receive updates about new features and promotions</p>
+                    </div>
+                    <input type="checkbox" id="marketingEmailsCheckbox" class="w-4 h-4 lg:w-5 lg:h-5 rounded border-gray-300 text-slate-800 focus:ring-slate-800 cursor-pointer shrink-0">
+                </label>
+            </div>
+
+            <button id="saveNotificationPreferencesBtn" class="mt-4 lg:mt-6 w-full md:w-auto px-5 lg:px-6 py-2.5 lg:py-3 bg-slate-800 text-white rounded-xl text-sm lg:text-base font-bold hover:opacity-90 transition">
+                Save Preferences
+            </button>
+        </div>
+
+        <!-- Privacy Settings -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 lg:p-6">
+            <h2 class="text-base lg:text-lg font-bold text-slate-900 mb-4 lg:mb-6">Privacy Settings</h2>
+            
+            <div class="p-3 lg:p-4 bg-blue-50 border border-blue-200 rounded-xl mb-3 lg:mb-4">
+                <p class="text-xs lg:text-sm text-blue-800">
+                    <i class="fa-solid fa-info-circle mr-2"></i>
+                    Privacy settings can be managed from your <a href="#" data-route="profile" class="font-bold underline">Profile</a> page.
+                </p>
+            </div>
+            
+            <a href="#" data-route="profile" class="inline-block w-full sm:w-auto px-5 lg:px-6 py-2.5 lg:py-3 bg-white border-2 border-gray-200 text-slate-600 rounded-xl text-sm lg:text-base font-bold hover:bg-gray-50 transition text-center">
+                Go to Privacy Settings
+            </a>
+        </div>
+
+        <!-- Danger Zone -->
+        <div class="bg-white rounded-2xl border-2 border-red-200 shadow-sm p-4 lg:p-6">
+            <h2 class="text-base lg:text-lg font-bold text-red-900 mb-4 lg:mb-6">Danger Zone</h2>
+            
+            <div class="p-3 lg:p-4 bg-red-50 border border-red-200 rounded-xl mb-3 lg:mb-4">
+                <p class="text-xs lg:text-sm font-bold text-red-900 mb-2">Delete Account</p>
+                <p class="text-xs lg:text-sm text-red-800 mb-3 lg:mb-4">
+                    Once you delete your account, there is no going back. Please be certain. This will permanently delete all your data, including:
+                </p>
+                <ul class="text-xs lg:text-sm text-red-800 list-disc list-inside space-y-1 mb-3 lg:mb-4">
+                    <li>All transactions and transaction history</li>
+                    <li>All profit growths and growth data</li>
+                    <li>Your profile and account information</li>
+                    <li>All received and sent fund transfers</li>
+                </ul>
+                <p class="text-xs lg:text-sm font-bold text-red-900">
+                    ⚠️ This action cannot be undone.
+                </p>
+            </div>
+            
+            <button id="deleteAccountBtn" class="w-full sm:w-auto px-5 lg:px-6 py-2.5 lg:py-3 bg-red-600 text-white rounded-xl text-sm lg:text-base font-bold hover:bg-red-700 transition">
+                Delete My Account
+            </button>
+        </div>
+
+    </div>
+
+</main>
+
+<!-- 2FA Success Modal -->
+<div id="twoFactorSuccessModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full animate-slide-up">
+        <div class="p-8 text-center">
+            <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-500/30">
+                <i class="fa-solid fa-check text-white text-3xl"></i>
+            </div>
+            
+            <h2 class="text-2xl font-bold text-slate-900 mb-3">2FA Enabled Successfully!</h2>
+            <p class="text-sm text-gray-600 mb-6">Your account is now protected with two-factor authentication.</p>
+            
+            <div class="bg-green-50 border border-green-200 rounded-xl p-4 mb-6 text-left">
+                <div class="flex items-start gap-3">
+                    <i class="fa-solid fa-shield-halved text-green-600 mt-0.5"></i>
+                    <div class="flex-1">
+                        <p class="text-sm font-semibold text-green-900 mb-1">What's Next?</p>
+                        <ul class="text-xs text-green-800 space-y-1 list-disc list-inside">
+                            <li>Use your authenticator app to generate codes when logging in</li>
+                            <li>Save your recovery codes in a safe place</li>
+                            <li>You can disable 2FA anytime in settings</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="recoveryCodesContainer" class="hidden mb-6">
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                    <p class="text-xs font-semibold text-amber-900 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-exclamation-triangle"></i>
+                        Save These Recovery Codes
+                    </p>
+                    <p class="text-xs text-amber-800 mb-3">Use these codes if you lose access to your authenticator app:</p>
+                    <div id="recoveryCodesList" class="grid grid-cols-2 gap-2 mb-3"></div>
+                    <button onclick="copyRecoveryCodes()" class="w-full px-4 py-2 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-lg text-xs font-semibold transition">
+                        <i class="fa-solid fa-copy mr-2"></i>Copy All Codes
+                    </button>
+                </div>
+            </div>
+            
+            <button onclick="close2FASuccessModal()" class="w-full bg-slate-800 text-white py-3 rounded-xl font-bold hover:opacity-90 transition shadow-lg">
+                Got it, thanks!
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 2FA Setup Modal -->
+<div id="twoFactorModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <div class="p-6 border-b border-gray-200">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-bold text-slate-900">Set Up Two-Factor Authentication</h2>
+                <button onclick="close2FAModal()" class="text-gray-400 hover:text-gray-600 transition">
+                    <i class="fa-solid fa-times text-xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="p-6 space-y-6">
+            <!-- Step 1: Scan QR Code -->
+            <div id="twoFactorStep1">
+                <div class="text-center mb-4">
+                    <p class="text-sm text-gray-600 mb-4">Scan this QR code with your authenticator app (Google Authenticator, Authy, etc.)</p>
+                    <div class="bg-white p-4 rounded-xl border-2 border-gray-200 inline-block mb-4">
+                        <img id="twoFactorQRCode" src="" alt="QR Code" class="w-48 h-48 mx-auto">
+                    </div>
+                    <p class="text-xs text-gray-500 mb-2">Or enter this code manually:</p>
+                    <div class="flex items-center justify-center gap-2 mb-4">
+                        <code id="twoFactorSecret" class="bg-gray-100 px-4 py-2 rounded-lg text-sm font-mono text-gray-800"></code>
+                        <button onclick="copy2FASecret()" class="px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition text-sm font-medium">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
+                    <p class="text-xs text-blue-800 font-medium mb-1">Don't have an authenticator app?</p>
+                    <p class="text-xs text-blue-700">Download Google Authenticator or Authy from your app store.</p>
+                </div>
+                
+                <button onclick="show2FAStep2()" class="w-full bg-slate-800 text-white py-3 rounded-xl font-bold hover:opacity-90 transition">
+                    I've scanned the QR code
+                </button>
+            </div>
+            
+            <!-- Step 2: Verify Code -->
+            <div id="twoFactorStep2" class="hidden">
+                <div class="text-center mb-4">
+                    <p class="text-sm text-gray-600 mb-6">Enter the 6-digit code from your authenticator app to verify setup</p>
+                    <input 
+                        type="text" 
+                        id="twoFactorVerificationCode" 
+                        placeholder="000000" 
+                        maxlength="6" 
+                        pattern="[0-9]{6}"
+                        class="w-full px-4 py-3 text-center text-2xl font-mono tracking-widest border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-slate-800 focus:border-transparent outline-none"
+                        autocomplete="off"
+                    >
+                    <p class="text-xs text-gray-500 mt-2">Enter the 6-digit code from your authenticator app</p>
+                </div>
+                
+                <div class="flex gap-3">
+                    <button onclick="show2FAStep1()" class="flex-1 py-3 border-2 border-gray-200 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition">
+                        Back
+                    </button>
+                    <button onclick="verify2FACode()" id="verify2FABtn" class="flex-1 bg-slate-800 text-white py-3 rounded-xl font-bold hover:opacity-90 transition">
+                        Verify & Enable
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentUser = null;
+    let currentSettings = null;
+
+    // Load user data and settings on page load
+    async function loadUserData() {
+        try {
+            const [profileData, settingsData] = await Promise.all([
+                API.user.getProfile(),
+                API.user.getSettings()
+            ]);
+            
+            currentUser = profileData.user;
+            currentSettings = settingsData.settings;
+            
+            // Update email field with actual user email
+            if (currentUser && currentUser.email) {
+                const emailInput = document.getElementById('userEmailInput');
+                if (emailInput) {
+                    emailInput.value = currentUser.email;
+                }
+            }
+
+            // Load settings into form
+            if (currentSettings) {
+                const languageSelect = document.getElementById('languageSelect');
+                const timezoneSelect = document.getElementById('timezoneSelect');
+                const emailNotificationsCheckbox = document.getElementById('emailNotificationsCheckbox');
+                const pushNotificationsCheckbox = document.getElementById('pushNotificationsCheckbox');
+                const marketingEmailsCheckbox = document.getElementById('marketingEmailsCheckbox');
+                const twoFactorToggle = document.querySelector('input[type="checkbox"].peer');
+
+                if (languageSelect && currentSettings.language) {
+                    languageSelect.value = currentSettings.language;
+                }
+                if (timezoneSelect && currentSettings.timezone) {
+                    timezoneSelect.value = currentSettings.timezone;
+                }
+                if (emailNotificationsCheckbox !== null) {
+                    emailNotificationsCheckbox.checked = currentSettings.email_notifications_enabled ?? true;
+                }
+                if (pushNotificationsCheckbox !== null) {
+                    pushNotificationsCheckbox.checked = currentSettings.push_notifications_enabled ?? true;
+                }
+                if (marketingEmailsCheckbox !== null) {
+                    marketingEmailsCheckbox.checked = currentSettings.marketing_emails_enabled ?? false;
+                }
+                if (twoFactorToggle !== null) {
+                    twoFactorToggle.checked = currentSettings.two_factor_enabled ?? false;
+                }
+            }
+        } catch (error) {
+            console.error('Failed to load user data:', error);
+        }
+    }
+
+    // Save account settings
+    document.getElementById('saveAccountSettingsBtn')?.addEventListener('click', async function() {
+        const btn = this;
+        const originalText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Saving...';
+
+        try {
+            const language = document.getElementById('languageSelect')?.value;
+            const timezone = document.getElementById('timezoneSelect')?.value;
+            
+            if (!language || !timezone) {
+                Utils?.showToast?.('Please select both language and timezone', 'error');
+                return;
+            }
+            
+            await API.user.updateAccountSettings({ language, timezone });
+            Utils?.showToast?.('Account settings saved successfully!', 'success');
+        } catch (error) {
+            console.error('Failed to save account settings:', error);
+            const message = error.response?.message || error.message || 'Failed to save account settings';
+            Utils?.showToast?.(message, 'error');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = originalText;
+        }
+    });
+
+    // Change Email button
+    document.getElementById('changeEmailBtn')?.addEventListener('click', function() {
+        const newEmail = prompt('Enter your new email address:');
+        if (!newEmail) return;
+
+        const password = prompt('Enter your password to confirm:');
+        if (!password) return;
+
+        (async () => {
+            try {
+                await API.user.changeEmail(newEmail, password);
+                Utils?.showToast?.('Email changed successfully! Please verify your new email address.', 'success');
+                loadUserData(); // Reload to show new email
+            } catch (error) {
+                console.error('Failed to change email:', error);
+                const message = error.response?.message || error.message || 'Failed to change email';
+                Utils?.showToast?.(message, 'error');
+            }
+        })();
+    });
+
+    // Change Password button
+    document.getElementById('changePasswordBtn')?.addEventListener('click', function() {
+        const currentPassword = prompt('Enter your current password:');
+        if (!currentPassword) return;
+
+        const newPassword = prompt('Enter your new password:');
+        if (!newPassword) return;
+
+        const confirmPassword = prompt('Confirm your new password:');
+        if (!confirmPassword) return;
+
+        if (newPassword !== confirmPassword) {
+            Utils?.showToast?.('New passwords do not match', 'error');
+            return;
+        }
+
+        (async () => {
+            try {
+                await API.user.changePassword(currentPassword, newPassword, confirmPassword);
+                Utils?.showToast?.('Password changed successfully!', 'success');
+            } catch (error) {
+                console.error('Failed to change password:', error);
+                const message = error.response?.message || error.message || 'Failed to change password';
+                Utils?.showToast?.(message, 'error');
+            }
+        })();
+    });
+
+    let twoFactorSecret = null;
+    let twoFactorQRCodeURL = null;
+    let recoveryCodes = null;
+
+    // Set Up 2FA button
+    document.getElementById('setup2FABtn')?.addEventListener('click', async function() {
+        try {
+            const response = await API.user.initialize2FA();
+            twoFactorSecret = response.secret;
+            twoFactorQRCodeURL = response.qr_code_url;
+            
+            // Show modal with QR code
+            document.getElementById('twoFactorQRCode').src = twoFactorQRCodeURL;
+            document.getElementById('twoFactorSecret').textContent = twoFactorSecret;
+            document.getElementById('twoFactorModal').classList.remove('hidden');
+            show2FAStep1();
+        } catch (error) {
+            console.error('Failed to setup 2FA:', error);
+            const message = error.response?.message || error.message || 'Failed to setup 2FA';
+            Utils?.showToast?.(message, 'error');
+        }
+    });
+
+    // 2FA Modal functions
+    function close2FAModal() {
+        document.getElementById('twoFactorModal').classList.add('hidden');
+        document.getElementById('twoFactorVerificationCode').value = '';
+        twoFactorSecret = null;
+        twoFactorQRCodeURL = null;
+    }
+
+    function show2FAStep1() {
+        document.getElementById('twoFactorStep1').classList.remove('hidden');
+        document.getElementById('twoFactorStep2').classList.add('hidden');
+    }
+
+    function show2FAStep2() {
+        document.getElementById('twoFactorStep1').classList.add('hidden');
+        document.getElementById('twoFactorStep2').classList.remove('hidden');
+        document.getElementById('twoFactorVerificationCode').focus();
+    }
+
+    function copy2FASecret() {
+        const secret = document.getElementById('twoFactorSecret').textContent;
+        navigator.clipboard.writeText(secret).then(() => {
+            Utils?.showToast?.('Secret copied to clipboard!', 'success');
+        }).catch(() => {
+            Utils?.showToast?.('Failed to copy secret', 'error');
+        });
+    }
+
+    async function verify2FACode() {
+        const code = document.getElementById('twoFactorVerificationCode').value.trim();
+        
+        if (!code || code.length !== 6 || !/^\d+$/.test(code)) {
+            Utils?.showToast?.('Please enter a valid 6-digit code', 'error');
+            return;
+        }
+
+        if (!twoFactorSecret) {
+            Utils?.showToast?.('2FA setup session expired. Please try again.', 'error');
+            close2FAModal();
+            return;
+        }
+
+        const btn = document.getElementById('verify2FABtn');
+        const originalText = btn.textContent;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Verifying...';
+
+        try {
+            const response = await API.user.enable2FA(twoFactorSecret, code);
+            recoveryCodes = response.recovery_codes || null;
+            close2FAModal();
+            show2FASuccessModal();
+            loadUserData(); // Reload to update 2FA status
+        } catch (error) {
+            console.error('Failed to enable 2FA:', error);
+            const message = error.response?.message || error.message || 'Failed to enable 2FA. Please check your code and try again.';
+            Utils?.showToast?.(message, 'error');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = originalText;
+        }
+    }
+
+    // Allow Enter key to submit verification code
+    document.getElementById('twoFactorVerificationCode')?.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            verify2FACode();
+        }
+    });
+
+    // Close modal when clicking outside
+    document.getElementById('twoFactorModal')?.addEventListener('click', function(e) {
+        if (e.target === this) {
+            close2FAModal();
+        }
+    });
+
+    // 2FA Success Modal functions
+    function show2FASuccessModal() {
+        const modal = document.getElementById('twoFactorSuccessModal');
+        if (!modal) return;
+        
+        // Show recovery codes if available
+        if (recoveryCodes && Array.isArray(recoveryCodes) && recoveryCodes.length > 0) {
+            const container = document.getElementById('recoveryCodesContainer');
+            const list = document.getElementById('recoveryCodesList');
+            
+            if (container && list) {
+                container.classList.remove('hidden');
+                list.innerHTML = '';
+                recoveryCodes.forEach(code => {
+                    const codeElement = document.createElement('div');
+                    codeElement.className = 'bg-white px-3 py-2 rounded-lg text-xs font-mono text-amber-900 border border-amber-200';
+                    codeElement.textContent = code;
+                    list.appendChild(codeElement);
+                });
+            }
+        } else {
+            const container = document.getElementById('recoveryCodesContainer');
+            if (container) {
+                container.classList.add('hidden');
+            }
+        }
+        
+        modal.classList.remove('hidden');
+    }
+
+    function close2FASuccessModal() {
+        const modal = document.getElementById('twoFactorSuccessModal');
+        if (modal) {
+            modal.classList.add('hidden');
+        }
+        recoveryCodes = null;
+    }
+
+    function copyRecoveryCodes() {
+        if (!recoveryCodes || !Array.isArray(recoveryCodes)) {
+            return;
+        }
+        
+        const codesText = recoveryCodes.join('\n');
+        navigator.clipboard.writeText(codesText).then(() => {
+            Utils?.showToast?.('Recovery codes copied to clipboard!', 'success');
+        }).catch(() => {
+            Utils?.showToast?.('Failed to copy recovery codes', 'error');
+        });
+    }
+
+    // Close success modal when clicking outside
+    document.getElementById('twoFactorSuccessModal')?.addEventListener('click', function(e) {
+        if (e.target === this) {
+            close2FASuccessModal();
+        }
+    });
+
+    // 2FA Toggle
+    document.querySelector('input[type="checkbox"].peer')?.addEventListener('change', async function() {
+        if (this.checked && !currentSettings?.two_factor_enabled) {
+            // Enable 2FA
+            document.getElementById('setup2FABtn').click();
+        } else if (!this.checked && currentSettings?.two_factor_enabled) {
+            // Disable 2FA
+            const password = prompt('Enter your password to disable 2FA:');
+            if (!password) {
+                this.checked = true; // Revert toggle
+                return;
+            }
+            try {
+                await API.user.disable2FA(password);
+                Utils?.showToast?.('Two-factor authentication disabled', 'success');
+                loadUserData();
+            } catch (error) {
+                this.checked = true; // Revert toggle on error
+                const message = error.response?.message || error.message || 'Failed to disable 2FA';
+                Utils?.showToast?.(message, 'error');
+            }
+        }
+    });
+
+    // View Active Sessions button
+    document.getElementById('viewActiveSessionsBtn')?.addEventListener('click', async function() {
+        try {
+            const response = await API.user.getActiveSessions();
+            const sessions = response.sessions || [];
+            
+            let message = `Active Sessions (${sessions.length}):\n\n`;
+            sessions.forEach((session, index) => {
+                message += `${index + 1}. ${session.ip_address} - ${session.user_agent?.substring(0, 50)}...\n`;
+                message += `   Last activity: ${session.last_activity}\n`;
+                if (session.is_current) message += `   (Current session)\n`;
+                message += '\n';
+            });
+            
+            alert(message);
+        } catch (error) {
+            console.error('Failed to load sessions:', error);
+            const message = error.response?.message || error.message || 'Failed to load active sessions';
+            Utils?.showToast?.(message, 'error');
+        }
+    });
+
+    // Save notification preferences
+    document.getElementById('saveNotificationPreferencesBtn')?.addEventListener('click', async function() {
+        const btn = this;
+        const originalText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Saving...';
+
+        try {
+            const emailNotifications = document.getElementById('emailNotificationsCheckbox')?.checked || false;
+            const pushNotifications = document.getElementById('pushNotificationsCheckbox')?.checked || false;
+            const marketingEmails = document.getElementById('marketingEmailsCheckbox')?.checked || false;
+            
+            await API.user.updateNotificationPreferences({
+                email_notifications_enabled: emailNotifications,
+                push_notifications_enabled: pushNotifications,
+                marketing_emails_enabled: marketingEmails
+            });
+            
+            Utils?.showToast?.('Notification preferences saved successfully!', 'success');
+        } catch (error) {
+            console.error('Failed to save notification preferences:', error);
+            const message = error.response?.message || error.message || 'Failed to save notification preferences';
+            Utils?.showToast?.(message, 'error');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = originalText;
+        }
+    });
+
+    // Delete account confirmation
+    document.getElementById('deleteAccountBtn')?.addEventListener('click', async function() {
+        if (!confirm('Are you absolutely sure you want to delete your account? This action cannot be undone.')) {
+            return;
+        }
+
+        const password = prompt('Enter your password to confirm:');
+        if (!password) return;
+
+        const confirmation = prompt('This will permanently delete all your data. Type "DELETE" to confirm:');
+        if (confirmation !== 'DELETE') {
+            if (confirmation !== null) {
+                Utils?.showToast?.('Confirmation text did not match. Account deletion cancelled.', 'error');
+            }
+            return;
+        }
+
+        try {
+            await API.user.deleteAccount(password, 'DELETE');
+            Utils?.showToast?.('Account deleted successfully. Redirecting...', 'success');
+            setTimeout(() => {
+                window.location.href = '/login.html';
+            }, 2000);
+        } catch (error) {
+            console.error('Failed to delete account:', error);
+            const message = error.response?.message || error.message || 'Failed to delete account';
+            Utils?.showToast?.(message, 'error');
+        }
+    });
+
+    // Notification Dropdown Functions
+    window.toggleNotificationDropdown = function() {
+        const dropdown = document.getElementById('notificationDropdown');
+        if (dropdown) {
+            const isHidden = dropdown.classList.contains('hidden');
+            dropdown.classList.toggle('hidden');
+            if (isHidden) {
+                loadNotificationDropdown();
+            }
+        }
+    };
+
+    async function loadNotificationDropdown() {
+        const dropdownList = document.getElementById('notificationDropdownList');
+        if (!dropdownList) return;
+        try {
+            dropdownList.innerHTML = '<div class="p-4 text-center text-slate-500"><i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i><p class="text-sm">Loading notifications...</p></div>';
+            const dashboardData = await API.user.getDashboard();
+            const transactions = dashboardData.recent_transactions || [];
+            const activityLogs = dashboardData.recent_activity || [];
+            const allNotifications = [];
+            transactions.slice(0, 10).forEach(tx => {
+                allNotifications.push({ type: 'transaction', id: tx.id, action: tx.type, amount: tx.amount, currency: tx.currency || 'USD', description: tx.description || '', status: tx.status, created_at: tx.created_at });
+            });
+            activityLogs.slice(0, 10).forEach(activity => {
+                allNotifications.push({ type: 'activity', id: activity.id, action: activity.action, description: activity.description || '', created_at: activity.created_at });
+            });
+            allNotifications.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            const recentNotifications = allNotifications.slice(0, 5);
+            const badge = document.getElementById('notificationBadge');
+            if (badge) badge.classList.toggle('hidden', recentNotifications.length === 0);
+            if (recentNotifications.length === 0) {
+                dropdownList.innerHTML = '<div class="p-4 text-center text-slate-500"><p class="text-sm">No notifications</p></div>';
+                return;
+            }
+            dropdownList.innerHTML = recentNotifications.map(notif => {
+                const date = formatNotificationDate(notif.created_at);
+                const icon = getNotificationIcon(notif.action || notif.type);
+                const title = getNotificationTitle(notif);
+                const description = notif.description || '';
+                return `<div class="p-4 hover:bg-gray-50 transition cursor-pointer" onclick="handleNotificationClick('${notif.type}', ${notif.id})"><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full ${icon.bg} flex items-center justify-center shrink-0"><i class="fa-solid ${icon.icon} ${icon.color} text-sm"></i></div><div class="flex-1 min-w-0"><p class="text-sm font-bold text-slate-800 mb-1">${title}</p>${description ? `<p class="text-xs text-slate-500 line-clamp-2 mb-1">${description}</p>` : ''}<p class="text-xs text-slate-400">${date}</p></div></div></div>`;
+            }).join('');
+        } catch (error) {
+            console.error('Failed to load notifications:', error);
+            dropdownList.innerHTML = '<div class="p-4 text-center text-red-500"><p class="text-sm">Failed to load notifications</p></div>';
+        }
+    }
+
+    function formatNotificationDate(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+        if (diffMins < 1) return 'Just now';
+        if (diffMins < 60) return `${diffMins}m ago`;
+        if (diffHours < 24) return `${diffHours}h ago`;
+        if (diffDays < 7) return `${diffDays}d ago`;
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    function getNotificationIcon(action) {
+        const icons = { 'deposit': { icon: 'fa-arrow-down', color: 'text-green-600', bg: 'bg-green-100' }, 'withdrawal': { icon: 'fa-arrow-up', color: 'text-red-600', bg: 'bg-red-100' }, 'credit': { icon: 'fa-gift', color: 'text-blue-600', bg: 'bg-blue-100' }, 'debit': { icon: 'fa-minus', color: 'text-orange-600', bg: 'bg-orange-100' }, 'transfer_sent': { icon: 'fa-paper-plane', color: 'text-blue-600', bg: 'bg-blue-100' }, 'transfer_received': { icon: 'fa-inbox', color: 'text-green-600', bg: 'bg-green-100' }, 'profit_growth_created': { icon: 'fa-chart-line', color: 'text-purple-600', bg: 'bg-purple-100' }, 'profit_growth_updated': { icon: 'fa-sync', color: 'text-blue-600', bg: 'bg-blue-100' } };
+        return icons[action] || { icon: 'fa-bell', color: 'text-slate-600', bg: 'bg-slate-100' };
+    }
+
+    function getNotificationTitle(notif) {
+        const action = notif.action || notif.type;
+        const actionNames = { 'deposit': 'Deposit', 'withdrawal': 'Withdrawal', 'credit': 'Credit', 'debit': 'Debit', 'transfer_sent': 'Funds Sent', 'transfer_received': 'Funds Received', 'profit_growth_created': 'Profit Growth Created', 'profit_growth_updated': 'Profit Growth Updated' };
+        const actionName = actionNames[action] || action.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        if (notif.amount) {
+            const amount = parseFloat(notif.amount);
+            const sign = action === 'deposit' || action === 'credit' || action === 'transfer_received' ? '+' : '-';
+            return `${actionName}: ${sign}$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+        return actionName;
+    }
+
+    window.handleNotificationClick = function(type, id) {
+        window.location.href = type === 'transaction' ? '#transactions' : '#notifications';
+    };
+
+    // Close notification dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        const notificationDropdown = document.getElementById('notificationDropdown');
+        const notificationButton = event.target.closest('[onclick="toggleNotificationDropdown()"]');
+        if (notificationDropdown && !notificationDropdown.contains(event.target) && !notificationButton) {
+            notificationDropdown.classList.add('hidden');
+        }
+    });
+
+    // Mobile bottom navigation active state
+    function updateMobileNavActive() {
+        const currentPage = document.body.getAttribute('data-page');
+        const navItems = document.querySelectorAll('.mobile-nav-item');
+        
+        navItems.forEach(item => {
+            const route = item.getAttribute('data-route');
+            item.classList.remove('active', 'text-[#10B981]', 'bg-green-50');
+            item.classList.add('text-gray-600');
+            
+            // Map page to route
+            const pageRouteMap = {
+                'dashboard': 'dashboard',
+                'profitGrowths': 'profitGrowths',
+                'transactions': 'transactions',
+                'profile': 'profile',
+                'settings': 'settings'
+            };
+            
+            if (route === pageRouteMap[currentPage] || (currentPage === 'settings' && route === 'settings')) {
+                item.classList.add('active', 'text-[#10B981]', 'bg-green-50');
+                item.classList.remove('text-gray-600');
+            }
+        });
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        updateMobileNavActive();
+        loadUserData();
+    });
+</script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js?v=20250123"></script>
+<script src="js/forms.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

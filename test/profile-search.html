@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Find Users | ConchCapital</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .text-sim { color: #3B82F6; }
+        .bg-sim { background-color: #3B82F6; }
+        .border-sim { border-color: #3B82F6; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen" data-page="profileSearch">
+
+<nav class="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between">
+    <div class="text-xl font-bold tracking-tight text-slate-800">Conch<span class="text-[#10B981]">Capital</span></div>
+    <div class="flex items-center gap-6">
+        <a href="#" data-route="dashboard" class="text-sm font-medium text-slate-500 hover:text-slate-800">Dashboard</a>
+        <a href="#" data-route="profitGrowths" class="text-sm font-medium text-slate-500 hover:text-slate-800">Profit Growth</a>
+        <a href="#" data-route="profileSearch" class="text-sm font-bold text-sim border-b-2 border-sim pb-4 mt-4">Profile</a>
+        <a href="#" data-route="settings" class="text-sm font-medium text-slate-500 hover:text-slate-800">Settings</a>
+        <div class="flex items-center gap-4">
+            <div class="relative">
+                <button onclick="toggleNotificationDropdown()" class="relative text-slate-400 hover:text-slate-600 transition">
+                    <i class="fa-solid fa-bell text-xl"></i>
+                    <span id="notificationBadge" class="hidden absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
+                </button>
+                <!-- Notification Dropdown -->
+                <div id="notificationDropdown" class="hidden absolute right-0 top-full mt-2 w-80 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden z-50 max-h-96 overflow-y-auto">
+                    <div class="p-4 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white">
+                        <h3 class="text-sm font-bold text-slate-900">Notifications</h3>
+                        <a href="#" data-route="notifications" class="text-xs font-bold text-blue-600 hover:text-blue-800">View All</a>
+                    </div>
+                    <div id="notificationDropdownList" class="divide-y divide-gray-100">
+                        <div class="p-4 text-center text-slate-500">
+                            <i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i>
+                            <p class="text-sm">Loading notifications...</p>
+                        </div>
+                    </div>
+                    <div class="p-3 border-t border-gray-200 bg-gray-50 text-center">
+                        <a href="#" data-route="notifications" class="text-xs font-bold text-blue-600 hover:text-blue-800">View All Notifications</a>
+                    </div>
+                </div>
+            </div>
+            <div class="w-8 h-8 rounded-full bg-slate-200"></div>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-6xl mx-auto py-10 px-6">
+    
+    <div class="mb-8">
+        <h1 class="text-3xl font-extrabold text-slate-900 mb-2">Find Users</h1>
+        <p class="text-slate-500">Search for users to connect and send funds</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-6">
+        <div class="relative">
+            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+            <input 
+                type="text" 
+                placeholder="Search by username, display name, or email..." 
+                class="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-sim focus:border-sim outline-none text-sm"
+                id="searchInput"
+            >
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="flex flex-wrap gap-3 mb-8">
+        <button class="px-4 py-2 bg-sim text-white rounded-lg text-sm font-bold transition hover:opacity-90" id="filterAll">
+            All Users
+        </button>
+        <button class="px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-gray-50 transition" id="filterAccepts">
+            Accepts Transfers
+        </button>
+        <button class="px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-gray-50 transition" id="filterActive">
+            Active Recently
+        </button>
+    </div>
+
+    <!-- Results Count -->
+    <div class="mb-6" id="resultsCountContainer" style="display: none;">
+        <p class="text-sm text-slate-500">
+            <span id="resultsCount">0</span> users found
+        </p>
+    </div>
+
+    <!-- Search Results Grid -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="resultsGrid">
+        <!-- Dynamic user cards will be inserted here -->
+        <div class="col-span-full text-center py-12 text-slate-500">
+            <i class="fa-solid fa-search text-4xl mb-4"></i>
+            <p>Search for users by username, display name, or email</p>
+        </div>
+
+    </div>
+
+
+    <!-- Empty State (Hidden by default) -->
+    <div id="emptyState" class="hidden text-center py-16">
+        <i class="fa-solid fa-users-slash text-6xl text-slate-300 mb-4"></i>
+        <h3 class="text-xl font-bold text-slate-800 mb-2">No users found</h3>
+        <p class="text-slate-500">Try adjusting your search or filters</p>
+    </div>
+
+</main>
+
+<script>
+    // Simple search functionality (would be connected to backend in production)
+    const searchInput = document.getElementById('searchInput');
+    const resultsGrid = document.getElementById('resultsGrid');
+    const resultsCount = document.getElementById('resultsCount');
+    const emptyState = document.getElementById('emptyState');
+    const filterButtons = {
+        all: document.getElementById('filterAll'),
+        accepts: document.getElementById('filterAccepts'),
+        active: document.getElementById('filterActive')
+    };
+
+    // Filter button functionality
+    Object.values(filterButtons).forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Remove active state from all buttons
+            Object.values(filterButtons).forEach(b => {
+                b.classList.remove('bg-sim', 'text-white');
+                b.classList.add('bg-white', 'border', 'border-gray-200', 'text-slate-600');
+            });
+            // Add active state to clicked button
+            this.classList.remove('bg-white', 'border', 'border-gray-200', 'text-slate-600');
+            this.classList.add('bg-sim', 'text-white');
+        });
+    });
+
+    // Get initials helper
+    function getInitials(name) {
+        if (!name) return 'U';
+        const parts = name.trim().split(' ');
+        if (parts.length >= 2) {
+            return (parts[0][0] + parts[1][0]).toUpperCase();
+        }
+        return name.substring(0, 2).toUpperCase();
+    }
+
+    // Render user cards
+    function renderUsers(users, totalCount = null) {
+        const resultsCountContainer = document.getElementById('resultsCountContainer');
+        
+        if (!users || users.length === 0) {
+            resultsGrid.innerHTML = `
+                <div class="col-span-full text-center py-12 text-slate-500">
+                    <i class="fa-solid fa-users-slash text-4xl mb-4"></i>
+                    <p>No users found</p>
+                </div>
+            `;
+            resultsCount.textContent = '0';
+            resultsCountContainer.style.display = 'block';
+            return;
+        }
+
+        resultsCount.textContent = totalCount !== null ? totalCount : users.length;
+        resultsCountContainer.style.display = 'block';
+        resultsGrid.innerHTML = users.map(user => {
+            const initials = getInitials(user.display_name || user.name || user.username || user.email || 'U');
+            const displayName = user.display_name || user.name || user.username || 'Unknown';
+            const username = user.username ? `@${user.username}` : user.email || '';
+            const bio = user.bio || '(No bio available)';
+            const avatarUrl = user.avatar_url || '';
+            
+            let imageUrl = '';
+            if (avatarUrl) {
+                if (avatarUrl.startsWith('/storage/')) {
+                    imageUrl = avatarUrl;
+                } else if (!avatarUrl.startsWith('http://') && !avatarUrl.startsWith('https://')) {
+                    imageUrl = '/' + avatarUrl.replace(/^\//, '');
+                } else {
+                    imageUrl = avatarUrl;
+                }
+            }
+            const hasAvatar = imageUrl && imageUrl.trim() !== '';
+            
+            return `
+                <div class="bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-lg transition">
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-xl shrink-0 relative overflow-hidden">
+                            ${hasAvatar ? `<img src="${imageUrl}" alt="${displayName}" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />` : ''}
+                            <span class="${hasAvatar ? 'hidden' : ''}">${initials}</span>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-lg font-bold text-slate-800 truncate">${username}</h3>
+                            <p class="text-sm text-slate-600 truncate">${displayName}</p>
+                        </div>
+                    </div>
+                    
+                    <p class="text-sm ${bio === '(No bio available)' ? 'text-slate-400 italic' : 'text-slate-600'} mb-4 line-clamp-2">
+                        ${bio}
+                    </p>
+                    
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="fa-solid fa-check-circle text-green-500 text-sm"></i>
+                        <span class="text-xs font-medium text-green-600">Accepts fund transfers</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="viewPortfolio(${user.id})" class="py-2 rounded-lg border-2 border-blue-500 text-blue-600 text-xs font-bold hover:bg-blue-50 transition flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-chart-line"></i> View Portfolio
+                        </button>
+                        <button onclick="sendFundsToUser(${user.id})" class="py-2 rounded-lg bg-sim text-white text-xs font-bold hover:opacity-90 transition flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-paper-plane"></i> Send Funds
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // View portfolio function
+    function viewPortfolio(userId) {
+        window.location.href = `/user-profile-view.html?user_id=${userId}`;
+    }
+
+    // Send funds function
+    function sendFundsToUser(userId) {
+        // Use route system to avoid hardcoding filenames
+        const sendFundsRoute = AppRoutes?.sendSimFunds || 'send-simu-funds.html';
+        window.location.href = `/${sendFundsRoute}?user_id=${userId}`;
+    }
+
+    // State
+    let currentQuery = '';
+    let isLoading = false;
+    
+    // Search input debounce with API call
+    let searchTimeout;
+    const resultsCountContainer = document.getElementById('resultsCountContainer');
+    
+    // Load users function
+    async function loadUsers(query = '', page = 1, append = false) {
+        if (isLoading) return;
+        isLoading = true;
+        
+        // Show loading state
+        resultsGrid.innerHTML = `
+            <div class="col-span-full text-center py-12 text-slate-500">
+                <i class="fa-solid fa-spinner fa-spin text-4xl mb-4"></i>
+                <p>Loading users...</p>
+            </div>
+        `;
+        resultsCountContainer.style.display = 'none';
+        
+        try {
+            const params = { per_page: 12, page: 1 }; // Always show 12 users, no pagination
+            
+            const data = await API.user.searchUsers(query, params);
+            
+            const users = data.users || [];
+            const pagination = data.pagination || {};
+            
+            // Limit to first 12 users (in case API returns more)
+            const displayUsers = users.slice(0, 12);
+            
+            // Replace all users (no pagination)
+            renderUsers(displayUsers, pagination.total);
+            
+            // Update results count
+            if (pagination.total !== undefined) {
+                resultsCount.textContent = pagination.total;
+                resultsCountContainer.style.display = 'block';
+            }
+            
+            
+        } catch (error) {
+            console.error('Load users error:', error);
+            resultsGrid.innerHTML = `
+                <div class="col-span-full text-center py-12 text-red-500">
+                    <i class="fa-solid fa-exclamation-circle text-4xl mb-4"></i>
+                    <p>Failed to load users. Please try again.</p>
+                </div>
+            `;
+            resultsCount.textContent = '0';
+            resultsCountContainer.style.display = 'block';
+        } finally {
+            isLoading = false;
+        }
+    }
+    
+    // Create user card HTML
+    function createUserCard(user) {
+        const initials = getInitials(user.display_name || user.name || user.username || user.email || 'U');
+        const displayName = user.display_name || user.name || user.username || 'Unknown';
+        const username = user.username ? `@${user.username}` : user.email || '';
+        const bio = user.bio || '(No bio available)';
+        const avatarUrl = user.avatar_url || '';
+        
+        let imageUrl = '';
+        if (avatarUrl) {
+            if (avatarUrl.startsWith('/storage/')) {
+                imageUrl = avatarUrl;
+            } else if (!avatarUrl.startsWith('http://') && !avatarUrl.startsWith('https://')) {
+                imageUrl = '/' + avatarUrl.replace(/^\//, '');
+            } else {
+                imageUrl = avatarUrl;
+            }
+        }
+        const hasAvatar = imageUrl && imageUrl.trim() !== '';
+        
+        return `
+            <div class="bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-lg transition">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-xl shrink-0 relative overflow-hidden">
+                        ${hasAvatar ? `<img src="${imageUrl}" alt="${displayName}" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />` : ''}
+                        <span class="${hasAvatar ? 'hidden' : ''}">${initials}</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="text-lg font-bold text-slate-800 truncate">${username}</h3>
+                        <p class="text-sm text-slate-600 truncate">${displayName}</p>
+                    </div>
+                </div>
+                
+                <p class="text-sm ${bio === '(No bio available)' ? 'text-slate-400 italic' : 'text-slate-600'} mb-4 line-clamp-2">
+                    ${bio}
+                </p>
+                
+                <div class="flex items-center gap-2 mb-4">
+                    <i class="fa-solid fa-check-circle text-green-500 text-sm"></i>
+                    <span class="text-xs font-medium text-green-600">Accepts fund transfers</span>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="viewPortfolio(${user.id})" class="py-2 rounded-lg border-2 border-blue-500 text-blue-600 text-xs font-bold hover:bg-blue-50 transition flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-chart-line"></i> View Portfolio
+                    </button>
+                    <button onclick="sendFundsToUser(${user.id})" class="py-2 rounded-lg bg-sim text-white text-xs font-bold hover:opacity-90 transition flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-paper-plane"></i> Send Funds
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+    
+    searchInput.addEventListener('input', async function() {
+        clearTimeout(searchTimeout);
+        const query = this.value.trim();
+        currentQuery = query;
+        
+        if (query.length < 2) {
+            // Load random 12 users when search is cleared
+            await loadUsers('', 1, false);
+            return;
+        }
+
+        searchTimeout = setTimeout(async () => {
+            await loadUsers(query, 1, false);
+        }, 300);
+    });
+
+    // Notification Dropdown Functions
+    window.toggleNotificationDropdown = function() {
+        const dropdown = document.getElementById('notificationDropdown');
+        if (dropdown) {
+            const isHidden = dropdown.classList.contains('hidden');
+            dropdown.classList.toggle('hidden');
+            if (isHidden) {
+                loadNotificationDropdown();
+            }
+        }
+    };
+
+    async function loadNotificationDropdown() {
+        const dropdownList = document.getElementById('notificationDropdownList');
+        if (!dropdownList) return;
+        try {
+            dropdownList.innerHTML = '<div class="p-4 text-center text-slate-500"><i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i><p class="text-sm">Loading notifications...</p></div>';
+            const dashboardData = await API.user.getDashboard();
+            const transactions = dashboardData.recent_transactions || [];
+            const activityLogs = dashboardData.recent_activity || [];
+            const allNotifications = [];
+            transactions.slice(0, 10).forEach(tx => {
+                allNotifications.push({ type: 'transaction', id: tx.id, action: tx.type, amount: tx.amount, currency: tx.currency || 'USD', description: tx.description || '', status: tx.status, created_at: tx.created_at });
+            });
+            activityLogs.slice(0, 10).forEach(activity => {
+                allNotifications.push({ type: 'activity', id: activity.id, action: activity.action, description: activity.description || '', created_at: activity.created_at });
+            });
+            allNotifications.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            const recentNotifications = allNotifications.slice(0, 5);
+            const badge = document.getElementById('notificationBadge');
+            if (badge) badge.classList.toggle('hidden', recentNotifications.length === 0);
+            if (recentNotifications.length === 0) {
+                dropdownList.innerHTML = '<div class="p-4 text-center text-slate-500"><p class="text-sm">No notifications</p></div>';
+                return;
+            }
+            dropdownList.innerHTML = recentNotifications.map(notif => {
+                const date = formatNotificationDate(notif.created_at);
+                const icon = getNotificationIcon(notif.action || notif.type);
+                const title = getNotificationTitle(notif);
+                const description = notif.description || '';
+                return `<div class="p-4 hover:bg-gray-50 transition cursor-pointer" onclick="handleNotificationClick('${notif.type}', ${notif.id})"><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full ${icon.bg} flex items-center justify-center shrink-0"><i class="fa-solid ${icon.icon} ${icon.color} text-sm"></i></div><div class="flex-1 min-w-0"><p class="text-sm font-bold text-slate-800 mb-1">${title}</p>${description ? `<p class="text-xs text-slate-500 line-clamp-2 mb-1">${description}</p>` : ''}<p class="text-xs text-slate-400">${date}</p></div></div></div>`;
+            }).join('');
+        } catch (error) {
+            console.error('Failed to load notifications:', error);
+            dropdownList.innerHTML = '<div class="p-4 text-center text-red-500"><p class="text-sm">Failed to load notifications</p></div>';
+        }
+    }
+
+    function formatNotificationDate(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+        if (diffMins < 1) return 'Just now';
+        if (diffMins < 60) return `${diffMins}m ago`;
+        if (diffHours < 24) return `${diffHours}h ago`;
+        if (diffDays < 7) return `${diffDays}d ago`;
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    function getNotificationIcon(action) {
+        const icons = { 'deposit': { icon: 'fa-arrow-down', color: 'text-green-600', bg: 'bg-green-100' }, 'withdrawal': { icon: 'fa-arrow-up', color: 'text-red-600', bg: 'bg-red-100' }, 'credit': { icon: 'fa-gift', color: 'text-blue-600', bg: 'bg-blue-100' }, 'debit': { icon: 'fa-minus', color: 'text-orange-600', bg: 'bg-orange-100' }, 'transfer_sent': { icon: 'fa-paper-plane', color: 'text-blue-600', bg: 'bg-blue-100' }, 'transfer_received': { icon: 'fa-inbox', color: 'text-green-600', bg: 'bg-green-100' }, 'profit_growth_created': { icon: 'fa-chart-line', color: 'text-purple-600', bg: 'bg-purple-100' }, 'profit_growth_updated': { icon: 'fa-sync', color: 'text-blue-600', bg: 'bg-blue-100' } };
+        return icons[action] || { icon: 'fa-bell', color: 'text-slate-600', bg: 'bg-slate-100' };
+    }
+
+    function getNotificationTitle(notif) {
+        const action = notif.action || notif.type;
+        const actionNames = { 'deposit': 'Deposit', 'withdrawal': 'Withdrawal', 'credit': 'Credit', 'debit': 'Debit', 'transfer_sent': 'Funds Sent', 'transfer_received': 'Funds Received', 'profit_growth_created': 'Profit Growth Created', 'profit_growth_updated': 'Profit Growth Updated' };
+        const actionName = actionNames[action] || action.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        if (notif.amount) {
+            const amount = parseFloat(notif.amount);
+            const sign = action === 'deposit' || action === 'credit' || action === 'transfer_received' ? '+' : '-';
+            return `${actionName}: ${sign}$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+        return actionName;
+    }
+
+    window.handleNotificationClick = function(type, id) {
+        window.location.href = type === 'transaction' ? '#transactions' : '#notifications';
+    };
+
+    // Close notification dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        const notificationDropdown = document.getElementById('notificationDropdown');
+        const notificationButton = event.target.closest('[onclick="toggleNotificationDropdown()"]');
+        if (notificationDropdown && !notificationDropdown.contains(event.target) && !notificationButton) {
+            notificationDropdown.classList.add('hidden');
+        }
+    });
+
+    // Load initial users on page load
+    (async function() {
+        // Wait for DOM and scripts to be ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', async function() {
+                // Wait for API to be available
+                await new Promise(resolve => setTimeout(resolve, 200));
+                await loadUsers('', 1, false);
+            });
+        } else {
+            // DOM already loaded, wait for scripts
+            await new Promise(resolve => setTimeout(resolve, 300));
+            await loadUsers('', 1, false);
+        }
+    })();
+</script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/forms.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

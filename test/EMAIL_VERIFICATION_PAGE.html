@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Verify Email | ConchCapital</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center py-12 px-6" data-page="verifyEmail">
+
+<div class="w-full max-w-md">
+    <!-- Logo -->
+    <div class="text-center mb-8">
+        <div class="text-3xl font-bold tracking-tight text-slate-800 inline-block">Conch<span class="text-[#10B981]">Capital</span></div>
+    </div>
+
+    <!-- Email Verification Status -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-lg p-8 text-center">
+        <!-- Pending State -->
+        <div id="pendingState">
+            <div class="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4">
+                <i class="fa-solid fa-envelope text-amber-600 text-2xl"></i>
+            </div>
+            <h1 class="text-2xl font-extrabold text-slate-900 mb-2">Verify Your Email</h1>
+            <p class="text-slate-600 mb-4">
+                We've sent a verification link to <span class="font-bold">user@example.com</span>
+            </p>
+            <p class="text-sm text-slate-500 mb-6">
+                Please check your email and click the verification link to activate your account.
+            </p>
+
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
+                <div class="flex items-start gap-3">
+                    <i class="fa-solid fa-info-circle text-blue-600 shrink-0 mt-0.5"></i>
+                    <div class="text-left">
+                        <p class="text-xs font-bold text-blue-900 mb-1">Didn't receive the email?</p>
+                        <ul class="text-xs text-blue-800 space-y-1">
+                            <li>• Check your spam/junk folder</li>
+                            <li>• Make sure the email address is correct</li>
+                            <li>• Wait a few minutes and try again</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="resendVerification()" class="w-full py-3.5 bg-[#10B981] text-white rounded-xl font-bold shadow-lg shadow-green-200 hover:opacity-90 transition mb-4">
+                Resend Verification Email
+            </button>
+
+            <div class="text-sm text-slate-500">
+                <p class="mb-2">Resend available in <span id="countdown" class="font-bold text-[#10B981]">60</span> seconds</p>
+            </div>
+
+            <div class="mt-6 pt-6 border-t border-gray-100">
+                <a href="#" data-route="login" class="text-sm font-medium text-[#10B981] hover:underline">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Back to Login
+                </a>
+            </div>
+        </div>
+
+        <!-- Verified State (Hidden by default) -->
+        <div id="verifiedState" class="hidden">
+            <div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+                <i class="fa-solid fa-check-circle text-green-600 text-2xl"></i>
+            </div>
+            <h1 class="text-2xl font-extrabold text-slate-900 mb-2">Email Verified!</h1>
+            <p class="text-slate-600 mb-6">
+                Your email has been successfully verified. You can now access all features.
+            </p>
+            <a href="#" data-route="dashboard" class="inline-block w-full py-3.5 bg-[#10B981] text-white rounded-xl font-bold shadow-lg shadow-green-200 hover:opacity-90 transition text-center">
+                Continue to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Check if email was verified via URL parameter - do this first
+    const urlParams = new URLSearchParams(window.location.search);
+    const verified = urlParams.get('verified');
+    const already = urlParams.get('already');
+    const error = urlParams.get('error');
+    
+    // Show verified state immediately if verified
+    if (verified === '1') {
+        document.addEventListener('DOMContentLoaded', function() {
+            const pendingState = document.getElementById('pendingState');
+            const verifiedState = document.getElementById('verifiedState');
+            
+            if (pendingState && verifiedState) {
+                pendingState.classList.add('hidden');
+                verifiedState.classList.remove('hidden');
+                
+                if (already === '1') {
+                    const verifiedText = document.querySelector('#verifiedState p');
+                    if (verifiedText) {
+                        verifiedText.textContent = 'Your email was already verified. You can access all features.';
+                    }
+                }
+            }
+        });
+    } else if (error) {
+        // Show error message
+        document.addEventListener('DOMContentLoaded', function() {
+            const errorMessage = error === 'user_not_found' 
+                ? 'User not found. Please register again.' 
+                : 'Verification failed. Please try again.';
+            
+            const pendingTitle = document.querySelector('#pendingState h1');
+            if (pendingTitle) {
+                pendingTitle.textContent = 'Verification Error';
+                pendingTitle.classList.add('text-red-600');
+            }
+            
+            const pendingText = document.querySelector('#pendingState p.text-slate-600');
+            if (pendingText) {
+                pendingText.textContent = errorMessage;
+                pendingText.classList.add('text-red-600');
+            }
+        });
+    }
+
+    // Only run countdown if not verified
+    if (verified !== '1') {
+        document.addEventListener('DOMContentLoaded', function() {
+            let countdown = 60;
+            const countdownElement = document.getElementById('countdown');
+            const resendButton = document.querySelector('button[onclick="resendVerification()"]');
+
+            if (!countdownElement || !resendButton) return;
+
+            // Countdown timer
+            const timer = setInterval(() => {
+                countdown--;
+                if (countdownElement) {
+                    countdownElement.textContent = countdown;
+                }
+                
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    if (resendButton) {
+                        resendButton.disabled = false;
+                        resendButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                    }
+                    const countdownText = document.querySelector('.text-sm.text-slate-500');
+                    if (countdownText) {
+                        countdownText.style.display = 'none';
+                    }
+                }
+            }, 1000);
+
+            // Disable resend button initially
+            resendButton.disabled = true;
+            resendButton.classList.add('opacity-50', 'cursor-not-allowed');
+        });
+    }
+
+    function resendVerification() {
+        // In production, this would be an API call
+        console.log('Resending verification email...');
+        
+        const countdownElement = document.getElementById('countdown');
+        const resendButton = document.querySelector('button[onclick="resendVerification()"]');
+        
+        if (countdownElement && resendButton) {
+            let countdown = 60;
+            countdownElement.textContent = countdown;
+            resendButton.disabled = true;
+            resendButton.classList.add('opacity-50', 'cursor-not-allowed');
+            const countdownText = document.querySelector('.text-sm.text-slate-500');
+            if (countdownText) {
+                countdownText.style.display = 'block';
+            }
+            
+            alert('Verification email sent! Please check your inbox.');
+            
+            // Restart timer
+            const newTimer = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+                
+                if (countdown <= 0) {
+                    clearInterval(newTimer);
+                    resendButton.disabled = false;
+                    resendButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                    if (countdownText) {
+                        countdownText.style.display = 'none';
+                    }
+                }
+            }, 1000);
+        }
+    }
+</script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/forms.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

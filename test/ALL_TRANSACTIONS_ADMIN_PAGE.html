@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>All Transactions | Admin</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .text-real { color: #10B981; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen" data-page="adminTransactions">
+
+<aside class="w-64 bg-slate-950 text-slate-400 flex flex-col shrink-0 border-r border-slate-800 fixed h-screen">
+    <div class="p-6 border-b border-slate-800/50">
+        <div class="text-2xl font-bold tracking-tight text-white">
+            Conch<span class="text-[#10B981]">Capital</span>
+        </div>
+        <p class="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500 mt-1">Admin Portal</p>
+    </div>
+    <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+        <a href="#" data-route="adminDashboard" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-chart-pie text-sm"></i>
+            <span class="text-sm font-medium">Overview</span>
+        </a>
+        <a href="#" data-route="adminUsers" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-users-gear text-sm"></i>
+            <span class="text-sm font-medium">User Management</span>
+        </a>
+        <a href="#" data-route="adminTransactions" class="flex items-center space-x-3 p-3 bg-slate-900 text-white rounded-xl transition">
+            <i class="fa-solid fa-file-invoice-dollar text-sm"></i>
+            <span class="text-sm font-medium">Transactions</span>
+        </a>
+        <a href="#" data-route="adminCredits" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-money-bill-transfer text-sm"></i>
+            <span class="text-sm font-medium">Credits</span>
+        </a>
+        <a href="#" data-route="adminFreezes" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-snowflake text-sm"></i>
+            <span class="text-sm font-medium">Freezes</span>
+        </a>
+        <div class="pt-4 mt-4 border-t border-slate-800/50">
+            <a href="#" data-route="adminSettings" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+                <i class="fa-solid fa-gear text-sm"></i>
+                <span class="text-sm font-medium">Settings</span>
+            </a>
+        </div>
+    </nav>
+</aside>
+
+<main class="ml-64 flex-1 p-8">
+    
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+            <h1 class="text-3xl font-extrabold text-slate-900 mb-2">All Transactions</h1>
+            <p class="text-slate-500">Monitor all platform transactions across all users</p>
+        </div>
+    </div>
+
+    <!-- Search and Export -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 mb-6">
+        <div class="flex flex-col md:flex-row gap-4">
+            <div class="flex-1 relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+                <input 
+                    type="text" 
+                    placeholder="Search by transaction ID, user, amount..."
+                    class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-slate-800 focus:border-slate-800 outline-none"
+                    id="searchInput"
+                >
+            </div>
+            <div class="flex gap-2">
+                <button class="px-6 py-3 bg-white border-2 border-gray-200 text-slate-600 rounded-xl font-bold hover:bg-gray-50 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-file-csv"></i> Export CSV
+                </button>
+                <button class="px-6 py-3 bg-white border-2 border-gray-200 text-slate-600 rounded-xl font-bold hover:bg-gray-50 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-file-excel"></i> Export Excel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced Filters -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-6">
+        <h3 class="text-sm font-bold text-slate-700 uppercase tracking-widest mb-4">Advanced Filters</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <!-- User Filter -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">User</label>
+                <div class="relative">
+                    <i class="fa-solid fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input 
+                        type="text" 
+                        placeholder="Search user..."
+                        class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-slate-800 outline-none text-sm"
+                    >
+                </div>
+            </div>
+            
+            <!-- Type Filter -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Type</label>
+                <select class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-slate-800 outline-none text-sm">
+                    <option>All Types</option>
+                    <option>Deposits</option>
+                    <option>Withdrawals</option>
+                    <option>Credits</option>
+                </select>
+            </div>
+            
+            <!-- Status Filter -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Status</label>
+                <select class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-slate-800 outline-none text-sm">
+                    <option>All Status</option>
+                    <option>Pending</option>
+                    <option>Completed</option>
+                    <option>Failed</option>
+                </select>
+            </div>
+            
+            <!-- Date Range -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Date Range</label>
+                <select class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-slate-800 outline-none text-sm">
+                    <option>Last 7 days</option>
+                    <option>Last 30 days</option>
+                    <option>Last 90 days</option>
+                    <option>All time</option>
+                    <option>Custom range</option>
+                </select>
+            </div>
+            
+            <!-- Amount Range -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Amount Range</label>
+                <div class="flex gap-2">
+                    <input 
+                        type="number" 
+                        placeholder="Min"
+                        class="flex-1 px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-slate-800 outline-none text-sm"
+                    >
+                    <input 
+                        type="number" 
+                        placeholder="Max"
+                        class="flex-1 px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-slate-800 outline-none text-sm"
+                    >
+                </div>
+            </div>
+        </div>
+        <div class="mt-4 flex gap-2">
+            <button class="px-4 py-2 bg-slate-800 text-white rounded-lg text-sm font-bold hover:opacity-90 transition">
+                Apply Filters
+            </button>
+            <button class="px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-gray-50 transition">
+                Clear Filters
+            </button>
+        </div>
+    </div>
+
+    <!-- Summary Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white rounded-xl border border-gray-200 p-4">
+            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Total Transactions</p>
+            <p id="totalTransactions" class="text-2xl font-extrabold text-slate-800">-</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 p-4">
+            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Total Volume</p>
+            <p id="totalVolume" class="text-2xl font-extrabold text-green-600">-</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 p-4">
+            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Pending</p>
+            <p id="pendingCount" class="text-2xl font-extrabold text-amber-600">-</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 p-4">
+            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Failed</p>
+            <p id="failedCount" class="text-2xl font-extrabold text-red-600">-</p>
+        </div>
+    </div>
+
+    <!-- Transaction Table -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <!-- Desktop Table View -->
+        <div class="hidden md:block overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">User</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Type</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Date</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Amount</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Status</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionsTableBody" class="divide-y divide-gray-100">
+                    <tr>
+                        <td colspan="6" class="px-6 py-12 text-center">
+                            <i class="fa-solid fa-spinner fa-spin text-2xl text-slate-400 mb-2"></i>
+                            <p class="text-slate-500">Loading transactions...</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Mobile Card View -->
+        <div id="transactionsMobileView" class="md:hidden divide-y divide-gray-100">
+            <div class="p-4 text-center">
+                <i class="fa-solid fa-spinner fa-spin text-2xl text-slate-400 mb-2"></i>
+                <p class="text-slate-500">Loading transactions...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex items-center justify-between mt-6">
+        <p id="paginationInfo" class="text-sm text-slate-500">Loading...</p>
+        <div id="paginationControls" class="flex items-center gap-2">
+            <!-- Pagination will be dynamically generated -->
+        </div>
+    </div>
+
+</main>
+
+<script>
+    let currentPage = 1;
+    let paginationData = null;
+    let allTransactions = [];
+    let filters = {
+        user_id: null,
+        type: null,
+        fund_type: null,
+        status: null
+    };
+
+    // Format date
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
+        const timeOptions = { hour: '2-digit', minute: '2-digit' };
+        return {
+            date: date.toLocaleDateString('en-US', options),
+            time: date.toLocaleTimeString('en-US', timeOptions)
+        };
+    }
+
+    // Get transaction type icon and color
+    function getTransactionIcon(type, status) {
+        const icons = {
+            'deposit': { icon: 'fa-arrow-down', bg: 'bg-green-100', color: 'text-green-600' },
+            'withdrawal': { icon: 'fa-arrow-up', bg: 'bg-red-100', color: 'text-red-600' },
+            'credit': { icon: 'fa-gift', bg: 'bg-blue-100', color: 'text-blue-600' },
+            'debit': { icon: 'fa-minus', bg: 'bg-orange-100', color: 'text-orange-600' }
+        };
+        return icons[type] || { icon: 'fa-exchange', bg: 'bg-gray-100', color: 'text-gray-600' };
+    }
+
+    // Get status badge class
+    function getStatusBadge(status) {
+        const badges = {
+            'completed': 'bg-green-100 text-green-700',
+            'pending': 'bg-amber-100 text-amber-700',
+            'failed': 'bg-red-100 text-red-700',
+            'cancelled': 'bg-gray-100 text-gray-700'
+        };
+        return badges[status] || 'bg-gray-100 text-gray-700';
+    }
+
+    // Get user initials
+    function getUserInitials(user) {
+        if (user?.username) {
+            return user.username.substring(0, 2).toUpperCase();
+        }
+        if (user?.name) {
+            const parts = user.name.split(' ');
+            if (parts.length > 1) {
+                return (parts[0][0] + parts[1][0]).toUpperCase();
+            }
+            return user.name.substring(0, 2).toUpperCase();
+        }
+        return 'U' + (user?.id || '?');
+    }
+
+    // Get user avatar color
+    function getUserAvatarColor(userId) {
+        const colors = ['bg-blue-500', 'bg-purple-500', 'bg-indigo-500', 'bg-green-500', 'bg-pink-500', 'bg-yellow-500'];
+        return colors[userId % colors.length];
+    }
+
+    // Load transactions
+    async function loadTransactions(page = 1) {
+        try {
+            currentPage = page;
+            
+            const tbody = document.getElementById('transactionsTableBody');
+            const mobileView = document.getElementById('transactionsMobileView');
+            
+            tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-12 text-center"><i class="fa-solid fa-spinner fa-spin text-2xl text-slate-400 mb-2"></i><p class="text-slate-500">Loading transactions...</p></td></tr>';
+            mobileView.innerHTML = '<div class="p-4 text-center"><i class="fa-solid fa-spinner fa-spin text-2xl text-slate-400 mb-2"></i><p class="text-slate-500">Loading transactions...</p></div>';
+
+            const params = {
+                page: page,
+                per_page: 20
+            };
+
+            // Add filters
+            if (filters.user_id) params.user_id = filters.user_id;
+            if (filters.type) params.type = filters.type;
+            if (filters.fund_type) params.fund_type = filters.fund_type;
+            if (filters.status) params.status = filters.status;
+
+            const response = await API.admin.getTransactions(params);
+            
+            // Handle Laravel pagination response
+            let transactions = [];
+            if (response.data && Array.isArray(response.data)) {
+                transactions = response.data;
+                paginationData = {
+                    data: response.data,
+                    current_page: response.current_page || 1,
+                    last_page: response.last_page || 1,
+                    per_page: response.per_page || 20,
+                    total: response.total || 0,
+                    from: response.from || 0,
+                    to: response.to || 0
+                };
+            } else if (Array.isArray(response)) {
+                transactions = response;
+                paginationData = { 
+                    data: response, 
+                    total: response.length, 
+                    per_page: 20, 
+                    current_page: 1, 
+                    last_page: 1,
+                    from: 1,
+                    to: response.length
+                };
+            } else {
+                console.error('Unexpected response format:', response);
+                throw new Error('Invalid response format from API');
+            }
+
+            allTransactions = transactions;
+
+            if (!Array.isArray(transactions) || transactions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-12 text-center"><p class="text-slate-500">No transactions found</p></td></tr>';
+                mobileView.innerHTML = '<div class="p-4 text-center text-slate-500">No transactions found</div>';
+                updatePagination();
+                updateSummaryStats();
+                return;
+            }
+
+            renderTransactions(transactions);
+            updatePagination();
+            // Update summary stats after pagination is set
+            updateSummaryStats();
+        } catch (error) {
+            console.error('Failed to load transactions:', error);
+            const errorMessage = error.response?.message || error.message || 'Failed to load transactions';
+            const tbody = document.getElementById('transactionsTableBody');
+            const mobileView = document.getElementById('transactionsMobileView');
+            tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-12 text-center text-red-500">${errorMessage}</td></tr>`;
+            mobileView.innerHTML = `<div class="p-4 text-center text-red-500">${errorMessage}</div>`;
+            Utils?.showToast?.(errorMessage, 'error');
+        }
+    }
+
+    // Render transactions
+    function renderTransactions(transactions) {
+        const tbody = document.getElementById('transactionsTableBody');
+        const mobileView = document.getElementById('transactionsMobileView');
+        
+        tbody.innerHTML = '';
+        mobileView.innerHTML = '';
+
+        transactions.forEach(tx => {
+            const date = formatDate(tx.created_at);
+            const iconData = getTransactionIcon(tx.type, tx.status);
+            const amount = parseFloat(tx.amount || 0);
+            const isPositive = tx.type === 'deposit' || tx.type === 'credit';
+            const amountColor = isPositive ? 'text-green-600' : 'text-red-600';
+            const amountSign = isPositive ? '+' : '-';
+            const user = tx.user || {};
+            const userInitials = getUserInitials(user);
+            const avatarColor = getUserAvatarColor(user.id || 0);
+
+            // Desktop row
+            const row = document.createElement('tr');
+            row.className = 'hover:bg-gray-50 transition';
+            row.innerHTML = `
+                <td class="px-6 py-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full ${avatarColor} flex items-center justify-center text-white text-xs font-bold">
+                            ${userInitials}
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-800">${Utils.escapeHtml(user.username ? '@' + user.username : user.name || 'User ' + (user.id || '?'))}</p>
+                            <p class="text-xs text-slate-500">${Utils.escapeHtml(user.email || '')}</p>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-full ${iconData.bg} flex items-center justify-center">
+                            <i class="fa-solid ${iconData.icon} ${iconData.color} text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-800">${tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}</p>
+                            <p class="text-xs text-slate-500">${tx.fund_type || 'USD'}</p>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4">
+                    <p class="text-sm font-medium text-slate-800">${date.date}</p>
+                    <p class="text-xs text-slate-500">${date.time}</p>
+                </td>
+                <td class="px-6 py-4">
+                    <p class="text-sm font-bold ${amountColor}">${amountSign}$${Math.abs(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p class="text-xs text-slate-500">${tx.currency || 'USD'}</p>
+                </td>
+                <td class="px-6 py-4">
+                    <span class="px-3 py-1 ${getStatusBadge(tx.status)} rounded-full text-xs font-bold">${tx.status.charAt(0).toUpperCase() + tx.status.slice(1)}</span>
+                </td>
+                <td class="px-6 py-4">
+                    <button onclick="viewTransaction(${tx.id})" class="text-sm font-bold text-slate-800 hover:underline">View</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+
+            // Mobile card
+            const card = document.createElement('div');
+            card.className = 'p-4';
+            card.innerHTML = `
+                <div class="flex items-start justify-between mb-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full ${avatarColor} flex items-center justify-center text-white text-xs font-bold">
+                            ${userInitials}
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-800">${Utils.escapeHtml(user.username ? '@' + user.username : user.name || 'User')}</p>
+                            <p class="text-xs text-slate-500">${tx.type.charAt(0).toUpperCase() + tx.type.slice(1)} • ${tx.fund_type || 'USD'}</p>
+                        </div>
+                    </div>
+                    <span class="px-3 py-1 ${getStatusBadge(tx.status)} rounded-full text-xs font-bold">${tx.status.charAt(0).toUpperCase() + tx.status.slice(1)}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-bold ${amountColor}">${amountSign}$${Math.abs(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                        <p class="text-xs text-slate-500">${date.date} • ${date.time}</p>
+                    </div>
+                    <button onclick="viewTransaction(${tx.id})" class="text-sm font-bold text-slate-800 hover:underline">View</button>
+                </div>
+            `;
+            mobileView.appendChild(card);
+        });
+    }
+
+    // Update pagination
+    function updatePagination() {
+        const paginationInfo = document.getElementById('paginationInfo');
+        const paginationControls = document.getElementById('paginationControls');
+        
+        if (!paginationData) {
+            paginationInfo.textContent = 'Loading...';
+            paginationControls.innerHTML = '';
+            return;
+        }
+
+        const current_page = paginationData.current_page || 1;
+        const last_page = paginationData.last_page || 1;
+        const per_page = paginationData.per_page || 20;
+        const total = paginationData.total || 0;
+        
+        const start = total > 0 ? (current_page - 1) * per_page + 1 : 0;
+        const end = Math.min(current_page * per_page, total);
+        
+        paginationInfo.textContent = total > 0 
+            ? `Showing ${start}-${end} of ${total} transactions`
+            : 'No transactions found';
+
+        paginationControls.innerHTML = '';
+
+        // Only show pagination if there's more than one page
+        if (last_page <= 1) {
+            return;
+        }
+
+        // Previous button
+        const prevBtn = document.createElement('button');
+        prevBtn.className = 'px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-bold hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed';
+        prevBtn.disabled = current_page === 1;
+        prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i> Previous';
+        prevBtn.onclick = () => loadTransactions(current_page - 1);
+        paginationControls.appendChild(prevBtn);
+
+        // Page numbers
+        const pageNumbers = document.createElement('div');
+        pageNumbers.className = 'flex gap-1';
+
+        const maxPages = 5;
+        let startPage = Math.max(1, current_page - Math.floor(maxPages / 2));
+        let endPage = Math.min(last_page, startPage + maxPages - 1);
+        if (endPage - startPage < maxPages - 1) {
+            startPage = Math.max(1, endPage - maxPages + 1);
+        }
+
+        if (startPage > 1) {
+            const firstBtn = document.createElement('button');
+            firstBtn.className = 'px-3 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-bold hover:bg-gray-50';
+            firstBtn.textContent = '1';
+            firstBtn.onclick = () => loadTransactions(1);
+            pageNumbers.appendChild(firstBtn);
+            if (startPage > 2) {
+                const ellipsis = document.createElement('span');
+                ellipsis.className = 'px-3 py-2 text-slate-500';
+                ellipsis.textContent = '...';
+                pageNumbers.appendChild(ellipsis);
+            }
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            const pageBtn = document.createElement('button');
+            pageBtn.className = i === current_page 
+                ? 'px-3 py-2 bg-slate-800 text-white rounded-lg text-sm font-bold'
+                : 'px-3 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-bold hover:bg-gray-50';
+            pageBtn.textContent = i;
+            pageBtn.onclick = () => loadTransactions(i);
+            pageNumbers.appendChild(pageBtn);
+        }
+
+        if (endPage < last_page) {
+            if (endPage < last_page - 1) {
+                const ellipsis = document.createElement('span');
+                ellipsis.className = 'px-3 py-2 text-slate-500';
+                ellipsis.textContent = '...';
+                pageNumbers.appendChild(ellipsis);
+            }
+            const lastBtn = document.createElement('button');
+            lastBtn.className = 'px-3 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-bold hover:bg-gray-50';
+            lastBtn.textContent = last_page;
+            lastBtn.onclick = () => loadTransactions(last_page);
+            pageNumbers.appendChild(lastBtn);
+        }
+
+        paginationControls.appendChild(pageNumbers);
+
+        // Next button
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-bold hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed';
+        nextBtn.disabled = current_page === last_page;
+        nextBtn.innerHTML = 'Next <i class="fa-solid fa-chevron-right"></i>';
+        nextBtn.onclick = () => loadTransactions(current_page + 1);
+        paginationControls.appendChild(nextBtn);
+    }
+
+    // Update summary stats
+    async function updateSummaryStats() {
+        try {
+            console.log('Updating summary stats...', paginationData);
+            
+            // Use pagination total for total transactions count
+            const total = paginationData?.total || 0;
+            document.getElementById('totalTransactions').textContent = total > 0 ? total.toLocaleString() : '0';
+
+            // Fetch counts for pending and failed using filtered API calls
+            // These are fast because we only need the total count, not the data
+            const [pendingResponse, failedResponse] = await Promise.all([
+                API.admin.getTransactions({ status: 'pending', per_page: 1 }).catch(() => ({ total: 0 })),
+                API.admin.getTransactions({ status: 'failed', per_page: 1 }).catch(() => ({ total: 0 }))
+            ]);
+
+            const pending = pendingResponse?.total || 0;
+            const failed = failedResponse?.total || 0;
+
+            // For total volume, fetch completed transactions
+            // Start with first page, then fetch more if needed
+            let totalVolume = 0;
+            try {
+                const completedResponse = await API.admin.getTransactions({ 
+                    status: 'completed', 
+                    per_page: 100 
+                });
+                
+                const completedTxs = completedResponse?.data || [];
+                const completedTotal = completedResponse?.total || 0;
+                const completedLastPage = completedResponse?.last_page || 1;
+
+                // Calculate volume from first page
+                completedTxs.forEach(tx => {
+                    totalVolume += Math.abs(parseFloat(tx.amount || 0));
+                });
+
+                // If there are more pages, fetch them (limit to 5 pages for performance)
+                if (completedLastPage > 1 && completedLastPage <= 5) {
+                    for (let page = 2; page <= completedLastPage; page++) {
+                        try {
+                            const pageResponse = await API.admin.getTransactions({ 
+                                status: 'completed', 
+                                page: page, 
+                                per_page: 100 
+                            });
+                            const pageTxs = pageResponse?.data || [];
+                            pageTxs.forEach(tx => {
+                                totalVolume += Math.abs(parseFloat(tx.amount || 0));
+                            });
+                        } catch (err) {
+                            console.error(`Error loading completed page ${page}:`, err);
+                            break;
+                        }
+                    }
+                } else if (completedLastPage > 5) {
+                    // For more than 5 pages, estimate based on average
+                    for (let page = 2; page <= 5; page++) {
+                        try {
+                            const pageResponse = await API.admin.getTransactions({ 
+                                status: 'completed', 
+                                page: page, 
+                                per_page: 100 
+                            });
+                            const pageTxs = pageResponse?.data || [];
+                            pageTxs.forEach(tx => {
+                                totalVolume += Math.abs(parseFloat(tx.amount || 0));
+                            });
+                        } catch (err) {
+                            console.error(`Error loading completed page ${page}:`, err);
+                            break;
+                        }
+                    }
+                    // Estimate: average per transaction * remaining transactions
+                    if (completedTxs.length > 0) {
+                        const avgPerTx = totalVolume / (5 * 100);
+                        const remainingTxs = completedTotal - (5 * 100);
+                        totalVolume += avgPerTx * remainingTxs;
+                    }
+                }
+            } catch (err) {
+                console.error('Error loading completed transactions:', err);
+            }
+
+            // Update UI with calculated values
+            document.getElementById('totalVolume').textContent = totalVolume > 0 
+                ? '$' + totalVolume.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                : '$0.00';
+            document.getElementById('pendingCount').textContent = pending > 0 ? pending.toLocaleString() : '0';
+            document.getElementById('failedCount').textContent = failed > 0 ? failed.toLocaleString() : '0';
+
+            console.log('Summary stats updated:', { total, pending, failed, totalVolume });
+
+        } catch (error) {
+            console.error('Failed to load summary stats:', error);
+            // Fallback: use pagination data and current page data
+            const total = paginationData?.total || 0;
+            document.getElementById('totalTransactions').textContent = total > 0 ? total.toLocaleString() : '0';
+            
+            // Calculate from current page data as fallback
+            const totalVolume = allTransactions.reduce((sum, tx) => {
+                if (tx.status === 'completed') {
+                    return sum + Math.abs(parseFloat(tx.amount || 0));
+                }
+                return sum;
+            }, 0);
+            const pending = allTransactions.filter(tx => tx.status === 'pending').length;
+            const failed = allTransactions.filter(tx => tx.status === 'failed').length;
+
+            document.getElementById('totalVolume').textContent = totalVolume > 0 
+                ? '$' + totalVolume.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                : '$0.00';
+            document.getElementById('pendingCount').textContent = pending > 0 ? pending.toString() : '0';
+            document.getElementById('failedCount').textContent = failed > 0 ? failed.toString() : '0';
+        }
+    }
+
+    // View transaction detail
+    function viewTransaction(id) {
+        const tx = allTransactions.find(t => String(t.id) === String(id));
+        if (!tx) return;
+
+        const esc = (v) => (window.Utils && Utils.escapeHtml) ? Utils.escapeHtml(v ?? '') : (v ?? '');
+        const user = tx.user || {};
+        const money = (n) => '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        let modal = document.getElementById('txDetailModal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'txDetailModal';
+            modal.className = 'fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4';
+            document.body.appendChild(modal);
+            modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+        }
+
+        modal.innerHTML = `
+            <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto">
+                <div class="p-5 border-b border-gray-200 flex items-center justify-between">
+                    <h3 class="font-bold text-slate-900">Transaction #${esc(tx.id)}</h3>
+                    <button onclick="document.getElementById('txDetailModal').remove()" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-times"></i></button>
+                </div>
+                <div class="p-5 space-y-3 text-sm">
+                    <div class="flex justify-between"><span class="text-slate-500">User</span><span class="font-bold text-slate-900">@${esc(user.username || '-')}</span></div>
+                    <div class="flex justify-between"><span class="text-slate-500">Email</span><span class="font-bold text-slate-900">${esc(user.email || '-')}</span></div>
+                    <div class="flex justify-between"><span class="text-slate-500">Type</span><span class="font-bold text-slate-900">${esc(tx.type)}</span></div>
+                    <div class="flex justify-between"><span class="text-slate-500">Fund type</span><span class="font-bold text-slate-900">${esc(tx.fund_type)}</span></div>
+                    <div class="flex justify-between"><span class="text-slate-500">Amount</span><span class="font-bold text-slate-900">${money(tx.amount)} ${esc(tx.currency || '')}</span></div>
+                    <div class="flex justify-between"><span class="text-slate-500">Status</span><span class="font-bold text-slate-900">${esc(tx.status)}</span></div>
+                    <div class="flex justify-between"><span class="text-slate-500">Reference</span><span class="font-mono text-xs font-bold text-slate-900">${esc(tx.reference || '-')}</span></div>
+                    <div class="flex justify-between"><span class="text-slate-500">Date</span><span class="font-bold text-slate-900">${tx.created_at ? new Date(tx.created_at).toLocaleString() : '-'}</span></div>
+                    <div><span class="text-slate-500 block mb-1">Description</span><p class="text-slate-800">${esc(tx.description || '-')}</p></div>
+                </div>
+                ${user.id ? `<div class="p-5 border-t border-gray-200"><a href="admin-user-detail.html?user_id=${user.id}" class="block text-center px-4 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-bold hover:bg-black">Open user</a></div>` : ''}
+            </div>`;
+    }
+
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', function() {
+        const query = this.value.toLowerCase();
+        // Filter displayed transactions
+        if (query) {
+            const filtered = allTransactions.filter(tx => {
+                const user = tx.user || {};
+                return (
+                    tx.id.toString().includes(query) ||
+                    (user.username || '').toLowerCase().includes(query) ||
+                    (user.email || '').toLowerCase().includes(query) ||
+                    (user.name || '').toLowerCase().includes(query) ||
+                    tx.amount.toString().includes(query) ||
+                    (tx.description || '').toLowerCase().includes(query)
+                );
+            });
+            renderTransactions(filtered);
+        } else {
+            renderTransactions(allTransactions);
+        }
+    });
+
+    // Export functionality
+    document.querySelectorAll('button').forEach(btn => {
+        if (btn.textContent.includes('Export CSV')) {
+            btn.addEventListener('click', function() {
+                console.log('Exporting to CSV...');
+                Utils?.showToast?.('CSV export started. Download will begin shortly.', 'info');
+            });
+        }
+        if (btn.textContent.includes('Export Excel')) {
+            btn.addEventListener('click', function() {
+                console.log('Exporting to Excel...');
+                Utils?.showToast?.('Excel export started. Download will begin shortly.', 'info');
+            });
+        }
+    });
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        loadTransactions(1);
+    });
+</script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/forms.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

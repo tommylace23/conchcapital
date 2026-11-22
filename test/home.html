@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConchCapital | Professional Investment Platform</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#10B981',
+                        secondary: '#3B82F6',
+                        darkSlate: '#0F172A',
+                        slate800: '#1E293B',
+                        background: '#F9FAFB',
+                        textDark: '#111827',
+                        textGray: '#6B7280',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'fade-in': 'fadeIn 0.6s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        fadeIn: {
+                            'from': { opacity: '0' },
+                            'to': { opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap');
+
+        html { scroll-behavior: smooth; }
+        
+        body {
+            background-color: #F9FAFB;
+            color: #111827;
+        }
+
+        .glass-header {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .hero-gradient {
+            background: radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 100% 100%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+        }
+
+        .feature-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .btn-shine {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-shine::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: 0.5s;
+        }
+
+        .btn-shine:hover::after {
+            left: 100%;
+        }
+
+        .stats-blur {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+        }
+
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-answer {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body data-page="home" class="font-sans antialiased">
+
+    <header class="glass-header fixed w-full top-0 z-[100] transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="#" data-route="home" class="flex items-center gap-2 group">
+                <div class="w-9 h-9 bg-[#10B981] rounded-xl flex items-center justify-center shadow-lg shadow-[#10B981]/20 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-chart-line text-white text-lg"></i>
+                </div>
+                <span class="text-2xl font-bold text-[#0F172A] tracking-tight">Conch<span class="text-[#10B981]">Capital</span></span>
+            </a>
+
+            <nav class="hidden md:flex items-center gap-8">
+                <a href="#features" class="text-sm font-semibold text-[#6B7280] hover:text-[#10B981] transition-colors">Features</a>
+                <a href="#how-it-works" class="text-sm font-semibold text-[#6B7280] hover:text-[#10B981] transition-colors">How It Works</a>
+                <a href="#faq" class="text-sm font-semibold text-[#6B7280] hover:text-[#10B981] transition-colors">FAQ</a>
+                <a href="#disclaimer" class="text-sm font-semibold text-[#6B7280] hover:text-[#10B981] transition-colors">Safety</a>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <button data-route="login" class="text-sm font-bold text-[#111827] hover:text-[#10B981] transition-colors">Sign In</button>
+                <button id="getStartedBtn" data-route="register" class="btn-shine bg-[#10B981] text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-lg shadow-[#10B981]/20 hover:bg-[#10B981]/90 transition-all">
+                    Get Started
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero-gradient pt-40 pb-24 px-6 overflow-hidden">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+            <div class="space-y-8 animate-fade-in">
+                <div class="inline-flex items-center gap-2 px-4 py-2 bg-[#10B981]/10 rounded-full border border-[#10B981]/20">
+                    <span class="flex h-2 w-2 rounded-full bg-[#10B981] animate-pulse"></span>
+                    <span class="text-xs font-bold text-[#10B981] uppercase tracking-wider">The Future of Investment Management</span>
+                </div>
+                <h1 class="text-5xl lg:text-7xl font-extrabold text-[#0F172A] leading-[1.1]">
+                    Build Your Portfolio <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#10B981] to-[#3B82F6]">With Confidence.</span>
+                </h1>
+                <p class="text-lg text-[#6B7280] leading-relaxed max-w-lg">
+                    Manage profit growth funds, understand real-world market dynamics, and build your portfolio. A professional platform designed for serious investors.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-4">
+                    <button data-route="register" class="btn-shine bg-[#10B981] text-white font-bold px-8 py-4 rounded-2xl shadow-xl shadow-[#10B981]/30 hover:scale-105 transition-all text-lg">
+                        Get Started Free
+                    </button>
+                </div>
+                <div class="pt-8 flex items-center gap-6">
+                    <div class="flex -space-x-3">
+                        <img class="w-10 h-10 rounded-full border-4 border-white" src="https://ui-avatars.com/api/?name=JD&background=10B981&color=fff" alt="User">
+                        <img class="w-10 h-10 rounded-full border-4 border-white" src="https://ui-avatars.com/api/?name=AS&background=3B82F6&color=fff" alt="User">
+                        <img class="w-10 h-10 rounded-full border-4 border-white" src="https://ui-avatars.com/api/?name=MK&background=0F172A&color=fff" alt="User">
+                    </div>
+                    <p class="text-sm text-[#6B7280]">Join <span class="text-[#0F172A] font-bold">10,123+</span> investors building wealth.</p>
+                </div>
+            </div>
+
+            <div class="relative animate-float lg:block hidden">
+                <div class="absolute -inset-4 bg-gradient-to-r from-[#10B981]/20 to-[#3B82F6]/20 rounded-[3rem] blur-3xl opacity-30"></div>
+                <div class="relative bg-white p-8 rounded-[2.5rem] shadow-2xl border border-slate-100">
+                    <div class="flex items-center justify-between mb-8">
+                        <div>
+                            <p class="text-xs font-bold text-[#6B7280] uppercase tracking-widest">Profit Growth Portfolio</p>
+                            <h3 class="text-3xl font-black text-[#0F172A] font-mono">$377,011</h3>
+                        </div>
+                        <div class="px-3 py-1 bg-[#3B82F6]/10 text-[#3B82F6] rounded-full text-[10px] font-black uppercase">Active Growth</div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="h-40 w-full bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl overflow-hidden relative border border-slate-100">
+                            <!-- Chart Grid Lines -->
+                            <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 160" preserveAspectRatio="none">
+                                <!-- Grid lines -->
+                                <line x1="0" y1="40" x2="400" y2="40" stroke="#E2E8F0" stroke-width="1" opacity="0.5"/>
+                                <line x1="0" y1="80" x2="400" y2="80" stroke="#E2E8F0" stroke-width="1" opacity="0.5"/>
+                                <line x1="0" y1="120" x2="400" y2="120" stroke="#E2E8F0" stroke-width="1" opacity="0.5"/>
+                                
+                                <!-- Gradient fill area -->
+                                <defs>
+                                    <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:0.2" />
+                                        <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:0" />
+                                    </linearGradient>
+                                </defs>
+                                
+                                <!-- Growth line path (animated upward trend) -->
+                                <path id="growthLine" d="M 0 140 Q 50 120 100 100 T 200 60 T 300 40 T 400 20" 
+                                      fill="none" 
+                                      stroke="#3B82F6" 
+                                      stroke-width="3" 
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      style="stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: drawLine 2s ease-out forwards;">
+                                </path>
+                                
+                                <!-- Filled area under the line -->
+                                <path d="M 0 140 Q 50 120 100 100 T 200 60 T 300 40 T 400 20 L 400 160 L 0 160 Z" 
+                                      fill="url(#chartGradient)"
+                                      style="opacity: 0; animation: fadeIn 1s ease-out 1s forwards;">
+                                </path>
+                                
+                                <!-- Data points -->
+                                <circle cx="100" cy="100" r="4" fill="#3B82F6" style="opacity: 0; animation: fadeIn 0.5s ease-out 1.5s forwards;"/>
+                                <circle cx="200" cy="60" r="4" fill="#3B82F6" style="opacity: 0; animation: fadeIn 0.5s ease-out 1.7s forwards;"/>
+                                <circle cx="300" cy="40" r="4" fill="#3B82F6" style="opacity: 0; animation: fadeIn 0.5s ease-out 1.9s forwards;"/>
+                                <circle cx="400" cy="20" r="5" fill="#3B82F6" style="opacity: 0; animation: fadeIn 0.5s ease-out 2.1s forwards;"/>
+                            </svg>
+                            
+                            <!-- Chart animation styles -->
+                            <style>
+                                @keyframes drawLine {
+                                    to {
+                                        stroke-dashoffset: 0;
+                                    }
+                                }
+                                @keyframes fadeIn {
+                                    to {
+                                        opacity: 1;
+                                    }
+                                }
+                            </style>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="h-16 bg-slate-50 rounded-xl p-3 border border-slate-100">
+                                <span class="text-[10px] text-[#6B7280] uppercase font-bold">Daily Growth</span>
+                                <p class="text-[#10B981] font-bold">2.8%</p>
+                            </div>
+                            <div class="h-16 bg-slate-50 rounded-xl p-3 border border-slate-100">
+                                <span class="text-[10px] text-[#6B7280] uppercase font-bold">Real Balance</span>
+                                <p class="text-[#0F172A] font-bold">0.42 BTC</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust rail -->
+    <div class="max-w-4xl mx-auto px-4 lg:px-8 mb-12">
+        <div class="trust-rail">
+            <span class="trust-rail-label">Custody &amp; settlement partners</span>
+            <span class="trust-mark trust-mark--serif" data-name="BNY Mellon">
+                <img src="assets/images/trust/bnymellon.png" alt="BNY Mellon" loading="lazy" onerror="trustFallback(this)">
+                <span class="trust-text">BNY Mellon</span>
+            </span>
+            <span class="trust-mark trust-mark--serif" data-name="State Street">
+                <img src="assets/images/trust/statestreet.png" alt="State Street" loading="lazy" onerror="trustFallback(this)">
+                <span class="trust-text">State Street</span>
+            </span>
+            <span class="trust-mark" data-name="BitGo">
+                <img src="assets/images/trust/bitgo.png" alt="BitGo" loading="lazy" onerror="trustFallback(this)">
+                <span class="trust-text">BitGo</span>
+            </span>
+            <span class="trust-mark" data-name="Coinbase Prime">
+                <img src="assets/images/trust/coinbase.png" alt="Coinbase Prime" loading="lazy" onerror="trustFallback(this)">
+                <span class="trust-text">Coinbase Prime</span>
+            </span>
+            <span class="trust-mark trust-mark--caps" data-name="SWIFT">
+                <img src="assets/images/trust/swift.jpg" alt="SWIFT" loading="lazy" onerror="trustFallback(this)">
+                <span class="trust-text">SWIFT</span>
+            </span>
+            <span class="trust-mark trust-mark--serif" data-name="HSBC">
+                <img src="assets/images/trust/hsbc.png" alt="HSBC" loading="lazy" onerror="trustFallback(this)">
+                <span class="trust-text">HSBC</span>
+            </span>
+            <span class="trust-mark trust-mark--serif" data-name="Citi">
+                <img src="assets/images/trust/citi.png" alt="Citi" loading="lazy" onerror="trustFallback(this)">
+                <span class="trust-text">Citi</span>
+            </span>
+        </div>
+    </div>
+    <script>
+        function trustFallback(img) {
+            const mark = img.closest('.trust-mark');
+            if (mark) mark.classList.add('is-fallback');
+        }
+    </script>
+
+    <!-- Recent Payouts ticker -->
+    <div class="max-w-6xl mx-auto px-4 lg:px-8 mb-10">
+        <div id="payoutsTicker" class="hidden">
+            <div class="payout-label"><span class="payout-live-dot"></span> Recent Payouts</div>
+            <div class="payout-viewport">
+                <div class="payout-track"></div>
+            </div>
+        </div>
+    </div>
+
+    <section id="features" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-20 space-y-4">
+                <h2 class="text-xs font-bold text-[#3B82F6] uppercase tracking-[0.2em]">Our Ecosystem</h2>
+                <h3 class="text-4xl font-extrabold text-[#0F172A]">Engineered for Transparency and Growth</h3>
+                <p class="text-[#6B7280]">We've built a dual-environment system that protects your capital while maximizing your investment potential.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="feature-card group bg-[#F9FAFB] p-10 rounded-[2rem] border border-slate-100 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-[#10B981]/5 rounded-bl-[4rem] group-hover:scale-150 transition-transform"></div>
+                    <div class="w-14 h-14 bg-white rounded-2xl shadow-md flex items-center justify-center mb-8">
+                        <i class="fa-solid fa-wallet text-[#10B981] text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-[#0F172A] mb-4">Real Wallet Balance</h4>
+                    <p class="text-[#6B7280] text-sm leading-relaxed">
+                        Deposit real crypto and track your actual funds with institutional-grade security. Clear indicators ensure you always know when you are dealing with live assets.
+                    </p>
+                </div>
+
+                <div class="feature-card group bg-[#F9FAFB] p-10 rounded-[2rem] border border-slate-100 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-[#3B82F6]/5 rounded-bl-[4rem] group-hover:scale-150 transition-transform"></div>
+                    <div class="w-14 h-14 bg-white rounded-2xl shadow-md flex items-center justify-center mb-8">
+                        <i class="fa-solid fa-flask-vial text-[#3B82F6] text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-[#0F172A] mb-4">Profit Growth Platform</h4>
+                    <p class="text-[#6B7280] text-sm leading-relaxed">
+                        Test your theories in a risk-free environment. Use profit growth capital to model strategies without endangering your personal savings.
+                    </p>
+                </div>
+
+                <div class="feature-card group bg-[#F9FAFB] p-10 rounded-[2rem] border border-slate-100 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-[#0F172A]/5 rounded-bl-[4rem] group-hover:scale-150 transition-transform"></div>
+                    <div class="w-14 h-14 bg-white rounded-2xl shadow-md flex items-center justify-center mb-8">
+                        <i class="fa-solid fa-users text-[#0F172A] text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-[#0F172A] mb-4">Network & Collaborate</h4>
+                    <p class="text-[#6B7280] text-sm leading-relaxed">
+                        Connect with fellow investors and advisors. View profit growth performance metrics and exchange strategies in a professional network.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-[#F9FAFB]">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-4xl font-extrabold text-[#0F172A] mb-6 leading-tight">Clear Visual Distinction. <br>Peace of Mind.</h2>
+                    <p class="text-[#6B7280] mb-8 leading-relaxed">
+                        Confusion between demo and live trading is the biggest risk in investment management. <strong>ConchCapital</strong> uses a strict design system to ensure you never make an accidental move.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 p-4 bg-white rounded-2xl border border-slate-100">
+                            <div class="w-10 h-10 rounded-full bg-[#10B981]/10 flex items-center justify-center text-[#10B981]">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <span class="text-sm font-bold text-[#0F172A]">Real, withdrawable funds are clearly marked with solid green borders and green color accents.</span>
+                        </div>
+                        <div class="flex items-center gap-4 p-4 bg-white rounded-2xl border border-slate-100">
+                            <div class="w-10 h-10 rounded-full bg-[#3B82F6]/10 flex items-center justify-center text-[#3B82F6]">
+                                <i class="fa-solid fa-flask"></i>
+                            </div>
+                            <span class="text-sm font-bold text-[#0F172A]">Profit growth accounts use dashed borders and vibrant blue.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-3xl shadow-xl border-l-[6px] border-[#10B981]">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-[10px] font-black text-[#10B981] uppercase tracking-[0.2em]">Live Wallet</span>
+                            <span class="px-2 py-0.5 bg-[#10B981]/10 text-[#10B981] text-[10px] font-black rounded uppercase">Withdrawable</span>
+                        </div>
+                        <p class="text-2xl font-mono font-bold text-[#0F172A]">$12,450.00</p>
+                        <p class="text-xs text-[#6B7280] mt-2 italic">Real funds verified on blockchain</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl shadow-xl border-l-[6px] border-[#3B82F6] border-dashed border-2">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-[10px] font-black text-[#3B82F6] uppercase tracking-[0.2em]">Profit Growth Mode</span>
+                            <span class="px-2 py-0.5 bg-[#3B82F6]/10 text-[#3B82F6] text-[10px] font-black rounded uppercase">Growth Only</span>
+                        </div>
+                        <p class="text-2xl font-mono font-bold text-[#0F172A]">$377,011</p>
+                        <p class="text-xs text-[#6B7280] mt-2 italic">Profit growth portfolio balance</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-20 space-y-4">
+                <h2 class="text-xs font-bold text-[#3B82F6] uppercase tracking-[0.2em]">Simple Process</h2>
+                <h3 class="text-4xl font-extrabold text-[#0F172A]">How It Works</h3>
+                <p class="text-[#6B7280]">Get started in minutes and begin building your investment portfolio.</p>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-8 relative">
+                <!-- Step 1 -->
+                <div class="relative">
+                    <div class="bg-[#F9FAFB] p-8 rounded-[2rem] border border-slate-100 h-full relative z-10">
+                        <div class="w-14 h-14 bg-[#10B981] rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-[#10B981]/20">
+                            <span class="text-2xl font-black text-white">1</span>
+                        </div>
+                        <h4 class="text-xl font-bold text-[#0F172A] mb-4">Create Account</h4>
+                        <p class="text-[#6B7280] text-sm leading-relaxed">
+                            Sign up for free and verify your email. No credit card required to start investing.
+                        </p>
+                    </div>
+                    <div class="hidden md:block absolute top-1/2 left-full w-8 h-0.5 bg-gradient-to-r from-[#10B981] to-[#3B82F6] z-0 transform -translate-y-1/2"></div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative">
+                    <div class="bg-[#F9FAFB] p-8 rounded-[2rem] border border-slate-100 h-full relative z-10">
+                        <div class="w-14 h-14 bg-[#3B82F6] rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-[#3B82F6]/20">
+                            <span class="text-2xl font-black text-white">2</span>
+                        </div>
+                        <h4 class="text-xl font-bold text-[#0F172A] mb-4">Fund Your Wallet</h4>
+                        <p class="text-[#6B7280] text-sm leading-relaxed">
+                            Deposit real funds to your Real Wallet or start with profit growth funds to build your portfolio.
+                        </p>
+                    </div>
+                    <div class="hidden md:block absolute top-1/2 left-full w-8 h-0.5 bg-gradient-to-r from-[#3B82F6] to-[#10B981] z-0 transform -translate-y-1/2"></div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative">
+                    <div class="bg-[#F9FAFB] p-8 rounded-[2rem] border border-slate-100 h-full relative z-10">
+                        <div class="w-14 h-14 bg-[#10B981] rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-[#10B981]/20">
+                            <span class="text-2xl font-black text-white">3</span>
+                        </div>
+                        <h4 class="text-xl font-bold text-[#0F172A] mb-4">Start Profit Growth</h4>
+                        <p class="text-[#6B7280] text-sm leading-relaxed">
+                            Transfer funds to Profit Growth accounts. Watch your profit growth portfolio compound returns through intelligent growth calculations.
+                        </p>
+                    </div>
+                    <div class="hidden md:block absolute top-1/2 left-full w-8 h-0.5 bg-gradient-to-r from-[#10B981] to-[#3B82F6] z-0 transform -translate-y-1/2"></div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="relative">
+                    <div class="bg-[#F9FAFB] p-8 rounded-[2rem] border border-slate-100 h-full relative z-10">
+                        <div class="w-14 h-14 bg-[#3B82F6] rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-[#3B82F6]/20">
+                            <span class="text-2xl font-black text-white">4</span>
+                        </div>
+                        <h4 class="text-xl font-bold text-[#0F172A] mb-4">Monitor & Scale</h4>
+                        <p class="text-[#6B7280] text-sm leading-relaxed">
+                            Track your performance, connect with the network, and scale your investments with confidence.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Details -->
+            <div class="mt-20 grid md:grid-cols-3 gap-8">
+                <div class="bg-gradient-to-br from-[#10B981]/5 to-transparent p-6 rounded-2xl border border-[#10B981]/10">
+                    <div class="w-12 h-12 bg-[#10B981]/10 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-chart-line text-[#10B981] text-xl"></i>
+                    </div>
+                    <h5 class="font-bold text-[#0F172A] mb-2">Automatic Growth</h5>
+                    <p class="text-sm text-[#6B7280]">Profit Growth accounts earn returns automatically through optimized growth calculations and compounding mechanisms.</p>
+                </div>
+
+                <div class="bg-gradient-to-br from-[#3B82F6]/5 to-transparent p-6 rounded-2xl border border-[#3B82F6]/10">
+                    <div class="w-12 h-12 bg-[#3B82F6]/10 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-users text-[#3B82F6] text-xl"></i>
+                    </div>
+                    <h5 class="font-bold text-[#0F172A] mb-2">Professional Network</h5>
+                    <p class="text-sm text-[#6B7280]">Share profit growth funds with partners, view profiles, and leverage the network's strategies.</p>
+                </div>
+
+                <div class="bg-gradient-to-br from-[#0F172A]/5 to-transparent p-6 rounded-2xl border border-[#0F172A]/10">
+                    <div class="w-12 h-12 bg-[#0F172A]/10 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-shield-halved text-[#0F172A] text-xl"></i>
+                    </div>
+                    <h5 class="font-bold text-[#0F172A] mb-2">Secure Operations</h5>
+                    <p class="text-sm text-[#6B7280]">All profit growth funds are clearly marked. Real funds are protected and separate from growth activities.</p>
+                </div>
+            </div>
+
+            <!-- Profit Growth Calculator -->
+            <div class="mt-24">
+                <div class="text-center max-w-3xl mx-auto mb-12 space-y-4">
+                    <h2 class="text-xs font-bold text-[#3B82F6] uppercase tracking-[0.2em]">Calculate Your Growth</h2>
+                    <h3 class="text-4xl font-extrabold text-[#0F172A]">See Your Potential Returns</h3>
+                    <p class="text-[#6B7280]">Enter your deposit amount to see how your profit growth account will compound over time.</p>
+                </div>
+
+                <div class="max-w-5xl mx-auto">
+                    <div class="bg-gradient-to-br from-white to-[#F9FAFB] rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-8 lg:p-12 border border-slate-200 shadow-xl">
+                        <!-- Calculator Input -->
+                        <div class="mb-10">
+                            <label for="depositAmount" class="block text-sm font-bold text-[#0F172A] mb-3 uppercase tracking-wider">Deposit Amount</label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-xl md:text-2xl font-bold text-[#10B981]">$</span>
+                                <input 
+                                    type="number" 
+                                    id="depositAmount" 
+                                    min="1" 
+                                    step="0.01" 
+                                    value="1000" 
+                                    placeholder="Enter amount"
+                                    class="w-full pl-10 pr-6 py-4 md:py-5 text-2xl md:text-3xl font-bold text-[#0F172A] bg-white border-2 border-slate-200 rounded-2xl focus:border-[#10B981] focus:outline-none transition-all"
+                                />
+                            </div>
+                            <p class="mt-3 text-xs text-[#6B7280] flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                                <i class="fa-solid fa-info-circle text-[#3B82F6] mt-0.5"></i>
+                                <span>You can only make one deposit per week into your profit growth account.</span>
+                            </p>
+                        </div>
+
+                        <!-- Growth Rates Info -->
+                        <div class="grid md:grid-cols-2 gap-6 mb-10">
+                            <div class="bg-[#10B981]/5 border border-[#10B981]/20 rounded-2xl p-6">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-xs font-bold text-[#10B981] uppercase tracking-wider">Daily Growth</span>
+                                    <i class="fa-solid fa-chart-line text-[#10B981]"></i>
+                                </div>
+                                <p class="text-3xl font-black text-[#0F172A]">2.8%</p>
+                                <p class="text-xs text-[#6B7280] mt-1">Compounded daily on your balance</p>
+                            </div>
+                            <div class="bg-[#3B82F6]/5 border border-[#3B82F6]/20 rounded-2xl p-6">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-xs font-bold text-[#3B82F6] uppercase tracking-wider">Weekly Growth</span>
+                                    <i class="fa-solid fa-calendar-week text-[#3B82F6]"></i>
+                                </div>
+                                <p class="text-3xl font-black text-[#0F172A]">20%</p>
+                                <p class="text-xs text-[#6B7280] mt-1">Total growth after 7 days</p>
+                            </div>
+                        </div>
+
+                        <!-- Projections -->
+                        <div class="space-y-6">
+                            <h4 class="text-lg font-bold text-[#0F172A] mb-6">Projected Returns</h4>
+                            
+                            <!-- Week 1 -->
+                            <div class="bg-white rounded-2xl p-4 md:p-6 border border-slate-200 hover:shadow-lg transition-shadow">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-[#10B981] rounded-xl flex items-center justify-center flex-shrink-0">
+                                            <span class="text-white font-black">1</span>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-bold text-[#0F172A]">Week 1</h5>
+                                            <p class="text-xs text-[#6B7280]">7 days of growth</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-left sm:text-right">
+                                        <p class="text-xs text-[#6B7280] mb-1">Total Balance</p>
+                                        <p id="week1Balance" class="text-xl md:text-2xl font-black text-[#10B981]">$1,200.00</p>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-4 sm:grid-cols-7 gap-2 mt-4">
+                                    <div class="text-center">
+                                        <p class="text-[10px] text-[#6B7280] mb-1">Day 1</p>
+                                        <p id="day1" class="text-xs font-bold text-[#0F172A] break-words">$1,028</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-[10px] text-[#6B7280] mb-1">Day 2</p>
+                                        <p id="day2" class="text-xs font-bold text-[#0F172A] break-words">$1,057</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-[10px] text-[#6B7280] mb-1">Day 3</p>
+                                        <p id="day3" class="text-xs font-bold text-[#0F172A] break-words">$1,087</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-[10px] text-[#6B7280] mb-1">Day 4</p>
+                                        <p id="day4" class="text-xs font-bold text-[#0F172A] break-words">$1,117</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-[10px] text-[#6B7280] mb-1">Day 5</p>
+                                        <p id="day5" class="text-xs font-bold text-[#0F172A] break-words">$1,148</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-[10px] text-[#6B7280] mb-1">Day 6</p>
+                                        <p id="day6" class="text-xs font-bold text-[#0F172A] break-words">$1,180</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-[10px] text-[#6B7280] mb-1">Day 7</p>
+                                        <p id="day7" class="text-xs font-bold text-[#10B981] break-words">$1,200</p>
+                                    </div>
+                                </div>
+                                <div class="mt-4 pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                                    <span class="text-xs text-[#6B7280]">Profit Earned:</span>
+                                    <span id="week1Profit" class="text-sm font-bold text-[#10B981]">+$200.00</span>
+                                </div>
+                            </div>
+
+                            <!-- Week 2 -->
+                            <div class="bg-white rounded-2xl p-4 md:p-6 border border-slate-200 hover:shadow-lg transition-shadow">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-[#3B82F6] rounded-xl flex items-center justify-center flex-shrink-0">
+                                            <span class="text-white font-black">2</span>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-bold text-[#0F172A]">Week 2</h5>
+                                            <p class="text-xs text-[#6B7280]">14 days of growth</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-left sm:text-right">
+                                        <p class="text-xs text-[#6B7280] mb-1">Total Balance</p>
+                                        <p id="week2Balance" class="text-xl md:text-2xl font-black text-[#3B82F6]">$1,440.00</p>
+                                    </div>
+                                </div>
+                                <div class="mt-4 pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                                    <span class="text-xs text-[#6B7280]">Profit Earned:</span>
+                                    <span id="week2Profit" class="text-sm font-bold text-[#3B82F6]">+$440.00</span>
+                                </div>
+                            </div>
+
+                            <!-- Week 3 -->
+                            <div class="bg-white rounded-2xl p-4 md:p-6 border border-slate-200 hover:shadow-lg transition-shadow">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-[#10B981] rounded-xl flex items-center justify-center flex-shrink-0">
+                                            <span class="text-white font-black">3</span>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-bold text-[#0F172A]">Week 3</h5>
+                                            <p class="text-xs text-[#6B7280]">21 days of growth</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-left sm:text-right">
+                                        <p class="text-xs text-[#6B7280] mb-1">Total Balance</p>
+                                        <p id="week3Balance" class="text-xl md:text-2xl font-black text-[#10B981]">$1,728.00</p>
+                                    </div>
+                                </div>
+                                <div class="mt-4 pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                                    <span class="text-xs text-[#6B7280]">Profit Earned:</span>
+                                    <span id="week3Profit" class="text-sm font-bold text-[#10B981]">+$728.00</span>
+                                </div>
+                            </div>
+
+                            <!-- Week 4 -->
+                            <div class="bg-white rounded-2xl p-4 md:p-6 border border-slate-200 hover:shadow-lg transition-shadow">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-[#3B82F6] rounded-xl flex items-center justify-center flex-shrink-0">
+                                            <span class="text-white font-black">4</span>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-bold text-[#0F172A]">Week 4</h5>
+                                            <p class="text-xs text-[#6B7280]">28 days of growth</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-left sm:text-right">
+                                        <p class="text-xs text-[#6B7280] mb-1">Total Balance</p>
+                                        <p id="week4Balance" class="text-xl md:text-2xl font-black text-[#3B82F6]">$2,073.60</p>
+                                    </div>
+                                </div>
+                                <div class="mt-4 pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                                    <span class="text-xs text-[#6B7280]">Profit Earned:</span>
+                                    <span id="week4Profit" class="text-sm font-bold text-[#3B82F6]">+$1,073.60</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Summary -->
+                        <div class="mt-8 pt-8 border-t-2 border-slate-200 bg-gradient-to-r from-[#10B981]/5 to-[#3B82F6]/5 rounded-2xl p-4 md:p-6">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                <div>
+                                    <p class="text-xs font-bold text-[#6B7280] uppercase tracking-wider mb-2">Total Growth After 4 Weeks</p>
+                                    <p id="totalGrowth" class="text-2xl md:text-3xl font-black text-[#0F172A]">+107.36%</p>
+                                </div>
+                                <div class="text-left sm:text-right">
+                                    <p class="text-xs font-bold text-[#6B7280] uppercase tracking-wider mb-2">Final Balance</p>
+                                    <p id="finalBalance" class="text-2xl md:text-3xl font-black text-[#10B981]">$2,073.60</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-24 bg-white">
+        <div class="max-w-4xl mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <h2 class="text-xs font-bold text-[#3B82F6] uppercase tracking-[0.2em]">Common Questions</h2>
+                <h3 class="text-4xl font-extrabold text-[#0F172A]">Frequently Asked Questions</h3>
+                <p class="text-[#6B7280]">Find answers to the most common questions about our platform and profit growth accounts.</p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- FAQ Item 1 -->
+                <div class="faq-item bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                    <button class="faq-question w-full px-6 py-5 text-left flex items-center justify-between focus:outline-none group">
+                        <span class="font-bold text-[#0F172A] pr-4">How does profit growth work?</span>
+                        <i class="fa-solid fa-chevron-down text-[#6B7280] group-hover:text-[#10B981] transition-all transform faq-icon"></i>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-5">
+                        <p class="text-[#6B7280] leading-relaxed">
+                            Profit growth accounts automatically earn returns through our intelligent growth calculation system. Your funds grow at a rate of <strong class="text-[#10B981]">2.8% daily</strong>, which compounds to approximately <strong class="text-[#10B981]">20% weekly</strong>. Growth is calculated automatically every day, and you can track your progress in real-time through your dashboard.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="faq-item bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                    <button class="faq-question w-full px-6 py-5 text-left flex items-center justify-between focus:outline-none group">
+                        <span class="font-bold text-[#0F172A] pr-4">What's the difference between Real Wallet and Profit Growth accounts?</span>
+                        <i class="fa-solid fa-chevron-down text-[#6B7280] group-hover:text-[#10B981] transition-all transform faq-icon"></i>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-5">
+                        <p class="text-[#6B7280] leading-relaxed mb-3">
+                            Your <strong class="text-[#10B981]">Real Wallet</strong> contains actual, withdrawable funds that you've deposited. These funds are clearly marked with green borders and can be withdrawn at any time.
+                        </p>
+                        <p class="text-[#6B7280] leading-relaxed">
+                            <strong class="text-[#3B82F6]">Profit Growth accounts</strong> are separate investment accounts where you can transfer funds from your Real Wallet. These accounts use dashed blue borders and are designed for growth strategies. Funds in profit growth accounts earn automatic returns but are subject to lock periods.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="faq-item bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                    <button class="faq-question w-full px-6 py-5 text-left flex items-center justify-between focus:outline-none group">
+                        <span class="font-bold text-[#0F172A] pr-4">How do I buy crypto to deposit into the platform?</span>
+                        <i class="fa-solid fa-chevron-down text-[#6B7280] group-hover:text-[#10B981] transition-all transform faq-icon"></i>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-5">
+                        <p class="text-[#6B7280] leading-relaxed mb-3">
+                            To deposit funds into ConchCapital, you'll need to purchase cryptocurrency from an external exchange or platform first. Popular options include:
+                        </p>
+                        <ul class="list-disc list-inside text-[#6B7280] space-y-2 mb-3 ml-4">
+                            <li>Major cryptocurrency exchanges (Binance, Coinbase, Kraken, etc.)</li>
+                            <li>Peer-to-peer trading platforms</li>
+                            <li>Crypto ATMs (if available in your area)</li>
+                        </ul>
+                        <p class="text-[#6B7280] leading-relaxed">
+                            Once you have cryptocurrency in your external wallet, you can transfer it to your ConchCapital Real Wallet using the deposit feature. We'll provide you with a wallet address where you can send your crypto.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="faq-item bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                    <button class="faq-question w-full px-6 py-5 text-left flex items-center justify-between focus:outline-none group">
+                        <span class="font-bold text-[#0F172A] pr-4">How often can I deposit into my profit growth account?</span>
+                        <i class="fa-solid fa-chevron-down text-[#6B7280] group-hover:text-[#10B981] transition-all transform faq-icon"></i>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-5">
+                        <p class="text-[#6B7280] leading-relaxed">
+                            You can make <strong class="text-[#10B981]">one deposit per week</strong> into your profit growth account. This weekly limit helps ensure stable growth calculations and prevents excessive transfers. After making a deposit, you'll need to wait 7 days before you can make another transfer to your profit growth account.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 5 -->
+                <div class="faq-item bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                    <button class="faq-question w-full px-6 py-5 text-left flex items-center justify-between focus:outline-none group">
+                        <span class="font-bold text-[#0F172A] pr-4">Can I withdraw my funds anytime?</span>
+                        <i class="fa-solid fa-chevron-down text-[#6B7280] group-hover:text-[#10B981] transition-all transform faq-icon"></i>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-5">
+                        <p class="text-[#6B7280] leading-relaxed mb-3">
+                            <strong class="text-[#10B981]">Real Wallet funds</strong> can be withdrawn at any time - there are no restrictions on withdrawing from your real wallet balance.
+                        </p>
+                        <p class="text-[#6B7280] leading-relaxed">
+                            For <strong class="text-[#3B82F6]">Profit Growth accounts</strong>, funds are locked for 7 days after each deposit to allow for the growth period. Once the lock period ends, you can withdraw funds from your profit growth account back to your Real Wallet, and then withdraw to your external wallet.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 6 -->
+                <div class="faq-item bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                    <button class="faq-question w-full px-6 py-5 text-left flex items-center justify-between focus:outline-none group">
+                        <span class="font-bold text-[#0F172A] pr-4">Is my money safe?</span>
+                        <i class="fa-solid fa-chevron-down text-[#6B7280] group-hover:text-[#10B981] transition-all transform faq-icon"></i>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-5">
+                        <p class="text-[#6B7280] leading-relaxed mb-3">
+                            We take security seriously. Your real funds are kept separate from profit growth activities and are clearly marked throughout the platform. We use industry-standard security measures to protect your account and transactions.
+                        </p>
+                        <p class="text-[#6B7280] leading-relaxed">
+                            However, it's important to understand that all investments carry risk. Profit growth accounts are designed for growth strategies, and while we provide transparent calculations and clear distinctions between real and profit growth funds, you should only invest what you can afford to use for growth purposes.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 7 -->
+                <div class="faq-item bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                    <button class="faq-question w-full px-6 py-5 text-left flex items-center justify-between focus:outline-none group">
+                        <span class="font-bold text-[#0F172A] pr-4">How is the growth calculated?</span>
+                        <i class="fa-solid fa-chevron-down text-[#6B7280] group-hover:text-[#10B981] transition-all transform faq-icon"></i>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-5">
+                        <p class="text-[#6B7280] leading-relaxed mb-3">
+                            Growth is calculated using <strong class="text-[#10B981]">compound interest</strong> at a rate of <strong class="text-[#10B981]">2.8% per day</strong>. This means:
+                        </p>
+                        <ul class="list-disc list-inside text-[#6B7280] space-y-2 ml-4">
+                            <li>Each day, your balance grows by 2.8%</li>
+                            <li>The growth compounds daily (you earn growth on your previous day's balance plus growth)</li>
+                            <li>After 7 days, this compounds to approximately 20% total growth</li>
+                            <li>Calculations happen automatically every day</li>
+                        </ul>
+                        <p class="text-[#6B7280] leading-relaxed mt-3">
+                            You can use our calculator on this page to see exactly how your funds will grow over time.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 8 -->
+                <div class="faq-item bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                    <button class="faq-question w-full px-6 py-5 text-left flex items-center justify-between focus:outline-none group">
+                        <span class="font-bold text-[#0F172A] pr-4">What happens during the 7-day lock period?</span>
+                        <i class="fa-solid fa-chevron-down text-[#6B7280] group-hover:text-[#10B981] transition-all transform faq-icon"></i>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-5">
+                        <p class="text-[#6B7280] leading-relaxed mb-3">
+                            When you transfer funds to a profit growth account, they are locked for 7 days. During this period:
+                        </p>
+                        <ul class="list-disc list-inside text-[#6B7280] space-y-2 ml-4">
+                            <li>Your funds earn daily growth at 2.8% per day</li>
+                            <li>You cannot withdraw the locked funds until the period ends</li>
+                            <li>You can still view your balance and see it growing in real-time</li>
+                            <li>After 7 days, the lock automatically releases and funds become available for withdrawal</li>
+                        </ul>
+                        <p class="text-[#6B7280] leading-relaxed mt-3">
+                            The lock period ensures stable growth calculations and protects the integrity of the growth system.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 9 -->
+                <div class="faq-item bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                    <button class="faq-question w-full px-6 py-5 text-left flex items-center justify-between focus:outline-none group">
+                        <span class="font-bold text-[#0F172A] pr-4">Are there any fees?</span>
+                        <i class="fa-solid fa-chevron-down text-[#6B7280] group-hover:text-[#10B981] transition-all transform faq-icon"></i>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-5">
+                        <p class="text-[#6B7280] leading-relaxed">
+                            We strive to keep our platform transparent. Standard network fees may apply for cryptocurrency transactions (deposits and withdrawals) as these are processed on the blockchain. These fees are determined by the network, not by ConchCapital. There are no hidden fees for using profit growth accounts or for growth calculations.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 10 -->
+                <div class="faq-item bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                    <button class="faq-question w-full px-6 py-5 text-left flex items-center justify-between focus:outline-none group">
+                        <span class="font-bold text-[#0F172A] pr-4">What is the minimum deposit amount?</span>
+                        <i class="fa-solid fa-chevron-down text-[#6B7280] group-hover:text-[#10B981] transition-all transform faq-icon"></i>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-5">
+                        <p class="text-[#6B7280] leading-relaxed">
+                            The minimum deposit amount for profit growth accounts is <strong class="text-[#10B981]">$0.01</strong>. You can start with any amount you're comfortable with. However, we recommend starting with an amount that allows you to see meaningful growth over time.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 11 -->
+                <div class="faq-item bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                    <button class="faq-question w-full px-6 py-5 text-left flex items-center justify-between focus:outline-none group">
+                        <span class="font-bold text-[#0F172A] pr-4">Can I lose money in profit growth accounts?</span>
+                        <i class="fa-solid fa-chevron-down text-[#6B7280] group-hover:text-[#10B981] transition-all transform faq-icon"></i>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-5">
+                        <p class="text-[#6B7280] leading-relaxed mb-3">
+                            Profit growth accounts are designed to grow your funds through automatic calculations. The growth rate is fixed at 2.8% daily (20% weekly), and calculations are transparent and automated.
+                        </p>
+                        <p class="text-[#6B7280] leading-relaxed">
+                            However, as with any investment platform, it's important to understand that all investments carry inherent risks. You should only invest funds that you can afford to use for growth purposes. Always do your own research and invest responsibly.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 12 -->
+                <div class="faq-item bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                    <button class="faq-question w-full px-6 py-5 text-left flex items-center justify-between focus:outline-none group">
+                        <span class="font-bold text-[#0F172A] pr-4">How do I get started?</span>
+                        <i class="fa-solid fa-chevron-down text-[#6B7280] group-hover:text-[#10B981] transition-all transform faq-icon"></i>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-5">
+                        <p class="text-[#6B7280] leading-relaxed mb-3">
+                            Getting started is simple:
+                        </p>
+                        <ol class="list-decimal list-inside text-[#6B7280] space-y-2 ml-4">
+                            <li><strong class="text-[#0F172A]">Create an account</strong> - Sign up for free with your email address</li>
+                            <li><strong class="text-[#0F172A]">Verify your email</strong> - Check your inbox and click the verification link</li>
+                            <li><strong class="text-[#0F172A]">Purchase cryptocurrency</strong> - Buy crypto from an external exchange</li>
+                            <li><strong class="text-[#0F172A]">Deposit to Real Wallet</strong> - Transfer your crypto to your ConchCapital Real Wallet</li>
+                            <li><strong class="text-[#0F172A]">Start Profit Growth</strong> - Transfer funds from your Real Wallet to a profit growth account</li>
+                        </ol>
+                        <p class="text-[#6B7280] leading-relaxed mt-3">
+                            No credit card is required to create an account. You can explore the platform and use the calculator to see potential returns before making any deposits.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 13 -->
+                <div class="faq-item bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                    <button class="faq-question w-full px-6 py-5 text-left flex items-center justify-between focus:outline-none group">
+                        <span class="font-bold text-[#0F172A] pr-4">What happens after the lock period ends?</span>
+                        <i class="fa-solid fa-chevron-down text-[#6B7280] group-hover:text-[#10B981] transition-all transform faq-icon"></i>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-5">
+                        <p class="text-[#6B7280] leading-relaxed mb-3">
+                            After the 7-day lock period ends:
+                        </p>
+                        <ul class="list-disc list-inside text-[#6B7280] space-y-2 ml-4">
+                            <li>Your funds are automatically unlocked</li>
+                            <li>Growth continues at 2.8% daily on your full balance (including all previous growth)</li>
+                            <li>You can withdraw funds from your profit growth account back to your Real Wallet</li>
+                            <li>You can make another deposit (subject to the weekly limit)</li>
+                            <li>All future growth compounds on your total balance</li>
+                        </ul>
+                        <p class="text-[#6B7280] leading-relaxed mt-3">
+                            The growth never stops - it continues daily as long as you have funds in your profit growth account.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <section class="py-20 bg-[#0F172A] text-white overflow-hidden relative">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-0 left-0 w-full h-full" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M54.627 0l.83.83L.83 55.457l-.83-.83L54.627 0zM0 54.627l.83.83L55.457.83l-.83-.83L0 54.627z\' fill=\'%23ffffff\' fill-opacity=\'0.1\' fill-rule=\'evenodd\'/%3E%3C/svg%3E');"></div>
+        </div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid md:grid-cols-4 gap-12 text-center">
+                <div>
+                    <p class="text-4xl font-black text-[#10B981] mb-2">44k+</p>
+                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">Active Investors</p>
+                </div>
+                <div>
+                    <p class="text-4xl font-black text-white mb-2">$32B+</p>
+                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">Growth Trades</p>
+                </div>
+                <div>
+                    <p class="text-4xl font-black text-[#3B82F6] mb-2">24/7</p>
+                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">Market Monitoring</p>
+                </div>
+                <div>
+                    <p class="text-4xl font-black text-white mb-2">100%</p>
+                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest">Risk Free Start</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="disclaimer" class="py-24 bg-white">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="bg-slate-50 border border-slate-200 rounded-[2.5rem] p-12 relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-8 text-slate-200">
+                    <i class="fa-solid fa-shield-halved text-9xl"></i>
+                </div>
+                <div class="relative z-10">
+                    <h4 class="text-2xl font-extrabold text-[#0F172A] mb-6">Investment Platform & Safeguards</h4>
+                    <div class="grid md:grid-cols-2 gap-8 text-sm text-[#6B7280] leading-relaxed">
+                        <div class="space-y-4">
+                            <p class="font-bold text-[#0F172A]">Platform Benefits:</p>
+                            <p>Experience automated profit growth strategies that work around the clock. Our intelligent system calculates optimal growth rates based on your portfolio parameters, providing you with transparent, real-time performance tracking and the flexibility to scale your investments as you grow.</p>
+                        </div>
+                        <div class="space-y-4">
+                            <p class="font-bold text-[#0F172A]">Dual Portfolio System:</p>
+                            <p>Manage both your real capital and profit growth portfolios in one powerful platform. Your real funds remain secure and withdrawable at any time, while your profit growth accounts compound returns automatically, giving you complete control over your investment strategy.</p>
+                        </div>
+                    </div>
+                    <div class="mt-10 pt-8 border-t border-slate-200 flex flex-wrap gap-4">
+                        <button data-route="register" class="bg-[#10B981] text-white font-bold px-8 py-3 rounded-xl shadow-lg hover:opacity-90 transition-all">Get Started Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-[#F9FAFB] border-t border-slate-200 pt-20 pb-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-12 mb-16">
+                <div class="space-y-6">
+                    <a href="#" data-route="home" class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-[#10B981] rounded-lg flex items-center justify-center">
+                            <i class="fa-solid fa-chart-line text-white text-sm"></i>
+                        </div>
+                        <span class="text-xl font-bold text-[#0F172A]">ConchCapital</span>
+                    </a>
+                    <p class="text-[#6B7280] text-sm">Elevating investment management through professional profit growth strategies and peer-to-peer collaboration.</p>
+                </div>
+                
+                <div>
+                    <h5 class="text-sm font-black text-[#0F172A] uppercase tracking-widest mb-6">Platform</h5>
+                    <ul class="space-y-4 text-sm text-[#6B7280]">
+                        <li><a href="#how-it-works" class="hover:text-[#10B981] transition-colors">How it Works</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5 class="text-sm font-black text-[#0F172A] uppercase tracking-widest mb-6">Company</h5>
+                    <ul class="space-y-4 text-sm text-[#6B7280]">
+                        <li><a href="#" data-route="about" class="hover:text-[#10B981] transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-[#10B981] transition-colors">Contact</a></li>
+                        <li><a href="#" data-route="privacyPolicy" class="hover:text-[#10B981] transition-colors">Privacy Policy</a></li>
+                        <li><a href="terms-of-service.html" class="hover:text-[#10B981] transition-colors">Terms of Service</a></li>
+                        <li><a href="risk-disclosure.html" class="hover:text-[#10B981] transition-colors">Risk Disclosure</a></li>
+                        <li><a href="fee-schedule.html" class="hover:text-[#10B981] transition-colors">Fee Schedule</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5 class="text-sm font-black text-[#0F172A] uppercase tracking-widest mb-6">Newsletter</h5>
+                    <p class="text-xs text-[#6B7280] mb-4">Stay updated with the latest in market insights.</p>
+                    <form id="newsletterForm" class="flex gap-2">
+                        <input type="email" id="newsletterEmail" placeholder="Email address" required class="flex-1 bg-white border border-slate-200 px-4 py-2 rounded-lg text-sm outline-none focus:border-[#10B981]">
+                        <button type="submit" id="newsletterSubmitBtn" class="bg-[#10B981] text-white p-2 rounded-lg hover:opacity-90 transition"><i class="fa-solid fa-paper-plane"></i></button>
+                    </form>
+                    <div id="newsletterMessage" class="mt-2 text-xs hidden"></div>
+                </div>
+            </div>
+            
+            <div class="pt-8 border-t border-slate-200 text-center">
+                <p class="text-xs text-[#6B7280] uppercase tracking-widest font-bold">© 2026 ConchCapital Platform. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js?v=20250124"></script>
+    <script src="js/forms.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/routes.js?v=20250123"></script>
+    <script src="js/main.js"></script>
+    <script src="js/payouts.js"></script>
+
+    <script>
+        // Newsletter subscription handler
+        document.addEventListener('DOMContentLoaded', function() {
+            const newsletterForm = document.getElementById('newsletterForm');
+            const newsletterEmail = document.getElementById('newsletterEmail');
+            const newsletterSubmitBtn = document.getElementById('newsletterSubmitBtn');
+            const newsletterMessage = document.getElementById('newsletterMessage');
+
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const email = newsletterEmail.value.trim();
+                    if (!email) {
+                        showNewsletterMessage('Please enter a valid email address.', 'error');
+                        return;
+                    }
+
+                    // Disable button and show loading state
+                    newsletterSubmitBtn.disabled = true;
+                    newsletterSubmitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+                    try {
+                        const response = await API.newsletter.subscribe(email);
+                        showNewsletterMessage(response.message || 'Successfully subscribed to our newsletter!', 'success');
+                        newsletterEmail.value = '';
+                    } catch (error) {
+                        const message = error.message || 'Failed to subscribe. Please try again.';
+                        showNewsletterMessage(message, 'error');
+                    } finally {
+                        newsletterSubmitBtn.disabled = false;
+                        newsletterSubmitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i>';
+                    }
+                });
+            }
+
+            function showNewsletterMessage(message, type) {
+                if (!newsletterMessage) return;
+                
+                newsletterMessage.textContent = message;
+                newsletterMessage.classList.remove('hidden');
+                newsletterMessage.classList.remove('text-green-600', 'text-red-600');
+                
+                if (type === 'success') {
+                    newsletterMessage.classList.add('text-green-600');
+                } else {
+                    newsletterMessage.classList.add('text-red-600');
+                }
+
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    newsletterMessage.classList.add('hidden');
+                }, 5000);
+            }
+        });
+    </script>
+
+    <script>
+        // Simple header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.glass-header');
+            if (window.scrollY > 20) {
+                header.classList.add('shadow-lg');
+            } else {
+                header.classList.remove('shadow-lg');
+            }
+        });
+
+        // Check authentication status and transform "Get Started" to "Dashboard" if logged in
+        async function checkAuthStatus() {
+            try {
+                // First, get CSRF cookie (required for Sanctum session-based auth)
+                await fetch('/sanctum/csrf-cookie', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+
+                // Then check authentication via session (Laravel uses session-based auth)
+                // Try to get current user from /api/auth/user endpoint
+                const response = await fetch('/api/auth/user', {
+                    method: 'GET',
+                    credentials: 'include', // Important: include cookies for session auth
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && data.user) {
+                        // User is authenticated - transform "Get Started" to "Dashboard"
+                        const getStartedBtn = document.getElementById('getStartedBtn');
+                        if (getStartedBtn) {
+                            // Remove old event listeners by cloning the button
+                            const newBtn = getStartedBtn.cloneNode(true);
+                            getStartedBtn.parentNode.replaceChild(newBtn, getStartedBtn);
+                            
+                            // Update the new button
+                            newBtn.textContent = 'Dashboard';
+                            newBtn.setAttribute('data-route', 'dashboard');
+                            // Update styling slightly to indicate it's a dashboard button
+                            newBtn.classList.remove('btn-shine');
+                            newBtn.classList.add('bg-[#3B82F6]', 'hover:bg-[#2563EB]');
+                            newBtn.classList.remove('bg-[#10B981]', 'hover:bg-[#10B981]/90');
+                            
+                            // Re-wire the route for the new button
+                            if (typeof RouteUtils !== 'undefined' && RouteUtils.wireRouteLinks) {
+                                RouteUtils.wireRouteLinks();
+                            } else {
+                                // Fallback: direct navigation
+                                newBtn.addEventListener('click', function() {
+                                    window.location.href = 'dashboard.html';
+                                });
+                            }
+                        }
+                    } else {
+                        resetGetStartedButton();
+                    }
+                } else {
+                    // Not authenticated (401 or other error) - ensure "Get Started" button shows
+                    resetGetStartedButton();
+                }
+            } catch (error) {
+                // On error (network issue, etc.), default to "Get Started"
+                console.error('Error checking auth status:', error);
+                resetGetStartedButton();
+            }
+        }
+
+        function resetGetStartedButton() {
+            const getStartedBtn = document.getElementById('getStartedBtn');
+            if (getStartedBtn) {
+                // Remove old event listeners by cloning the button
+                const newBtn = getStartedBtn.cloneNode(true);
+                getStartedBtn.parentNode.replaceChild(newBtn, getStartedBtn);
+                
+                // Reset the new button
+                newBtn.textContent = 'Get Started';
+                newBtn.setAttribute('data-route', 'register');
+                // Reset to original styling
+                newBtn.classList.add('btn-shine');
+                newBtn.classList.remove('bg-[#3B82F6]', 'hover:bg-[#2563EB]');
+                newBtn.classList.add('bg-[#10B981]', 'hover:bg-[#10B981]/90');
+                
+                // Re-wire the route for the new button
+                if (typeof RouteUtils !== 'undefined' && RouteUtils.wireRouteLinks) {
+                    RouteUtils.wireRouteLinks();
+                } else {
+                    // Fallback: direct navigation
+                    newBtn.addEventListener('click', function() {
+                        window.location.href = 'registration.html';
+                    });
+                }
+            }
+        }
+
+        // Check auth status when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wire up all route links
+            if (typeof RouteUtils !== 'undefined' && RouteUtils.wireRouteLinks) {
+                RouteUtils.wireRouteLinks();
+            }
+            checkAuthStatus();
+            
+            // Initialize Profit Growth Calculator
+            initProfitGrowthCalculator();
+        });
+
+        // Profit Growth Calculator
+        function initProfitGrowthCalculator() {
+            const depositInput = document.getElementById('depositAmount');
+            if (!depositInput) return;
+
+            // Calculate growth based on 2.8% daily (20% weekly)
+            const DAILY_GROWTH_RATE = 0.028; // 2.8%
+            const WEEKLY_GROWTH_RATE = 0.20; // 20%
+
+            function calculateGrowth(principal, days) {
+                // Calculate compound growth: principal * (1 + daily_rate) ^ days
+                return principal * Math.pow(1 + DAILY_GROWTH_RATE, days);
+            }
+
+            function formatCurrency(amount) {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }).format(amount);
+            }
+
+            function formatPercent(amount, principal) {
+                const percent = ((amount - principal) / principal) * 100;
+                return percent.toFixed(2);
+            }
+
+            function updateCalculator() {
+                const deposit = parseFloat(depositInput.value) || 0;
+                
+                if (deposit <= 0) {
+                    return;
+                }
+
+                // Calculate daily balances for week 1
+                const day1 = calculateGrowth(deposit, 1);
+                const day2 = calculateGrowth(deposit, 2);
+                const day3 = calculateGrowth(deposit, 3);
+                const day4 = calculateGrowth(deposit, 4);
+                const day5 = calculateGrowth(deposit, 5);
+                const day6 = calculateGrowth(deposit, 6);
+                const day7 = calculateGrowth(deposit, 7);
+                const week1 = calculateGrowth(deposit, 7);
+                const week2 = calculateGrowth(deposit, 14);
+                const week3 = calculateGrowth(deposit, 21);
+                const week4 = calculateGrowth(deposit, 28);
+
+                // Update daily displays
+                document.getElementById('day1').textContent = formatCurrency(day1);
+                document.getElementById('day2').textContent = formatCurrency(day2);
+                document.getElementById('day3').textContent = formatCurrency(day3);
+                document.getElementById('day4').textContent = formatCurrency(day4);
+                document.getElementById('day5').textContent = formatCurrency(day5);
+                document.getElementById('day6').textContent = formatCurrency(day6);
+                document.getElementById('day7').textContent = formatCurrency(day7);
+
+                // Update weekly balances
+                document.getElementById('week1Balance').textContent = formatCurrency(week1);
+                document.getElementById('week2Balance').textContent = formatCurrency(week2);
+                document.getElementById('week3Balance').textContent = formatCurrency(week3);
+                document.getElementById('week4Balance').textContent = formatCurrency(week4);
+
+                // Update profits
+                document.getElementById('week1Profit').textContent = '+' + formatCurrency(week1 - deposit);
+                document.getElementById('week2Profit').textContent = '+' + formatCurrency(week2 - deposit);
+                document.getElementById('week3Profit').textContent = '+' + formatCurrency(week3 - deposit);
+                document.getElementById('week4Profit').textContent = '+' + formatCurrency(week4 - deposit);
+
+                // Update summary
+                const totalGrowthPercent = formatPercent(week4, deposit);
+                document.getElementById('totalGrowth').textContent = '+' + totalGrowthPercent + '%';
+                document.getElementById('finalBalance').textContent = formatCurrency(week4);
+            }
+
+            // Update on input
+            depositInput.addEventListener('input', updateCalculator);
+            depositInput.addEventListener('change', updateCalculator);
+
+            // Initial calculation
+            updateCalculator();
+        }
+
+        // FAQ Accordion Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                const answer = item.querySelector('.faq-answer');
+                const icon = item.querySelector('.faq-icon');
+                
+                question.addEventListener('click', function() {
+                    const isOpen = !answer.classList.contains('hidden');
+                    
+                    // Close all other FAQ items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            const otherAnswer = otherItem.querySelector('.faq-answer');
+                            const otherIcon = otherItem.querySelector('.faq-icon');
+                            otherAnswer.classList.add('hidden');
+                            otherIcon.classList.remove('rotate-180');
+                        }
+                    });
+                    
+                    // Toggle current item
+                    if (isOpen) {
+                        answer.classList.add('hidden');
+                        icon.classList.remove('rotate-180');
+                    } else {
+                        answer.classList.remove('hidden');
+                        icon.classList.add('rotate-180');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/697274b44e6a21197c2ff10d/1jfjhfop2';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
+</body>
+</html>

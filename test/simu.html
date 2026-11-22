@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Create Profit Growth | ConchCapital</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .text-sim { color: #3B82F6; }
+        .bg-sim { background-color: #3B82F6; }
+        .border-sim { border-color: #3B82F6; }
+        .focus-ring-sim:focus { ring-color: #3B82F6; border-color: #3B82F6; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen py-12 px-6" data-page="simulationCreate">
+
+<main class="max-w-5xl mx-auto">
+    
+    <!-- FIX 1: Added Back to Simulations link -->
+    <a href="#" data-route="profitGrowths" class="inline-flex items-center text-sm text-gray-500 hover:text-gray-800 transition mb-6">
+        <i class="fa-solid fa-arrow-left mr-2"></i> Back to Profit Growth
+    </a>
+    
+    <div class="mb-10 flex items-center gap-4">
+        <div class="w-12 h-12 bg-sim rounded-xl flex items-center justify-center text-white text-xl shadow-lg shadow-blue-200">
+            <i class="fa-solid fa-flask-vial"></i>
+        </div>
+        <div>
+            <h1 class="text-3xl font-extrabold text-slate-900">Create New Profit Growth</h1>
+            <p class="text-slate-500">Track and grow your simulated portfolio with zero financial risk.</p>
+        </div>
+    </div>
+
+    <div class="grid lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 space-y-6">
+            <div class="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm space-y-8">
+                <div class="bg-amber-50 border-2 border-amber-300 rounded-xl p-6 text-center">
+                    <i class="fa-solid fa-shield-halved text-amber-600 text-4xl mb-4"></i>
+                    <h3 class="text-xl font-bold text-amber-900 mb-2">Admin Access Required</h3>
+                    <p class="text-amber-800 mb-4">Only administrators can create profit growths. Please contact an admin to create a profit growth for you.</p>
+                    <button data-route="profitGrowths" class="bg-amber-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-amber-700 transition">
+                        Back to Profit Growths
+                    </button>
+                </div>
+            </div>
+            <!-- Hidden form for reference (not used) -->
+            <form id="createSimForm" class="hidden">
+                
+                <!-- FIX 2: Updated Base Amount section to match requirements -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-4 uppercase tracking-wider">Base Amount for Profit Growth</label>
+                    <div class="space-y-3">
+                        <label class="relative cursor-pointer group flex items-center gap-3 p-4 border-2 border-sim bg-blue-50 rounded-xl transition-all">
+                            <input type="radio" name="amountSource" value="full" class="peer sr-only" checked>
+                            <div class="flex-1">
+                                <p class="font-bold text-slate-800">Use current simulated balance</p>
+                                <p id="availableBalance" class="text-xs text-slate-400 mt-1">$0.00 available</p>
+                            </div>
+                            <div class="w-5 h-5 rounded-full border-2 border-sim bg-sim flex items-center justify-center">
+                                <div class="w-2 h-2 rounded-full bg-white"></div>
+                            </div>
+                        </label>
+                        <label class="relative cursor-pointer group flex items-center gap-3 p-4 border-2 border-gray-100 rounded-xl hover:border-sim hover:bg-blue-50 transition-all">
+                            <input type="radio" name="amountSource" value="partial" class="peer sr-only">
+                            <div class="flex-1">
+                                <p class="font-bold text-slate-800">Use part of simulated balance</p>
+                                <input type="number" id="partialAmount" placeholder="$____" step="0.01" min="0.01" class="mt-2 w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sim outline-none text-sm" disabled>
+                            </div>
+                            <div class="w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center">
+                                <div class="w-2 h-2 rounded-full bg-white hidden peer-checked:block"></div>
+                            </div>
+                        </label>
+                        <label class="relative cursor-pointer group flex items-center gap-3 p-4 border-2 border-gray-100 rounded-xl hover:border-sim hover:bg-blue-50 transition-all">
+                            <input type="radio" name="amountSource" value="hypothetical" class="peer sr-only">
+                            <div class="flex-1">
+                                <p class="font-bold text-slate-800">Enter hypothetical amount</p>
+                                <input type="number" id="hypotheticalAmount" placeholder="$____" step="0.01" min="0.01" class="mt-2 w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sim outline-none text-sm" disabled>
+                            </div>
+                            <div class="w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center">
+                                <div class="w-2 h-2 rounded-full bg-white hidden peer-checked:block"></div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Profit Growth Name</label>
+                        <input type="text" id="simulationName" placeholder="e.g., Growth Portfolio #1" required
+                            class="w-full p-4 rounded-xl border border-gray-200 bg-gray-50 outline-none focus:ring-2 focus:ring-sim transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Description (Optional)</label>
+                        <textarea id="simulationDescription" placeholder="Describe your profit growth strategy..." rows="3"
+                            class="w-full p-4 rounded-xl border border-gray-200 bg-gray-50 outline-none focus:ring-2 focus:ring-sim transition"></textarea>
+                    </div>
+                </div>
+
+                <!-- FIX 3: Updated disclaimer to match wireframe format -->
+                <div class="border-2 border-red-500 bg-red-50 p-5 rounded-xl">
+                    <h4 class="font-bold text-red-700 text-sm mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i> DISCLAIMER
+                    </h4>
+                    <p class="text-sm text-red-800 font-semibold">
+                        This is a SIMULATION ONLY. Values are hypothetical, not guaranteed, and not withdrawable.
+                    </p>
+                </div>
+
+                <!-- FIX 4: Updated checkbox text to match wireframe -->
+                <div class="flex items-center gap-3">
+                    <input type="checkbox" id="terms" class="h-5 w-5 rounded border-gray-300 text-sim focus:ring-sim cursor-pointer">
+                    <label for="terms" class="text-sm font-medium text-slate-600 cursor-pointer select-none">
+                        I understand this is not real money (Required)
+                    </label>
+                </div>
+
+                <div class="flex gap-4 pt-6 border-t border-gray-100">
+                    <button data-route="simulations" class="flex-1 px-6 py-4 rounded-xl font-bold text-slate-500 hover:bg-gray-50 transition">Cancel</button>
+                    <button type="submit" id="createBtn" form="createSimForm" class="flex-[2] bg-sim text-white px-6 py-4 rounded-xl font-bold shadow-lg shadow-blue-200 hover:opacity-90 transition transform active:scale-[0.98]">
+                        <span id="createBtnText">Create Simulation</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="space-y-6">
+            <div class="bg-slate-900 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden">
+                <div class="relative z-10">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-8">Preview</h3>
+                    
+                    <div class="space-y-6 mb-10">
+                        <div>
+                            <p class="text-slate-500 text-[10px] font-bold uppercase">Starting</p>
+                            <p id="previewStart" class="text-2xl font-mono">$0.00</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="h-10 w-px bg-slate-700"></div>
+                            <i class="fa-solid fa-arrow-down text-sim"></i>
+                        </div>
+                        <div>
+                            <p class="text-sim text-[10px] font-bold uppercase">Projected</p>
+                            <p id="previewEnd" class="text-4xl font-black text-sim font-mono">$0.00</p>
+                            <p id="previewROI" class="text-xs text-sim font-bold mt-1">+0% ROI</p>
+                        </div>
+                    </div>
+
+                    <div class="h-32 w-full flex items-end gap-1.5">
+                        <div class="bg-sim/20 flex-1 rounded-t-sm" style="height: 30%"></div>
+                        <div class="bg-sim/30 flex-1 rounded-t-sm" style="height: 45%"></div>
+                        <div class="bg-sim/50 flex-1 rounded-t-sm" style="height: 40%"></div>
+                        <div class="bg-sim/70 flex-1 rounded-t-sm" style="height: 65%"></div>
+                        <div class="bg-sim/80 flex-1 rounded-t-sm" style="height: 85%"></div>
+                        <div class="bg-sim flex-1 rounded-t-sm" style="height: 100%"></div>
+                    </div>
+                </div>
+                <div class="absolute -top-20 -right-20 w-64 h-64 bg-sim/10 rounded-full blur-[100px]"></div>
+            </div>
+
+            <div class="bg-white border border-gray-200 rounded-2xl p-6">
+                <h5 class="text-sm font-bold text-slate-800 mb-2">What happens next?</h5>
+                <p class="text-xs text-slate-500 leading-relaxed">
+                    After creation, your profit growth will track performance based on your strategy. You can view, edit, or delete it anytime from your Profit Growth page.
+                </p>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/forms.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/routes.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        let userBalance = 0;
+        let selectedAmount = 0;
+
+        // Load user balance
+        async function loadBalance() {
+            try {
+                const data = await API.user.getProfile();
+                if (data.user) {
+                    userBalance = parseFloat(data.user.simulated_balance || 0);
+                    document.getElementById('availableBalance').textContent = `$${userBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} available`;
+                    updatePreview();
+                }
+            } catch (error) {
+                console.error('Failed to load balance:', error);
+            }
+        }
+
+        // Handle amount source selection
+        document.querySelectorAll('input[name="amountSource"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const partialInput = document.getElementById('partialAmount');
+                const hypotheticalInput = document.getElementById('hypotheticalAmount');
+                
+                if (this.value === 'partial') {
+                    partialInput.disabled = false;
+                    partialInput.focus();
+                    hypotheticalInput.disabled = true;
+                } else if (this.value === 'hypothetical') {
+                    hypotheticalInput.disabled = false;
+                    hypotheticalInput.focus();
+                    partialInput.disabled = true;
+                } else {
+                    partialInput.disabled = true;
+                    hypotheticalInput.disabled = true;
+                }
+                updatePreview();
+            });
+        });
+
+        // Update preview as inputs change
+        function updatePreview() {
+            const amountSource = document.querySelector('input[name="amountSource"]:checked').value;
+            let amount = 0;
+
+            if (amountSource === 'full') {
+                amount = userBalance;
+            } else if (amountSource === 'partial') {
+                amount = parseFloat(document.getElementById('partialAmount').value) || 0;
+            } else if (amountSource === 'hypothetical') {
+                amount = parseFloat(document.getElementById('hypotheticalAmount').value) || 0;
+            }
+
+            selectedAmount = amount;
+
+            document.getElementById('previewStart').textContent = `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            
+            // Simple projection (5% annual growth)
+            const projected = amount * 1.05;
+            const roi = amount > 0 ? ((projected - amount) / amount * 100) : 0;
+            
+            document.getElementById('previewEnd').textContent = `$${projected.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            document.getElementById('previewROI').textContent = `+${roi.toFixed(1)}% ROI`;
+        }
+
+        // Listen to amount inputs
+        document.getElementById('partialAmount').addEventListener('input', updatePreview);
+        document.getElementById('hypotheticalAmount').addEventListener('input', updatePreview);
+
+        // Form submission
+        document.getElementById('createSimForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const nameInput = document.getElementById('simulationName');
+            const descriptionInput = document.getElementById('simulationDescription');
+            const termsCheckbox = document.getElementById('terms');
+            const createBtn = document.getElementById('createBtn');
+            const createBtnText = document.getElementById('createBtnText');
+
+            const name = nameInput.value.trim();
+            if (!name) {
+                Utils?.showToast?.('Please enter a profit growth name', 'error');
+                return;
+            }
+
+            if (!termsCheckbox.checked) {
+                Utils?.showToast?.('Please confirm you understand this is not real money', 'error');
+                return;
+            }
+
+            if (selectedAmount <= 0) {
+                Utils?.showToast?.('Please enter a valid amount', 'error');
+                return;
+            }
+
+            // Check balance if using real balance
+            const amountSource = document.querySelector('input[name="amountSource"]:checked').value;
+            if (amountSource !== 'hypothetical' && selectedAmount > userBalance) {
+                Utils?.showToast?.('Insufficient simulated balance', 'error');
+                return;
+            }
+
+            createBtn.disabled = true;
+            createBtnText.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Creating...';
+
+            try {
+                const data = {
+                    name: name,
+                    description: descriptionInput.value.trim() || null,
+                    initial_balance: selectedAmount,
+                    currency: 'USD',
+                    strategy_data: {
+                        amount_source: amountSource,
+                        created_at: new Date().toISOString()
+                    }
+                };
+
+                const response = await API.user.createSimulation(data);
+                
+                Utils?.showToast?.('Profit Growth created successfully!', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = '/simu-list-page.html';
+                }, 1500);
+
+            } catch (error) {
+                console.error('Create profit growth error:', error);
+                const message = error.response?.message || error.message || 'Failed to create profit growth';
+                Utils?.showToast?.(message, 'error');
+            } finally {
+                createBtn.disabled = false;
+                createBtnText.textContent = 'Create Profit Growth';
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBalance();
+        });
+    </script>
+</html>

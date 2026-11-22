@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Withdrawal Management | Admin</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .text-real { color: #10B981; }
+        .bg-real { background-color: #10B981; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen" data-page="adminWithdrawals">
+
+<aside class="w-64 bg-slate-950 text-slate-400 flex flex-col shrink-0 border-r border-slate-800 fixed h-screen">
+    <div class="p-6 border-b border-slate-800/50">
+        <div class="text-2xl font-bold tracking-tight text-white">
+            Conch<span class="text-[#10B981]">Capital</span>
+        </div>
+        <p class="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500 mt-1">Admin Portal</p>
+    </div>
+    <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+        <a href="#" data-route="adminDashboard" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-chart-pie text-sm"></i>
+            <span class="text-sm font-medium">Overview</span>
+        </a>
+        <a href="#" data-route="adminUsers" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-users-gear text-sm"></i>
+            <span class="text-sm font-medium">User Management</span>
+        </a>
+        <a href="#" data-route="adminTransactions" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-file-invoice-dollar text-sm"></i>
+            <span class="text-sm font-medium">Transactions</span>
+        </a>
+        <a href="#" data-route="adminDeposits" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-wallet text-sm"></i>
+            <span class="text-sm font-medium">Deposits</span>
+        </a>
+        <a href="#" data-route="adminWithdrawals" class="flex items-center space-x-3 p-3 bg-slate-900 text-white rounded-xl transition">
+            <i class="fa-solid fa-arrow-up-from-bracket text-sm"></i>
+            <span class="text-sm font-medium">Withdrawals</span>
+        </a>
+        <a href="#" data-route="adminCredits" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-money-bill-transfer text-sm"></i>
+            <span class="text-sm font-medium">Credits</span>
+        </a>
+        <a href="#" data-route="adminFreezes" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-snowflake text-sm"></i>
+            <span class="text-sm font-medium">Freezes</span>
+        </a>
+        <div class="pt-4 mt-4 border-t border-slate-800/50">
+            <a href="#" data-route="adminSettings" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+                <i class="fa-solid fa-gear text-sm"></i>
+                <span class="text-sm font-medium">Settings</span>
+            </a>
+        </div>
+    </nav>
+</aside>
+
+<main class="ml-64 flex-1 p-8">
+    
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+            <h1 class="text-3xl font-extrabold text-slate-900 mb-2">Withdrawal Management</h1>
+            <p class="text-slate-500">Review and process pending withdrawal requests</p>
+        </div>
+        <div class="flex gap-3">
+            <button onclick="refreshWithdrawals()" class="px-4 py-2 bg-white border-2 border-gray-200 text-slate-600 rounded-xl font-bold hover:bg-gray-50 transition flex items-center gap-2">
+                <i class="fa-solid fa-rotate"></i> Refresh
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Pending Withdrawals</p>
+                    <h2 class="text-3xl font-bold text-slate-900" id="pendingCount">0</h2>
+                </div>
+                <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
+                    <i class="fa-solid fa-clock text-amber-600 text-xl"></i>
+                </div>
+            </div>
+            <p class="text-xs text-slate-500">Awaiting processing</p>
+        </div>
+        
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Total Pending Amount</p>
+                    <h2 class="text-3xl font-bold text-slate-900" id="pendingAmount">$0.00</h2>
+                </div>
+                <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                    <i class="fa-solid fa-dollar-sign text-blue-600 text-xl"></i>
+                </div>
+            </div>
+            <p class="text-xs text-slate-500">Total to be sent</p>
+        </div>
+        
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Today's Requests</p>
+                    <h2 class="text-3xl font-bold text-slate-900" id="todayCount">0</h2>
+                </div>
+                <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                    <i class="fa-solid fa-calendar-day text-green-600 text-xl"></i>
+                </div>
+            </div>
+            <p class="text-xs text-slate-500">Requests today</p>
+        </div>
+    </div>
+
+    <!-- Auto-refresh toggle -->
+    <div class="bg-white rounded-xl border border-gray-200 p-4 mb-6 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <input type="checkbox" id="autoRefresh" checked class="w-4 h-4 text-[#10B981] rounded focus:ring-[#10B981]">
+            <label for="autoRefresh" class="text-sm font-medium text-slate-700">Auto-refresh every 30 seconds</label>
+        </div>
+    </div>
+
+    <!-- Withdrawals Table -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-slate-50 border-b border-gray-200">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">User</th>
+                        <th class="px-4 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Amount</th>
+                        <th class="px-4 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Crypto Amount</th>
+                        <th class="px-4 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Withdrawal Address</th>
+                        <th class="px-4 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Status</th>
+                        <th class="px-4 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Requested</th>
+                        <th class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-widest">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="withdrawalsTableBody" class="divide-y divide-gray-200">
+                    <tr>
+                        <td colspan="7" class="px-6 py-12 text-center text-slate-400">
+                            <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
+                            <p>Loading withdrawals...</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div id="noWithdrawals" class="hidden px-6 py-12 text-center">
+            <i class="fa-solid fa-inbox text-4xl text-slate-300 mb-4"></i>
+            <p class="text-slate-500 font-medium">No pending withdrawals</p>
+            <p class="text-sm text-slate-400 mt-1">All withdrawal requests have been processed</p>
+        </div>
+    </div>
+</main>
+
+<!-- Confirm Withdrawal Modal -->
+<div id="confirmModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-slate-900">Confirm Withdrawal</h2>
+            <button onclick="closeConfirmModal()" class="text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-times text-xl"></i>
+            </button>
+        </div>
+        
+        <div class="space-y-4 mb-6">
+            <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl">
+                <p class="text-sm font-bold text-amber-800 mb-2">⚠️ Important</p>
+                <p class="text-xs text-amber-700">Make sure you have sent the crypto to the user's address before confirming. This action cannot be undone.</p>
+            </div>
+            
+            <div>
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">User</p>
+                <p class="text-lg font-bold text-slate-900" id="confirmUser">-</p>
+            </div>
+            
+            <div>
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Amount</p>
+                <p class="text-lg font-bold text-slate-900" id="confirmAmount">-</p>
+            </div>
+            
+            <div>
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Withdrawal Address</p>
+                <div class="flex items-center gap-2 mt-1">
+                    <p class="text-sm font-mono text-slate-700 bg-gray-50 px-3 py-2 rounded-lg flex-1 break-all" id="confirmAddress">-</p>
+                    <button onclick="copyConfirmAddress()" class="px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-slate-600">
+                        <i class="fa-solid fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex gap-3">
+            <button onclick="closeConfirmModal()" class="flex-1 px-6 py-3 bg-gray-100 text-slate-700 rounded-xl font-bold hover:bg-gray-200 transition">
+                Cancel
+            </button>
+            <button id="confirmBtn" onclick="confirmWithdrawal()" class="flex-1 px-6 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition">
+                <i class="fa-solid fa-check mr-2"></i> Confirm Sent
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Cancel Withdrawal Modal -->
+<div id="cancelModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-slate-900">Cancel Withdrawal</h2>
+            <button onclick="closeCancelModal()" class="text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-times text-xl"></i>
+            </button>
+        </div>
+        
+        <div class="space-y-4 mb-6">
+            <div class="bg-red-50 border border-red-200 p-4 rounded-xl">
+                <p class="text-sm font-bold text-red-800 mb-2">⚠️ Warning</p>
+                <p class="text-xs text-red-700">This will cancel the withdrawal and refund the user's balance. The user will be notified.</p>
+            </div>
+            
+            <div>
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">User</p>
+                <p class="text-lg font-bold text-slate-900" id="cancelUser">-</p>
+            </div>
+            
+            <div>
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Amount to Refund</p>
+                <p class="text-lg font-bold text-slate-900" id="cancelAmount">-</p>
+            </div>
+            
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Reason (Optional)</label>
+                <textarea id="cancelReason" placeholder="Enter reason for cancellation..." class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 outline-none text-sm" rows="3"></textarea>
+            </div>
+        </div>
+        
+        <div class="flex gap-3">
+            <button onclick="closeCancelModal()" class="flex-1 px-6 py-3 bg-gray-100 text-slate-700 rounded-xl font-bold hover:bg-gray-200 transition">
+                Back
+            </button>
+            <button id="cancelBtn" onclick="cancelWithdrawal()" class="flex-1 px-6 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition">
+                <i class="fa-solid fa-times mr-2"></i> Cancel & Refund
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let withdrawals = [];
+    let currentWithdrawalId = null;
+    let autoRefreshInterval = null;
+
+    // Load withdrawals on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        loadWithdrawals();
+        
+        // Setup auto-refresh
+        document.getElementById('autoRefresh').addEventListener('change', function() {
+            if (this.checked) {
+                startAutoRefresh();
+            } else {
+                stopAutoRefresh();
+            }
+        });
+        
+        startAutoRefresh();
+    });
+
+    // Load pending withdrawals
+    async function loadWithdrawals() {
+        try {
+            const response = await API.admin.getPendingWithdrawals();
+            console.log('Withdrawals API response:', response);
+            withdrawals = response.withdrawals || [];
+            
+            updateStats(withdrawals);
+            renderWithdrawals(withdrawals);
+        } catch (error) {
+            console.error('Failed to load withdrawals:', error);
+            console.error('Error details:', {
+                message: error.message,
+                response: error.response,
+                status: error.status
+            });
+            
+            const errorMessage = error.response?.message || error.message || 'Failed to load withdrawals';
+            document.getElementById('withdrawalsTableBody').innerHTML = `
+                <tr>
+                    <td colspan="7" class="px-6 py-12 text-center text-red-400">
+                        <i class="fa-solid fa-exclamation-triangle text-2xl mb-2"></i>
+                        <p>Failed to load withdrawals</p>
+                        <p class="text-xs mt-2 text-red-300">${errorMessage}</p>
+                    </td>
+                </tr>
+            `;
+        }
+    }
+
+    // Update statistics
+    function updateStats(withdrawals) {
+        const pendingCount = withdrawals.length;
+        const pendingAmount = withdrawals.reduce((sum, w) => sum + parseFloat(w.amount || 0), 0);
+        const today = new Date().toDateString();
+        const todayCount = withdrawals.filter(w => new Date(w.created_at).toDateString() === today).length;
+        
+        document.getElementById('pendingCount').textContent = pendingCount;
+        document.getElementById('pendingAmount').textContent = `$${pendingAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        document.getElementById('todayCount').textContent = todayCount;
+    }
+
+    // Render withdrawals table
+    function renderWithdrawals(withdrawals) {
+        const tbody = document.getElementById('withdrawalsTableBody');
+        const noWithdrawals = document.getElementById('noWithdrawals');
+        
+        if (withdrawals.length === 0) {
+            tbody.innerHTML = '';
+            noWithdrawals.classList.remove('hidden');
+            return;
+        }
+        
+        noWithdrawals.classList.add('hidden');
+        
+        tbody.innerHTML = withdrawals.map(withdrawal => {
+            const user = withdrawal.user || {};
+            const metadata = withdrawal.metadata || {};
+            const cryptoCurrency = metadata.crypto_currency || 'BTC';
+            const cryptoAmount = parseFloat(metadata.crypto_amount || 0).toFixed(cryptoCurrency === 'BTC' ? 8 : cryptoCurrency === 'ETH' ? 6 : 2);
+            const cryptoAddress = metadata.crypto_address || 'N/A';
+            const date = new Date(withdrawal.created_at).toLocaleString();
+            
+            return `
+                <tr class="hover:bg-gray-50/50 transition">
+                    <td class="px-6 py-4">
+                        <div>
+                            <p class="font-bold text-slate-900">${Utils.escapeHtml(user.display_name || user.name || user.username || 'N/A')}</p>
+                            <p class="text-xs text-slate-500">@${Utils.escapeHtml(user.username || 'N/A')}</p>
+                            <p class="text-xs text-slate-400">${Utils.escapeHtml(user.email || '')}</p>
+                        </div>
+                    </td>
+                    <td class="px-4 py-4">
+                        <p class="font-bold text-slate-900">$${parseFloat(withdrawal.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                        <p class="text-xs text-slate-500">${withdrawal.currency || 'USD'}</p>
+                    </td>
+                    <td class="px-4 py-4">
+                        <p class="font-bold text-slate-900">${cryptoAmount} ${cryptoCurrency}</p>
+                    </td>
+                    <td class="px-4 py-4">
+                        <div class="flex items-center gap-2">
+                            <p class="font-mono text-xs text-slate-600 max-w-[200px] truncate" title="${cryptoAddress}">${cryptoAddress}</p>
+                            <button onclick="copyAddress('${cryptoAddress}')" class="text-slate-400 hover:text-slate-600">
+                                <i class="fa-solid fa-copy text-xs"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td class="px-4 py-4">
+                        <span class="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-1 rounded-full">Pending</span>
+                    </td>
+                    <td class="px-4 py-4">
+                        <p class="text-sm text-slate-600">${date}</p>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <div class="flex items-center justify-end gap-2">
+                            <button onclick="openCancelModal(${withdrawal.id})" class="px-3 py-1.5 bg-red-600 text-white rounded-lg text-xs font-bold hover:bg-red-700 transition">
+                                <i class="fa-solid fa-times mr-1"></i> Cancel
+                            </button>
+                            <button onclick="openConfirmModal(${withdrawal.id})" class="px-3 py-1.5 bg-green-600 text-white rounded-lg text-xs font-bold hover:bg-green-700 transition">
+                                <i class="fa-solid fa-check mr-1"></i> Confirm
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    // Open confirm modal
+    function openConfirmModal(withdrawalId) {
+        const withdrawal = withdrawals.find(w => w.id === withdrawalId);
+        if (!withdrawal) return;
+        
+        currentWithdrawalId = withdrawalId;
+        const user = withdrawal.user || {};
+        const metadata = withdrawal.metadata || {};
+        const cryptoCurrency = metadata.crypto_currency || 'BTC';
+        const cryptoAmount = parseFloat(metadata.crypto_amount || 0).toFixed(cryptoCurrency === 'BTC' ? 8 : cryptoCurrency === 'ETH' ? 6 : 2);
+        
+        document.getElementById('confirmUser').textContent = `${user.display_name || user.name || user.username} (@${user.username})`;
+        document.getElementById('confirmAmount').textContent = `$${parseFloat(withdrawal.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${withdrawal.currency || 'USD'} (${cryptoAmount} ${cryptoCurrency})`;
+        document.getElementById('confirmAddress').textContent = metadata.crypto_address || 'N/A';
+        
+        document.getElementById('confirmModal').classList.remove('hidden');
+    }
+
+    // Close confirm modal
+    function closeConfirmModal() {
+        document.getElementById('confirmModal').classList.add('hidden');
+        currentWithdrawalId = null;
+    }
+
+    // Confirm withdrawal
+    async function confirmWithdrawal() {
+        if (!currentWithdrawalId) return;
+        
+        const btn = document.getElementById('confirmBtn');
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Confirming...';
+        
+        try {
+            await API.admin.confirmWithdrawal(currentWithdrawalId);
+            
+            Utils?.showToast?.('Withdrawal confirmed successfully!', 'success');
+            closeConfirmModal();
+            loadWithdrawals();
+        } catch (error) {
+            console.error('Failed to confirm withdrawal:', error);
+            const message = error.response?.message || error.message || 'Failed to confirm withdrawal';
+            Utils?.showToast?.(message, 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+        }
+    }
+
+    // Open cancel modal
+    function openCancelModal(withdrawalId) {
+        const withdrawal = withdrawals.find(w => w.id === withdrawalId);
+        if (!withdrawal) return;
+        
+        currentWithdrawalId = withdrawalId;
+        const user = withdrawal.user || {};
+        
+        document.getElementById('cancelUser').textContent = `${user.display_name || user.name || user.username} (@${user.username})`;
+        document.getElementById('cancelAmount').textContent = `$${parseFloat(withdrawal.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${withdrawal.currency || 'USD'}`;
+        document.getElementById('cancelReason').value = '';
+        
+        document.getElementById('cancelModal').classList.remove('hidden');
+    }
+
+    // Close cancel modal
+    function closeCancelModal() {
+        document.getElementById('cancelModal').classList.add('hidden');
+        currentWithdrawalId = null;
+    }
+
+    // Cancel withdrawal
+    async function cancelWithdrawal() {
+        if (!currentWithdrawalId) return;
+        
+        const btn = document.getElementById('cancelBtn');
+        const reason = document.getElementById('cancelReason').value;
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Cancelling...';
+        
+        try {
+            await API.admin.cancelWithdrawal(currentWithdrawalId, reason);
+            
+            Utils?.showToast?.('Withdrawal cancelled and funds refunded!', 'success');
+            closeCancelModal();
+            loadWithdrawals();
+        } catch (error) {
+            console.error('Failed to cancel withdrawal:', error);
+            const message = error.response?.message || error.message || 'Failed to cancel withdrawal';
+            Utils?.showToast?.(message, 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+        }
+    }
+
+    // Copy address to clipboard
+    function copyAddress(address) {
+        navigator.clipboard.writeText(address).then(() => {
+            Utils?.showToast?.('Address copied to clipboard!', 'success');
+        }).catch(() => {
+            Utils?.showToast?.('Failed to copy address', 'error');
+        });
+    }
+
+    // Copy confirm address
+    function copyConfirmAddress() {
+        const address = document.getElementById('confirmAddress').textContent;
+        copyAddress(address);
+    }
+
+    // Refresh withdrawals
+    function refreshWithdrawals() {
+        loadWithdrawals();
+        Utils?.showToast?.('Withdrawals refreshed', 'success');
+    }
+
+    // Auto-refresh
+    function startAutoRefresh() {
+        if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+        autoRefreshInterval = setInterval(() => {
+            loadWithdrawals();
+        }, 30000); // 30 seconds
+    }
+
+    function stopAutoRefresh() {
+        if (autoRefreshInterval) {
+            clearInterval(autoRefreshInterval);
+            autoRefreshInterval = null;
+        }
+    }
+</script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js?v=20250123"></script>
+<script src="js/forms.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

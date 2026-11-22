@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Activity Feed | ConchCapital</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .text-sim { color: #3B82F6; }
+        .text-real { color: #10B981; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen" data-page="activityFeed">
+
+<nav class="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between">
+    <div class="text-xl font-bold tracking-tight text-slate-800">Conch<span class="text-[#10B981]">Capital</span></div>
+    <div class="flex items-center gap-6">
+        <a href="#" data-route="dashboard" class="text-sm font-medium text-slate-500 hover:text-slate-800">Dashboard</a>
+        <a href="#" data-route="activityFeed" class="text-sm font-bold text-slate-800 border-b-2 border-slate-800 pb-4 mt-4">Activity</a>
+        <a href="#" data-route="simulations" class="text-sm font-medium text-slate-500 hover:text-slate-800">Simulations</a>
+        <a href="#" data-route="profile" class="text-sm font-medium text-slate-500 hover:text-slate-800">Profile</a>
+        <a href="#" data-route="settings" class="text-sm font-medium text-slate-500 hover:text-slate-800">Settings</a>
+        <div class="flex items-center gap-4">
+            <div class="relative">
+                <button onclick="toggleNotificationDropdown()" class="relative text-slate-400 hover:text-slate-600 transition">
+                    <i class="fa-solid fa-bell text-xl"></i>
+                    <span id="notificationBadge" class="hidden absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
+                </button>
+                <!-- Notification Dropdown -->
+                <div id="notificationDropdown" class="hidden absolute right-0 top-full mt-2 w-80 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden z-50 max-h-96 overflow-y-auto">
+                    <div class="p-4 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white">
+                        <h3 class="text-sm font-bold text-slate-900">Notifications</h3>
+                        <a href="#" data-route="notifications" class="text-xs font-bold text-blue-600 hover:text-blue-800">View All</a>
+                    </div>
+                    <div id="notificationDropdownList" class="divide-y divide-gray-100">
+                        <div class="p-4 text-center text-slate-500">
+                            <i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i>
+                            <p class="text-sm">Loading notifications...</p>
+                        </div>
+                    </div>
+                    <div class="p-3 border-t border-gray-200 bg-gray-50 text-center">
+                        <a href="#" data-route="notifications" class="text-xs font-bold text-blue-600 hover:text-blue-800">View All Notifications</a>
+                    </div>
+                </div>
+            </div>
+            <div class="w-8 h-8 rounded-full bg-slate-200"></div>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-3xl mx-auto py-10 px-6">
+    
+    <div class="mb-8">
+        <h1 class="text-3xl font-extrabold text-slate-900 mb-2">Activity Feed</h1>
+        <p class="text-slate-500">View all your account activity in chronological order</p>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 mb-6">
+        <div class="flex flex-wrap gap-2">
+            <span class="text-sm font-medium text-slate-600 self-center">Filter:</span>
+            <button class="px-4 py-2 bg-slate-800 text-white rounded-lg text-sm font-bold">All</button>
+            <button class="px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-gray-50">Transactions</button>
+            <button class="px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-gray-50">Simulations</button>
+            <button class="px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-gray-50">Transfers</button>
+        </div>
+    </div>
+
+    <!-- Activity Timeline -->
+    <div class="space-y-8">
+        
+        <!-- Today Section -->
+        <div>
+            <div class="flex items-center gap-4 mb-4">
+                <h2 class="text-lg font-bold text-slate-800">Today</h2>
+                <div class="flex-1 h-px bg-gray-200"></div>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- Activity 1: Created Simulation -->
+                <div class="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-flask-vial text-blue-600"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-bold text-slate-800 mb-1">
+                                Created simulation <span class="text-blue-600">"Growth Strategy #1"</span>
+                            </p>
+                            <p class="text-xs text-slate-500">2 hours ago</p>
+                        </div>
+                        <button data-route="simulationDetail" class="text-xs font-bold text-blue-600 hover:underline">View</button>
+                    </div>
+                </div>
+
+                <!-- Activity 2: Received Simulated Funds -->
+                <div class="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-arrow-down text-blue-600"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-bold text-slate-800 mb-1">
+                                Received <span class="text-blue-600">$50.00</span> simulated funds from <span class="font-bold">@username123</span>
+                            </p>
+                            <p class="text-xs text-slate-500">5 hours ago</p>
+                        </div>
+                        <button data-route="receivedSimFunds" class="text-xs font-bold text-blue-600 hover:underline">View</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Yesterday Section -->
+        <div>
+            <div class="flex items-center gap-4 mb-4">
+                <h2 class="text-lg font-bold text-slate-800">Yesterday</h2>
+                <div class="flex-1 h-px bg-gray-200"></div>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- Activity 3: Deposit Confirmed -->
+                <div class="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-arrow-down text-green-600"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-bold text-slate-800 mb-1">
+                                Deposit confirmed: <span class="text-green-600">0.0023 BTC</span> ($120.00)
+                            </p>
+                            <p class="text-xs text-slate-500">Yesterday at 10:15 AM</p>
+                        </div>
+                        <button data-route="transactions" class="text-xs font-bold text-green-600 hover:underline">View</button>
+                    </div>
+                </div>
+
+                <!-- Activity 4: Sent Simulated Funds -->
+                <div class="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-arrow-up text-blue-600"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-bold text-slate-800 mb-1">
+                                Sent <span class="text-blue-600">$25.00</span> simulated funds to <span class="font-bold">@trader_jane</span>
+                            </p>
+                            <p class="text-xs text-slate-500">Yesterday at 2:30 PM</p>
+                        </div>
+                        <button data-route="sentSimFunds" class="text-xs font-bold text-blue-600 hover:underline">View</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- January 13, 2025 Section -->
+        <div>
+            <div class="flex items-center gap-4 mb-4">
+                <h2 class="text-lg font-bold text-slate-800">January 13, 2025</h2>
+                <div class="flex-1 h-px bg-gray-200"></div>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- Activity 5: Withdrawal Processed -->
+                <div class="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-arrow-up text-red-600"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-bold text-slate-800 mb-1">
+                                Withdrawal processed: <span class="text-red-600">0.0010 BTC</span> ($50.00)
+                            </p>
+                            <p class="text-xs text-slate-500">January 13, 2025 at 3:45 PM</p>
+                        </div>
+                        <button data-route="transactions" class="text-xs font-bold text-red-600 hover:underline">View</button>
+                    </div>
+                </div>
+
+                <!-- Activity 6: Created Simulation -->
+                <div class="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-flask-vial text-blue-600"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-bold text-slate-800 mb-1">
+                                Created simulation <span class="text-blue-600">"Tech Portfolio"</span>
+                            </p>
+                            <p class="text-xs text-slate-500">January 13, 2025 at 11:20 AM</p>
+                        </div>
+                        <button data-route="simulationDetail" class="text-xs font-bold text-blue-600 hover:underline">View</button>
+                    </div>
+                </div>
+
+                <!-- Activity 7: Admin Credit -->
+                <div class="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-gift text-purple-600"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-bold text-slate-800 mb-1">
+                                Received <span class="text-purple-600">$25.00</span> credit from admin (Bonus)
+                            </p>
+                            <p class="text-xs text-slate-500">January 13, 2025 at 9:00 AM</p>
+                        </div>
+                        <button data-route="transactions" class="text-xs font-bold text-purple-600 hover:underline">View</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- January 10, 2025 Section -->
+        <div>
+            <div class="flex items-center gap-4 mb-4">
+                <h2 class="text-lg font-bold text-slate-800">January 10, 2025</h2>
+                <div class="flex-1 h-px bg-gray-200"></div>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- Activity 8: Applied Strategy -->
+                <div class="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md transition">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-chart-line text-indigo-600"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-bold text-slate-800 mb-1">
+                                Applied growth strategy to simulation <span class="text-indigo-600">"Growth Strategy #2"</span>
+                            </p>
+                            <p class="text-xs text-slate-500">January 10, 2025 at 4:20 PM</p>
+                        </div>
+                        <button data-route="simulationEdit" class="text-xs font-bold text-indigo-600 hover:underline">View</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Load More -->
+    <div class="mt-8 text-center">
+        <button class="px-6 py-3 bg-white border border-gray-200 text-slate-600 rounded-xl font-bold hover:bg-gray-50 transition">
+            Load More
+        </button>
+    </div>
+
+    <!-- Empty State (Hidden by default) -->
+    <div id="emptyState" class="hidden text-center py-16">
+        <i class="fa-solid fa-clock-rotate-left text-6xl text-slate-300 mb-4"></i>
+        <h3 class="text-xl font-bold text-slate-800 mb-2">No activity</h3>
+        <p class="text-slate-500">Your activity feed will appear here</p>
+    </div>
+
+</main>
+
+<script>
+    // Filter functionality
+    document.querySelectorAll('button:contains("All"), button:contains("Transactions"), button:contains("Simulations"), button:contains("Transfers")').forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Remove active state from all filter buttons
+            this.parentElement.querySelectorAll('button').forEach(b => {
+                b.classList.remove('bg-slate-800', 'text-white');
+                b.classList.add('bg-white', 'border', 'border-gray-200', 'text-slate-600');
+            });
+            // Add active state to clicked button
+            this.classList.remove('bg-white', 'border', 'border-gray-200', 'text-slate-600');
+            this.classList.add('bg-slate-800', 'text-white');
+            
+            // In production, filter activities based on type
+            console.log('Filtering by:', this.textContent);
+        });
+    });
+</script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/forms.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

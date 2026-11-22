@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Details | ConchCapital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .mono { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace; }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50" data-page="bankDetails">
+
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 lg:px-6 py-4 flex items-center justify-between">
+            <a href="dashboard.html" class="flex items-center gap-2">
+                <div class="w-9 h-9 bg-[#10B981] rounded-xl flex items-center justify-center shadow-lg shadow-[#10B981]/20">
+                    <i class="fa-solid fa-chart-line text-white text-lg"></i>
+                </div>
+                <span class="text-2xl font-bold text-[#0F172A] tracking-tight">Conch<span class="text-[#10B981]">Capital</span></span>
+            </a>
+            <a href="dashboard.html" class="text-sm font-bold text-[#10B981] hover:underline">
+                <i class="fa-solid fa-arrow-left mr-1"></i> Back to Dashboard
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 lg:px-6 py-8 lg:py-12 space-y-6">
+
+        <div>
+            <h1 class="text-2xl lg:text-3xl font-extrabold text-[#0F172A]">Banking Details</h1>
+            <p class="text-sm text-gray-500 mt-1">Your account information and deposit instructions.</p>
+        </div>
+
+        <!-- Your Account -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 lg:p-8">
+            <div class="flex items-center justify-between mb-5">
+                <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-id-card text-slate-400"></i> Your Account
+                </h2>
+                <span id="accountBadge" class="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-emerald-100 text-emerald-700">Active</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-4 bg-slate-50 border border-gray-100 rounded-xl">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Account Holder</p>
+                    <p id="accountHolder" class="text-sm font-bold text-slate-900">—</p>
+                </div>
+                <div class="p-4 bg-slate-50 border border-gray-100 rounded-xl">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Currency</p>
+                    <p id="accountCurrency" class="text-sm font-bold text-slate-900">—</p>
+                </div>
+                <div class="p-4 bg-emerald-50 border border-emerald-100 rounded-xl md:col-span-2">
+                    <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-widest mb-1">Account Number</p>
+                    <div class="flex items-center justify-between gap-3">
+                        <p id="accountNumber" class="mono text-lg lg:text-2xl font-black tracking-widest text-slate-900">—</p>
+                        <button type="button" data-copy="accountNumber" class="shrink-0 px-4 py-2 bg-slate-900 text-white rounded-lg text-xs font-bold hover:bg-black transition">Copy</button>
+                    </div>
+                </div>
+                <div class="p-4 bg-slate-50 border border-gray-100 rounded-xl md:col-span-2">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">IBAN</p>
+                    <div class="flex items-center justify-between gap-3">
+                        <p id="accountIban" class="mono text-sm lg:text-base font-bold tracking-wider text-slate-800 break-all">—</p>
+                        <button type="button" data-copy="accountIban" class="shrink-0 px-4 py-2 bg-slate-900 text-white rounded-lg text-xs font-bold hover:bg-black transition">Copy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bank / deposit instructions -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 lg:p-8">
+            <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2 mb-5">
+                <i class="fa-solid fa-building-columns text-slate-400"></i> Deposit Instructions
+            </h2>
+
+            <div class="p-4 bg-amber-50 border-l-4 border-amber-400 rounded-r-xl mb-5">
+                <p class="text-xs text-amber-800 leading-relaxed">
+                    <strong>Important:</strong> Always include your deposit reference. Transfers without a reference may be delayed.
+                </p>
+            </div>
+
+            <div class="p-4 bg-slate-900 rounded-xl mb-5">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Your Deposit Reference</p>
+                <div class="flex items-center justify-between gap-3">
+                    <p id="depositReference" class="mono text-lg lg:text-xl font-black tracking-widest text-emerald-400">—</p>
+                    <button type="button" data-copy="depositReference" class="shrink-0 px-4 py-2 bg-emerald-500 text-white rounded-lg text-xs font-bold hover:bg-emerald-600 transition">Copy</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-4 border border-gray-100 rounded-xl">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Bank Name</p>
+                    <p id="bankName" class="text-sm font-bold text-slate-900">—</p>
+                </div>
+                <div class="p-4 border border-gray-100 rounded-xl">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">SWIFT / BIC</p>
+                    <p id="bankSwift" class="mono text-sm font-bold text-slate-900">—</p>
+                </div>
+                <div class="p-4 border border-gray-100 rounded-xl">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Routing Number</p>
+                    <p id="bankRouting" class="mono text-sm font-bold text-slate-900">—</p>
+                </div>
+                <div class="p-4 border border-gray-100 rounded-xl">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Account Holder (Settlement)</p>
+                    <p id="bankHolder" class="text-sm font-bold text-slate-900">—</p>
+                </div>
+                <div class="p-4 border border-gray-100 rounded-xl md:col-span-2">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Bank Address</p>
+                    <p id="bankAddress" class="text-sm font-bold text-slate-900">—</p>
+                </div>
+            </div>
+
+            <div class="mt-5 flex flex-col sm:flex-row gap-3">
+                <a href="deposit.html" class="flex-1 text-center px-4 py-3 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 transition">
+                    <i class="fa-solid fa-arrow-down-to-line mr-2"></i> Make a Deposit
+                </a>
+                <a href="withdrawal.html" class="flex-1 text-center px-4 py-3 border-2 border-slate-900 text-slate-900 rounded-xl text-sm font-bold hover:bg-slate-900 hover:text-white transition">
+                    <i class="fa-solid fa-arrow-up-from-bracket mr-2"></i> Withdraw
+                </a>
+            </div>
+        </div>
+
+        <!-- Support / manager -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+                <h2 class="text-base font-bold text-slate-900 flex items-center gap-2 mb-4">
+                    <i class="fa-solid fa-user-tie text-slate-400"></i> Your Relationship Manager
+                </h2>
+                <p id="rmName" class="font-bold text-slate-900">—</p>
+                <p id="rmTitle" class="text-xs text-slate-500 mb-4">—</p>
+                <div class="space-y-2 text-sm">
+                    <p><i class="fa-solid fa-envelope text-slate-400 mr-2"></i><a id="rmEmail" class="text-emerald-600 font-semibold hover:underline" href="#">—</a></p>
+                    <p><i class="fa-solid fa-phone text-slate-400 mr-2"></i><span id="rmPhone" class="text-slate-700">—</span></p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+                <h2 class="text-base font-bold text-slate-900 flex items-center gap-2 mb-4">
+                    <i class="fa-solid fa-headset text-slate-400"></i> Client Support
+                </h2>
+                <div class="space-y-2 text-sm">
+                    <p><i class="fa-solid fa-envelope text-slate-400 mr-2"></i><a id="supportEmail" class="text-emerald-600 font-semibold hover:underline" href="#">—</a></p>
+                    <p><i class="fa-solid fa-phone text-slate-400 mr-2"></i><span id="supportPhone" class="text-slate-700">—</span></p>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-4 leading-relaxed">
+                    Support is available 24/5. Include your account number in all correspondence.
+                </p>
+            </div>
+        </div>
+
+        <p id="bankError" class="hidden text-sm text-red-600 text-center"></p>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/forms.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/routes.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        (async function loadBankDetails() {
+            const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val ?? '—'; };
+
+            try {
+                const data = await API.get('/api/bank-details');
+
+                set('accountNumber', data.client.account_number_formatted);
+                set('accountIban', data.client.iban_formatted);
+                set('accountCurrency', data.client.currency);
+                set('depositReference', data.deposit_reference);
+
+                // Account holder name comes from the signed-in profile
+                try {
+                    const profile = await API.user.getProfile();
+                    const name = profile?.user?.display_name || profile?.user?.name || profile?.user?.username;
+                    if (name) set('accountHolder', name);
+                } catch (e) { /* non-fatal: leave placeholder */ }
+
+                set('bankName', data.bank.name);
+                set('bankSwift', data.bank.swift);
+                set('bankRouting', data.bank.routing);
+                set('bankHolder', data.bank.account_holder);
+                set('bankAddress', data.bank.address);
+
+                set('rmName', data.relationship_manager.name);
+                set('rmTitle', data.relationship_manager.title);
+                set('rmPhone', data.relationship_manager.phone);
+
+                const rmEmail = document.getElementById('rmEmail');
+                if (rmEmail) { rmEmail.textContent = data.relationship_manager.email; rmEmail.href = 'mailto:' + data.relationship_manager.email; }
+
+                const supportEmail = document.getElementById('supportEmail');
+                if (supportEmail) { supportEmail.textContent = data.bank.support_email; supportEmail.href = 'mailto:' + data.bank.support_email; }
+                set('supportPhone', data.bank.support_phone);
+
+                // Copy buttons
+                document.querySelectorAll('[data-copy]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const el = document.getElementById(btn.dataset.copy);
+                        if (!el || !el.textContent || el.textContent === '—') return;
+                        navigator.clipboard?.writeText(el.textContent.trim()).then(() => {
+                            const original = btn.textContent;
+                            btn.textContent = 'Copied';
+                            setTimeout(() => { btn.textContent = original; }, 1500);
+                        }).catch(() => Utils?.showToast?.('Copy failed', 'error'));
+                    });
+                });
+            } catch (err) {
+                console.error('Failed to load bank details:', err);
+                const e = document.getElementById('bankError');
+                if (e) { e.textContent = 'Unable to load banking details. Please sign in again.'; e.classList.remove('hidden'); }
+            }
+        })();
+    </script>
+</body>
+</html>

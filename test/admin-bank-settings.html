@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Details Settings | Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-50" data-page="adminBankSettings">
+
+    <header class="bg-slate-900 text-white sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 lg:px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-building-columns text-emerald-400"></i>
+                <span class="font-bold tracking-tight">Client Banking Details</span>
+            </div>
+            <a href="admin-dashboard.html" class="text-xs font-bold text-slate-300 hover:text-white">
+                <i class="fa-solid fa-arrow-left mr-1"></i> Back to Admin
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 lg:px-6 py-8 space-y-6">
+
+        <div class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
+            <p class="text-xs text-amber-800 leading-relaxed">
+                These details are shown to <strong>every signed-in client</strong> on their Bank Details and Deposit pages.
+                Clients send funds to exactly what you enter here — keep it accurate.
+            </p>
+        </div>
+
+        <form id="bankSettingsForm" class="space-y-6">
+
+            <section class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+                <h2 class="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-building text-slate-400"></i> Receiving Bank
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Bank Name</label>
+                        <input id="bank_name" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Bank Address</label>
+                        <input id="bank_address" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">SWIFT / BIC</label>
+                        <input id="bank_swift" class="mono w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 uppercase">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Routing Number</label>
+                        <input id="bank_routing" class="mono w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Beneficiary / Account Holder</label>
+                        <input id="bank_account_holder" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Deposit Reference Prefix</label>
+                        <input id="deposit_reference_prefix" class="mono w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 uppercase" maxlength="10">
+                        <p class="text-[11px] text-slate-500 mt-1">Shown as <span class="mono">PREFIX-ACCOUNTNUMBER</span>.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+                <h2 class="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-headset text-slate-400"></i> Support
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Support Email</label>
+                        <input id="bank_support_email" type="email" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Support Phone</label>
+                        <input id="bank_support_phone" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+                <h2 class="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-user-tie text-slate-400"></i> Relationship Manager
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Name</label>
+                        <input id="rm_name" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Title</label>
+                        <input id="rm_title" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Email</label>
+                        <input id="rm_email" type="email" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Phone</label>
+                        <input id="rm_phone" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Booking URL (optional)</label>
+                        <input id="rm_booking_url" type="url" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                </div>
+            </section>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button type="submit" id="saveBtn" class="flex-1 px-6 py-3.5 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition">
+                    <i class="fa-solid fa-floppy-disk mr-2"></i> Save Details
+                </button>
+                <button type="button" id="resetBtn" class="px-6 py-3.5 border-2 border-slate-300 text-slate-700 rounded-xl font-bold hover:bg-slate-100 transition">
+                    <i class="fa-solid fa-rotate-left mr-2"></i> Reset to Defaults
+                </button>
+                <a href="bank-details.html" target="_blank" class="px-6 py-3.5 border-2 border-slate-900 text-slate-900 rounded-xl font-bold hover:bg-slate-900 hover:text-white transition text-center">
+                    <i class="fa-solid fa-eye mr-2"></i> Preview
+                </a>
+            </div>
+        </form>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/forms.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/routes.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        let keys = [];
+
+        (async function load() {
+            try {
+                const data = await API.admin.getBankSettings();
+                keys = data.keys || [];
+
+                keys.forEach(key => {
+                    const el = document.getElementById(key);
+                    if (!el) return;
+                    el.value = data.settings[key] || '';
+                    el.placeholder = data.defaults[key] || '';
+                });
+            } catch (err) {
+                console.error('Failed to load bank settings:', err);
+                Utils?.showToast?.('Failed to load settings', 'error');
+            }
+        })();
+
+        document.getElementById('bankSettingsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('saveBtn');
+            btn.disabled = true;
+            const original = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Saving...';
+
+            const payload = {};
+            keys.forEach(key => {
+                const el = document.getElementById(key);
+                if (el) payload[key] = el.value.trim();
+            });
+
+            try {
+                await API.admin.updateBankSettings(payload);
+                Utils?.showToast?.('Banking details saved', 'success');
+            } catch (err) {
+                console.error(err);
+                Utils?.showToast?.(err.response?.message || 'Failed to save', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = original;
+            }
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', async () => {
+            if (!confirm('Clear all overrides and restore the built-in defaults?')) return;
+            try {
+                await API.admin.resetBankSettings();
+                window.location.reload();
+            } catch (err) {
+                Utils?.showToast?.('Failed to reset', 'error');
+            }
+        });
+    </script>
+</body>
+</html>

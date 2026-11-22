@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Reports | Admin</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen" data-page="adminReports">
+
+<aside class="w-64 bg-slate-950 text-slate-400 flex flex-col shrink-0 border-r border-slate-800 fixed h-screen">
+    <div class="p-6 border-b border-slate-800/50">
+        <div class="text-2xl font-bold tracking-tight text-white">
+            Conch<span class="text-[#10B981]">Capital</span>
+        </div>
+        <p class="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500 mt-1">Admin Portal</p>
+    </div>
+    <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+        <a href="#" data-route="adminDashboard" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-chart-pie text-sm"></i>
+            <span class="text-sm font-medium">Overview</span>
+        </a>
+        <a href="#" data-route="adminUsers" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-users-gear text-sm"></i>
+            <span class="text-sm font-medium">User Management</span>
+        </a>
+        <a href="#" data-route="adminTransactions" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-file-invoice-dollar text-sm"></i>
+            <span class="text-sm font-medium">Transactions</span>
+        </a>
+        <a href="#" data-route="adminCredits" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-money-bill-transfer text-sm"></i>
+            <span class="text-sm font-medium">Credits</span>
+        </a>
+        <a href="#" data-route="adminFreezes" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-snowflake text-sm"></i>
+            <span class="text-sm font-medium">Freezes</span>
+        </a>
+        <div class="pt-4 mt-4 border-t border-slate-800/50">
+            <a href="#" data-route="adminSettings" class="flex items-center space-x-3 p-3 bg-slate-900 text-white rounded-xl transition">
+                <i class="fa-solid fa-gear text-sm"></i>
+                <span class="text-sm font-medium">Settings</span>
+            </a>
+        </div>
+    </nav>
+</aside>
+
+<main class="ml-64 flex-1 p-8">
+    
+    <div class="mb-8">
+        <h1 class="text-3xl font-extrabold text-slate-900 mb-2">Reports</h1>
+        <p class="text-slate-500">Generate and export platform reports</p>
+    </div>
+
+    <form class="space-y-6">
+        
+        <!-- Report Type -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <h2 class="text-lg font-bold text-slate-900 mb-6">Report Type</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <label class="flex items-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer border-2 border-slate-800">
+                    <input type="radio" name="report_type" value="users" checked class="w-4 h-4 text-slate-800 focus:ring-slate-800 cursor-pointer">
+                    <div class="ml-3">
+                        <p class="text-sm font-bold text-slate-800">Users Report</p>
+                        <p class="text-xs text-slate-500">User statistics and demographics</p>
+                    </div>
+                </label>
+                
+                <label class="flex items-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer border border-gray-200">
+                    <input type="radio" name="report_type" value="transactions" class="w-4 h-4 text-slate-800 focus:ring-slate-800 cursor-pointer">
+                    <div class="ml-3">
+                        <p class="text-sm font-bold text-slate-800">Transactions Report</p>
+                        <p class="text-xs text-slate-500">All financial transactions</p>
+                    </div>
+                </label>
+                
+                <label class="flex items-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer border border-gray-200">
+                    <input type="radio" name="report_type" value="credits" class="w-4 h-4 text-slate-800 focus:ring-slate-800 cursor-pointer">
+                    <div class="ml-3">
+                        <p class="text-sm font-bold text-slate-800">Credits Report</p>
+                        <p class="text-xs text-slate-500">Admin credit history</p>
+                    </div>
+                </label>
+                
+                <label class="flex items-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer border border-gray-200">
+                    <input type="radio" name="report_type" value="freezes" class="w-4 h-4 text-slate-800 focus:ring-slate-800 cursor-pointer">
+                    <div class="ml-3">
+                        <p class="text-sm font-bold text-slate-800">Freezes Report</p>
+                        <p class="text-xs text-slate-500">Account freeze history</p>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Live summary -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-6">
+            <h2 class="text-lg font-bold text-slate-900 mb-6">Live Summary</h2>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-slate-50 rounded-xl p-4"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Users</p><p id="rptUsers" class="text-2xl font-black text-slate-900">—</p></div>
+                <div class="bg-slate-50 rounded-xl p-4"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Frozen</p><p id="rptFrozen" class="text-2xl font-black text-red-600">—</p></div>
+                <div class="bg-slate-50 rounded-xl p-4"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Deposits</p><p id="rptDeposits" class="text-2xl font-black text-emerald-600">—</p></div>
+                <div class="bg-slate-50 rounded-xl p-4"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Withdrawals</p><p id="rptWithdrawals" class="text-2xl font-black text-slate-900">—</p></div>
+            </div>
+            <p id="rptMeta" class="text-xs text-slate-500 mt-3">—</p>
+        </div>
+
+        <!-- Date Range -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <h2 class="text-lg font-bold text-slate-900 mb-6">Date Range</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 uppercase tracking-widest mb-2">Start Date</label>
+                    <input 
+                        type="date" 
+                        id="reportStartDate"
+                        class="w-full p-3.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-slate-800 outline-none"
+                    >
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 uppercase tracking-widest mb-2">End Date</label>
+                    <input 
+                        type="date" 
+                        id="reportEndDate"
+                        class="w-full p-3.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-slate-800 outline-none"
+                    >
+                </div>
+            </div>
+            
+            <div class="mt-4 flex flex-wrap gap-2">
+                <button type="button" class="px-4 py-2 bg-gray-100 text-slate-600 rounded-lg text-sm font-medium hover:bg-gray-200 transition">
+                    Last 7 days
+                </button>
+                <button type="button" class="px-4 py-2 bg-gray-100 text-slate-600 rounded-lg text-sm font-medium hover:bg-gray-200 transition">
+                    Last 30 days
+                </button>
+                <button type="button" class="px-4 py-2 bg-gray-100 text-slate-600 rounded-lg text-sm font-medium hover:bg-gray-200 transition">
+                    Last 90 days
+                </button>
+                <button type="button" class="px-4 py-2 bg-gray-100 text-slate-600 rounded-lg text-sm font-medium hover:bg-gray-200 transition">
+                    This month
+                </button>
+                <button type="button" class="px-4 py-2 bg-gray-100 text-slate-600 rounded-lg text-sm font-medium hover:bg-gray-200 transition">
+                    Last month
+                </button>
+            </div>
+        </div>
+
+        <!-- Export Options -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <h2 class="text-lg font-bold text-slate-900 mb-6">Export Format</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <label class="flex items-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer border-2 border-slate-800">
+                    <input type="radio" name="export_format" value="pdf" checked class="w-4 h-4 text-slate-800 focus:ring-slate-800 cursor-pointer">
+                    <div class="ml-3">
+                        <i class="fa-solid fa-file-pdf text-red-600 text-xl mb-1"></i>
+                        <p class="text-sm font-bold text-slate-800">PDF</p>
+                    </div>
+                </label>
+                
+                <label class="flex items-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer border border-gray-200">
+                    <input type="radio" name="export_format" value="csv" class="w-4 h-4 text-slate-800 focus:ring-slate-800 cursor-pointer">
+                    <div class="ml-3">
+                        <i class="fa-solid fa-file-csv text-green-600 text-xl mb-1"></i>
+                        <p class="text-sm font-bold text-slate-800">CSV</p>
+                    </div>
+                </label>
+                
+                <label class="flex items-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer border border-gray-200">
+                    <input type="radio" name="export_format" value="excel" class="w-4 h-4 text-slate-800 focus:ring-slate-800 cursor-pointer">
+                    <div class="ml-3">
+                        <i class="fa-solid fa-file-excel text-green-600 text-xl mb-1"></i>
+                        <p class="text-sm font-bold text-slate-800">Excel</p>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Scheduled Reports -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <h2 class="text-lg font-bold text-slate-900 mb-6">Scheduled Reports</h2>
+            
+            <div class="space-y-4">
+                <div class="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <div>
+                            <p class="text-sm font-bold text-slate-800">Weekly Users Report</p>
+                            <p class="text-xs text-slate-500">Every Monday at 9:00 AM</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Active</span>
+                            <button class="text-xs font-bold text-red-600 hover:underline">Delete</button>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-500">Format: PDF • Recipients: admin@platform.com</p>
+                </div>
+                
+                <button type="button" class="w-full px-4 py-2 bg-white border-2 border-gray-200 text-slate-600 rounded-lg text-sm font-bold hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-plus mr-2"></i> Create Scheduled Report
+                </button>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-4 pt-6">
+            <button type="button" data-route="adminDashboard" class="flex-1 px-6 py-3 bg-white border-2 border-gray-200 text-slate-600 rounded-xl font-bold hover:bg-gray-50 transition">
+                Preview Report
+            </button>
+            <button type="submit" class="flex-1 md:flex-[2] px-6 py-3 bg-slate-800 text-white rounded-xl font-bold hover:opacity-90 transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-download"></i> Generate Report
+            </button>
+        </div>
+    </form>
+
+</main>
+
+<script>
+    // Date range quick buttons
+    document.querySelectorAll('button:contains("Last 7 days"), button:contains("Last 30 days"), button:contains("Last 90 days"), button:contains("This month"), button:contains("Last month")').forEach(btn => {
+        btn.addEventListener('click', function() {
+            // In production, this would set the date range
+            console.log('Setting date range:', this.textContent);
+        });
+    });
+
+    // Form submission
+    document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const reportType = document.querySelector('input[name="report_type"]:checked').value;
+        const format = document.querySelector('input[name="export_format"]:checked').value;
+        
+        // In production, this would generate the report
+        console.log('Generating report:', { reportType, format });
+        const start = document.getElementById('reportStartDate').value;
+        const end = document.getElementById('reportEndDate').value;
+        if (!start || !end) { Utils?.showToast?.('Select a date range', 'error'); return; }
+
+        const fmt = format === 'csv' ? 'csv' : 'json';
+        const params = new URLSearchParams({ start_date: start, end_date: end, format: fmt });
+        window.open(`/api/admin/compliance-export?${params.toString()}`, '_blank');
+        Utils?.showToast?.('Export generated', 'success');
+    });
+</script>
+<script>
+(function () {
+    const start = document.getElementById('reportStartDate');
+    const end = document.getElementById('reportEndDate');
+    if (!start || !end) return;
+
+    const iso = (d) => d.toISOString().slice(0, 10);
+    const today = new Date();
+    const past = new Date(); past.setDate(today.getDate() - 30);
+    start.value = iso(past);
+    end.value = iso(today);
+
+    const money = (n) => '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    async function loadSummary() {
+        if (!start.value || !end.value) return;
+        try {
+            const d = await API.admin.getReports({ start_date: start.value, end_date: end.value });
+            document.getElementById('rptUsers').textContent = d.users?.total ?? 0;
+            document.getElementById('rptFrozen').textContent = d.users?.frozen ?? 0;
+            document.getElementById('rptDeposits').textContent = money(d.transactions?.total_deposits);
+            document.getElementById('rptWithdrawals').textContent = money(d.transactions?.total_withdrawals);
+            document.getElementById('rptMeta').textContent = `Range ${start.value} → ${end.value} · ${d.transactions?.total ?? 0} transactions`;
+        } catch (e) {
+            console.error('Failed to load report summary', e);
+            document.getElementById('rptMeta').textContent = 'Could not load summary.';
+        }
+    }
+
+    start.addEventListener('change', loadSummary);
+    end.addEventListener('change', loadSummary);
+    window.addEventListener('load', loadSummary);
+})();
+</script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/forms.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <script src="https://cdn.tailwindcss.com"></script> <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"> <link rel="stylesheet" href="css/main.css"> <title>Credit Funds | ConchCapital Admin</title> <style> body { font-family: 'Inter', sans-serif; } .bg-real { background-color: #10B981; } .text-real { color: #10B981; } .border-real { border-color: #10B981; } .bg-sim { background-color: #3B82F6; } .text-sim { color: #3B82F6; } .border-sim { border-color: #3B82F6; } .accent-real { accent-color: #10B981; } </style> </head> <body class="bg-gray-50 min-h-screen" data-page="adminCredits">
+
+<header class="bg-slate-900 text-white px-8 py-4 flex items-center justify-between sticky top-0 z-30">
+    <div class="flex items-center gap-8">
+        <div class="text-lg font-bold tracking-widest uppercase">
+            Conch<span class="text-real">Capital</span> <span class="text-slate-500 font-light text-xs ml-2">Admin</span>
+        </div>
+        <nav class="hidden md:flex space-x-6 text-sm font-medium text-slate-400">
+            <a href="#" data-route="adminUsers" class="hover:text-white transition">Users</a>
+            <a href="#" data-route="adminTransactions" class="hover:text-white transition">Transactions</a>
+            <a href="#" data-route="adminCredits" class="text-white border-b-2 border-real pb-1">Credits</a>
+            <a href="#" data-route="adminFreezes" class="hover:text-white transition">Freezes</a>
+        </nav>
+    </div>
+    <div class="flex items-center gap-4">
+        <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold">A</div>
+    </div>
+</header>
+
+<main class="max-w-4xl mx-auto py-10 px-6">
+    
+    <div class="mb-8">
+        <a href="#" id="backToUserDetailLink" class="text-xs font-bold text-slate-400 hover:text-slate-900 transition flex items-center gap-2 mb-4">
+            <i class="fa-solid fa-arrow-left"></i> BACK TO USER DETAIL
+        </a>
+        <h1 class="text-2xl font-black text-slate-900">Credit Funds: <span class="text-slate-500">@john123</span></h1>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-8 flex flex-col md:flex-row justify-between gap-6">
+        <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center text-xl font-bold text-slate-400">J</div>
+            <div>
+                <h2 class="text-lg font-bold text-slate-900">@john123</h2>
+                <p class="text-sm text-slate-500">Tier 2 Investor • Active Member</p>
+            </div>
+        </div>
+        <div class="flex flex-col justify-center gap-2 md:text-right border-t md:border-t-0 md:border-l border-gray-100 pt-4 md:pt-0 md:pl-8">
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Real Balance: <span class="text-real">$120.00</span></p>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Simulated Balance: <span class="text-sim">$50.00</span></p>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden mb-12">
+        <form id="creditForm" class="p-8 space-y-8">
+            
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">1. Direction</label>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <label class="relative flex items-center p-4 border-2 border-gray-100 rounded-2xl cursor-pointer hover:bg-gray-50 transition">
+                        <input type="radio" name="direction" value="credit" class="accent-real h-5 w-5" checked>
+                        <div class="ml-4">
+                            <span class="block text-sm font-bold text-slate-800"><i class="fa-solid fa-plus text-real mr-1"></i> Credit</span>
+                            <span class="text-xs text-slate-500">Add funds to the user's balance</span>
+                        </div>
+                    </label>
+                    <label class="relative flex items-center p-4 border-2 border-gray-100 rounded-2xl cursor-pointer hover:bg-gray-50 transition">
+                        <input type="radio" name="direction" value="debit" class="accent-red-500 h-5 w-5">
+                        <div class="ml-4">
+                            <span class="block text-sm font-bold text-slate-800"><i class="fa-solid fa-minus text-red-500 mr-1"></i> Debit</span>
+                            <span class="text-xs text-slate-500">Remove funds from the user's balance</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">2. Fund Type</label>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <label class="relative flex items-center p-4 border-2 border-gray-100 rounded-2xl cursor-pointer hover:bg-gray-50 transition peer">
+                        <input type="radio" name="fund_type" value="real" class="accent-real h-5 w-5" checked>
+                        <div class="ml-4">
+                            <span class="block text-sm font-bold text-slate-800">Real Funds</span>
+                            <span class="text-xs text-slate-500">Directly withdrawable by user</span>
+                        </div>
+                    </label>
+                    <label class="relative flex items-center p-4 border-2 border-gray-100 rounded-2xl cursor-pointer hover:bg-gray-50 transition">
+                        <input type="radio" name="fund_type" value="simulated" class="accent-real h-5 w-5">
+                        <div class="ml-4">
+                            <span class="block text-sm font-bold text-slate-800">Simulated Funds</span>
+                            <span class="text-xs text-slate-500">Virtual capital for training only</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">3. Amount (USD)</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
+                        <input type="number" id="creditAmount" name="amount" placeholder="0.00" step="0.01" min="0.01" required
+                            class="w-full pl-8 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-real transition font-mono">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">3. Reason</label>
+                    <select id="creditReason" name="reason" class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-real transition text-sm">
+                        <option value="">Select Reason</option>
+                        <option value="Promotional">Promotional</option>
+                        <option value="Refund">Refund</option>
+                        <option value="Bonus">Bonus</option>
+                        <option value="Other">Other (Specify Below)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">4. Note/Description (Required)</label>
+                <textarea id="creditDescription" name="description" rows="3" placeholder="Enter a detailed explanation for this manual credit for audit purposes..." required
+                    class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-real transition text-sm"></textarea>
+            </div>
+
+            <div class="p-6 bg-blue-50/50 border border-blue-100 rounded-2xl hidden" id="sim-options">
+                <label class="flex items-center gap-3 cursor-pointer mb-4">
+                    <input type="checkbox" class="h-5 w-5 rounded border-blue-300 text-sim focus:ring-sim">
+                    <span class="text-sm font-bold text-blue-900">Create as new simulation with growth strategy</span>
+                </label>
+                <select class="w-full p-3 bg-white border border-blue-200 rounded-xl outline-none text-sm">
+                    <option>Aggressive Growth (S&P 500 Tracking)</option>
+                    <option>Conservative (Dividends)</option>
+                    <option>Crypto-Volatility (High Risk)</option>
+                </select>
+            </div>
+
+            <div class="pt-8 border-t border-gray-100">
+                <div class="bg-gray-900 rounded-2xl p-6 text-white relative overflow-hidden">
+                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-file-invoice-dollar text-real"></i> Transaction Summary
+                    </h4>
+                    <div class="space-y-2 relative z-10">
+                        <p class="text-sm">You are about to credit <span id="summaryAmount" class="text-real font-black">$0.00</span> <span id="summaryFundType" class="text-real font-black">Real Funds</span> to <span id="summaryUser" class="font-bold">-</span></p>
+                        <p class="text-xs text-slate-400 font-medium italic">Reason: <span id="summaryReason">-</span></p>
+                    </div>
+                    <div class="absolute -right-4 -bottom-4 opacity-10">
+                        <i class="fa-solid fa-shield-check text-8xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-4">
+                <button type="button" id="cancelBtn" class="flex-1 py-4 font-bold text-slate-400 hover:bg-gray-50 rounded-xl transition">Cancel</button>
+                <button type="submit" id="submitBtn" class="flex-[2] bg-real text-white py-4 rounded-xl font-bold shadow-lg shadow-real/20 hover:opacity-90 transition transform active:scale-[0.98]">
+                    Confirm Credit
+                </button>
+            </div>
+
+        </form>
+    </div>
+    
+    <script>
+        let targetUserId = null;
+        let targetUser = null;
+
+        // Get user ID from URL params or set default
+        function getUserIdFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('user_id');
+        }
+
+        // Update back to user detail link with user_id
+        function updateBackLink() {
+            const userId = getUserIdFromUrl();
+            const backLink = document.getElementById('backToUserDetailLink');
+            if (backLink && userId) {
+                backLink.href = `/admin-user-detail.html?user_id=${userId}`;
+                backLink.onclick = function(e) {
+                    e.preventDefault();
+                    window.location.href = `/admin-user-detail.html?user_id=${userId}`;
+                };
+            }
+        }
+
+        // Load user data
+        async function loadUserData() {
+            const userId = getUserIdFromUrl();
+            if (!userId) {
+                Utils?.showToast?.('No user ID provided. Please select a user first.', 'error');
+                setTimeout(() => {
+                    window.location.href = '/admin-user-list.html';
+                }, 2000);
+                return;
+            }
+            
+            // Update back link
+            updateBackLink();
+
+            try {
+                const data = await API.admin.getUser(userId);
+                targetUser = data.user;
+                targetUserId = userId;
+                
+                // Update UI with user info
+                document.querySelector('h1 span').textContent = `@${targetUser.username || targetUser.name || 'user'}`;
+                document.querySelector('.w-14.h-14').textContent = (targetUser.name || 'U')[0].toUpperCase();
+                document.querySelector('h2').textContent = `@${targetUser.username || targetUser.name || 'user'}`;
+                document.querySelector('.text-real').textContent = `$${parseFloat(targetUser.real_balance || 0).toFixed(2)}`;
+                document.querySelector('.text-sim').textContent = `$${parseFloat(targetUser.simulated_balance || 0).toFixed(2)}`;
+                document.getElementById('summaryUser').textContent = `@${targetUser.username || targetUser.name || 'user'}`;
+                
+                // Update back link after user data is loaded
+                updateBackLink();
+            } catch (error) {
+                console.error('Failed to load user:', error);
+                Utils?.showToast?.('Failed to load user data', 'error');
+            }
+        }
+
+        // Update summary as form changes
+        function updateSummary() {
+            const amount = document.getElementById('creditAmount').value || '0.00';
+            const fundType = document.querySelector('input[name="fund_type"]:checked').value;
+            const direction = document.querySelector('input[name="direction"]:checked').value;
+            const reason = document.getElementById('creditReason').value || '-';
+            
+            document.getElementById('summaryAmount').textContent = `$${parseFloat(amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            document.getElementById('summaryFundType').textContent = (direction === 'debit' ? 'Debit — ' : 'Credit — ') + (fundType === 'real' ? 'Real Funds' : 'Simulated Funds');
+            document.getElementById('summaryFundType').className = direction === 'debit' ? 'text-red-500 font-black' : (fundType === 'real' ? 'text-real font-black' : 'text-sim font-black');
+            document.getElementById('summaryReason').textContent = reason;
+        }
+
+        // Form submission
+        document.getElementById('creditForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!targetUserId) {
+                Utils?.showToast?.('No user selected', 'error');
+                return;
+            }
+
+            const amount = parseFloat(document.getElementById('creditAmount').value);
+            const fundType = document.querySelector('input[name="fund_type"]:checked').value;
+            const direction = document.querySelector('input[name="direction"]:checked').value;
+            const reason = document.getElementById('creditReason').value;
+            const description = document.getElementById('creditDescription').value;
+
+            if (!amount || amount <= 0) {
+                Utils?.showToast?.('Please enter a valid amount', 'error');
+                return;
+            }
+
+            if (!description.trim()) {
+                Utils?.showToast?.('Description is required', 'error');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Processing...';
+
+            try {
+                await API.admin.creditFunds(targetUserId, amount, reason || description, fundType, description, direction);
+
+                Utils?.showToast?.(direction === 'debit' ? 'Funds debited successfully!' : 'Funds credited successfully!', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = `/admin-user-detail.html?user_id=${targetUserId}`;
+                }, 1500);
+
+            } catch (error) {
+                console.error('Credit error:', error);
+                const message = error.response?.message || error.message || 'Failed to credit funds';
+                Utils?.showToast?.(message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        });
+
+        // Update summary on input changes
+        document.getElementById('creditAmount').addEventListener('input', updateSummary);
+        document.getElementById('creditReason').addEventListener('change', updateSummary);
+        document.querySelectorAll('input[name="fund_type"]').forEach(radio => {
+            radio.addEventListener('change', updateSummary);
+        });
+
+        // Handle cancel button
+        document.addEventListener('DOMContentLoaded', function() {
+            const cancelBtn = document.getElementById('cancelBtn');
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', function() {
+                    const userId = getUserIdFromUrl();
+                    if (userId) {
+                        window.location.href = `/admin-user-detail.html?user_id=${userId}`;
+                    } else {
+                        window.location.href = '/admin-user-list.html';
+                    }
+                });
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateBackLink(); // Set up back link first
+            loadUserData();
+            updateSummary();
+        });
+    </script>
+
+    <p class="text-center text-[10px] text-slate-400 uppercase tracking-widest">
+        Authorization Protocol 4.2-A // All manual credits are logged for security review.
+    </p>
+</main>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/forms.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+</body> </html>

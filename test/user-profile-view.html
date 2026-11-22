@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>@username123 Profile | ConchCapital</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .text-sim { color: #3B82F6; }
+        .bg-sim { background-color: #3B82F6; }
+        .border-sim { border-color: #3B82F6; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen" data-page="userProfileView">
+
+<nav class="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between">
+    <div class="text-xl font-bold tracking-tight text-slate-800">Conch<span class="text-[#10B981]">Capital</span></div>
+    <div class="flex items-center gap-6">
+        <a href="#" data-route="dashboard" class="text-sm font-medium text-slate-500 hover:text-slate-800">Dashboard</a>
+        <a href="#" data-route="profitGrowths" class="text-sm font-medium text-slate-500 hover:text-slate-800">Profit Growth</a>
+        <a href="#" data-route="userProfileView" class="text-sm font-bold text-sim border-b-2 border-sim pb-4 mt-4">Profile</a>
+        <a href="#" data-route="settings" class="text-sm font-medium text-slate-500 hover:text-slate-800">Settings</a>
+        <div class="flex items-center gap-4">
+            <div class="relative">
+                <button onclick="toggleNotificationDropdown()" class="relative text-slate-400 hover:text-slate-600 transition">
+                    <i class="fa-regular fa-bell text-xl"></i>
+                    <span id="notificationBadge" class="hidden absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
+                </button>
+                <!-- Notification Dropdown -->
+                <div id="notificationDropdown" class="hidden absolute right-0 top-full mt-2 w-80 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden z-50 max-h-96 overflow-y-auto">
+                    <div class="p-4 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white">
+                        <h3 class="text-sm font-bold text-slate-900">Notifications</h3>
+                        <a href="#" data-route="notifications" class="text-xs font-bold text-blue-600 hover:text-blue-800">View All</a>
+                    </div>
+                    <div id="notificationDropdownList" class="divide-y divide-gray-100">
+                        <div class="p-4 text-center text-slate-500">
+                            <i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i>
+                            <p class="text-sm">Loading notifications...</p>
+                        </div>
+                    </div>
+                    <div class="p-3 border-t border-gray-200 bg-gray-50 text-center">
+                        <a href="#" data-route="notifications" class="text-xs font-bold text-blue-600 hover:text-blue-800">View All Notifications</a>
+                    </div>
+                </div>
+            </div>
+            <div class="relative">
+                <button onclick="toggleHeaderUserMenu()" class="flex items-center space-x-3 px-3 py-2 border border-gray-200 rounded-xl text-sm font-bold text-slate-600 hover:bg-gray-50 transition">
+                    <div id="headerUserAvatar" class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-xs shrink-0 overflow-hidden">
+                        <span id="headerUserInitials">U</span>
+                        <img id="headerUserImage" src="" alt="Profile" class="hidden w-8 h-8 rounded-full object-cover">
+                    </div>
+                    <span id="headerUserName" class="hidden md:inline">User</span>
+                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                </button>
+                <!-- User Menu Dropdown -->
+                <div id="headerUserMenuDropdown" class="hidden absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden z-50">
+                    <a href="#" data-route="profile" class="flex items-center space-x-3 px-4 py-3 text-sm text-slate-700 hover:bg-gray-50 transition">
+                        <i class="fa-solid fa-user text-sm w-5"></i>
+                        <span>View Profile</span>
+                    </a>
+                    <a href="#" data-route="settings" class="flex items-center space-x-3 px-4 py-3 text-sm text-slate-700 hover:bg-gray-50 transition">
+                        <i class="fa-solid fa-gear text-sm w-5"></i>
+                        <span>Settings</span>
+                    </a>
+                    <div class="border-t border-gray-200"></div>
+                    <button onclick="handleLogout()" class="w-full flex items-center space-x-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition">
+                        <i class="fa-solid fa-right-from-bracket text-sm w-5"></i>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-4xl mx-auto py-10 px-6">
+    
+    <!-- Back Link -->
+    <a href="#" data-route="profileSearch" class="inline-flex items-center text-sm text-gray-500 hover:text-gray-800 transition mb-6">
+        <i class="fa-solid fa-arrow-left mr-2"></i> Back to Search
+    </a>
+
+    <!-- Profile Header -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-8 mb-6">
+        <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+            <!-- Avatar -->
+            <div id="avatarContainer" class="w-32 h-32 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-4xl shrink-0">
+                <span id="avatarInitials">JD</span>
+                <img id="avatarImage" src="" alt="Profile" class="hidden w-32 h-32 rounded-full object-cover">
+            </div>
+            
+            <!-- Profile Info -->
+            <div class="flex-1 text-center md:text-left">
+                <h1 id="profileUsername" class="text-3xl font-extrabold text-slate-900 mb-2">@username123</h1>
+                <p id="profileDisplayName" class="text-lg text-slate-600 mb-4">Display Name</p>
+                
+                <p id="profileBio" class="text-slate-600 mb-4 leading-relaxed">
+                    Learning about investment strategies and crypto trading. Always open to learning from others and sharing knowledge with the community!
+                </p>
+                
+                <div class="flex flex-wrap items-center gap-4 justify-center md:justify-start mb-4">
+                    <div class="flex items-center gap-2 text-sm text-slate-500">
+                        <i class="fa-solid fa-calendar text-slate-400"></i>
+                        <span id="memberSince">Member since: January 2024</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-check-circle text-green-500"></i>
+                        <span class="text-sm font-medium text-green-600">Accepts fund transfers</span>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="flex flex-col md:flex-row gap-3">
+                    <button id="requestAccessBtn" onclick="requestProfileAccess()" class="hidden w-full md:w-auto px-8 py-3 bg-sim text-white rounded-xl font-bold shadow-lg shadow-blue-200 hover:opacity-90 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-user-lock"></i> Request Access
+                    </button>
+                    <button id="sendFundsBtn" onclick="sendFundsToUser()" class="w-full md:w-auto px-8 py-3 bg-sim text-white rounded-xl font-bold shadow-lg shadow-blue-200 hover:opacity-90 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i> Send Funds
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Access Request Status Message -->
+    <div id="accessRequestStatus" class="hidden bg-blue-50 border-2 border-blue-200 rounded-2xl p-6 mb-6">
+        <div class="flex items-start gap-4">
+            <i class="fa-solid fa-info-circle text-blue-600 text-2xl shrink-0 mt-1"></i>
+            <div class="flex-1">
+                <h3 class="text-lg font-bold text-blue-900 mb-2">Access Request Pending</h3>
+                <p class="text-sm text-blue-800 leading-relaxed">
+                    Your request to view this profile is pending approval. You will receive an email notification once the profile owner responds.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Public Profit Growth Statistics (if enabled) -->
+    <div id="portfolioStats" class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-6">
+        <h2 class="text-lg font-bold text-slate-900 mb-6">Portfolio Statistics</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
+                <p class="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Real Wallet Balance</p>
+                <p id="realBalance" class="text-3xl font-extrabold text-blue-700">-</p>
+            </div>
+            <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 border border-green-200">
+                <p class="text-xs font-bold text-green-600 uppercase tracking-widest mb-2">Profit Growth Balance</p>
+                <p id="profitGrowthBalance" class="text-3xl font-extrabold text-green-700">-</p>
+            </div>
+            <div class="bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl p-6 border border-amber-200">
+                <p class="text-xs font-bold text-amber-600 uppercase tracking-widest mb-2">Best Growth Performance</p>
+                <p id="bestGrowth" class="text-3xl font-extrabold text-amber-700">-</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity (Public) -->
+    <div id="recentActivity" class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-6">
+        <h2 class="text-lg font-bold text-slate-900 mb-6">Recent Activity</h2>
+        <div id="recentActivityList" class="space-y-4">
+            <div class="text-center py-8 text-slate-500">
+                <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
+                <p>Loading activity...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Information Box -->
+    <div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-6">
+        <div class="flex items-start gap-4">
+            <i class="fa-solid fa-info-circle text-blue-600 text-2xl shrink-0 mt-1"></i>
+            <div>
+                <h3 class="text-lg font-bold text-blue-900 mb-2">ℹ️ Profile Information</h3>
+                <p class="text-sm text-blue-800 leading-relaxed">
+                    This profile displays public information and portfolio statistics. Fund transfers between users are processed securely through the platform. All transactions are recorded and can be viewed in your transaction history. Please ensure you trust the recipient before sending funds.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alternative State: Private Profile (Hidden by default, shown via JavaScript if needed) -->
+    <div id="privateProfile" class="hidden bg-white rounded-2xl border border-gray-200 shadow-sm p-8 text-center">
+        <i class="fa-solid fa-lock text-6xl text-slate-300 mb-4"></i>
+        <h2 class="text-2xl font-bold text-slate-800 mb-2">Private Profile</h2>
+        <p class="text-slate-500">This user has chosen to keep their profile private.</p>
+    </div>
+
+    <!-- Alternative State: Stats Disabled (Hidden by default) -->
+    <div id="statsDisabled" class="hidden bg-white rounded-2xl border border-gray-200 shadow-sm p-6 text-center">
+        <i class="fa-solid fa-chart-line text-4xl text-slate-300 mb-4"></i>
+        <p class="text-slate-500">Profit growth statistics are not publicly available for this profile.</p>
+    </div>
+
+</main>
+
+<!-- Request Access Success Modal -->
+<div id="requestAccessSuccessModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center animate-fade-in">
+        <!-- Success Icon -->
+        <div class="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-6">
+            <i class="fa-solid fa-check-circle text-blue-600 text-4xl"></i>
+        </div>
+        
+        <!-- Success Message -->
+        <h2 class="text-2xl font-bold text-slate-900 mb-3">Request Sent Successfully!</h2>
+        <p class="text-slate-600 mb-6">Your profile view request has been sent to the profile owner.</p>
+        
+        <!-- Information Box -->
+        <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-6">
+            <div class="space-y-3">
+                <div class="flex items-start gap-3">
+                    <i class="fa-solid fa-envelope text-blue-600 shrink-0 mt-0.5"></i>
+                    <div class="text-left">
+                        <p class="text-sm font-bold text-blue-900 mb-1">What happens next?</p>
+                        <p class="text-xs text-blue-800 leading-relaxed">
+                            The profile owner will receive an email notification. You'll be notified via email once they approve or decline your request.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Action Button -->
+        <button onclick="closeRequestAccessModal()" class="w-full px-6 py-3 bg-blue-600 text-white rounded-xl font-bold hover:opacity-90 transition">
+            <i class="fa-solid fa-check mr-2"></i> Got It
+        </button>
+    </div>
+</div>
+
+<style>
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    .animate-fade-in {
+        animation: fade-in 0.3s ease-out;
+    }
+</style>
+
+<script>
+    let targetUserId = null;
+
+    // Get user ID from URL
+    function getUserIdFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('user_id') || params.get('id');
+    }
+
+    // Get initials from name
+    function getInitials(name) {
+        if (!name) return 'U';
+        const parts = name.trim().split(' ');
+        if (parts.length >= 2) {
+            return (parts[0][0] + parts[1][0]).toUpperCase();
+        }
+        return name.substring(0, 2).toUpperCase();
+    }
+
+    // Format date
+    function formatMemberSince(dateString) {
+        if (!dateString) return 'Unknown';
+        const date = new Date(dateString);
+        return `Member since: ${date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}`;
+    }
+
+    // Check access and load user profile
+    async function loadUserProfile() {
+        targetUserId = getUserIdFromUrl();
+        if (!targetUserId) {
+            Utils?.showToast?.('No user ID provided', 'error');
+            setTimeout(() => {
+                window.location.href = '/profile-search.html';
+            }, 2000);
+            return;
+        }
+
+        try {
+            // First, check access permissions
+            const accessData = await API.user.checkProfileViewAccess(targetUserId);
+            const canView = accessData.can_view;
+            const reason = accessData.reason;
+
+            // Load basic profile info (always available)
+            const data = await API.user.getUserProfile(targetUserId);
+            const user = data.user;
+            
+            if (!user) {
+                Utils?.showToast?.('User not found', 'error');
+                return;
+            }
+
+            // Update avatar
+            const initials = getInitials(user.display_name || user.name || user.username);
+            document.getElementById('avatarInitials').textContent = initials;
+            
+            if (user.avatar_url) {
+                const img = document.getElementById('avatarImage');
+                let imageUrl = user.avatar_url;
+                if (imageUrl.startsWith('/storage/')) {
+                    imageUrl = imageUrl;
+                } else if (!imageUrl.startsWith('http://') && !imageUrl.startsWith('https://')) {
+                    imageUrl = '/' + imageUrl.replace(/^\//, '');
+                }
+                img.src = imageUrl;
+                img.onerror = function() {
+                    img.classList.add('hidden');
+                    document.getElementById('avatarInitials').classList.remove('hidden');
+                };
+                img.onload = function() {
+                    img.classList.remove('hidden');
+                    document.getElementById('avatarInitials').classList.add('hidden');
+                };
+            }
+
+            // Update profile info
+            const username = user.username ? `@${user.username}` : 'User';
+            document.getElementById('profileUsername').textContent = username;
+            document.getElementById('profileDisplayName').textContent = user.display_name || user.name || username;
+            document.getElementById('profileBio').textContent = user.bio || 'No bio available.';
+            document.getElementById('memberSince').textContent = formatMemberSince(user.created_at);
+
+            // Handle access permissions
+            if (canView) {
+                // User has access - show portfolio stats and activity
+                document.getElementById('portfolioStats').classList.remove('hidden');
+                document.getElementById('recentActivity').classList.remove('hidden');
+                document.getElementById('requestAccessBtn').classList.add('hidden');
+                document.getElementById('accessRequestStatus').classList.add('hidden');
+                
+                // Load portfolio statistics
+                await loadPortfolioStatistics(targetUserId);
+            } else {
+                // User doesn't have access
+                document.getElementById('portfolioStats').classList.add('hidden');
+                document.getElementById('recentActivity').classList.add('hidden');
+                
+                if (reason === 'pending_request') {
+                    // Show pending status
+                    document.getElementById('requestAccessBtn').classList.add('hidden');
+                    document.getElementById('accessRequestStatus').classList.remove('hidden');
+                } else if (reason === 'no_request') {
+                    // Show request button
+                    document.getElementById('requestAccessBtn').classList.remove('hidden');
+                    document.getElementById('accessRequestStatus').classList.add('hidden');
+                } else {
+                    // Declined or other reason - show request button anyway (they can try again)
+                    document.getElementById('requestAccessBtn').classList.remove('hidden');
+                    document.getElementById('accessRequestStatus').classList.add('hidden');
+                }
+            }
+        } catch (error) {
+            console.error('Failed to load user profile:', error);
+            Utils?.showToast?.('Failed to load user profile', 'error');
+        }
+    }
+
+    // Request profile access
+    async function requestProfileAccess() {
+        if (!targetUserId) {
+            Utils?.showToast?.('No user ID available', 'error');
+            return;
+        }
+
+        const requestBtn = document.getElementById('requestAccessBtn');
+        const originalText = requestBtn.innerHTML;
+        requestBtn.disabled = true;
+        requestBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending Request...';
+
+        try {
+            const response = await API.user.createProfileViewRequest(targetUserId);
+            
+            // Show success modal
+            showRequestAccessSuccessModal();
+            
+            // Update UI to show pending status
+            requestBtn.classList.add('hidden');
+            document.getElementById('accessRequestStatus').classList.remove('hidden');
+        } catch (error) {
+            console.error('Failed to send request:', error);
+            const message = error.response?.message || error.message || 'Failed to send request';
+            Utils?.showToast?.(message, 'error');
+        } finally {
+            requestBtn.disabled = false;
+            requestBtn.innerHTML = originalText;
+        }
+    }
+
+    // Show request access success modal
+    function showRequestAccessSuccessModal() {
+        const modal = document.getElementById('requestAccessSuccessModal');
+        modal.classList.remove('hidden');
+    }
+
+    // Close request access success modal
+    function closeRequestAccessModal() {
+        const modal = document.getElementById('requestAccessSuccessModal');
+        modal.classList.add('hidden');
+    }
+
+    // Load portfolio statistics for the viewed user
+    async function loadPortfolioStatistics(userId) {
+        try {
+            console.log('Loading portfolio statistics for user:', userId);
+            const response = await API.user.getUserPortfolio(userId);
+            console.log('Portfolio API Response:', response);
+            
+            const stats = response.statistics || {};
+            const transactions = response.recent_transactions || [];
+            
+            console.log('Statistics:', stats);
+            console.log('Best Growth Performance from API:', stats.best_growth_performance);
+
+            // Update portfolio statistics
+            // Real wallet balance
+            const realBalance = parseFloat(stats.real_balance || 0);
+            const realBalanceElement = document.getElementById('realBalance');
+            if (realBalanceElement) {
+                realBalanceElement.textContent = `$${realBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            }
+            
+            // Profit growth balance
+            const profitGrowthBalance = parseFloat(stats.total_profit_growth_balance || 0);
+            const profitGrowthBalanceElement = document.getElementById('profitGrowthBalance');
+            if (profitGrowthBalanceElement) {
+                profitGrowthBalanceElement.textContent = `$${profitGrowthBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            }
+            
+            // Format best growth performance (percentage)
+            const bestGrowth = parseFloat(stats.best_growth_performance || 0);
+            const bestGrowthElement = document.getElementById('bestGrowth');
+            console.log('Best Growth (parsed):', bestGrowth, 'Type:', typeof bestGrowth, 'Is NaN:', isNaN(bestGrowth));
+            
+            if (bestGrowthElement) {
+                if (!isNaN(bestGrowth) && bestGrowth > 0) {
+                    bestGrowthElement.textContent = `${bestGrowth.toFixed(2)}%`;
+                    console.log('Set best growth to:', `${bestGrowth.toFixed(2)}%`);
+                } else {
+                    // If 0, null, or NaN, show default 20%
+                    bestGrowthElement.textContent = '20.00%';
+                    console.log('Set best growth to default: 20.00%');
+                }
+            } else {
+                console.error('bestGrowthElement not found in DOM');
+            }
+
+            // Update recent activity
+            renderRecentActivity(transactions);
+
+        } catch (error) {
+            console.error('Failed to load portfolio statistics:', error);
+            console.error('Error details:', error.response || error.message);
+            // If access denied, don't show error - just keep stats hidden
+            if (error.status !== 403) {
+                console.error('Error loading portfolio:', error);
+            }
+        }
+    }
+
+    // Render recent activity
+    function renderRecentActivity(transactions) {
+        const container = document.getElementById('recentActivityList');
+        
+        if (!transactions || transactions.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-8 text-slate-500">
+                    <i class="fa-solid fa-inbox text-3xl mb-2"></i>
+                    <p>No recent activity</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = transactions.map(transaction => {
+            const icon = getTransactionIcon(transaction.type);
+            const description = transaction.description || getTransactionDescription(transaction);
+            const date = formatTransactionDate(transaction.created_at);
+            
+            return `
+                <div class="flex items-start gap-4 pb-4 border-b border-gray-100 last:border-0">
+                    <div class="w-10 h-10 rounded-full ${icon.bg} flex items-center justify-center shrink-0">
+                        <i class="${icon.icon} ${icon.color}"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm font-medium text-slate-800">
+                            ${description}
+                        </p>
+                        <p class="text-xs text-slate-500 mt-1">${date}</p>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // Get transaction icon based on type
+    function getTransactionIcon(type) {
+        const icons = {
+            'deposit': { icon: 'fa-solid fa-arrow-down', bg: 'bg-green-100', color: 'text-green-600' },
+            'withdrawal': { icon: 'fa-solid fa-arrow-up', bg: 'bg-red-100', color: 'text-red-600' },
+            'transfer': { icon: 'fa-solid fa-exchange-alt', bg: 'bg-blue-100', color: 'text-blue-600' },
+            'profit_growth': { icon: 'fa-solid fa-chart-line', bg: 'bg-purple-100', color: 'text-purple-600' },
+            'credit': { icon: 'fa-solid fa-plus-circle', bg: 'bg-green-100', color: 'text-green-600' },
+        };
+        return icons[type] || { icon: 'fa-solid fa-circle', bg: 'bg-gray-100', color: 'text-gray-600' };
+    }
+
+    // Get transaction description
+    function getTransactionDescription(transaction) {
+        const amount = parseFloat(transaction.amount || 0);
+        const formattedAmount = `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        
+        switch (transaction.type) {
+            case 'deposit':
+                return `Deposited <span class="font-bold">${formattedAmount}</span>`;
+            case 'withdrawal':
+                return `Withdrew <span class="font-bold">${formattedAmount}</span>`;
+            case 'transfer':
+                return `Transferred <span class="font-bold">${formattedAmount}</span>`;
+            case 'profit_growth':
+                return `Profit growth: <span class="font-bold">${formattedAmount}</span>`;
+            case 'credit':
+                return `Received credit: <span class="font-bold">${formattedAmount}</span>`;
+            default:
+                return `Transaction: <span class="font-bold">${formattedAmount}</span>`;
+        }
+    }
+
+    // Format transaction date
+    function formatTransactionDate(dateString) {
+        if (!dateString) return 'Unknown';
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        
+        if (diffDays === 0) {
+            return 'Today';
+        } else if (diffDays === 1) {
+            return 'Yesterday';
+        } else if (diffDays < 7) {
+            return `${diffDays} days ago`;
+        } else if (diffDays < 30) {
+            const weeks = Math.floor(diffDays / 7);
+            return `${weeks} week${weeks > 1 ? 's' : ''} ago`;
+        } else {
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+    }
+
+    // Send funds to this user
+    function sendFundsToUser() {
+        if (targetUserId) {
+            window.location.href = `/send-simu-funds.html?user_id=${targetUserId}`;
+        } else {
+            window.location.href = '/send-simu-funds.html';
+        }
+    }
+
+    // Initialize on page load
+    // Load logged-in user data for header
+    async function loadLoggedInUser() {
+        try {
+            // Get current user from API
+            const response = await API.get('/api/auth/user');
+            const user = response.user || response;
+            
+            if (user) {
+                // Update header user avatar and name
+                const initials = getInitials(user.display_name || user.name || user.username || 'U');
+                const headerInitials = document.getElementById('headerUserInitials');
+                const headerImage = document.getElementById('headerUserImage');
+                const headerName = document.getElementById('headerUserName');
+                
+                if (headerInitials) {
+                    headerInitials.textContent = initials;
+                }
+                
+                if (headerName) {
+                    headerName.textContent = user.display_name || user.name || user.username || 'User';
+                }
+                
+                if (user.avatar_url && headerImage) {
+                    let imageUrl = user.avatar_url;
+                    if (imageUrl.startsWith('/storage/')) {
+                        imageUrl = imageUrl;
+                    } else if (!imageUrl.startsWith('http://') && !imageUrl.startsWith('https://')) {
+                        imageUrl = '/' + imageUrl.replace(/^\//, '');
+                    }
+                    headerImage.src = imageUrl;
+                    headerImage.onerror = function() {
+                        headerImage.classList.add('hidden');
+                        if (headerInitials) headerInitials.classList.remove('hidden');
+                    };
+                    headerImage.onload = function() {
+                        headerImage.classList.remove('hidden');
+                        if (headerInitials) headerInitials.classList.add('hidden');
+                    };
+                }
+            }
+        } catch (error) {
+            console.error('Failed to load logged-in user:', error);
+        }
+    }
+
+    // Toggle header user menu dropdown
+    function toggleHeaderUserMenu() {
+        const dropdown = document.getElementById('headerUserMenuDropdown');
+        if (dropdown) {
+            dropdown.classList.toggle('hidden');
+        }
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        const dropdown = document.getElementById('headerUserMenuDropdown');
+        const button = event.target.closest('[onclick="toggleHeaderUserMenu()"]');
+        if (dropdown && !dropdown.contains(event.target) && !button) {
+            dropdown.classList.add('hidden');
+        }
+        
+        // Close notification dropdown when clicking outside
+        const notificationDropdown = document.getElementById('notificationDropdown');
+        const notificationButton = event.target.closest('[onclick="toggleNotificationDropdown()"]');
+        if (notificationDropdown && !notificationDropdown.contains(event.target) && !notificationButton) {
+            notificationDropdown.classList.add('hidden');
+        }
+    });
+
+    // Notification Dropdown Functions
+    window.toggleNotificationDropdown = function() {
+        const dropdown = document.getElementById('notificationDropdown');
+        if (dropdown) {
+            const isHidden = dropdown.classList.contains('hidden');
+            dropdown.classList.toggle('hidden');
+            if (isHidden) {
+                loadNotificationDropdown();
+            }
+        }
+    };
+
+    async function loadNotificationDropdown() {
+        const dropdownList = document.getElementById('notificationDropdownList');
+        if (!dropdownList) return;
+        try {
+            dropdownList.innerHTML = '<div class="p-4 text-center text-slate-500"><i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i><p class="text-sm">Loading notifications...</p></div>';
+            const dashboardData = await API.user.getDashboard();
+            const transactions = dashboardData.recent_transactions || [];
+            const activityLogs = dashboardData.recent_activity || [];
+            const allNotifications = [];
+            transactions.slice(0, 10).forEach(tx => {
+                allNotifications.push({ type: 'transaction', id: tx.id, action: tx.type, amount: tx.amount, currency: tx.currency || 'USD', description: tx.description || '', status: tx.status, created_at: tx.created_at });
+            });
+            activityLogs.slice(0, 10).forEach(activity => {
+                allNotifications.push({ type: 'activity', id: activity.id, action: activity.action, description: activity.description || '', created_at: activity.created_at });
+            });
+            allNotifications.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            const recentNotifications = allNotifications.slice(0, 5);
+            const badge = document.getElementById('notificationBadge');
+            if (badge) badge.classList.toggle('hidden', recentNotifications.length === 0);
+            if (recentNotifications.length === 0) {
+                dropdownList.innerHTML = '<div class="p-4 text-center text-slate-500"><p class="text-sm">No notifications</p></div>';
+                return;
+            }
+            dropdownList.innerHTML = recentNotifications.map(notif => {
+                const date = formatNotificationDate(notif.created_at);
+                const icon = getNotificationIconDropdown(notif.action || notif.type);
+                const title = getNotificationTitleDropdown(notif);
+                const description = notif.description || '';
+                return `<div class="p-4 hover:bg-gray-50 transition cursor-pointer" onclick="handleNotificationClick('${notif.type}', ${notif.id})"><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full ${icon.bg} flex items-center justify-center shrink-0"><i class="fa-solid ${icon.icon} ${icon.color} text-sm"></i></div><div class="flex-1 min-w-0"><p class="text-sm font-bold text-slate-800 mb-1">${title}</p>${description ? `<p class="text-xs text-slate-500 line-clamp-2 mb-1">${description}</p>` : ''}<p class="text-xs text-slate-400">${date}</p></div></div></div>`;
+            }).join('');
+        } catch (error) {
+            console.error('Failed to load notifications:', error);
+            dropdownList.innerHTML = '<div class="p-4 text-center text-red-500"><p class="text-sm">Failed to load notifications</p></div>';
+        }
+    }
+
+    function formatNotificationDate(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+        if (diffMins < 1) return 'Just now';
+        if (diffMins < 60) return `${diffMins}m ago`;
+        if (diffHours < 24) return `${diffHours}h ago`;
+        if (diffDays < 7) return `${diffDays}d ago`;
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    function getNotificationIconDropdown(action) {
+        const icons = { 'deposit': { icon: 'fa-arrow-down', color: 'text-green-600', bg: 'bg-green-100' }, 'withdrawal': { icon: 'fa-arrow-up', color: 'text-red-600', bg: 'bg-red-100' }, 'credit': { icon: 'fa-gift', color: 'text-blue-600', bg: 'bg-blue-100' }, 'debit': { icon: 'fa-minus', color: 'text-orange-600', bg: 'bg-orange-100' }, 'transfer_sent': { icon: 'fa-paper-plane', color: 'text-blue-600', bg: 'bg-blue-100' }, 'transfer_received': { icon: 'fa-inbox', color: 'text-green-600', bg: 'bg-green-100' }, 'profit_growth_created': { icon: 'fa-chart-line', color: 'text-purple-600', bg: 'bg-purple-100' }, 'profit_growth_updated': { icon: 'fa-sync', color: 'text-blue-600', bg: 'bg-blue-100' } };
+        return icons[action] || { icon: 'fa-bell', color: 'text-slate-600', bg: 'bg-slate-100' };
+    }
+
+    function getNotificationTitleDropdown(notif) {
+        const action = notif.action || notif.type;
+        const actionNames = { 'deposit': 'Deposit', 'withdrawal': 'Withdrawal', 'credit': 'Credit', 'debit': 'Debit', 'transfer_sent': 'Funds Sent', 'transfer_received': 'Funds Received', 'profit_growth_created': 'Profit Growth Created', 'profit_growth_updated': 'Profit Growth Updated' };
+        const actionName = actionNames[action] || action.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        if (notif.amount) {
+            const amount = parseFloat(notif.amount);
+            const sign = action === 'deposit' || action === 'credit' || action === 'transfer_received' ? '+' : '-';
+            return `${actionName}: ${sign}$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+        return actionName;
+    }
+
+    window.handleNotificationClick = function(type, id) {
+        window.location.href = type === 'transaction' ? '#transactions' : '#notifications';
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+        loadUserProfile();
+        loadLoggedInUser();
+    });
+</script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/forms.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

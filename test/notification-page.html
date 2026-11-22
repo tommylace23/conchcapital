@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Notifications | ConchCapital</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen" data-page="notifications">
+
+<nav class="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between">
+    <div class="text-xl font-bold tracking-tight text-slate-800">Conch<span class="text-[#10B981]">Capital</span></div>
+    <div class="flex items-center gap-6">
+        <a href="#" data-route="dashboard" class="text-sm font-medium text-slate-500 hover:text-slate-800">Dashboard</a>
+        <a href="#" data-route="profitGrowths" class="text-sm font-medium text-slate-500 hover:text-slate-800">Profit Growth</a>
+        <a href="#" data-route="profile" class="text-sm font-medium text-slate-500 hover:text-slate-800">Profile</a>
+        <a href="#" data-route="notifications" class="text-sm font-bold text-slate-800 border-b-2 border-slate-800 pb-4 mt-4">Notifications</a>
+        <a href="#" data-route="settings" class="text-sm font-medium text-slate-500 hover:text-slate-800">Settings</a>
+        <div class="flex items-center gap-4">
+            <div class="relative">
+                <button onclick="toggleNotificationDropdown()" class="relative text-slate-400 hover:text-slate-600 transition">
+                    <i class="fa-regular fa-bell text-xl"></i>
+                    <span id="notificationBadge" class="hidden absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
+                </button>
+                <!-- Notification Dropdown -->
+                <div id="notificationDropdown" class="hidden absolute right-0 top-full mt-2 w-80 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden z-50 max-h-96 overflow-y-auto">
+                    <div class="p-4 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white">
+                        <h3 class="text-sm font-bold text-slate-900">Notifications</h3>
+                        <a href="#" data-route="notifications" class="text-xs font-bold text-blue-600 hover:text-blue-800">View All</a>
+                    </div>
+                    <div id="notificationDropdownList" class="divide-y divide-gray-100">
+                        <div class="p-4 text-center text-slate-500">
+                            <i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i>
+                            <p class="text-sm">Loading notifications...</p>
+                        </div>
+                    </div>
+                    <div class="p-3 border-t border-gray-200 bg-gray-50 text-center">
+                        <a href="#" data-route="notifications" class="text-xs font-bold text-blue-600 hover:text-blue-800">View All Notifications</a>
+                    </div>
+                </div>
+            </div>
+            <div class="relative">
+                <button onclick="toggleHeaderUserMenu()" class="flex items-center space-x-3 px-3 py-2 border border-gray-200 rounded-xl text-sm font-bold text-slate-600 hover:bg-gray-50 transition">
+                    <div id="headerUserAvatar" class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-xs shrink-0 overflow-hidden">
+                        <span id="headerUserInitials">U</span>
+                        <img id="headerUserImage" src="" alt="Profile" class="hidden w-8 h-8 rounded-full object-cover">
+                    </div>
+                    <span id="headerUserName" class="hidden md:inline">User</span>
+                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                </button>
+                <!-- User Menu Dropdown -->
+                <div id="headerUserMenuDropdown" class="hidden absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden z-50">
+                    <a href="#" data-route="profile" class="flex items-center space-x-3 px-4 py-3 text-sm text-slate-700 hover:bg-gray-50 transition">
+                        <i class="fa-solid fa-user text-sm w-5"></i>
+                        <span>View Profile</span>
+                    </a>
+                    <a href="#" data-route="settings" class="flex items-center space-x-3 px-4 py-3 text-sm text-slate-700 hover:bg-gray-50 transition">
+                        <i class="fa-solid fa-gear text-sm w-5"></i>
+                        <span>Settings</span>
+                    </a>
+                    <div class="border-t border-gray-200"></div>
+                    <button onclick="handleLogout()" class="w-full flex items-center space-x-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition">
+                        <i class="fa-solid fa-right-from-bracket text-sm w-5"></i>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-3xl mx-auto py-10 px-6">
+    
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+            <h1 class="text-3xl font-extrabold text-slate-900 mb-2">Notifications</h1>
+            <p class="text-slate-500">Stay updated on your account activity</p>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="text-sm text-slate-500">
+                <span id="unreadCount">3</span> unread
+            </span>
+        </div>
+    </div>
+
+    <!-- Filter and Actions Bar -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 mb-6">
+        <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div class="flex gap-2">
+                <button id="filterAll" class="filter-btn px-4 py-2 bg-slate-800 text-white rounded-lg text-sm font-bold">All</button>
+                <button id="filterUnread" class="filter-btn px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-gray-50">Unread</button>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="markAllAsRead()" class="px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-gray-50 transition">
+                    Mark All Read
+                </button>
+                <button onclick="clearAllNotifications()" class="px-4 py-2 bg-white border border-red-200 text-red-600 rounded-lg text-sm font-medium hover:bg-red-50 transition">
+                    Clear All
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile View Requests Section -->
+    <div id="profileViewRequestsSection" class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-6">
+        <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-user-lock text-blue-600"></i>
+            Profile View Requests
+        </h2>
+        <div id="profileViewRequestsList" class="space-y-3">
+            <div class="text-center py-8 text-slate-500">
+                <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
+                <p>Loading requests...</p>
+            </div>
+        </div>
+        <div id="noProfileViewRequests" class="hidden text-center py-8 text-slate-500">
+            <i class="fa-solid fa-check-circle text-3xl mb-2"></i>
+            <p>No pending profile view requests</p>
+        </div>
+    </div>
+
+    <!-- Notifications List -->
+    <div id="notificationsList" class="space-y-3">
+        <div class="text-center py-8 text-slate-500">
+            <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
+            <p>Loading notifications...</p>
+        </div>
+    </div>
+
+    <!-- Load More / Pagination -->
+    <div class="mt-8 text-center">
+        <button class="px-6 py-3 bg-white border border-gray-200 text-slate-600 rounded-xl font-bold hover:bg-gray-50 transition">
+            Load More
+        </button>
+    </div>
+
+    <!-- Empty State (Hidden by default) -->
+    <div id="emptyState" class="hidden text-center py-16">
+        <i class="fa-solid fa-bell-slash text-6xl text-slate-300 mb-4"></i>
+        <h3 class="text-xl font-bold text-slate-800 mb-2">No notifications</h3>
+        <p class="text-slate-500">You're all caught up! Check back later for updates.</p>
+    </div>
+
+</main>
+
+<script>
+    // Load profile view requests
+    async function loadProfileViewRequests() {
+        try {
+            const data = await API.user.getPendingProfileViewRequests();
+            const requests = data.requests || [];
+            const container = document.getElementById('profileViewRequestsList');
+            const noRequests = document.getElementById('noProfileViewRequests');
+            
+            if (requests.length === 0) {
+                container.classList.add('hidden');
+                noRequests.classList.remove('hidden');
+                return;
+            }
+            
+            container.classList.remove('hidden');
+            noRequests.classList.add('hidden');
+            
+            container.innerHTML = requests.map(request => {
+                const requester = request.requester;
+                const initials = (requester.display_name || requester.name || requester.username || 'U').substring(0, 2).toUpperCase();
+                const displayName = requester.display_name || requester.name || requester.username || 'Unknown';
+                const username = requester.username ? `@${requester.username}` : requester.email || '';
+                const avatarUrl = requester.avatar_url || '';
+                let imageUrl = '';
+                if (avatarUrl) {
+                    if (avatarUrl.startsWith('/storage/')) {
+                        imageUrl = avatarUrl;
+                    } else if (!avatarUrl.startsWith('http://') && !avatarUrl.startsWith('https://')) {
+                        imageUrl = '/' + avatarUrl.replace(/^\//, '');
+                    } else {
+                        imageUrl = avatarUrl;
+                    }
+                }
+                const hasAvatar = imageUrl && imageUrl.trim() !== '';
+                
+                return `
+                    <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold relative overflow-hidden shrink-0">
+                                ${hasAvatar ? `<img src="${imageUrl}" alt="${displayName}" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />` : ''}
+                                <span class="${hasAvatar ? 'hidden' : ''}">${initials}</span>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-bold text-slate-800 mb-1">
+                                    <strong>${displayName}</strong> (${username}) wants to view your profile
+                                </p>
+                                <p class="text-xs text-slate-500 mb-3">${new Date(request.created_at).toLocaleString()}</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <button onclick="approveRequest(${request.id})" class="px-4 py-2 bg-green-600 text-white rounded-lg text-xs font-bold hover:bg-green-700 transition">
+                                        <i class="fa-solid fa-check"></i> Approve
+                                    </button>
+                                    <button onclick="declineRequest(${request.id})" class="px-4 py-2 bg-red-600 text-white rounded-lg text-xs font-bold hover:bg-red-700 transition">
+                                        <i class="fa-solid fa-times"></i> Decline
+                                    </button>
+                                    <a href="/user-profile-view.html?user_id=${requester.id}" class="px-4 py-2 bg-gray-100 text-slate-600 rounded-lg text-xs font-bold hover:bg-gray-200 transition inline-block">
+                                        View Their Profile
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        } catch (error) {
+            console.error('Failed to load profile view requests:', error);
+            document.getElementById('profileViewRequestsList').innerHTML = `
+                <div class="text-center py-4 text-red-500">
+                    <p>Failed to load requests. Please refresh the page.</p>
+                </div>
+            `;
+        }
+    }
+
+    // Approve request
+    async function approveRequest(requestId) {
+        try {
+            await API.user.approveProfileViewRequest(requestId);
+            Utils?.showToast?.('Request approved successfully!', 'success');
+            await loadProfileViewRequests();
+        } catch (error) {
+            console.error('Failed to approve request:', error);
+            const message = error.response?.message || error.message || 'Failed to approve request';
+            Utils?.showToast?.(message, 'error');
+        }
+    }
+
+    // Decline request
+    async function declineRequest(requestId) {
+        if (!confirm('Are you sure you want to decline this profile view request?')) {
+            return;
+        }
+        
+        try {
+            await API.user.declineProfileViewRequest(requestId);
+            Utils?.showToast?.('Request declined.', 'info');
+            await loadProfileViewRequests();
+        } catch (error) {
+            console.error('Failed to decline request:', error);
+            const message = error.response?.message || error.message || 'Failed to decline request';
+            Utils?.showToast?.(message, 'error');
+        }
+    }
+
+    // Load logged-in user data for header
+    async function loadLoggedInUser() {
+        try {
+            // Get current user from API
+            const response = await API.get('/api/auth/user');
+            const user = response.user || response;
+            
+            if (user) {
+                // Update header user avatar and name
+                const initials = getInitials(user.display_name || user.name || user.username || 'U');
+                const headerInitials = document.getElementById('headerUserInitials');
+                const headerImage = document.getElementById('headerUserImage');
+                const headerName = document.getElementById('headerUserName');
+                
+                if (headerInitials) {
+                    headerInitials.textContent = initials;
+                }
+                
+                if (headerName) {
+                    headerName.textContent = user.display_name || user.name || user.username || 'User';
+                }
+                
+                if (user.avatar_url && headerImage) {
+                    let imageUrl = user.avatar_url;
+                    if (imageUrl.startsWith('/storage/')) {
+                        imageUrl = imageUrl;
+                    } else if (!imageUrl.startsWith('http://') && !imageUrl.startsWith('https://')) {
+                        imageUrl = '/' + imageUrl.replace(/^\//, '');
+                    }
+                    headerImage.src = imageUrl;
+                    headerImage.onerror = function() {
+                        headerImage.classList.add('hidden');
+                        if (headerInitials) headerInitials.classList.remove('hidden');
+                    };
+                    headerImage.onload = function() {
+                        headerImage.classList.remove('hidden');
+                        if (headerInitials) headerInitials.classList.add('hidden');
+                    };
+                }
+            }
+        } catch (error) {
+            console.error('Failed to load logged-in user:', error);
+        }
+    }
+
+    // Toggle header user menu dropdown
+    function toggleHeaderUserMenu() {
+        const dropdown = document.getElementById('headerUserMenuDropdown');
+        if (dropdown) {
+            dropdown.classList.toggle('hidden');
+        }
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        const dropdown = document.getElementById('headerUserMenuDropdown');
+        const button = event.target.closest('[onclick="toggleHeaderUserMenu()"]');
+        if (dropdown && !dropdown.contains(event.target) && !button) {
+            dropdown.classList.add('hidden');
+        }
+        
+        // Close notification dropdown when clicking outside
+        const notificationDropdown = document.getElementById('notificationDropdown');
+        const notificationButton = event.target.closest('[onclick="toggleNotificationDropdown()"]');
+        if (notificationDropdown && !notificationDropdown.contains(event.target) && !notificationButton) {
+            notificationDropdown.classList.add('hidden');
+        }
+    });
+
+    // Get initials helper
+    function getInitials(name) {
+        if (!name) return 'U';
+        const parts = name.trim().split(/\s+/);
+        if (parts.length >= 2) {
+            return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+        }
+        return name.substring(0, 2).toUpperCase();
+    }
+
+    // Load notifications from activity logs and transactions
+    async function loadNotifications() {
+        try {
+            const dashboardData = await API.user.getDashboard();
+            const transactions = dashboardData.recent_transactions || [];
+            const activityLogs = dashboardData.recent_activity || [];
+            
+            // Combine and sort by date
+            const allNotifications = [];
+            
+            // Add transactions as notifications (exclude pending deposits)
+            transactions
+                .filter(tx => {
+                    // Don't show pending deposits - they shouldn't appear until admin confirms
+                    if (tx.type === 'deposit' && tx.status === 'pending') {
+                        return false;
+                    }
+                    return true;
+                })
+                .forEach(tx => {
+                    allNotifications.push({
+                        type: 'transaction',
+                        id: tx.id,
+                        action: tx.type,
+                        amount: tx.amount,
+                        currency: tx.currency || 'USD',
+                        description: tx.description || '',
+                        status: tx.status,
+                        date: tx.created_at,
+                        read: tx.read || false
+                    });
+                });
+            
+            // Add activity logs as notifications
+            activityLogs.forEach(log => {
+                allNotifications.push({
+                    type: 'activity',
+                    id: log.id,
+                    action: log.action,
+                    amount: log.amount,
+                    currency: log.currency || 'USD',
+                    description: log.description || '',
+                    status: 'completed',
+                    date: log.created_at,
+                    read: log.read || false
+                });
+            });
+            
+            // Sort by date (most recent first)
+            allNotifications.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Update unread count
+            const unreadCount = allNotifications.filter(n => !n.read).length;
+            document.getElementById('unreadCount').textContent = unreadCount;
+            
+            // Render notifications
+            renderNotifications(allNotifications);
+            
+        } catch (error) {
+            console.error('Failed to load notifications:', error);
+            document.getElementById('notificationsList').innerHTML = `
+                <div class="text-center py-8 text-red-500">
+                    <p>Failed to load notifications. Please refresh the page.</p>
+                </div>
+            `;
+        }
+    }
+
+    // Render notifications
+    function renderNotifications(notifications) {
+        const container = document.getElementById('notificationsList');
+        const emptyState = document.getElementById('emptyState');
+        
+        if (!notifications || notifications.length === 0) {
+            container.innerHTML = '';
+            emptyState.classList.remove('hidden');
+            return;
+        }
+        
+        emptyState.classList.add('hidden');
+        
+        container.innerHTML = notifications.map(notification => {
+            return createNotificationCard(notification);
+        }).join('');
+        
+        // Re-attach event listeners
+        attachNotificationEventListeners();
+    }
+
+    // Create notification card HTML
+    function createNotificationCard(notification) {
+        const isUnread = !notification.read;
+        const borderClass = isUnread ? 'border-2' : 'border';
+        const borderColorClass = isUnread ? getBorderColorClass(notification.action) : 'border-gray-200';
+        const iconClass = getNotificationIcon(notification.action);
+        const timeAgo = formatTimeAgo(notification.date);
+        const description = getNotificationDescription(notification);
+        
+        return `
+            <div class="bg-white rounded-2xl ${borderClass} ${borderColorClass} shadow-sm p-6 hover:shadow-md transition relative" data-notification-id="${notification.id}">
+                ${isUnread ? `<div class="absolute top-4 right-4"><span class="w-3 h-3 ${iconClass.color.replace('text-', 'bg-')} rounded-full"></span></div>` : ''}
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-full ${iconClass.bg} flex items-center justify-center shrink-0">
+                        <i class="${iconClass.icon} ${iconClass.color}"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        ${description}
+                        <p class="text-xs text-slate-500 mb-3">${timeAgo}</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${isUnread ? `<button onclick="markAsRead(${notification.id}, '${notification.type}')" class="px-4 py-2 bg-gray-100 text-slate-600 rounded-lg text-xs font-bold hover:bg-gray-200 transition">Mark as Read</button>` : ''}
+                            ${getNotificationActionButton(notification)}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Get notification description based on action type
+    function getNotificationDescription(notification) {
+        const amount = parseFloat(notification.amount || 0);
+        const formattedAmount = amount > 0 ? `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '';
+        const description = notification.description || '';
+        
+        switch (notification.action) {
+            case 'transfer_received':
+                // Try to extract sender username from description
+                // Descriptions might be: "Received funds from @username" or "Funds received from @username" or just contain username
+                let sender = 'another user';
+                const senderPatterns = [
+                    /from\s+@?(\w+)/i,
+                    /@(\w+)/,
+                    /(\w+)(?:\s+sent|sends)?/i
+                ];
+                for (const pattern of senderPatterns) {
+                    const match = description.match(pattern);
+                    if (match && match[1]) {
+                        sender = `@${match[1]}`;
+                        break;
+                    }
+                }
+                // Extract message if in quotes
+                const messageMatch = description.match(/"([^"]+)"/);
+                const message = messageMatch ? messageMatch[1] : '';
+                return `<p class="text-sm font-bold text-slate-800 mb-1">You received <span class="text-blue-600">${formattedAmount}</span> from <span class="font-bold">${sender}</span></p>${message ? `<p class="text-sm text-slate-600 mb-2 italic">"${message}"</p>` : ''}`;
+            
+            case 'transfer_sent':
+                // Try to extract recipient username from description
+                let recipient = 'another user';
+                const recipientPatterns = [
+                    /to\s+@?(\w+)/i,
+                    /@(\w+)/,
+                    /(\w+)(?:\s+received|receives)?/i
+                ];
+                for (const pattern of recipientPatterns) {
+                    const match = description.match(pattern);
+                    if (match && match[1]) {
+                        recipient = `@${match[1]}`;
+                        break;
+                    }
+                }
+                return `<p class="text-sm font-bold text-slate-800 mb-1">You sent <span class="text-blue-600">${formattedAmount}</span> to <span class="font-bold">${recipient}</span></p>`;
+            
+            case 'deposit':
+                return `<p class="text-sm font-bold text-slate-800 mb-1">Your deposit of <span class="text-green-600">${description}</span> has been confirmed</p>`;
+            
+            case 'withdrawal':
+                return `<p class="text-sm font-bold text-slate-800 mb-1">Your withdrawal of <span class="text-green-600">${description}</span> has been processed</p>`;
+            
+            case 'admin_credit':
+            case 'credit':
+                const reasonMatch = description.match(/\(([^)]+)\)/);
+                const reason = reasonMatch ? reasonMatch[1] : '';
+                return `<p class="text-sm font-bold text-slate-800 mb-1">You received a <span class="text-purple-600">${formattedAmount}</span> credit${reason ? ` (${reason})` : ''}</p>`;
+            
+            case 'profit_growth_created':
+                return `<p class="text-sm font-bold text-slate-800 mb-1">Profit growth created: <span class="text-blue-600">${description}</span></p>`;
+            
+            default:
+                return `<p class="text-sm font-bold text-slate-800 mb-1">${description || notification.action.replace(/_/g, ' ')}</p>`;
+        }
+    }
+
+    // Get notification icon and colors
+    function getNotificationIcon(action) {
+        const icons = {
+            'transfer_received': { icon: 'fa-solid fa-arrow-down', bg: 'bg-blue-100', color: 'text-blue-600' },
+            'transfer_sent': { icon: 'fa-solid fa-arrow-up', bg: 'bg-blue-100', color: 'text-blue-600' },
+            'deposit': { icon: 'fa-solid fa-check-circle', bg: 'bg-green-100', color: 'text-green-600' },
+            'withdrawal': { icon: 'fa-solid fa-check-circle', bg: 'bg-green-100', color: 'text-green-600' },
+            'admin_credit': { icon: 'fa-solid fa-gift', bg: 'bg-purple-100', color: 'text-purple-600' },
+            'credit': { icon: 'fa-solid fa-gift', bg: 'bg-purple-100', color: 'text-purple-600' },
+            'profit_growth_created': { icon: 'fa-solid fa-chart-line', bg: 'bg-blue-100', color: 'text-blue-600' },
+        };
+        return icons[action] || { icon: 'fa-solid fa-info-circle', bg: 'bg-amber-100', color: 'text-amber-600' };
+    }
+
+    // Get border color class for unread notifications
+    function getBorderColorClass(action) {
+        const colors = {
+            'transfer_received': 'border-blue-200',
+            'transfer_sent': 'border-blue-200',
+            'deposit': 'border-green-200',
+            'withdrawal': 'border-green-200',
+            'admin_credit': 'border-purple-200',
+            'credit': 'border-purple-200',
+        };
+        return colors[action] || 'border-blue-200';
+    }
+
+    // Get action button for notification
+    function getNotificationActionButton(notification) {
+        switch (notification.action) {
+            case 'transfer_received':
+                return `<button data-route="receivedSimFunds" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-bold hover:opacity-90 transition">View Details</button>`;
+            case 'transfer_sent':
+                return `<button data-route="sentSimFunds" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-bold hover:opacity-90 transition">View Transfer</button>`;
+            case 'deposit':
+            case 'withdrawal':
+            case 'admin_credit':
+            case 'credit':
+                return `<button data-route="transactions" class="px-4 py-2 bg-green-600 text-white rounded-lg text-xs font-bold hover:opacity-90 transition">View Transaction</button>`;
+            default:
+                return '';
+        }
+    }
+
+    // Format time ago
+    function formatTimeAgo(dateString) {
+        if (!dateString) return 'Unknown';
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMinutes = Math.floor(diffMs / (1000 * 60));
+        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        
+        if (diffMinutes < 1) return 'Just now';
+        if (diffMinutes < 60) return `${diffMinutes} ${diffMinutes === 1 ? 'minute' : 'minutes'} ago`;
+        if (diffHours < 24) return `${diffHours} ${diffHours === 1 ? 'hour' : 'hours'} ago`;
+        if (diffDays < 7) return `${diffDays} ${diffDays === 1 ? 'day' : 'days'} ago`;
+        if (diffDays < 30) {
+            const weeks = Math.floor(diffDays / 7);
+            return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`;
+        }
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    // Mark notification as read
+    async function markAsRead(notificationId, type) {
+        // In a real implementation, this would call an API endpoint
+        // For now, just update the UI
+        const notificationCard = document.querySelector(`[data-notification-id="${notificationId}"]`);
+        if (notificationCard) {
+            notificationCard.classList.remove('border-2');
+            notificationCard.classList.add('border', 'border-gray-200');
+            const unreadDot = notificationCard.querySelector('.absolute .w-3');
+            if (unreadDot) unreadDot.remove();
+            const markReadBtn = notificationCard.querySelector('button[onclick*="markAsRead"]');
+            if (markReadBtn) markReadBtn.remove();
+            
+            // Update unread count
+            const unreadCount = parseInt(document.getElementById('unreadCount').textContent);
+            if (unreadCount > 0) {
+                document.getElementById('unreadCount').textContent = unreadCount - 1;
+            }
+        }
+    }
+
+    // Attach event listeners for filter buttons
+    function attachNotificationEventListeners() {
+        // Filter buttons
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterButtons.forEach(b => {
+                    b.classList.remove('bg-slate-800', 'text-white');
+                    b.classList.add('bg-white', 'border', 'border-gray-200', 'text-slate-600');
+                });
+                this.classList.remove('bg-white', 'border', 'border-gray-200', 'text-slate-600');
+                this.classList.add('bg-slate-800', 'text-white');
+            });
+        });
+    }
+
+    // Notification Dropdown Functions
+    window.toggleNotificationDropdown = function() {
+        const dropdown = document.getElementById('notificationDropdown');
+        if (dropdown) {
+            const isHidden = dropdown.classList.contains('hidden');
+            dropdown.classList.toggle('hidden');
+            if (isHidden) {
+                loadNotificationDropdown();
+            }
+        }
+    };
+
+    async function loadNotificationDropdown() {
+        const dropdownList = document.getElementById('notificationDropdownList');
+        if (!dropdownList) return;
+        try {
+            dropdownList.innerHTML = '<div class="p-4 text-center text-slate-500"><i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i><p class="text-sm">Loading notifications...</p></div>';
+            const dashboardData = await API.user.getDashboard();
+            const transactions = dashboardData.recent_transactions || [];
+            const activityLogs = dashboardData.recent_activity || [];
+            const allNotifications = [];
+            transactions.slice(0, 10).forEach(tx => {
+                allNotifications.push({ type: 'transaction', id: tx.id, action: tx.type, amount: tx.amount, currency: tx.currency || 'USD', description: tx.description || '', status: tx.status, created_at: tx.created_at });
+            });
+            activityLogs.slice(0, 10).forEach(activity => {
+                allNotifications.push({ type: 'activity', id: activity.id, action: activity.action, description: activity.description || '', created_at: activity.created_at });
+            });
+            allNotifications.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            const recentNotifications = allNotifications.slice(0, 5);
+            const badge = document.getElementById('notificationBadge');
+            if (badge) badge.classList.toggle('hidden', recentNotifications.length === 0);
+            if (recentNotifications.length === 0) {
+                dropdownList.innerHTML = '<div class="p-4 text-center text-slate-500"><p class="text-sm">No notifications</p></div>';
+                return;
+            }
+            dropdownList.innerHTML = recentNotifications.map(notif => {
+                const date = formatNotificationDateDropdown(notif.created_at);
+                const icon = getNotificationIconDropdown(notif.action || notif.type);
+                const title = getNotificationTitleDropdown(notif);
+                const description = notif.description || '';
+                return `<div class="p-4 hover:bg-gray-50 transition cursor-pointer" onclick="handleNotificationClick('${notif.type}', ${notif.id})"><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full ${icon.bg} flex items-center justify-center shrink-0"><i class="fa-solid ${icon.icon} ${icon.color} text-sm"></i></div><div class="flex-1 min-w-0"><p class="text-sm font-bold text-slate-800 mb-1">${title}</p>${description ? `<p class="text-xs text-slate-500 line-clamp-2 mb-1">${description}</p>` : ''}<p class="text-xs text-slate-400">${date}</p></div></div></div>`;
+            }).join('');
+        } catch (error) {
+            console.error('Failed to load notifications:', error);
+            dropdownList.innerHTML = '<div class="p-4 text-center text-red-500"><p class="text-sm">Failed to load notifications</p></div>';
+        }
+    }
+
+    function formatNotificationDateDropdown(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+        if (diffMins < 1) return 'Just now';
+        if (diffMins < 60) return `${diffMins}m ago`;
+        if (diffHours < 24) return `${diffHours}h ago`;
+        if (diffDays < 7) return `${diffDays}d ago`;
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    function getNotificationIconDropdown(action) {
+        const icons = { 'deposit': { icon: 'fa-arrow-down', color: 'text-green-600', bg: 'bg-green-100' }, 'withdrawal': { icon: 'fa-arrow-up', color: 'text-red-600', bg: 'bg-red-100' }, 'credit': { icon: 'fa-gift', color: 'text-blue-600', bg: 'bg-blue-100' }, 'debit': { icon: 'fa-minus', color: 'text-orange-600', bg: 'bg-orange-100' }, 'transfer_sent': { icon: 'fa-paper-plane', color: 'text-blue-600', bg: 'bg-blue-100' }, 'transfer_received': { icon: 'fa-inbox', color: 'text-green-600', bg: 'bg-green-100' }, 'profit_growth_created': { icon: 'fa-chart-line', color: 'text-purple-600', bg: 'bg-purple-100' }, 'profit_growth_updated': { icon: 'fa-sync', color: 'text-blue-600', bg: 'bg-blue-100' } };
+        return icons[action] || { icon: 'fa-bell', color: 'text-slate-600', bg: 'bg-slate-100' };
+    }
+
+    function getNotificationTitleDropdown(notif) {
+        const action = notif.action || notif.type;
+        const actionNames = { 'deposit': 'Deposit', 'withdrawal': 'Withdrawal', 'credit': 'Credit', 'debit': 'Debit', 'transfer_sent': 'Funds Sent', 'transfer_received': 'Funds Received', 'profit_growth_created': 'Profit Growth Created', 'profit_growth_updated': 'Profit Growth Updated' };
+        const actionName = actionNames[action] || action.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        if (notif.amount) {
+            const amount = parseFloat(notif.amount);
+            const sign = action === 'deposit' || action === 'credit' || action === 'transfer_received' ? '+' : '-';
+            return `${actionName}: ${sign}$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+        return actionName;
+    }
+
+    window.handleNotificationClick = function(type, id) {
+        window.location.href = type === 'transaction' ? '#transactions' : '#notifications';
+    };
+
+    // Load requests and notifications on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        loadProfileViewRequests();
+        loadNotifications();
+        loadLoggedInUser();
+    });
+
+    // Mark all as read
+    function markAllAsRead() {
+        document.querySelectorAll('[data-notification-id]').forEach(card => {
+            markAsRead(card.getAttribute('data-notification-id'), 'transaction');
+        });
+    }
+
+    // Clear all notifications
+    function clearAllNotifications() {
+        if (confirm('Are you sure you want to clear all notifications?')) {
+            document.getElementById('notificationsList').innerHTML = '';
+            document.getElementById('unreadCount').textContent = '0';
+            document.getElementById('emptyState').classList.remove('hidden');
+        }
+    }
+
+    // Handle logout
+    async function handleLogout() {
+        try {
+            await API.auth.logout();
+            localStorage.removeItem('auth_token');
+            window.location.href = '/login.html';
+        } catch (error) {
+            console.error('Logout error:', error);
+            localStorage.removeItem('auth_token');
+            window.location.href = '/login.html';
+        }
+    }
+</script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/forms.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Admin Dashboard | ConchCapital</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .text-real { color: #10B981; }
+        .bg-real { background-color: #10B981; }
+    </style>
+</head>
+<body class="bg-gray-50 flex min-h-screen" data-page="adminDashboard">
+
+    <aside class="w-64 bg-slate-950 text-slate-400 flex flex-col shrink-0 border-r border-slate-800">
+        <div class="p-6 border-b border-slate-800/50">
+            <div class="text-2xl font-bold tracking-tight text-white">
+                Conch<span class="text-real">Capital</span>
+            </div>
+            <p class="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500 mt-1">Admin Portal</p>
+        </div>
+
+        <nav class="flex-1 p-4 space-y-2">
+            <a href="#" data-route="adminDashboard" class="flex items-center space-x-3 p-3 bg-slate-900 text-white rounded-xl transition">
+                <i class="fa-solid fa-chart-pie text-sm"></i>
+                <span class="text-sm font-medium">Overview</span>
+            </a>
+            <a href="#" data-route="adminUsers" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+                <i class="fa-solid fa-users-gear text-sm"></i>
+                <span class="text-sm font-medium">User Management</span>
+            </a>
+            <a href="#" data-route="adminTransactions" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+                <i class="fa-solid fa-file-invoice-dollar text-sm"></i>
+                <span class="text-sm font-medium">Transactions</span>
+            </a>
+            <a href="#" data-route="adminDeposits" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+                <i class="fa-solid fa-wallet text-sm"></i>
+                <span class="text-sm font-medium">Deposits</span>
+            </a>
+            <a href="#" data-route="adminWithdrawals" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+                <i class="fa-solid fa-arrow-up-from-bracket text-sm"></i>
+                <span class="text-sm font-medium">Withdrawals</span>
+            </a>
+            <a href="#" data-route="adminCredits" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+                <i class="fa-solid fa-money-bill-transfer text-sm"></i>
+                <span class="text-sm font-medium">Credits</span>
+            </a>
+            <a href="#" data-route="adminFreezes" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+                <i class="fa-solid fa-snowflake text-sm"></i>
+                <span class="text-sm font-medium">Freezes</span>
+            </a>
+            <div class="pt-4 mt-4 border-t border-slate-800/50">
+                <a href="admin-bank-settings.html" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+                    <i class="fa-solid fa-building-columns text-sm"></i>
+                    <span class="text-sm font-medium">Banking Details</span>
+                </a>
+                <a href="#" data-route="adminSettings" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+                    <i class="fa-solid fa-gear text-sm"></i>
+                    <span class="text-sm font-medium">Settings</span>
+                </a>
+            </div>
+        </nav>
+        
+        <!-- Admin User Section -->
+        <div class="p-4 border-t border-slate-800/50">
+            <div class="relative">
+                <div id="adminSidebarUserMenu" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-slate-900 cursor-pointer transition" onclick="toggleAdminSidebarMenu()">
+                    <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white font-bold shrink-0">
+                        <i class="fa-solid fa-user-shield text-sm"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p id="adminSidebarUserName" class="text-sm font-bold text-white truncate">Admin</p>
+                        <p class="text-xs text-slate-400 truncate">Administrator</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-up text-xs text-slate-400" id="adminSidebarChevron"></i>
+                </div>
+                
+                <!-- Admin Sidebar Menu Dropdown -->
+                <div id="adminSidebarMenuDropdown" class="hidden absolute bottom-full left-0 right-0 mb-2 bg-slate-900 rounded-lg shadow-lg border border-slate-700 overflow-hidden">
+                    <a href="#" data-route="dashboard" class="flex items-center space-x-3 px-4 py-3 text-sm text-slate-300 hover:bg-slate-800 transition">
+                        <i class="fa-solid fa-home text-sm w-5"></i>
+                        <span>User Dashboard</span>
+                    </a>
+                    <div class="border-t border-slate-700"></div>
+                    <button onclick="handleLogout()" class="w-full flex items-center space-x-3 px-4 py-3 text-sm text-red-400 hover:bg-slate-800 transition">
+                        <i class="fa-solid fa-right-from-bracket text-sm w-5"></i>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col">
+        <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8 shrink-0">
+            <h1 class="text-lg font-bold text-slate-800">System Overview</h1>
+            <div class="flex items-center gap-4">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input type="text" placeholder="Search users or txns..." class="pl-10 pr-4 py-2 bg-gray-100 border-none rounded-lg text-sm focus:ring-2 focus:ring-slate-950 w-64 transition-all">
+                </div>
+                <button data-route="adminReports" class="bg-slate-950 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-black transition flex items-center gap-2">
+                    <i class="fa-solid fa-file-export text-xs"></i>
+                    System Report
+                </button>
+                <div class="relative">
+                    <button onclick="toggleAdminUserMenu()" class="flex items-center space-x-2 px-4 py-2 border border-gray-200 rounded-lg text-sm font-bold text-slate-600 hover:bg-gray-50 transition">
+                        <i class="fa-solid fa-user-shield"></i>
+                        <span>Admin</span>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <!-- Admin User Menu Dropdown -->
+                    <div id="adminUserMenuDropdown" class="hidden absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden z-50">
+                        <a href="#" data-route="dashboard" class="flex items-center space-x-3 px-4 py-3 text-sm text-slate-700 hover:bg-gray-50 transition">
+                            <i class="fa-solid fa-home text-sm w-5"></i>
+                            <span>User Dashboard</span>
+                        </a>
+                        <div class="border-t border-gray-200"></div>
+                        <button onclick="handleLogout()" class="w-full flex items-center space-x-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition">
+                            <i class="fa-solid fa-right-from-bracket text-sm w-5"></i>
+                            <span>Logout</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="p-8 overflow-y-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex items-center gap-6">
+                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Total Users</p>
+                        <div class="flex items-baseline gap-2">
+                            <h2 id="totalUsers" class="text-2xl font-black text-slate-900">-</h2>
+                            <span class="text-[10px] font-bold text-slate-400 hidden" id="usersChange">-</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex items-center gap-6">
+                    <div class="w-12 h-12 bg-green-50 text-real rounded-xl flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Total Deposits</p>
+                        <h2 id="totalDeposits" class="text-2xl font-black text-slate-900">$0.00</h2>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 border-l-4 border-l-red-500 shadow-sm flex items-center gap-6">
+                    <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-snowflake"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Active Freezes</p>
+                        <div class="flex items-center gap-3">
+                            <h2 id="frozenUsers" class="text-2xl font-black text-slate-900">0</h2>
+                            <span id="freezeAlert" class="px-2 py-0.5 bg-red-100 text-red-600 text-[10px] font-bold rounded-full hidden">ACTION REQUIRED</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Quick Actions</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+                <button data-route="adminCredits" class="bg-white p-4 border border-gray-200 rounded-xl flex items-center justify-between group hover:bg-slate-950 transition-all duration-300">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-slate-400 group-hover:bg-slate-800 transition-colors">
+                            <i class="fa-solid fa-money-bill-transfer text-xs"></i>
+                        </div>
+                        <span class="text-sm font-bold text-slate-700 group-hover:text-white transition-colors">Credit Funds</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 group-hover:text-slate-500"></i>
+                </button>
+                <button data-route="adminFreezes" class="bg-white p-4 border border-gray-200 rounded-xl flex items-center justify-between group hover:bg-red-600 transition-all duration-300">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-slate-400 group-hover:bg-red-500 transition-colors">
+                            <i class="fa-solid fa-snowflake text-xs"></i>
+                        </div>
+                        <span class="text-sm font-bold text-slate-700 group-hover:text-white transition-colors">Freeze Account</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 group-hover:text-red-300"></i>
+                </button>
+                <button data-route="adminUsers" class="bg-white p-4 border border-gray-200 rounded-xl flex items-center justify-between group hover:bg-slate-950 transition-all duration-300">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-slate-400 group-hover:bg-slate-800 transition-colors">
+                            <i class="fa-solid fa-users text-xs"></i>
+                        </div>
+                        <span class="text-sm font-bold text-slate-700 group-hover:text-white transition-colors">View Users</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 group-hover:text-slate-500"></i>
+                </button>
+                <button data-route="adminSimTransfers" class="bg-white p-4 border border-gray-200 rounded-xl flex items-center justify-between group hover:bg-slate-950 transition-all duration-300">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-slate-400 group-hover:bg-slate-800 transition-colors">
+                            <i class="fa-solid fa-paper-plane text-xs"></i>
+                        </div>
+                        <span class="text-sm font-bold text-slate-700 group-hover:text-white transition-colors">Simulated Transfers</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 group-hover:text-slate-500"></i>
+                </button>
+                <button data-route="adminCompliance" class="bg-white p-4 border border-gray-200 rounded-xl flex items-center justify-between group hover:bg-slate-950 transition-all duration-300">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-slate-400 group-hover:bg-slate-800 transition-colors">
+                            <i class="fa-solid fa-file-shield text-xs"></i>
+                        </div>
+                        <span class="text-sm font-bold text-slate-700 group-hover:text-white transition-colors">Compliance Export</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 group-hover:text-slate-500"></i>
+                </button>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/50">
+                    <h3 class="font-bold text-slate-800 text-sm">Critical Activity Feed</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm border-collapse">
+                        <thead class="bg-gray-50 text-slate-400 font-bold uppercase text-[10px] tracking-widest">
+                            <tr>
+                                <th class="px-6 py-4">Admin/User</th>
+                                <th class="px-6 py-4">Action Type</th>
+                                <th class="px-6 py-4">Details</th>
+                                <th class="px-6 py-4">Timestamp</th>
+                                <th class="px-6 py-4">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activityFeed" class="divide-y divide-gray-100">
+                            <tr><td colspan="5" class="px-6 py-8 text-center text-slate-500">Loading activity...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 text-center">
+                    <button data-route="adminActionsLog" class="text-xs font-bold text-slate-400 hover:text-slate-600 transition tracking-widest uppercase">View All System Logs</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/forms.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/routes.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // Load admin dashboard data
+        async function loadAdminDashboard() {
+            try {
+                // Load reports/statistics
+                const reports = await API.admin.getReports();
+                
+                // Update statistics cards
+                document.getElementById('totalUsers').textContent = reports.users?.total || 0;
+                document.getElementById('totalDeposits').textContent = `$${parseFloat(reports.transactions?.total_deposits || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                document.getElementById('frozenUsers').textContent = reports.users?.frozen || 0;
+                
+                // Show freeze alert if there are frozen users
+                if (reports.users?.frozen > 0) {
+                    document.getElementById('freezeAlert').classList.remove('hidden');
+                }
+
+                // Load recent admin actions (we'll need to add this endpoint or use transactions)
+                loadRecentActivity();
+
+            } catch (error) {
+                console.error('Failed to load admin dashboard:', error);
+                Utils?.showToast?.(error.response?.message || 'Failed to load dashboard data', 'error');
+            }
+        }
+
+        // Load recent activity (admin actions and transactions)
+        async function loadRecentActivity() {
+            try {
+                const tbody = document.getElementById('activityFeed');
+                
+                // Get recent transactions
+                const transactions = await API.admin.getTransactions({ per_page: 5 });
+                const txns = transactions.data || transactions;
+                
+                tbody.innerHTML = '';
+                
+                if (Array.isArray(txns) && txns.length > 0) {
+                    txns.forEach(txn => {
+                        const row = document.createElement('tr');
+                        row.className = 'hover:bg-slate-50 transition-colors';
+                        
+                        const user = txn.user || {};
+                        const actionType = txn.type === 'credit' ? 'CREDIT FUNDS' : 
+                                         txn.type === 'deposit' ? 'DEPOSIT' : 
+                                         txn.type === 'withdrawal' ? 'WITHDRAWAL' : 
+                                         txn.type.toUpperCase();
+                        
+                        const actionClass = txn.type === 'credit' ? 'bg-blue-100 text-blue-600' :
+                                          txn.type === 'deposit' ? 'bg-green-100 text-real' :
+                                          txn.type === 'withdrawal' ? 'bg-amber-100 text-amber-600' :
+                                          'bg-gray-100 text-gray-600';
+                        
+                        const date = new Date(txn.created_at);
+                        const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                        const timeStr = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                        
+                        row.innerHTML = `
+                            <td class="px-6 py-4 font-bold text-slate-900">${user.username || user.name || 'User'}</td>
+                            <td class="px-6 py-4">
+                                <span class="${actionClass} text-[9px] font-black px-2 py-1 rounded">${actionType}</span>
+                            </td>
+                            <td class="px-6 py-4 text-slate-600">
+                                ${txn.type === 'credit' ? `Credited <span class="font-bold">$${parseFloat(txn.amount || 0).toFixed(2)}</span> (${txn.description || 'Admin credit'})` :
+                                  txn.type === 'deposit' ? `Deposit of <span class="font-bold">$${parseFloat(txn.amount || 0).toFixed(2)}</span> (${txn.fund_type || 'real'} funds)` :
+                                  txn.type === 'withdrawal' ? `Withdrawal request for <span class="font-bold">$${parseFloat(txn.amount || 0).toFixed(2)}</span>` :
+                                  txn.description || 'Transaction'}
+                            </td>
+                            <td class="px-6 py-4 text-slate-400 text-xs">${dateStr}, ${timeStr}</td>
+                            <td class="px-6 py-4">
+                                <div class="w-5 h-5 ${txn.status === 'completed' ? 'bg-green-100 text-real' : 'bg-yellow-100 text-yellow-600'} rounded-full flex items-center justify-center text-[10px]">
+                                    <i class="fa-solid fa-${txn.status === 'completed' ? 'check' : 'clock'}"></i>
+                                </div>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-slate-500">No recent activity</td></tr>';
+                }
+            } catch (error) {
+                console.error('Failed to load activity:', error);
+                const tbody = document.getElementById('activityFeed');
+                tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-red-500">Failed to load activity</td></tr>';
+            }
+        }
+
+        // Initialize on page load
+        // Load admin user info
+        async function loadAdminUserInfo() {
+            try {
+                const data = await API.user.getProfile();
+                const user = data.user;
+                if (user && document.getElementById('adminSidebarUserName')) {
+                    document.getElementById('adminSidebarUserName').textContent = user.display_name || user.name || user.email || 'Admin';
+                }
+            } catch (error) {
+                console.error('Failed to load admin user info:', error);
+            }
+        }
+
+        // Toggle admin user menu dropdown (header)
+        function toggleAdminUserMenu() {
+            const dropdown = document.getElementById('adminUserMenuDropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('hidden');
+            }
+        }
+
+        // Toggle admin sidebar menu dropdown
+        function toggleAdminSidebarMenu() {
+            const dropdown = document.getElementById('adminSidebarMenuDropdown');
+            const chevron = document.getElementById('adminSidebarChevron');
+            if (dropdown && chevron) {
+                dropdown.classList.toggle('hidden');
+                chevron.classList.toggle('fa-chevron-up');
+                chevron.classList.toggle('fa-chevron-down');
+            }
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            // Header menu
+            const headerButton = document.querySelector('button[onclick="toggleAdminUserMenu()"]');
+            const headerDropdown = document.getElementById('adminUserMenuDropdown');
+            if (headerButton && headerDropdown && !headerButton.contains(event.target) && !headerDropdown.contains(event.target)) {
+                headerDropdown.classList.add('hidden');
+            }
+            
+            // Sidebar menu
+            const sidebarMenu = document.getElementById('adminSidebarUserMenu');
+            const sidebarDropdown = document.getElementById('adminSidebarMenuDropdown');
+            if (sidebarMenu && sidebarDropdown && !sidebarMenu.contains(event.target) && !sidebarDropdown.contains(event.target)) {
+                sidebarDropdown.classList.add('hidden');
+                const chevron = document.getElementById('adminSidebarChevron');
+                if (chevron) {
+                    chevron.classList.remove('fa-chevron-down');
+                    chevron.classList.add('fa-chevron-up');
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAdminDashboard();
+            loadAdminUserInfo();
+        });
+    </script>
+</body>
+</html>

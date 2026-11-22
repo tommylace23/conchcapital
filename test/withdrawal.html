@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Withdraw Funds | ConchCapital</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #F9FAFB; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .bg-real { background-color: #10B981; }
+        .text-real { color: #10B981; }
+        .currency-card.selected { border-color: #10B981; background-color: rgba(16, 185, 129, 0.05); }
+        .mobile-nav-item.active { color: #10B981; background-color: rgba(16, 185, 129, 0.1); }
+    </style>
+</head>
+<body class="min-h-screen pb-20 lg:pb-0" data-page="withdrawals">
+
+    <!-- Desktop Navigation -->
+    <nav class="hidden lg:flex bg-white border-b border-gray-200 h-16 items-center px-8 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto w-full flex justify-between items-center">
+            <div class="text-xl font-bold text-[#111827]">Conch<span class="text-[#10B981]">Capital</span></div>
+            <div class="text-sm font-medium text-gray-500">Secure Withdrawal Portal</div>
+        </div>
+    </nav>
+
+    <!-- Mobile Header -->
+    <nav class="lg:hidden bg-white border-b border-gray-200 h-14 flex items-center px-4 sticky top-0 z-50">
+        <div class="flex items-center justify-between w-full">
+            <div class="text-lg font-bold text-[#111827]">Conch<span class="text-[#10B981]">Capital</span></div>
+            <a href="#" data-route="dashboard" class="text-sm text-gray-500">
+                <i class="fa-solid fa-times text-lg"></i>
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-2xl mx-auto py-6 lg:py-12 px-4 lg:px-6">
+        
+        <a href="#" data-route="dashboard" class="hidden lg:inline-flex items-center text-sm text-gray-500 hover:text-gray-800 transition mb-8">
+            <i class="fa-solid fa-arrow-left mr-2"></i> Back to Dashboard
+        </a>
+        
+        <div class="bg-slate-900 rounded-xl lg:rounded-2xl p-4 lg:p-6 mb-6 lg:mb-8 text-white shadow-lg relative overflow-hidden">
+            <div class="relative z-10 flex justify-between items-center">
+                <div>
+                    <p class="text-slate-400 text-[10px] lg:text-xs font-bold uppercase tracking-widest mb-1">Available Balance</p>
+                    <h2 id="availableBalance" class="text-2xl lg:text-3xl font-bold">$0.00</h2>
+                    <p id="availableBalanceUsd" class="text-real text-xs lg:text-sm font-medium mt-1">≈ $0.00 USD</p>
+                </div>
+                <div class="bg-white/10 p-3 lg:p-4 rounded-xl backdrop-blur-md">
+                    <i class="fa-brands fa-dollar-sign text-2xl lg:text-3xl text-orange-400"></i>
+                </div>
+            </div>
+            <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-real/10 rounded-full blur-3xl"></div>
+        </div>
+
+        <div class="bg-white rounded-xl lg:rounded-2xl border border-gray-200 shadow-sm p-4 lg:p-8 space-y-6 lg:space-y-8">
+            
+            <!-- Crypto Currency Selection -->
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 lg:mb-4">Select Currency</label>
+                <div class="grid grid-cols-3 gap-2 lg:gap-4">
+                    <button class="currency-card p-3 lg:p-4 rounded-xl border-2 border-gray-200 hover:bg-gray-50 flex flex-col items-center gap-2 transition" data-currency="BTC">
+                        <i class="fa-brands fa-bitcoin text-xl lg:text-2xl text-[#F7931A]"></i>
+                        <span class="text-xs lg:text-sm font-bold text-gray-900">Bitcoin</span>
+                    </button>
+                    <button class="currency-card p-3 lg:p-4 rounded-xl border-2 border-gray-200 hover:bg-gray-50 flex flex-col items-center gap-2 transition" data-currency="USDT">
+                        <i class="fa-solid fa-dollar-sign text-xl lg:text-2xl text-[#26A17B]"></i>
+                        <span class="text-xs lg:text-sm font-bold text-gray-900">USDT</span>
+                    </button>
+                    <button class="currency-card p-3 lg:p-4 rounded-xl border-2 border-gray-200 hover:bg-gray-50 flex flex-col items-center gap-2 transition" data-currency="ETH">
+                        <i class="fa-brands fa-ethereum text-xl lg:text-2xl text-[#627EEA]"></i>
+                        <span class="text-xs lg:text-sm font-bold text-gray-900">Ethereum</span>
+                    </button>
+                </div>
+                <input type="hidden" id="selectedCurrency" value="BTC">
+            </div>
+
+            <!-- Withdrawal Address -->
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Withdrawal Address</label>
+                <div class="relative">
+                    <input type="text" id="withdrawalAddress" placeholder="Enter your crypto address" 
+                        class="w-full px-4 py-3 lg:py-4 rounded-xl border border-gray-200 focus:ring-2 focus:ring-real outline-none text-sm lg:text-base mono" required>
+                    <button onclick="pasteAddress()" class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-real hover:text-[#059669] font-semibold">
+                        <i class="fa-solid fa-paste mr-1"></i> Paste
+                    </button>
+                </div>
+                <p class="mt-2 text-xs text-gray-400">Make sure this address is correct. Withdrawals cannot be reversed.</p>
+            </div>
+        
+            <!-- Withdrawal Amount -->
+            <div>
+                <label class="block text-sm font-bold text-slate-700 mb-3">Withdrawal Amount</label>
+                <div class="relative mb-4">
+                    <input type="number" id="withdrawalAmount" placeholder="0.00" step="0.01" min="0.01" 
+                        class="w-full px-4 py-3 lg:py-4 rounded-xl border border-gray-200 focus:ring-2 focus:ring-real outline-none text-base lg:text-lg font-mono" required>
+                    <span class="absolute right-4 top-1/2 -translate-y-1/2 font-bold text-slate-400">USD</span>
+                </div>
+                <div class="grid grid-cols-4 gap-2">
+                    <button onclick="setWithdrawalPercentage(0.25)" class="py-2 px-2 lg:px-3 bg-gray-50 border border-gray-200 rounded-lg text-[10px] lg:text-xs font-bold text-slate-600 hover:bg-real hover:text-white hover:border-real transition">25%</button>
+                    <button onclick="setWithdrawalPercentage(0.5)" class="py-2 px-2 lg:px-3 bg-gray-50 border border-gray-200 rounded-lg text-[10px] lg:text-xs font-bold text-slate-600 hover:bg-real hover:text-white hover:border-real transition">50%</button>
+                    <button onclick="setWithdrawalPercentage(0.75)" class="py-2 px-2 lg:px-3 bg-gray-50 border border-gray-200 rounded-lg text-[10px] lg:text-xs font-bold text-slate-600 hover:bg-real hover:text-white hover:border-real transition">75%</button>
+                    <button onclick="setWithdrawalPercentage(1)" class="py-2 px-2 lg:px-3 bg-gray-50 border border-gray-200 rounded-lg text-[10px] lg:text-xs font-bold text-slate-600 hover:bg-real hover:text-white hover:border-real transition">MAX</button>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div>
+                <label class="block text-sm font-bold text-slate-700 mb-3">Description (Optional)</label>
+                <input type="text" id="withdrawalDescription" placeholder="Add a note about this withdrawal..." 
+                    class="w-full px-4 py-3 lg:py-4 rounded-xl border border-gray-200 focus:ring-2 focus:ring-real outline-none text-sm">
+            </div>
+
+            <!-- Transaction Summary -->
+            <div class="bg-gray-50 rounded-xl p-4 lg:p-5 space-y-3">
+                <div class="flex justify-between text-xs lg:text-sm">
+                    <span class="text-slate-500">Withdrawal Amount</span>
+                    <span class="font-mono font-medium text-slate-700" id="summaryAmount">$0.00 USD</span>
+                </div>
+                <div class="flex justify-between text-xs lg:text-sm">
+                    <span class="text-slate-500">Transaction Fee</span>
+                    <span class="font-mono font-medium text-slate-700" id="transactionFee">0.0000 <span id="feeCurrency">BTC</span></span>
+                </div>
+                <div class="flex justify-between items-center pt-3 border-t border-gray-200">
+                    <span class="text-xs lg:text-sm font-bold text-slate-800">Net Amount to Receive</span>
+                    <div class="text-right">
+                        <span class="text-lg lg:text-xl font-bold text-slate-900 font-mono" id="netAmount">0.0000 <span id="netCurrency">BTC</span></span>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">≈ $<span id="netAmountUsd">0.00</span> USD</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Warnings -->
+            <div class="space-y-3">
+                <div class="bg-amber-50 border border-amber-200 p-3 lg:p-4 rounded-xl flex gap-3">
+                    <i class="fa-solid fa-triangle-exclamation text-amber-600 mt-0.5 text-sm"></i>
+                    <p class="text-xs lg:text-sm font-bold text-amber-800">
+                        ⚠️ Withdrawals are final and cannot be reversed
+                    </p>
+                </div>
+                <div class="bg-amber-50 border border-amber-200 p-3 lg:p-4 rounded-xl flex gap-3">
+                    <i class="fa-solid fa-triangle-exclamation text-amber-600 mt-0.5 text-sm"></i>
+                    <p class="text-xs lg:text-sm font-bold text-amber-800">
+                        ⚠️ Double-check the address before confirming
+                    </p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3 lg:gap-4 pt-4">
+                <button data-route="dashboard" class="flex-1 px-6 py-3 lg:py-4 rounded-xl font-bold text-slate-500 hover:bg-gray-100 transition text-sm lg:text-base">Cancel</button>
+                <button id="withdrawBtn" onclick="processWithdrawal()" class="flex-[2] bg-real text-white px-6 py-3 lg:py-4 rounded-xl font-bold shadow-lg shadow-real/20 hover:opacity-90 transition text-sm lg:text-base">
+                    Confirm Withdrawal
+                </button>
+            </div>
+
+        </div>
+
+        <p id="withdrawalInfo" class="mt-6 lg:mt-8 text-center text-xs text-slate-400 hidden">
+            Internal ID: <span id="withdrawalId" class="font-mono">-</span> | Status: <span id="withdrawalStatus" class="text-slate-500">Pending</span>
+        </p>
+    </main>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 shadow-lg">
+        <div class="flex items-center justify-around px-2 py-2">
+            <a href="#" data-route="dashboard" class="mobile-nav-item flex flex-col items-center gap-1 px-2 py-2 rounded-lg transition">
+                <i class="fa-solid fa-home text-base"></i>
+                <span class="text-[9px] font-medium">Dashboard</span>
+            </a>
+            <a href="#" data-route="profitGrowths" class="mobile-nav-item flex flex-col items-center gap-1 px-2 py-2 rounded-lg transition">
+                <i class="fa-solid fa-chart-line text-base"></i>
+                <span class="text-[9px] font-medium">Growth</span>
+            </a>
+            <a href="#" data-route="transactions" class="mobile-nav-item flex flex-col items-center gap-1 px-2 py-2 rounded-lg transition">
+                <i class="fa-solid fa-file-invoice-dollar text-base"></i>
+                <span class="text-[9px] font-medium">Transactions</span>
+            </a>
+            <a href="#" data-route="profile" class="mobile-nav-item flex flex-col items-center gap-1 px-2 py-2 rounded-lg transition">
+                <i class="fa-solid fa-user text-base"></i>
+                <span class="text-[9px] font-medium">Profile</span>
+            </a>
+        </div>
+    </nav>
+
+<script>
+    let availableBalance = 0;
+    let selectedCurrency = 'BTC';
+    let exchangeRates = {
+        'BTC': 70000.00,
+        'USDT': 1.00,
+        'ETH': 3500.00
+    };
+    let transactionFees = {
+        'BTC': 0.0005,
+        'USDT': 1.00,
+        'ETH': 0.001
+    };
+
+    // Load user balance on page load
+    async function loadBalance() {
+        try {
+            const data = await API.user.getProfile();
+            if (data.user) {
+                availableBalance = parseFloat(data.user.real_balance || 0);
+                document.getElementById('availableBalance').textContent = `$${availableBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                document.getElementById('availableBalanceUsd').textContent = `≈ $${availableBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`;
+                updateSummary();
+            }
+        } catch (error) {
+            console.error('Failed to load balance:', error);
+        }
+    }
+
+    // Currency selection
+    document.querySelectorAll('.currency-card').forEach(card => {
+        card.addEventListener('click', function() {
+            document.querySelectorAll('.currency-card').forEach(c => c.classList.remove('selected'));
+            this.classList.add('selected');
+            selectedCurrency = this.getAttribute('data-currency');
+            document.getElementById('selectedCurrency').value = selectedCurrency;
+            updateSummary();
+        });
+    });
+
+    // Set initial selection
+    document.querySelector('.currency-card[data-currency="BTC"]').classList.add('selected');
+
+    // Update summary calculations
+    function updateSummary() {
+        const amount = parseFloat(document.getElementById('withdrawalAmount').value) || 0;
+        const fee = transactionFees[selectedCurrency];
+        const rate = exchangeRates[selectedCurrency];
+        
+        // Convert USD to crypto
+        const cryptoAmount = amount / rate;
+        const feeInUsd = fee * rate;
+        const netCrypto = Math.max(0, cryptoAmount - fee);
+        const netUsd = netCrypto * rate;
+
+        // Update summary display
+        document.getElementById('summaryAmount').textContent = `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`;
+        document.getElementById('transactionFee').innerHTML = `${fee.toFixed(selectedCurrency === 'BTC' ? 4 : selectedCurrency === 'ETH' ? 3 : 2)} <span id="feeCurrency">${selectedCurrency}</span>`;
+        document.getElementById('netAmount').innerHTML = `${netCrypto.toFixed(selectedCurrency === 'BTC' ? 6 : selectedCurrency === 'ETH' ? 4 : 2)} <span id="netCurrency">${selectedCurrency}</span>`;
+        document.getElementById('netAmountUsd').textContent = netUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    // Set withdrawal percentage
+    function setWithdrawalPercentage(percentage) {
+        const amount = availableBalance * percentage;
+        document.getElementById('withdrawalAmount').value = amount.toFixed(2);
+        updateSummary();
+    }
+
+    // Paste address from clipboard
+    async function pasteAddress() {
+        try {
+            const text = await navigator.clipboard.readText();
+            document.getElementById('withdrawalAddress').value = text;
+            Utils?.showToast?.('Address pasted', 'success');
+        } catch (error) {
+            Utils?.showToast?.('Failed to paste address', 'error');
+        }
+    }
+
+    // Listen for amount changes
+    document.getElementById('withdrawalAmount').addEventListener('input', updateSummary);
+
+    // Process withdrawal
+    async function processWithdrawal() {
+        const amountInput = document.getElementById('withdrawalAmount');
+        const addressInput = document.getElementById('withdrawalAddress');
+        const descriptionInput = document.getElementById('withdrawalDescription');
+        const withdrawBtn = document.getElementById('withdrawBtn');
+
+        const amount = parseFloat(amountInput.value);
+        const address = addressInput.value.trim();
+
+        if (!amount || amount <= 0) {
+            Utils?.showToast?.('Please enter a valid withdrawal amount', 'error');
+            return;
+        }
+
+        if (amount > availableBalance) {
+            Utils?.showToast?.('Insufficient balance', 'error');
+            return;
+        }
+
+        if (!address) {
+            Utils?.showToast?.('Please enter a withdrawal address', 'error');
+            return;
+        }
+
+        // Basic address validation
+        if (selectedCurrency === 'BTC' && !address.match(/^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,62}$/)) {
+            Utils?.showToast?.('Please enter a valid Bitcoin address', 'error');
+            return;
+        }
+        if (selectedCurrency === 'ETH' && !address.match(/^0x[a-fA-F0-9]{40}$/)) {
+            Utils?.showToast?.('Please enter a valid Ethereum address', 'error');
+            return;
+        }
+        if (selectedCurrency === 'USDT' && !address.match(/^0x[a-fA-F0-9]{40}$/)) {
+            Utils?.showToast?.('Please enter a valid USDT address', 'error');
+            return;
+        }
+
+        const originalText = withdrawBtn.textContent;
+        withdrawBtn.disabled = true;
+        withdrawBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Processing...';
+
+        try {
+            const fee = transactionFees[selectedCurrency];
+            const rate = exchangeRates[selectedCurrency];
+            const cryptoAmount = amount / rate;
+            const netCrypto = Math.max(0, cryptoAmount - fee);
+
+            const data = {
+                amount: amount,
+                currency: 'USD',
+                description: descriptionInput.value || null,
+                metadata: {
+                    crypto_currency: selectedCurrency,
+                    crypto_address: address,
+                    crypto_amount: netCrypto,
+                    transaction_fee: fee,
+                    exchange_rate: rate
+                }
+            };
+
+            const response = await API.user.withdrawal(data);
+            
+            Utils?.showToast?.('Withdrawal request submitted successfully!', 'success');
+            
+            // Show withdrawal info
+            if (response.transaction) {
+                document.getElementById('withdrawalId').textContent = response.transaction.reference || 'Processing...';
+                document.getElementById('withdrawalStatus').textContent = response.transaction.status || 'Pending';
+                document.getElementById('withdrawalInfo').classList.remove('hidden');
+            }
+            
+            // Redirect to dashboard after a short delay
+            setTimeout(() => {
+                window.location.href = '/dashboard.html';
+            }, 2000);
+
+        } catch (error) {
+            console.error('Withdrawal error:', error);
+            const message = error.response?.message || error.message || 'Failed to process withdrawal';
+            Utils?.showToast?.(message, 'error');
+        } finally {
+            withdrawBtn.disabled = false;
+            withdrawBtn.textContent = originalText;
+        }
+    }
+
+    // Update mobile nav active state
+    function updateMobileNavActive() {
+        const navItems = document.querySelectorAll('.mobile-nav-item');
+        navItems.forEach(item => {
+            item.classList.remove('active', 'text-[#10B981]', 'bg-green-50');
+            item.classList.add('text-gray-600');
+        });
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        loadBalance();
+        updateMobileNavActive();
+    });
+</script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/forms.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

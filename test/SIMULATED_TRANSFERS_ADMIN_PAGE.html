@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Simulated Transfers | Admin</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .text-sim { color: #3B82F6; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen" data-page="adminSimTransfers">
+
+<aside class="w-64 bg-slate-950 text-slate-400 flex flex-col shrink-0 border-r border-slate-800 fixed h-screen">
+    <div class="p-6 border-b border-slate-800/50">
+        <div class="text-2xl font-bold tracking-tight text-white">
+            Conch<span class="text-[#10B981]">Capital</span>
+        </div>
+        <p class="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500 mt-1">Admin Portal</p>
+    </div>
+    <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+        <a href="#" data-route="adminDashboard" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-chart-pie text-sm"></i>
+            <span class="text-sm font-medium">Overview</span>
+        </a>
+        <a href="#" data-route="adminUsers" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-users-gear text-sm"></i>
+            <span class="text-sm font-medium">User Management</span>
+        </a>
+        <a href="#" data-route="adminTransactions" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-file-invoice-dollar text-sm"></i>
+            <span class="text-sm font-medium">Transactions</span>
+        </a>
+        <a href="#" data-route="adminCredits" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-money-bill-transfer text-sm"></i>
+            <span class="text-sm font-medium">Credits</span>
+        </a>
+        <a href="#" data-route="adminSimTransfers" class="flex items-center space-x-3 p-3 bg-slate-900 text-white rounded-xl transition">
+            <i class="fa-solid fa-paper-plane text-sm"></i>
+            <span class="text-sm font-medium">Simulated Transfers</span>
+        </a>
+        <div class="pt-4 mt-4 border-t border-slate-800/50">
+            <a href="#" data-route="adminSettings" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+                <i class="fa-solid fa-gear text-sm"></i>
+                <span class="text-sm font-medium">Settings</span>
+            </a>
+        </div>
+    </nav>
+</aside>
+
+<main class="ml-64 flex-1 p-8">
+    
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+            <h1 class="text-3xl font-extrabold text-slate-900 mb-2">Simulated Transfers</h1>
+            <p class="text-slate-500">Monitor all user-to-user simulated fund transfers</p>
+        </div>
+    </div>
+
+    <!-- Search and Export -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 mb-6">
+        <div class="flex flex-col md:flex-row gap-4">
+            <div class="flex-1 relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+                <input 
+                    type="text" 
+                    placeholder="Search by sender, recipient, amount, or message..."
+                    class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-sim focus:border-sim outline-none"
+                    id="searchInput"
+                >
+            </div>
+            <button class="px-6 py-3 bg-white border-2 border-gray-200 text-slate-600 rounded-xl font-bold hover:bg-gray-50 transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-file-csv"></i> Export CSV
+            </button>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-6">
+        <h3 class="text-sm font-bold text-slate-700 uppercase tracking-widest mb-4">Filters</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Sender Filter -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Sender</label>
+                <div class="relative">
+                    <i class="fa-solid fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input 
+                        type="text" 
+                        placeholder="Search sender..."
+                        class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sim outline-none text-sm"
+                    >
+                </div>
+            </div>
+            
+            <!-- Recipient Filter -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Recipient</label>
+                <div class="relative">
+                    <i class="fa-solid fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input 
+                        type="text" 
+                        placeholder="Search recipient..."
+                        class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sim outline-none text-sm"
+                    >
+                </div>
+            </div>
+            
+            <!-- Date Range -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Date Range</label>
+                <select class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sim outline-none text-sm">
+                    <option>Last 7 days</option>
+                    <option>Last 30 days</option>
+                    <option>Last 90 days</option>
+                    <option>All time</option>
+                    <option>Custom range</option>
+                </select>
+            </div>
+            
+            <!-- Amount Range -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Amount Range</label>
+                <div class="flex gap-2">
+                    <input 
+                        type="number" 
+                        placeholder="Min"
+                        class="flex-1 px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sim outline-none text-sm"
+                    >
+                    <input 
+                        type="number" 
+                        placeholder="Max"
+                        class="flex-1 px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-sim outline-none text-sm"
+                    >
+                </div>
+            </div>
+        </div>
+        <div class="mt-4 flex gap-2">
+            <button class="px-4 py-2 bg-sim text-white rounded-lg text-sm font-bold hover:opacity-90 transition">
+                Apply Filters
+            </button>
+            <button class="px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-gray-50 transition">
+                Clear Filters
+            </button>
+        </div>
+    </div>
+
+    <!-- Summary Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white rounded-xl border border-gray-200 p-4">
+            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Total Transfers</p>
+            <p class="text-2xl font-extrabold text-slate-800">342</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 p-4">
+            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Total Volume</p>
+            <p class="text-2xl font-extrabold text-sim">$8,750</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 p-4">
+            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Unique Users</p>
+            <p class="text-2xl font-extrabold text-slate-800">156</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 p-4">
+            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Avg Transfer</p>
+            <p class="text-2xl font-extrabold text-slate-800">$25.58</p>
+        </div>
+    </div>
+
+    <!-- Transfer Table -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <!-- Desktop Table View -->
+        <div class="hidden md:block overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Sender</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Recipient</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Date</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Amount</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Message</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="transfersBody" class="divide-y divide-gray-100">
+                    <!-- Transfer 1 -->
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold">
+                                    U1
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">@user123</p>
+                                    <p class="text-xs text-slate-500">user@example.com</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs font-bold">
+                                    U2
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">@user456</p>
+                                    <p class="text-xs text-slate-500">user2@example.com</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-sm font-medium text-slate-800">Jan 15, 2025</p>
+                            <p class="text-xs text-slate-500">10:15 AM</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-sm font-bold text-sim">$50.00</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-sm text-slate-600 italic">"Good luck with your investment journey!"</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <button data-route="adminUserDetail" class="text-sm font-bold text-sim hover:underline">View</button>
+                        </td>
+                    </tr>
+                    
+                    <!-- Transfer 2 -->
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white text-xs font-bold">
+                                    U3
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">@user789</p>
+                                    <p class="text-xs text-slate-500">user3@example.com</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white text-xs font-bold">
+                                    U4
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">@user101</p>
+                                    <p class="text-xs text-slate-500">user4@example.com</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-sm font-medium text-slate-800">Jan 14, 2025</p>
+                            <p class="text-xs text-slate-500">2:30 PM</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-sm font-bold text-sim">$25.00</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-sm text-slate-400 italic">(No message)</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <button data-route="adminUserDetail" class="text-sm font-bold text-sim hover:underline">View</button>
+                        </td>
+                    </tr>
+                    
+                    <!-- Transfer 3 -->
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center text-white text-xs font-bold">
+                                    U5
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">@trader_jane</p>
+                                    <p class="text-xs text-slate-500">jane@example.com</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center text-white text-xs font-bold">
+                                    U6
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">@investor_pro</p>
+                                    <p class="text-xs text-slate-500">pro@example.com</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-sm font-medium text-slate-800">Jan 13, 2025</p>
+                            <p class="text-xs text-slate-500">9:00 AM</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-sm font-bold text-sim">$100.00</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-sm text-slate-600 italic">"Keep learning and growing!"</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <button data-route="adminUserDetail" class="text-sm font-bold text-sim hover:underline">View</button>
+                        </td>
+                    </tr>
+                    
+                    <!-- Transfer 4: Potential Abuse Pattern -->
+                    <tr class="hover:bg-gray-50 transition bg-amber-50/30">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold">
+                                    U1
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">@user123</p>
+                                    <p class="text-xs text-slate-500">user@example.com</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs font-bold">
+                                    U2
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">@user456</p>
+                                    <p class="text-xs text-slate-500">user2@example.com</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-sm font-medium text-slate-800">Jan 12, 2025</p>
+                            <p class="text-xs text-slate-500">3:45 PM</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-2">
+                                <p class="text-sm font-bold text-sim">$30.00</p>
+                                <span class="px-2 py-0.5 bg-amber-100 text-amber-700 rounded text-xs font-bold" title="Multiple transfers between same users">⚠️</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <p class="text-sm text-slate-400 italic">(No message)</p>
+                        </td>
+                        <td class="px-6 py-4">
+                            <button data-route="adminUserDetail" class="text-sm font-bold text-sim hover:underline">View</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Mobile Card View -->
+        <div class="md:hidden divide-y divide-gray-100">
+            <!-- Transfer Card 1 -->
+            <div class="p-4">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold">
+                                U1
+                            </div>
+                            <i class="fa-solid fa-arrow-right text-slate-400 text-xs"></i>
+                            <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs font-bold">
+                                U2
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-500">@user123 → @user456</p>
+                    </div>
+                    <p class="text-sm font-bold text-sim">$50.00</p>
+                </div>
+                <p class="text-xs text-slate-500 mb-2">Jan 15, 2025 • 10:15 AM</p>
+                <p class="text-xs text-slate-600 italic mb-2">"Good luck with your investment journey!"</p>
+                <button data-route="adminUserDetail" class="text-xs font-bold text-sim hover:underline">View Details</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex items-center justify-between mt-6">
+        <p class="text-sm text-slate-500">Showing 1-20 of 342 transfers</p>
+        <div class="flex items-center gap-2">
+            <button class="px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-bold hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                <i class="fa-solid fa-chevron-left"></i> Previous
+            </button>
+            <div class="flex gap-1">
+                <button class="px-3 py-2 bg-sim text-white rounded-lg text-sm font-bold">1</button>
+                <button class="px-3 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-bold hover:bg-gray-50">2</button>
+                <button class="px-3 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-bold hover:bg-gray-50">3</button>
+                <span class="px-3 py-2 text-slate-500">...</span>
+                <button class="px-3 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-bold hover:bg-gray-50">10</button>
+            </div>
+            <button class="px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-bold hover:bg-gray-50 transition">
+                Next <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Abuse Monitoring Note -->
+    <div class="mt-6 bg-amber-50 border border-amber-200 rounded-2xl p-6">
+        <div class="flex items-start gap-4">
+            <i class="fa-solid fa-shield-halved text-amber-600 text-xl shrink-0 mt-1"></i>
+            <div>
+                <h3 class="text-sm font-bold text-amber-900 mb-2">Abuse Monitoring</h3>
+                <p class="text-xs text-amber-800 leading-relaxed">
+                    Transfers flagged with ⚠️ indicate potential abuse patterns (e.g., multiple transfers between same users, unusual amounts, rapid transfers). Review these transfers for compliance and security purposes.
+                </p>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<script>
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', function() {
+        const query = this.value.toLowerCase();
+        // In production, this would filter transfers
+        console.log('Searching for:', query);
+    });
+
+    // Export functionality
+    document.querySelector('button:contains("Export CSV")')?.addEventListener('click', function() {
+        // In production, this would trigger CSV export
+        console.log('Exporting to CSV...');
+        alert('CSV export started. Download will begin shortly.');
+    });
+</script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/forms.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+
+<script>
+(function () {
+    const body = document.getElementById('transfersBody');
+    if (!body) return;
+    const esc = (v) => window.Utils?.escapeHtml ? Utils.escapeHtml(v ?? '') : (v ?? '');
+    const money = (n) => '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    async function load() {
+        body.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-slate-500">Loading transfers...</td></tr>';
+        try {
+            const res = await API.admin.getSimulatedTransfers({ per_page: 50 });
+            const rows = res.transfers || [];
+            if (!rows.length) {
+                body.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-slate-500">No simulated transfers.</td></tr>';
+                return;
+            }
+            body.innerHTML = rows.map(t => `
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="px-6 py-4">
+                        <p class="text-sm font-bold text-slate-800">@${esc(t.from_user?.username || 'unknown')}</p>
+                        <p class="text-xs text-slate-500">${esc(t.from_user?.display_name || '')}</p>
+                    </td>
+                    <td class="px-6 py-4">
+                        <p class="text-sm font-bold text-slate-800">@${esc(t.to_user?.username || 'unknown')}</p>
+                        <p class="text-xs text-slate-500">${esc(t.to_user?.display_name || '')}</p>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-slate-600">${t.created_at ? new Date(t.created_at).toLocaleString() : '-'}</td>
+                    <td class="px-6 py-4 font-mono font-bold text-slate-700">${money(t.amount)}</td>
+                    <td class="px-6 py-4 text-xs text-slate-600 max-w-[260px] truncate">${esc(t.message || '-')}</td>
+                </tr>`).join('');
+        } catch (e) {
+            console.error(e);
+            body.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-red-500">Failed to load transfers.</td></tr>';
+        }
+    }
+    load();
+})();
+</script>
+</body>
+</html>

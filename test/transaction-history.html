@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Transaction History | ConchCapital</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .text-real { color: #10B981; }
+        .bg-real { background-color: #10B981; }
+
+        /* Mobile Bottom Navigation Styles */
+        .mobile-nav-item {
+            color: #6B7280;
+            transition: all 0.2s;
+        }
+
+        .mobile-nav-item.active {
+            color: #10B981;
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+
+        .mobile-nav-item:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen pb-20 lg:pb-0" data-page="transactions">
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 shadow-lg">
+        <div class="flex items-center justify-around px-2 py-2">
+            <a href="#" data-route="dashboard" class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition">
+                <i class="fa-solid fa-house text-lg"></i>
+                <span class="text-[10px] font-medium">Dashboard</span>
+            </a>
+            <a href="#" data-route="profitGrowths" class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition">
+                <i class="fa-solid fa-chart-line text-lg"></i>
+                <span class="text-[10px] font-medium">Growth</span>
+            </a>
+            <a href="#" data-route="transactions" class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition active">
+                <i class="fa-solid fa-file-invoice-dollar text-lg"></i>
+                <span class="text-[10px] font-medium">Transactions</span>
+            </a>
+            <a href="#" data-route="profile" class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition">
+                <i class="fa-solid fa-user text-lg"></i>
+                <span class="text-[10px] font-medium">Profile</span>
+            </a>
+            <a href="#" data-route="settings" class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition">
+                <i class="fa-solid fa-gear text-lg"></i>
+                <span class="text-[10px] font-medium">Settings</span>
+            </a>
+        </div>
+    </nav>
+
+<nav class="hidden lg:flex bg-white border-b border-gray-200 px-8 py-4 items-center justify-between">
+    <div class="text-xl font-bold tracking-tight text-slate-800">Conch<span class="text-[#10B981]">Capital</span></div>
+    <div class="flex items-center gap-6">
+        <a href="#" data-route="dashboard" class="text-sm font-medium text-slate-500 hover:text-slate-800">Dashboard</a>
+        <a href="#" data-route="transactions" class="text-sm font-bold text-real border-b-2 border-real pb-4 mt-4">Transactions</a>
+        <a href="#" data-route="profitGrowths" class="text-sm font-medium text-slate-500 hover:text-slate-800">Profit Growth</a>
+        <a href="#" data-route="profile" class="text-sm font-medium text-slate-500 hover:text-slate-800">Profile</a>
+        <a href="#" data-route="settings" class="text-sm font-medium text-slate-500 hover:text-slate-800">Settings</a>
+        <div class="flex items-center gap-4">
+            <div class="relative">
+                <button onclick="toggleNotificationDropdown()" class="relative text-slate-400 hover:text-slate-600 transition">
+                    <i class="fa-regular fa-bell text-xl"></i>
+                    <span id="notificationBadge" class="hidden absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
+                </button>
+                <!-- Notification Dropdown -->
+                <div id="notificationDropdown" class="hidden absolute right-0 top-full mt-2 w-80 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden z-50 max-h-96 overflow-y-auto">
+                    <div class="p-4 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white">
+                        <h3 class="text-sm font-bold text-slate-900">Notifications</h3>
+                        <a href="#" data-route="notifications" class="text-xs font-bold text-blue-600 hover:text-blue-800">View All</a>
+                    </div>
+                    <div id="notificationDropdownList" class="divide-y divide-gray-100">
+                        <div class="p-4 text-center text-slate-500">
+                            <i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i>
+                            <p class="text-sm">Loading notifications...</p>
+                        </div>
+                    </div>
+                    <div class="p-3 border-t border-gray-200 bg-gray-50 text-center">
+                        <a href="#" data-route="notifications" class="text-xs font-bold text-blue-600 hover:text-blue-800">View All Notifications</a>
+                    </div>
+                </div>
+            </div>
+            <div class="relative">
+                <button onclick="toggleHeaderUserMenu()" class="flex items-center space-x-3 px-3 py-2 border border-gray-200 rounded-xl text-sm font-bold text-slate-600 hover:bg-gray-50 transition">
+                    <div id="headerUserAvatar" class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-xs shrink-0 overflow-hidden">
+                        <span id="headerUserInitials">U</span>
+                        <img id="headerUserImage" src="" alt="Profile" class="hidden w-8 h-8 rounded-full object-cover">
+                    </div>
+                    <span id="headerUserName" class="hidden md:inline">User</span>
+                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                </button>
+                <!-- User Menu Dropdown -->
+                <div id="headerUserMenuDropdown" class="hidden absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden z-50">
+                    <a href="#" data-route="profile" class="flex items-center space-x-3 px-4 py-3 text-sm text-slate-700 hover:bg-gray-50 transition">
+                        <i class="fa-solid fa-user text-sm w-5"></i>
+                        <span>View Profile</span>
+                    </a>
+                    <a href="#" data-route="settings" class="flex items-center space-x-3 px-4 py-3 text-sm text-slate-700 hover:bg-gray-50 transition">
+                        <i class="fa-solid fa-gear text-sm w-5"></i>
+                        <span>Settings</span>
+                    </a>
+                    <div class="border-t border-gray-200"></div>
+                    <button onclick="handleLogout()" class="w-full flex items-center space-x-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition">
+                        <i class="fa-solid fa-right-from-bracket text-sm w-5"></i>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-6xl mx-auto py-6 lg:py-10 px-4 lg:px-6">
+    
+    <!-- Back Link -->
+    <a href="#" data-route="dashboard" class="inline-flex items-center text-xs lg:text-sm text-gray-500 hover:text-gray-800 transition mb-4 lg:mb-6">
+        <i class="fa-solid fa-arrow-left mr-2"></i> Back to Dashboard
+    </a>
+
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 lg:gap-4 mb-6 lg:mb-8">
+        <div>
+            <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-900 mb-1 lg:mb-2">Transaction History</h1>
+            <p class="text-xs lg:text-sm text-slate-500">View all your deposits, withdrawals, and credits</p>
+        </div>
+    </div>
+
+    <!-- Search and Export -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-3 lg:p-4 mb-4 lg:mb-6">
+        <div class="flex flex-col sm:flex-row gap-3 lg:gap-4">
+            <div class="flex-1 relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 lg:left-4 top-1/2 transform -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input 
+                    type="text" 
+                    placeholder="Search transactions..."
+                    class="w-full pl-10 lg:pl-12 pr-3 lg:pr-4 py-2.5 lg:py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-real focus:border-real outline-none text-sm"
+                    id="searchInput"
+                >
+            </div>
+            <button class="px-4 lg:px-6 py-2.5 lg:py-3 bg-white border-2 border-gray-200 text-slate-600 rounded-xl text-xs lg:text-sm font-bold hover:bg-gray-50 transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-download"></i> <span class="hidden sm:inline">Export</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 lg:p-6 mb-4 lg:mb-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-4">
+            <!-- Type Filter -->
+            <div>
+                <label class="block text-[10px] lg:text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Type</label>
+                <div class="flex flex-wrap gap-2">
+                    <button id="filterTypeAll" onclick="filterByType(null)" class="px-3 lg:px-4 py-1.5 lg:py-2 bg-real text-white rounded-lg text-xs lg:text-sm font-bold">All</button>
+                    <button id="filterTypeDeposit" onclick="filterByType('deposit')" class="px-3 lg:px-4 py-1.5 lg:py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-xs lg:text-sm font-medium hover:bg-gray-50">Deposits</button>
+                    <button id="filterTypeWithdrawal" onclick="filterByType('withdrawal')" class="px-3 lg:px-4 py-1.5 lg:py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-xs lg:text-sm font-medium hover:bg-gray-50">Withdrawals</button>
+                    <button id="filterTypeCredit" onclick="filterByType('credit')" class="px-3 lg:px-4 py-1.5 lg:py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-xs lg:text-sm font-medium hover:bg-gray-50">Credits</button>
+                </div>
+            </div>
+            
+            <!-- Status Filter -->
+            <div>
+                <label class="block text-[10px] lg:text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Status</label>
+                <div class="flex flex-wrap gap-2">
+                    <button id="filterStatusAll" onclick="filterByStatus(null)" class="px-3 lg:px-4 py-1.5 lg:py-2 bg-real text-white rounded-lg text-xs lg:text-sm font-bold">All</button>
+                    <button id="filterStatusPending" onclick="filterByStatus('pending')" class="px-3 lg:px-4 py-1.5 lg:py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-xs lg:text-sm font-medium hover:bg-gray-50">Pending</button>
+                    <button id="filterStatusCompleted" onclick="filterByStatus('completed')" class="px-3 lg:px-4 py-1.5 lg:py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-xs lg:text-sm font-medium hover:bg-gray-50">Completed</button>
+                    <button id="filterStatusFailed" onclick="filterByStatus('failed')" class="px-3 lg:px-4 py-1.5 lg:py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-xs lg:text-sm font-medium hover:bg-gray-50">Failed</button>
+                </div>
+            </div>
+            
+            <!-- Date Filter -->
+            <div>
+                <label class="block text-[10px] lg:text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Date Range</label>
+                <select class="w-full px-3 lg:px-4 py-2 bg-white border border-gray-200 rounded-lg text-xs lg:text-sm font-medium outline-none focus:ring-2 focus:ring-real">
+                    <option>Last 7 days</option>
+                    <option>Last 30 days</option>
+                    <option>Last 90 days</option>
+                    <option>All time</option>
+                    <option>Custom range</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction Detail Modal -->
+    <div id="transactionDetailModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-4 lg:p-6 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white">
+                <h2 class="text-lg lg:text-2xl font-bold text-slate-900">Transaction Details</h2>
+                <button onclick="closeTransactionModal()" class="text-slate-400 hover:text-slate-600 transition">
+                    <i class="fa-solid fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-4 lg:p-6 space-y-4 lg:space-y-6">
+                <!-- Transaction Icon and Type -->
+                <div class="flex items-center gap-3 lg:gap-4 pb-3 lg:pb-4 border-b border-gray-200">
+                    <div id="modalTransactionIcon" class="w-12 h-12 lg:w-16 lg:h-16 rounded-full flex items-center justify-center">
+                        <i id="modalIcon" class="fa-solid text-xl lg:text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 id="modalTransactionType" class="text-base lg:text-xl font-bold text-slate-900"></h3>
+                        <p id="modalTransactionStatus" class="text-xs lg:text-sm text-slate-500 mt-1"></p>
+                    </div>
+                </div>
+
+                <!-- Amount -->
+                <div class="bg-gray-50 rounded-xl p-4 lg:p-6 border border-gray-200">
+                    <p class="text-[10px] lg:text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Amount</p>
+                    <p id="modalTransactionAmount" class="text-2xl lg:text-3xl font-extrabold"></p>
+                    <p id="modalTransactionCurrency" class="text-xs lg:text-sm text-slate-500 mt-1"></p>
+                </div>
+
+                <!-- Transaction Details Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4">
+                    <div>
+                        <p class="text-[10px] lg:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1 lg:mb-2">Transaction ID</p>
+                        <p id="modalTransactionId" class="text-xs lg:text-sm font-medium text-slate-800"></p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] lg:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1 lg:mb-2">Date & Time</p>
+                        <p id="modalTransactionDate" class="text-xs lg:text-sm font-medium text-slate-800"></p>
+                        <p id="modalTransactionTime" class="text-[10px] lg:text-xs text-slate-500"></p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] lg:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1 lg:mb-2">Fund Type</p>
+                        <p id="modalFundType" class="text-xs lg:text-sm font-medium text-slate-800"></p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] lg:text-xs font-bold text-slate-500 uppercase tracking-widest mb-1 lg:mb-2">Status</p>
+                        <span id="modalStatusBadge" class="inline-block px-2 lg:px-3 py-1 rounded-full text-[10px] lg:text-xs font-bold"></span>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div id="modalDescriptionContainer" class="hidden">
+                    <p class="text-[10px] lg:text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Description</p>
+                    <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 lg:p-4">
+                        <p id="modalTransactionDescription" class="text-xs lg:text-sm text-slate-800"></p>
+                    </div>
+                </div>
+
+                <!-- Close Button -->
+                <div class="pt-3 lg:pt-4 border-t border-gray-200">
+                    <button onclick="closeTransactionModal()" class="w-full px-4 lg:px-6 py-2.5 lg:py-3 bg-real text-white rounded-xl text-sm lg:text-base font-bold hover:opacity-90 transition">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction Table -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <!-- Desktop Table View -->
+        <div class="hidden md:block overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Type</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Date</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Amount</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Status</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionsTableBody" class="divide-y divide-gray-100">
+                    <tr>
+                        <td colspan="5" class="px-6 py-12 text-center">
+                            <i class="fa-solid fa-spinner fa-spin text-2xl text-slate-400 mb-2"></i>
+                            <p class="text-slate-500">Loading transactions...</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Mobile Card View -->
+        <div id="transactionsMobileView" class="md:hidden divide-y divide-gray-100">
+            <div class="p-4 text-center">
+                <i class="fa-solid fa-spinner fa-spin text-2xl text-slate-400 mb-2"></i>
+                <p class="text-slate-500">Loading transactions...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div id="paginationContainer" class="flex flex-col sm:flex-row items-center justify-between gap-3 lg:gap-0 mt-4 lg:mt-6">
+        <p id="paginationInfo" class="text-xs lg:text-sm text-slate-500 text-center sm:text-left">Loading...</p>
+        <div class="flex items-center gap-2">
+            <button id="prevBtn" class="px-3 lg:px-4 py-1.5 lg:py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-xs lg:text-sm font-bold hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                <i class="fa-solid fa-chevron-left"></i> <span class="hidden sm:inline">Previous</span>
+            </button>
+            <div id="pageNumbers" class="flex gap-1"></div>
+            <button id="nextBtn" class="px-3 lg:px-4 py-1.5 lg:py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-xs lg:text-sm font-bold hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                <span class="hidden sm:inline">Next </span><i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Empty State (Hidden by default) -->
+    <div id="emptyState" class="hidden text-center py-16">
+        <i class="fa-solid fa-receipt text-6xl text-slate-300 mb-4"></i>
+        <h3 class="text-xl font-bold text-slate-800 mb-2">No transactions found</h3>
+        <p class="text-slate-500">Try adjusting your filters or search terms</p>
+    </div>
+
+</main>
+
+<script>
+    let currentPage = 1;
+    let currentType = null;
+    let currentStatus = null;
+    let searchQuery = '';
+    let searchTimeout = null;
+    let paginationData = null;
+    let allTransactions = []; // Store all loaded transactions for detail view
+
+    // Format date
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
+        const timeOptions = { hour: '2-digit', minute: '2-digit' };
+        return {
+            date: date.toLocaleDateString('en-US', options),
+            time: date.toLocaleTimeString('en-US', timeOptions)
+        };
+    }
+
+    // Get transaction icon and color
+    function getTransactionIcon(type, status) {
+        if (type === 'deposit') {
+            return status === 'pending' 
+                ? { icon: 'fa-clock', bg: 'bg-amber-100', color: 'text-amber-600' }
+                : { icon: 'fa-arrow-down', bg: 'bg-green-100', color: 'text-green-600' };
+        } else if (type === 'withdrawal') {
+            return { icon: 'fa-arrow-up', bg: 'bg-red-100', color: 'text-red-600' };
+        } else if (type === 'credit') {
+            return { icon: 'fa-gift', bg: 'bg-blue-100', color: 'text-blue-600' };
+        }
+        return { icon: 'fa-exchange', bg: 'bg-gray-100', color: 'text-gray-600' };
+    }
+
+    // Get status badge
+    function getStatusBadge(status) {
+        const badges = {
+            'completed': 'bg-green-100 text-green-700',
+            'pending': 'bg-amber-100 text-amber-700',
+            'failed': 'bg-red-100 text-red-700',
+            'cancelled': 'bg-gray-100 text-gray-700'
+        };
+        return badges[status] || 'bg-gray-100 text-gray-700';
+    }
+
+    // Load transactions
+    async function loadTransactions(page = 1) {
+        try {
+            currentPage = page;
+            
+            const tbody = document.getElementById('transactionsTableBody');
+            const mobileView = document.getElementById('transactionsMobileView');
+            
+            tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-12 text-center"><i class="fa-solid fa-spinner fa-spin text-2xl text-slate-400 mb-2"></i><p class="text-slate-500">Loading transactions...</p></td></tr>';
+            mobileView.innerHTML = '<div class="p-4 text-center"><i class="fa-solid fa-spinner fa-spin text-2xl text-slate-400 mb-2"></i><p class="text-slate-500">Loading transactions...</p></div>';
+
+            const params = {
+                page: page,
+                per_page: 20
+            };
+
+            if (currentType) params.type = currentType;
+            if (currentStatus) params.status = currentStatus;
+
+            const response = await API.user.getTransactions(params);
+            
+            // Handle Laravel pagination response
+            let transactions = [];
+            if (response.data && Array.isArray(response.data)) {
+                transactions = response.data;
+                // Store transactions for detail view
+                allTransactions = transactions;
+                paginationData = response;
+            } else if (Array.isArray(response)) {
+                transactions = response;
+                paginationData = { data: response, total: response.length, per_page: 20, current_page: 1, last_page: 1 };
+            } else {
+                console.error('Unexpected response format:', response);
+                throw new Error('Invalid response format from API');
+            }
+
+            if (!Array.isArray(transactions) || transactions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-12 text-center"><p class="text-slate-500">No transactions found</p></td></tr>';
+                mobileView.innerHTML = '<div class="p-4 text-center text-slate-500">No transactions found</div>';
+                updatePagination();
+                return;
+            }
+
+            // Filter by search query if provided
+            let filtered = transactions;
+            if (searchQuery) {
+                const query = searchQuery.toLowerCase();
+                filtered = transactions.filter(tx => 
+                    tx.id.toString().includes(query) ||
+                    (tx.description || '').toLowerCase().includes(query) ||
+                    tx.amount.toString().includes(query)
+                );
+            }
+
+            renderTransactions(filtered);
+            updatePagination();
+        } catch (error) {
+            console.error('Failed to load transactions:', error);
+            const errorMessage = error.response?.message || error.message || 'Failed to load transactions';
+            const tbody = document.getElementById('transactionsTableBody');
+            const mobileView = document.getElementById('transactionsMobileView');
+            tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-12 text-center text-red-500">${errorMessage}</td></tr>`;
+            mobileView.innerHTML = `<div class="p-4 text-center text-red-500">${errorMessage}</div>`;
+            Utils?.showToast?.(errorMessage, 'error');
+        }
+    }
+
+    // Render transactions
+    function renderTransactions(transactions) {
+        const tbody = document.getElementById('transactionsTableBody');
+        const mobileView = document.getElementById('transactionsMobileView');
+        
+        tbody.innerHTML = '';
+        mobileView.innerHTML = '';
+
+        transactions.forEach(tx => {
+            const date = formatDate(tx.created_at);
+            const iconData = getTransactionIcon(tx.type, tx.status);
+            const amount = parseFloat(tx.amount || 0);
+            const isPositive = tx.type === 'deposit' || tx.type === 'credit';
+            const amountColor = isPositive ? 'text-green-600' : 'text-red-600';
+            const amountSign = isPositive ? '+' : '-';
+
+            // Desktop row
+            const row = document.createElement('tr');
+            row.className = 'hover:bg-gray-50 transition';
+            row.innerHTML = `
+                <td class="px-6 py-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full ${iconData.bg} flex items-center justify-center">
+                            <i class="fa-solid ${iconData.icon} ${iconData.color}"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-800">${tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}</p>
+                            <p class="text-xs text-slate-500">${tx.fund_type || 'USD'}</p>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4">
+                    <p class="text-sm font-medium text-slate-800">${date.date}</p>
+                    <p class="text-xs text-slate-500">${date.time}</p>
+                </td>
+                <td class="px-6 py-4">
+                    <p class="text-sm font-bold ${amountColor}">${amountSign}$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p class="text-xs text-slate-500">${tx.currency || 'USD'}</p>
+                </td>
+                <td class="px-6 py-4">
+                    <span class="px-3 py-1 ${getStatusBadge(tx.status)} rounded-full text-xs font-bold">${tx.status.charAt(0).toUpperCase() + tx.status.slice(1)}</span>
+                </td>
+                <td class="px-6 py-4">
+                    <button onclick="viewTransaction(${tx.id})" class="text-sm font-bold text-real hover:underline cursor-pointer">View</button>
+                </td>
+            `;
+            row.setAttribute('data-transaction-id', tx.id);
+            tbody.appendChild(row);
+
+            // Mobile card
+            const card = document.createElement('div');
+            card.className = 'p-4';
+            card.innerHTML = `
+                <div class="flex items-start justify-between mb-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full ${iconData.bg} flex items-center justify-center">
+                            <i class="fa-solid ${iconData.icon} ${iconData.color}"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-800">${tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}</p>
+                            <p class="text-xs text-slate-500">${date.date} • ${date.time}</p>
+                        </div>
+                    </div>
+                    <span class="px-3 py-1 ${getStatusBadge(tx.status)} rounded-full text-xs font-bold">${tx.status.charAt(0).toUpperCase() + tx.status.slice(1)}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-bold ${amountColor}">${amountSign}$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                        <p class="text-xs text-slate-500">${tx.currency || 'USD'}</p>
+                    </div>
+                    <button onclick="viewTransaction(${tx.id})" class="text-sm font-bold text-real hover:underline cursor-pointer">View</button>
+                </div>
+            `;
+            card.setAttribute('data-transaction-id', tx.id);
+            mobileView.appendChild(card);
+        });
+    }
+
+    // Update pagination
+    function updatePagination() {
+        if (!paginationData) return;
+
+        const total = paginationData.total || 0;
+        const perPage = paginationData.per_page || 20;
+        const current = paginationData.current_page || 1;
+        const lastPage = paginationData.last_page || 1;
+        const from = ((current - 1) * perPage) + 1;
+        const to = Math.min(current * perPage, total);
+
+        document.getElementById('paginationInfo').textContent = `Showing ${from}-${to} of ${total} transactions`;
+
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        prevBtn.disabled = current === 1;
+        nextBtn.disabled = current >= lastPage;
+
+        // Page numbers
+        const pageNumbers = document.getElementById('pageNumbers');
+        pageNumbers.innerHTML = '';
+        
+        const maxPages = Math.min(lastPage, 5);
+        let startPage = Math.max(1, current - 2);
+        if (startPage + maxPages > lastPage) {
+            startPage = Math.max(1, lastPage - maxPages + 1);
+        }
+
+        for (let i = startPage; i < startPage + maxPages && i <= lastPage; i++) {
+            const btn = document.createElement('button');
+            btn.className = `px-2 lg:px-3 py-1.5 lg:py-2 rounded-lg text-xs lg:text-sm font-bold ${i === current ? 'bg-real text-white' : 'bg-white border border-gray-200 text-slate-600 hover:bg-gray-50'}`;
+            btn.textContent = i;
+            btn.onclick = () => loadTransactions(i);
+            pageNumbers.appendChild(btn);
+        }
+    }
+
+    // Filter by type
+    function filterByType(type) {
+        currentType = type;
+        currentPage = 1;
+        
+        // Update button styles
+        document.querySelectorAll('[id^="filterType"]').forEach(btn => {
+            btn.classList.remove('bg-real', 'text-white');
+            btn.classList.add('bg-white', 'border', 'border-gray-200', 'text-slate-600');
+        });
+        
+        const activeBtn = type === null ? document.getElementById('filterTypeAll') : 
+                         document.getElementById(`filterType${type.charAt(0).toUpperCase() + type.slice(1)}`);
+        if (activeBtn) {
+            activeBtn.classList.add('bg-real', 'text-white');
+            activeBtn.classList.remove('bg-white', 'border', 'border-gray-200', 'text-slate-600');
+        }
+        
+        loadTransactions(1);
+    }
+
+    // Filter by status
+    function filterByStatus(status) {
+        currentStatus = status;
+        currentPage = 1;
+        
+        // Update button styles
+        document.querySelectorAll('[id^="filterStatus"]').forEach(btn => {
+            btn.classList.remove('bg-real', 'text-white');
+            btn.classList.add('bg-white', 'border', 'border-gray-200', 'text-slate-600');
+        });
+        
+        const activeBtn = status === null ? document.getElementById('filterStatusAll') : 
+                         document.getElementById(`filterStatus${status.charAt(0).toUpperCase() + status.slice(1)}`);
+        if (activeBtn) {
+            activeBtn.classList.add('bg-real', 'text-white');
+            activeBtn.classList.remove('bg-white', 'border', 'border-gray-200', 'text-slate-600');
+        }
+        
+        loadTransactions(1);
+    }
+
+    // View transaction - show detail modal
+    function viewTransaction(id) {
+        // Find the transaction in allTransactions or current filtered transactions
+        const tx = allTransactions.find(t => t.id === id);
+        
+        if (!tx) {
+            console.error('Transaction not found:', id);
+            Utils?.showToast?.('Transaction details not available', 'error');
+            return;
+        }
+
+        // Get icon data
+        const iconData = getTransactionIcon(tx.type, tx.status);
+        const date = formatDate(tx.created_at);
+        const amount = parseFloat(tx.amount || 0);
+        const isPositive = tx.type === 'deposit' || tx.type === 'credit';
+        const amountColor = isPositive ? 'text-green-600' : 'text-red-600';
+        const amountSign = isPositive ? '+' : '-';
+
+        // Populate modal
+        document.getElementById('modalTransactionIcon').className = `w-16 h-16 rounded-full ${iconData.bg} flex items-center justify-center`;
+        document.getElementById('modalIcon').className = `fa-solid ${iconData.icon} ${iconData.color} text-2xl`;
+        document.getElementById('modalTransactionType').textContent = tx.type.charAt(0).toUpperCase() + tx.type.slice(1);
+        document.getElementById('modalTransactionStatus').textContent = `Status: ${tx.status.charAt(0).toUpperCase() + tx.status.slice(1)}`;
+        document.getElementById('modalTransactionAmount').textContent = `${amountSign}$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        document.getElementById('modalTransactionAmount').className = `text-3xl font-extrabold ${amountColor}`;
+        document.getElementById('modalTransactionCurrency').textContent = tx.currency || 'USD';
+        document.getElementById('modalTransactionId').textContent = `#${tx.id}`;
+        document.getElementById('modalTransactionDate').textContent = date.date;
+        document.getElementById('modalTransactionTime').textContent = date.time;
+        document.getElementById('modalFundType').textContent = tx.fund_type ? tx.fund_type.charAt(0).toUpperCase() + tx.fund_type.slice(1) + ' funds' : 'USD';
+        
+        // Status badge
+        const statusBadge = document.getElementById('modalStatusBadge');
+        statusBadge.textContent = tx.status.charAt(0).toUpperCase() + tx.status.slice(1);
+        statusBadge.className = `inline-block px-3 py-1 ${getStatusBadge(tx.status)} rounded-full text-xs font-bold`;
+
+        // Description
+        const descriptionContainer = document.getElementById('modalDescriptionContainer');
+        const descriptionElement = document.getElementById('modalTransactionDescription');
+        if (tx.description && tx.description.trim()) {
+            descriptionElement.textContent = tx.description;
+            descriptionContainer.classList.remove('hidden');
+        } else {
+            descriptionContainer.classList.add('hidden');
+        }
+
+        // Show modal
+        document.getElementById('transactionDetailModal').classList.remove('hidden');
+    }
+
+    // Close transaction modal
+    function closeTransactionModal() {
+        document.getElementById('transactionDetailModal').classList.add('hidden');
+    }
+
+    // Close modal on outside click
+    document.getElementById('transactionDetailModal')?.addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeTransactionModal();
+        }
+    });
+
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', function() {
+        searchQuery = this.value.trim();
+        
+        if (searchTimeout) {
+            clearTimeout(searchTimeout);
+        }
+        
+        searchTimeout = setTimeout(() => {
+            loadTransactions(currentPage);
+        }, 300);
+    });
+
+    // Pagination buttons
+    document.getElementById('prevBtn').addEventListener('click', function() {
+        if (currentPage > 1) {
+            currentPage = currentPage - 1;
+            loadTransactions(currentPage);
+        }
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', function() {
+        if (paginationData && currentPage < paginationData.last_page) {
+            currentPage = currentPage + 1;
+            loadTransactions(currentPage);
+        }
+    });
+
+    // Load logged-in user data for header
+    async function loadLoggedInUser() {
+        try {
+            // Get current user from API
+            const response = await API.get('/api/auth/user');
+            const user = response.user || response;
+            
+            if (user) {
+                // Update header user avatar and name
+                const initials = getInitials(user.display_name || user.name || user.username || 'U');
+                const headerInitials = document.getElementById('headerUserInitials');
+                const headerImage = document.getElementById('headerUserImage');
+                const headerName = document.getElementById('headerUserName');
+                
+                if (headerInitials) {
+                    headerInitials.textContent = initials;
+                }
+                
+                if (headerName) {
+                    headerName.textContent = user.display_name || user.name || user.username || 'User';
+                }
+                
+                if (user.avatar_url && headerImage) {
+                    let imageUrl = user.avatar_url;
+                    if (imageUrl.startsWith('/storage/')) {
+                        imageUrl = imageUrl;
+                    } else if (!imageUrl.startsWith('http://') && !imageUrl.startsWith('https://')) {
+                        imageUrl = '/' + imageUrl.replace(/^\//, '');
+                    }
+                    headerImage.src = imageUrl;
+                    headerImage.onerror = function() {
+                        headerImage.classList.add('hidden');
+                        if (headerInitials) headerInitials.classList.remove('hidden');
+                    };
+                    headerImage.onload = function() {
+                        headerImage.classList.remove('hidden');
+                        if (headerInitials) headerInitials.classList.add('hidden');
+                    };
+                }
+            }
+        } catch (error) {
+            console.error('Failed to load logged-in user:', error);
+        }
+    }
+
+    // Toggle header user menu dropdown
+    function toggleHeaderUserMenu() {
+        const dropdown = document.getElementById('headerUserMenuDropdown');
+        if (dropdown) {
+            dropdown.classList.toggle('hidden');
+        }
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        const dropdown = document.getElementById('headerUserMenuDropdown');
+        const button = event.target.closest('[onclick="toggleHeaderUserMenu()"]');
+        if (dropdown && !dropdown.contains(event.target) && !button) {
+            dropdown.classList.add('hidden');
+        }
+        
+        // Close notification dropdown when clicking outside
+        const notificationDropdown = document.getElementById('notificationDropdown');
+        const notificationButton = event.target.closest('[onclick="toggleNotificationDropdown()"]');
+        if (notificationDropdown && !notificationDropdown.contains(event.target) && !notificationButton) {
+            notificationDropdown.classList.add('hidden');
+        }
+    });
+
+    // Get initials helper
+    function getInitials(name) {
+        if (!name) return 'U';
+        const parts = name.trim().split(/\s+/);
+        if (parts.length >= 2) {
+            return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+        }
+        return name.substring(0, 2).toUpperCase();
+    }
+
+    // Handle logout
+    async function handleLogout() {
+        try {
+            await API.auth.logout();
+            localStorage.removeItem('auth_token');
+            window.location.href = '/login.html';
+        } catch (error) {
+            console.error('Logout error:', error);
+            localStorage.removeItem('auth_token');
+            window.location.href = '/login.html';
+        }
+    }
+
+    // Notification Dropdown Functions
+    window.toggleNotificationDropdown = function() {
+        const dropdown = document.getElementById('notificationDropdown');
+        if (dropdown) {
+            const isHidden = dropdown.classList.contains('hidden');
+            dropdown.classList.toggle('hidden');
+            
+            // Load notifications when opening dropdown
+            if (isHidden) {
+                loadNotificationDropdown();
+            }
+        }
+    };
+
+    // Load notifications for dropdown
+    async function loadNotificationDropdown() {
+        const dropdownList = document.getElementById('notificationDropdownList');
+        if (!dropdownList) return;
+
+        try {
+            dropdownList.innerHTML = '<div class="p-4 text-center text-slate-500"><i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i><p class="text-sm">Loading notifications...</p></div>';
+
+            const dashboardData = await API.user.getDashboard();
+            const transactions = dashboardData.recent_transactions || [];
+            const activityLogs = dashboardData.recent_activity || [];
+            
+            // Combine and sort by date (most recent first)
+            const allNotifications = [];
+            
+            // Add transactions as notifications
+            transactions.slice(0, 10).forEach(tx => {
+                allNotifications.push({
+                    type: 'transaction',
+                    id: tx.id,
+                    action: tx.type,
+                    amount: tx.amount,
+                    currency: tx.currency || 'USD',
+                    description: tx.description || '',
+                    status: tx.status,
+                    date: tx.created_at,
+                    created_at: tx.created_at
+                });
+            });
+            
+            // Add activity logs as notifications
+            activityLogs.slice(0, 10).forEach(activity => {
+                allNotifications.push({
+                    type: 'activity',
+                    id: activity.id,
+                    action: activity.action,
+                    description: activity.description || '',
+                    date: activity.created_at,
+                    created_at: activity.created_at
+                });
+            });
+            
+            // Sort by date (most recent first)
+            allNotifications.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            
+            // Get first 5 notifications for dropdown
+            const recentNotifications = allNotifications.slice(0, 5);
+            
+            // Update badge
+            const badge = document.getElementById('notificationBadge');
+            if (badge) {
+                if (recentNotifications.length > 0) {
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+            }
+            
+            // Render notifications
+            if (recentNotifications.length === 0) {
+                dropdownList.innerHTML = '<div class="p-4 text-center text-slate-500"><p class="text-sm">No notifications</p></div>';
+                return;
+            }
+            
+            dropdownList.innerHTML = recentNotifications.map(notif => {
+                const date = formatNotificationDate(notif.created_at);
+                const icon = getNotificationIcon(notif.action || notif.type);
+                const title = getNotificationTitle(notif);
+                const description = notif.description || '';
+                
+                return `
+                    <div class="p-4 hover:bg-gray-50 transition cursor-pointer" onclick="handleNotificationClick('${notif.type}', ${notif.id})">
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 rounded-full ${icon.bg} flex items-center justify-center shrink-0">
+                                <i class="fa-solid ${icon.icon} ${icon.color} text-sm"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-bold text-slate-800 mb-1">${title}</p>
+                                ${description ? `<p class="text-xs text-slate-500 line-clamp-2 mb-1">${description}</p>` : ''}
+                                <p class="text-xs text-slate-400">${date}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+        } catch (error) {
+            console.error('Failed to load notifications:', error);
+            dropdownList.innerHTML = '<div class="p-4 text-center text-red-500"><p class="text-sm">Failed to load notifications</p></div>';
+        }
+    }
+
+    // Format notification date
+    function formatNotificationDate(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+        
+        if (diffMins < 1) return 'Just now';
+        if (diffMins < 60) return `${diffMins}m ago`;
+        if (diffHours < 24) return `${diffHours}h ago`;
+        if (diffDays < 7) return `${diffDays}d ago`;
+        
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    // Get notification icon
+    function getNotificationIcon(action) {
+        const icons = {
+            'deposit': { icon: 'fa-arrow-down', color: 'text-green-600', bg: 'bg-green-100' },
+            'withdrawal': { icon: 'fa-arrow-up', color: 'text-red-600', bg: 'bg-red-100' },
+            'credit': { icon: 'fa-gift', color: 'text-blue-600', bg: 'bg-blue-100' },
+            'debit': { icon: 'fa-minus', color: 'text-orange-600', bg: 'bg-orange-100' },
+            'transfer_sent': { icon: 'fa-paper-plane', color: 'text-blue-600', bg: 'bg-blue-100' },
+            'transfer_received': { icon: 'fa-inbox', color: 'text-green-600', bg: 'bg-green-100' },
+            'profit_growth_created': { icon: 'fa-chart-line', color: 'text-purple-600', bg: 'bg-purple-100' },
+            'profit_growth_updated': { icon: 'fa-sync', color: 'text-blue-600', bg: 'bg-blue-100' }
+        };
+        
+        return icons[action] || { icon: 'fa-bell', color: 'text-slate-600', bg: 'bg-slate-100' };
+    }
+
+    // Get notification title
+    function getNotificationTitle(notif) {
+        const action = notif.action || notif.type;
+        const actionNames = {
+            'deposit': 'Deposit',
+            'withdrawal': 'Withdrawal',
+            'credit': 'Credit',
+            'debit': 'Debit',
+            'transfer_sent': 'Funds Sent',
+            'transfer_received': 'Funds Received',
+            'profit_growth_created': 'Profit Growth Created',
+            'profit_growth_updated': 'Profit Growth Updated'
+        };
+        
+        const actionName = actionNames[action] || action.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        
+        if (notif.amount) {
+            const amount = parseFloat(notif.amount);
+            const sign = action === 'deposit' || action === 'credit' || action === 'transfer_received' ? '+' : '-';
+            return `${actionName}: ${sign}$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+        
+        return actionName;
+    }
+
+    // Handle notification click
+    window.handleNotificationClick = function(type, id) {
+        if (type === 'transaction') {
+            // Navigate to transaction history or show transaction detail
+            window.location.href = '#transactions';
+        } else {
+            // Navigate to notifications page
+            window.location.href = '#notifications';
+        }
+    };
+
+    // Mobile bottom navigation active state
+    function updateMobileNavActive() {
+        const currentPage = document.body.getAttribute('data-page');
+        const navItems = document.querySelectorAll('.mobile-nav-item');
+        
+        navItems.forEach(item => {
+            const route = item.getAttribute('data-route');
+            item.classList.remove('active', 'text-[#10B981]', 'bg-green-50');
+            item.classList.add('text-gray-600');
+            
+            // Map page to route
+            const pageRouteMap = {
+                'dashboard': 'dashboard',
+                'profitGrowths': 'profitGrowths',
+                'transactions': 'transactions',
+                'profile': 'profile',
+                'settings': 'settings'
+            };
+            
+            if (route === pageRouteMap[currentPage] || (currentPage === 'transactions' && route === 'transactions')) {
+                item.classList.add('active', 'text-[#10B981]', 'bg-green-50');
+                item.classList.remove('text-gray-600');
+            }
+        });
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        loadLoggedInUser();
+        loadTransactions(1);
+        updateMobileNavActive();
+    });
+</script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/forms.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

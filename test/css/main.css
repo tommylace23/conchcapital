@@ -1,0 +1,570 @@
+/**
+ * InvestEdu - Main Stylesheet
+ * Contains all custom styles, brand colors, and overrides
+ */
+
+/* ============================================
+   FONTS
+   ============================================ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+/* ============================================
+   CSS VARIABLES (Brand Colors & Theme)
+   ============================================ */
+:root {
+    /* Brand Colors */
+    --color-primary: #10B981;        /* Green - Real Funds */
+    --color-secondary: #3B82F6;      /* Blue - Simulated Funds */
+    --color-warning: #F59E0B;        /* Amber - Warnings */
+    --color-danger: #EF4444;         /* Red - Errors/Freezes */
+    
+    /* Neutral Colors */
+    --color-slate-900: #0F172A;
+    --color-slate-800: #1E293B;
+    --color-slate-700: #334155;
+    --color-slate-600: #475569;
+    --color-slate-500: #64748B;
+    --color-slate-400: #94A3B8;
+    --color-slate-300: #CBD5E1;
+    --color-slate-200: #E2E8F0;
+    --color-slate-100: #F1F5F9;
+    --color-slate-50: #F8FAFC;
+    
+    /* Background Colors */
+    --bg-primary: #F9FAFB;
+    --bg-white: #FFFFFF;
+    
+    /* Typography */
+    --font-primary: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    
+    /* Spacing */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-2xl: 24px;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-primary);
+    background-color: var(--bg-primary);
+    color: #111827;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* Brand Colors */
+.text-real {
+    color: var(--color-primary);
+}
+
+.bg-real {
+    background-color: var(--color-primary);
+}
+
+.text-sim {
+    color: var(--color-secondary);
+}
+
+.bg-sim {
+    background-color: var(--color-secondary);
+}
+
+.bg-slate-900-brand {
+    background-color: var(--color-slate-900);
+}
+
+/* Typography */
+.mono {
+    font-family: var(--font-mono);
+}
+
+.font-inter {
+    font-family: var(--font-primary);
+}
+
+/* ============================================
+   COMPONENTS
+   ============================================ */
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.btn-secondary {
+    background-color: var(--color-secondary);
+    color: white;
+}
+
+.btn-secondary:hover {
+    opacity: 0.9;
+}
+
+.btn-outline {
+    background-color: white;
+    border: 2px solid var(--color-slate-200);
+    color: var(--color-slate-700);
+}
+
+.btn-outline:hover {
+    background-color: var(--color-slate-50);
+}
+
+.btn-danger {
+    background-color: var(--color-danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #DC2626;
+}
+
+/* Cards */
+.card {
+    background: white;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-slate-200);
+    box-shadow: var(--shadow-sm);
+    padding: 1.5rem;
+}
+
+.card-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-slate-200);
+}
+
+/* Form Elements */
+.form-input {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--color-slate-200);
+    border-radius: var(--radius-md);
+    font-family: var(--font-primary);
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    background-color: white;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.form-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-slate-700);
+    margin-bottom: 0.5rem;
+}
+
+/* Badges */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.badge-success {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #059669;
+}
+
+.badge-warning {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #D97706;
+}
+
+.badge-danger {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #DC2626;
+}
+
+.badge-info {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: #2563EB;
+}
+
+/* Alerts */
+.alert {
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-lg);
+    border: 2px solid;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.alert-warning {
+    background-color: rgba(245, 158, 11, 0.05);
+    border-color: rgba(245, 158, 11, 0.3);
+    color: #92400E;
+}
+
+.alert-danger {
+    background-color: rgba(239, 68, 68, 0.05);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #991B1B;
+}
+
+.alert-info {
+    background-color: rgba(59, 130, 246, 0.05);
+    border-color: rgba(59, 130, 246, 0.3);
+    color: #1E40AF;
+}
+
+.alert-success {
+    background-color: rgba(16, 185, 129, 0.05);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: #047857;
+}
+
+/* Sidebar Navigation */
+.sidebar {
+    width: 16rem;
+    background-color: var(--color-slate-900);
+    color: var(--color-slate-400);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    border-right: 1px solid var(--color-slate-800);
+}
+
+.sidebar-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: var(--radius-lg);
+    transition: all 0.2s ease;
+    color: var(--color-slate-400);
+    text-decoration: none;
+}
+
+.sidebar-nav-link:hover {
+    background-color: var(--color-slate-800);
+    color: white;
+}
+
+.sidebar-nav-link.active {
+    background-color: var(--color-slate-800);
+    color: white;
+}
+
+/* ============================================
+   RESPONSIVE UTILITIES
+   ============================================ */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        position: fixed;
+        height: 100vh;
+        z-index: 50;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .sidebar.open {
+        transform: translateX(0);
+    }
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spin {
+    animation: spin 1s linear infinite;
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+    .sidebar,
+    .no-print {
+        display: none !important;
+    }
+}
+
+/* ---------------------------------------------------------------
+   Recent Payouts ticker (js/payouts.js)
+   --------------------------------------------------------------- */
+#payoutsTicker {
+    overflow: hidden;
+    position: relative;
+    background: #0F172A;
+    border-radius: 9999px;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    display: flex;
+    align-items: center;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+#payoutsTicker.hidden {
+    display: none !important;
+}
+
+#payoutsTicker .payout-label {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1rem;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #10B981;
+    border-right: 1px solid rgba(148, 163, 184, 0.25);
+    white-space: nowrap;
+    z-index: 2;
+    background: #0F172A;
+}
+
+#payoutsTicker .payout-live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 9999px;
+    background: #10B981;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
+    animation: payoutPulse 2s infinite;
+}
+
+@keyframes payoutPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.55); }
+    70%  { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+#payoutsTicker .payout-viewport {
+    flex: 1 1 auto;
+    overflow: hidden;
+}
+
+#payoutsTicker .payout-track {
+    display: inline-flex;
+    align-items: center;
+    gap: 2.25rem;
+    padding: 0.55rem 1.25rem;
+    white-space: nowrap;
+    will-change: transform;
+    animation: payoutScroll 40s linear infinite;
+}
+
+#payoutsTicker:hover .payout-track {
+    animation-play-state: paused;
+}
+
+@keyframes payoutScroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+
+#payoutsTicker .payout-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 12px;
+    color: #CBD5E1;
+}
+
+#payoutsTicker .payout-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 9999px;
+    background: #10B981;
+    flex: 0 0 auto;
+}
+
+#payoutsTicker .payout-name {
+    font-weight: 700;
+    color: #F8FAFC;
+}
+
+#payoutsTicker .payout-action {
+    color: #94A3B8;
+}
+
+#payoutsTicker .payout-amount {
+    font-weight: 800;
+    color: #10B981;
+}
+
+#payoutsTicker .payout-time {
+    color: #64748B;
+    font-size: 11px;
+}
+
+@media (max-width: 640px) {
+    #payoutsTicker .payout-label {
+        display: none;
+    }
+    #payoutsTicker {
+        border-radius: 0.85rem;
+    }
+}
+
+/* ---------------------------------------------------------------
+   Trust rail (custody & settlement partners)
+   --------------------------------------------------------------- */
+.trust-rail {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem 1.5rem;
+    padding: 1.1rem 1.25rem;
+    border: 1px solid #E5E7EB;
+    border-radius: 1rem;
+    background: #fff;
+}
+
+.trust-rail-label {
+    flex: 0 0 auto;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #6B7280;
+    padding-right: 1rem;
+    border-right: 1px solid #E5E7EB;
+}
+
+.trust-mark {
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: #0F172A;
+    opacity: 0.62;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+.trust-mark:hover {
+    opacity: 1;
+}
+
+.trust-mark img {
+    display: block;
+    height: 20px;
+    width: auto;
+    max-width: 120px;
+    object-fit: contain;
+    filter: grayscale(1);
+    transition: filter 0.2s ease;
+}
+
+.trust-mark:hover img {
+    filter: grayscale(0);
+}
+
+.trust-mark .trust-text {
+    display: none;
+}
+
+.trust-mark.is-fallback .trust-text {
+    display: inline;
+}
+
+.trust-mark.is-fallback img {
+    display: none;
+}
+
+.trust-mark--serif {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.trust-mark--caps {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 13px;
+}
+
+@media (max-width: 640px) {
+    .trust-rail {
+        gap: 0.6rem 1rem;
+        padding: 0.9rem 1rem;
+    }
+    .trust-rail-label {
+        width: 100%;
+        text-align: center;
+        border-right: 0;
+        padding-right: 0;
+        padding-bottom: 0.5rem;
+    }
+    .trust-mark {
+        font-size: 13px;
+    }
+}

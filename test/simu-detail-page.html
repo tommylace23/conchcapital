@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Profit Growth Detail | ConchCapital</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .text-sim {
+            color: #3B82F6;
+        }
+
+        .bg-sim {
+            background-color: #3B82F6;
+        }
+
+        .border-sim {
+            border-color: #3B82F6;
+        }
+
+        /* Mobile Bottom Navigation Styles */
+        .mobile-nav-item {
+            color: #6B7280;
+            transition: all 0.2s;
+        }
+
+        .mobile-nav-item.active {
+            color: #10B981;
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+
+        .mobile-nav-item:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen pb-20 lg:pb-12" data-page="profitGrowths">
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 shadow-lg">
+        <div class="flex items-center justify-around px-2 py-2">
+            <a href="#" data-route="dashboard"
+                class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition">
+                <i class="fa-solid fa-house text-lg"></i>
+                <span class="text-[10px] font-medium">Dashboard</span>
+            </a>
+            <a href="#" data-route="profitGrowths"
+                class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition active">
+                <i class="fa-solid fa-chart-line text-lg"></i>
+                <span class="text-[10px] font-medium">Growth</span>
+            </a>
+            <a href="#" data-route="transactions"
+                class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition">
+                <i class="fa-solid fa-file-invoice-dollar text-lg"></i>
+                <span class="text-[10px] font-medium">Transactions</span>
+            </a>
+            <a href="#" data-route="profile"
+                class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition">
+                <i class="fa-solid fa-user text-lg"></i>
+                <span class="text-[10px] font-medium">Profile</span>
+            </a>
+            <a href="#" data-route="settings"
+                class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition">
+                <i class="fa-solid fa-gear text-lg"></i>
+                <span class="text-[10px] font-medium">Settings</span>
+            </a>
+        </div>
+    </nav>
+
+    <nav class="hidden lg:flex bg-white border-b border-gray-200 px-8 py-4 items-center justify-between">
+        <div class="flex items-center gap-4">
+            <a href="#" data-route="profitGrowths" class="text-slate-400 hover:text-sim transition"><i
+                    class="fa-solid fa-arrow-left"></i></a>
+            <div class="text-xl font-bold tracking-tight text-slate-800">Conch<span
+                    class="text-[#10B981]">Capital</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <span
+                class="bg-blue-50 text-sim text-[10px] font-bold px-3 py-1 rounded-full border border-sim/20 uppercase">
+                <i class="fa-solid fa-chart-line mr-1"></i> Profit Growth Only
+            </span>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 lg:px-6 pt-6 lg:pt-10">
+
+        <!-- FIX 1: Added proper Back to Simulations link -->
+        <a href="#" data-route="profitGrowths"
+            class="inline-flex items-center text-xs lg:text-sm text-gray-500 hover:text-gray-800 transition mb-4 lg:mb-6">
+            <i class="fa-solid fa-arrow-left mr-2"></i> Back to Profit Growth
+        </a>
+
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-3 lg:gap-4 mb-6 lg:mb-8">
+            <div>
+                <div class="flex flex-col sm:flex-row sm:items-center gap-2 lg:gap-3 mb-2">
+                    <h1 id="simulationTitle" class="text-2xl lg:text-3xl font-extrabold text-slate-900">Loading...</h1>
+                    <span
+                        class="bg-sim text-white text-[9px] lg:text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-widest self-start sm:self-auto">Profit
+                        Growth Only</span>
+                </div>
+                <!-- FIX 2: Added Time Elapsed and Strategy info -->
+                <p id="timeElapsed" class="text-xs lg:text-sm text-slate-500 mt-1 lg:mt-2">Time Elapsed: -</p>
+                <p id="strategyInfo" class="text-xs lg:text-sm text-slate-500">Strategy: -</p>
+            </div>
+        </div>
+
+        <!-- FIX 3: Three metric cards as per wireframe -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6 mb-6 lg:mb-8">
+            <div class="bg-white p-4 lg:p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <p class="text-[10px] lg:text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Initial</p>
+                <h3 id="initialBalance" class="text-xl lg:text-2xl font-bold text-slate-800">$0.00</h3>
+            </div>
+            <div class="bg-white p-4 lg:p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <p class="text-[10px] lg:text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Current</p>
+                <h3 id="currentBalance" class="text-xl lg:text-2xl font-bold text-[#10B981]">$0.00</h3>
+            </div>
+            <div class="bg-white p-4 lg:p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <p class="text-[10px] lg:text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Growth</p>
+                <h3 id="growthPercent" class="text-xl lg:text-2xl font-bold text-sim">+0%</h3>
+            </div>
+        </div>
+
+        <!-- FIX 4: Large growth chart section -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 lg:p-8 mb-6 lg:mb-8">
+            <h4 class="text-base lg:text-lg font-bold text-slate-800 mb-4 lg:mb-6">Growth Chart</h4>
+            <div
+                class="w-full h-48 lg:h-80 bg-slate-50 rounded-2xl flex items-center justify-center relative border border-dashed border-gray-200 overflow-hidden">
+                <div class="text-center">
+                    <i class="fa-solid fa-chart-line text-slate-200 text-4xl lg:text-6xl mb-2 lg:mb-4"></i>
+                    <p class="text-slate-400 text-xs lg:text-sm font-medium italic">Line chart showing growth over time
+                    </p>
+                </div>
+                <!-- Chart visualization placeholder -->
+                <svg class="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 800 320">
+                    <defs>
+                        <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:0.3" />
+                            <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:0" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M 50 250 Q 150 220, 250 180 T 450 120 T 650 80 T 750 50" fill="none" stroke="#3B82F6"
+                        stroke-width="3" />
+                    <path d="M 50 250 Q 150 220, 250 180 T 450 120 T 650 80 T 750 50 L 750 320 L 50 320 Z"
+                        fill="url(#gradient)" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- FIX 5: Strategy Details as bullet list (not breakdown bars) -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 lg:p-8 mb-6 lg:mb-8">
+            <h4 class="text-base lg:text-lg font-bold text-slate-800 mb-4 lg:mb-6">Strategy Details</h4>
+            <div class="space-y-2 lg:space-y-3">
+                <p class="text-xs lg:text-sm text-slate-600">• Type: Fixed Monthly Growth</p>
+                <p class="text-xs lg:text-sm text-slate-600">• Rate: 5% per month</p>
+                <p class="text-xs lg:text-sm text-slate-600">• Time Period: 1 year</p>
+                <p class="text-xs lg:text-sm text-slate-600">• Source: Manual creation</p>
+                <!-- Optional: Show if received from user -->
+                <!-- <p class="text-xs lg:text-sm text-slate-600">• Source: Originally received from @user123</p> -->
+            </div>
+        </div>
+
+        <!-- FIX 6: Large disclaimer box matching wireframe exactly -->
+        <div class="bg-white rounded-2xl border-2 border-red-500 shadow-sm p-4 lg:p-8 mb-6 lg:mb-8">
+            <h4 class="font-bold text-red-700 text-xs lg:text-sm mb-2 lg:mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-triangle-exclamation"></i> DISCLAIMER
+            </h4>
+            <p class="text-xs lg:text-sm text-red-800 font-semibold leading-relaxed">
+                This profit growth is hypothetical. It does not represent actual performance or a promise of future
+                results. You cannot withdraw this simulated value.
+            </p>
+        </div>
+
+
+        <!-- Transfer Funds Section -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 lg:p-6 mb-6 lg:mb-8">
+            <h4 class="text-base lg:text-lg font-bold text-slate-800 mb-3 lg:mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-wallet text-slate-400"></i> Transfer Funds to Profit Growth
+            </h4>
+            <p class="text-xs lg:text-sm text-slate-600 mb-3 lg:mb-4">Move funds from your real wallet balance into this
+                profit growth.</p>
+            <form id="transferFundsForm" class="flex flex-col sm:flex-row gap-3 lg:gap-4">
+                <div class="flex-1">
+                    <label
+                        class="block text-[10px] lg:text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Amount
+                        (USD)</label>
+                    <input type="number" id="transferAmount" step="0.01" min="0.01" required
+                        class="w-full p-2.5 lg:p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-real outline-none text-sm"
+                        placeholder="0.00">
+                </div>
+                <div class="flex items-end">
+                    <button type="submit" id="transferBtn"
+                        class="w-full sm:w-auto bg-real text-white px-4 lg:px-6 py-2.5 lg:py-3 rounded-xl text-sm lg:text-base font-bold hover:opacity-90 transition">
+                        <span id="transferBtnText">Transfer Funds</span>
+                    </button>
+                </div>
+            </form>
+            <p id="realBalanceInfo" class="text-[10px] lg:text-xs text-slate-500 mt-2 lg:mt-3">Your real wallet balance:
+                <span id="realBalanceAmount" class="font-bold">$0.00</span>
+            </p>
+        </div>
+
+        <!-- Withdraw Funds Section -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 lg:p-6 mb-6 lg:mb-8">
+            <h4 class="text-base lg:text-lg font-bold text-slate-800 mb-3 lg:mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-arrow-up-from-bracket text-slate-400"></i> Withdraw to Real Balance
+            </h4>
+            <p class="text-xs lg:text-sm text-slate-600 mb-3 lg:mb-4">Move funds from this profit growth to your real
+                wallet balance
+                (withdrawable).</p>
+            <form id="withdrawFundsForm" class="flex flex-col sm:flex-row gap-3 lg:gap-4">
+                <div class="flex-1">
+                    <label
+                        class="block text-[10px] lg:text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Amount
+                        (USD)</label>
+                    <input type="number" id="withdrawAmount" step="0.01" min="0.01" required
+                        class="w-full p-2.5 lg:p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-real outline-none text-sm"
+                        placeholder="0.00">
+                </div>
+                <div class="flex items-end">
+                    <button type="submit" id="withdrawBtn"
+                        class="w-full sm:w-auto bg-real text-white px-4 lg:px-6 py-2.5 lg:py-3 rounded-xl text-sm lg:text-base font-bold hover:opacity-90 transition">
+                        <span id="withdrawBtnText">Withdraw to Real Balance</span>
+                    </button>
+                </div>
+            </form>
+            <p id="profitGrowthBalanceInfo" class="text-[10px] lg:text-xs text-slate-500 mt-2 lg:mt-3">Available in this
+                profit growth: <span id="profitGrowthBalanceAmount" class="font-bold">$0.00</span></p>
+            <p id="realBalanceInfoAfter" class="text-[10px] lg:text-xs text-slate-500">Your real wallet balance: <span
+                    id="realBalanceAmountAfter" class="font-bold">$0.00</span></p>
+        </div>
+
+        <!-- FIX 7: Action buttons (Edit only) - Send to User removed (users can only send real balance) -->
+        <div
+            class="flex flex-col sm:flex-row justify-center items-center gap-3 lg:gap-4 pt-6 lg:pt-8 border-t border-gray-200">
+            <button onclick="editSimulation()"
+                class="w-full sm:w-auto px-5 lg:px-6 py-2.5 lg:py-3 border-2 border-sim text-sim rounded-xl text-sm lg:text-base font-bold hover:bg-sim hover:text-white transition">
+                Edit
+            </button>
+        </div>
+
+    </main>
+</body>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/forms.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+<script>
+    let simulationId = null;
+    let simulation = null;
+
+    // Get simulation ID from URL
+    function getSimulationIdFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('simulation_id') || params.get('id');
+    }
+
+    // Load simulation data
+    async function loadSimulation() {
+        simulationId = getSimulationIdFromUrl();
+        if (!simulationId) {
+            Utils?.showToast?.('No simulation ID provided', 'error');
+            setTimeout(() => {
+                window.location.href = '/simu-list-page.html';
+            }, 2000);
+            return;
+        }
+
+        try {
+            const data = await API.user.getSimulation(simulationId);
+            simulation = data.simulation;
+
+            // Update page with simulation data
+            updateSimulationDisplay(simulation);
+
+            // Load user balance for transfer funds
+            await loadUserBalance();
+        } catch (error) {
+            console.error('Failed to load simulation:', error);
+            Utils?.showToast?.('Failed to load simulation', 'error');
+            setTimeout(() => {
+                window.location.href = '/simu-list-page.html';
+            }, 2000);
+        }
+    }
+
+    // Load user balance
+    async function loadUserBalance() {
+        try {
+            const data = await API.user.getProfile();
+            if (data.user && data.user.real_balance !== undefined) {
+                const balance = parseFloat(data.user.real_balance || 0);
+                document.getElementById('realBalanceAmount').textContent = `$${balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                // Also update the balance in withdrawal section
+                const realBalanceAfter = document.getElementById('realBalanceAmountAfter');
+                if (realBalanceAfter) {
+                    realBalanceAfter.textContent = `$${balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                }
+            }
+        } catch (error) {
+            console.error('Failed to load user balance:', error);
+        }
+    }
+
+    // Update simulation display
+    function updateSimulationDisplay(sim) {
+        document.getElementById('simulationTitle').textContent = sim.name || 'Untitled Simulation';
+
+        const initialBalance = parseFloat(sim.initial_balance || 0);
+        const currentBalance = parseFloat(sim.current_balance || 0);
+        const growth = initialBalance > 0 ? ((currentBalance - initialBalance) / initialBalance * 100) : 0;
+        const growthText = growth >= 0 ? `+${growth.toFixed(1)}%` : `${growth.toFixed(1)}%`;
+        const growthClass = growth >= 0 ? 'text-sim' : 'text-red-600';
+
+        document.getElementById('initialBalance').textContent = `$${initialBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        document.getElementById('currentBalance').textContent = `$${currentBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        document.getElementById('growthPercent').textContent = growthText;
+        document.getElementById('growthPercent').className = `text-xl lg:text-2xl font-bold ${growthClass}`;
+
+        // Update profit growth balance in withdrawal section
+        document.getElementById('profitGrowthBalanceAmount').textContent = `$${currentBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+        // Calculate time elapsed
+        if (sim.started_at) {
+            const started = new Date(sim.started_at);
+            const now = new Date();
+            const diffMs = now - started;
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            const diffMonths = Math.floor(diffDays / 30);
+            const diffYears = Math.floor(diffDays / 365);
+
+            let timeText = '';
+            if (diffYears > 0) {
+                timeText = `${diffYears} year${diffYears > 1 ? 's' : ''}`;
+            } else if (diffMonths > 0) {
+                timeText = `${diffMonths} month${diffMonths > 1 ? 's' : ''}`;
+            } else {
+                timeText = `${diffDays} day${diffDays !== 1 ? 's' : ''}`;
+            }
+            document.getElementById('timeElapsed').textContent = `Time Elapsed: ${timeText}`;
+        }
+
+        // Strategy info
+        const strategyData = sim.strategy_data || {};
+        const strategyText = strategyData.strategy || 'No strategy applied';
+        document.getElementById('strategyInfo').textContent = `Strategy: ${strategyText}`;
+
+        // Description
+        if (sim.description) {
+            const strategyDetails = document.querySelector('.space-y-3');
+            if (strategyDetails) {
+                strategyDetails.innerHTML = `
+                        <p class="text-sm text-slate-600">• Description: ${sim.description}</p>
+                        <p class="text-sm text-slate-600">• Status: ${sim.status || 'active'}</p>
+                        <p class="text-sm text-slate-600">• Created: ${new Date(sim.created_at).toLocaleDateString()}</p>
+                    `;
+            }
+        }
+    }
+
+    // Edit simulation
+    function editSimulation() {
+        if (simulationId) {
+            window.location.href = `/EDIT_SIMULATION_PAGE.html?simulation_id=${simulationId}`;
+        }
+    }
+
+    // Delete simulation - REMOVED: Only admins can delete profit growths
+    // Users cannot delete profit growths from the detail page
+    // Send to User - REMOVED: Users can only send real balance, not profit growth funds
+
+    // Handle transfer funds form submission
+    document.getElementById('transferFundsForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        if (!simulationId) {
+            Utils?.showToast?.('No profit growth selected', 'error');
+            return;
+        }
+
+        const amount = parseFloat(document.getElementById('transferAmount').value);
+        if (!amount || amount <= 0) {
+            Utils?.showToast?.('Please enter a valid amount', 'error');
+            return;
+        }
+
+        const btn = document.getElementById('transferBtn');
+        const btnText = document.getElementById('transferBtnText');
+        btn.disabled = true;
+        btnText.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Transferring...';
+
+        try {
+            const response = await API.user.transferFundsToProfitGrowth(simulationId, amount);
+
+            Utils?.showToast?.('Funds transferred successfully!', 'success');
+
+            // Reset form
+            document.getElementById('transferFundsForm').reset();
+
+            // Reload simulation and balance
+            await loadSimulation();
+            await loadUserBalance();
+
+        } catch (error) {
+            console.error('Transfer error:', error);
+            const message = error.response?.data?.message || error.message || 'Failed to transfer funds';
+            Utils?.showToast?.(message, 'error');
+        } finally {
+            btn.disabled = false;
+            btnText.textContent = 'Transfer Funds';
+        }
+    });
+
+    // Handle withdraw funds form submission
+    document.getElementById('withdrawFundsForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        if (!simulationId) {
+            Utils?.showToast?.('No profit growth selected', 'error');
+            return;
+        }
+
+        const amount = parseFloat(document.getElementById('withdrawAmount').value);
+        if (!amount || amount <= 0) {
+            Utils?.showToast?.('Please enter a valid amount', 'error');
+            return;
+        }
+
+        const btn = document.getElementById('withdrawBtn');
+        const btnText = document.getElementById('withdrawBtnText');
+        btn.disabled = true;
+        btnText.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Withdrawing...';
+
+        try {
+            const response = await API.user.withdrawFundsFromProfitGrowth(simulationId, amount);
+
+            Utils?.showToast?.('Funds withdrawn successfully!', 'success');
+
+            // Reset form
+            document.getElementById('withdrawFundsForm').reset();
+
+            // Reload simulation and balance
+            await loadSimulation();
+            await loadUserBalance();
+
+        } catch (error) {
+            console.error('Withdraw error:', error);
+            const message = error.response?.data?.message || error.message || 'Failed to withdraw funds';
+            Utils?.showToast?.(message, 'error');
+        } finally {
+            btn.disabled = false;
+            btnText.textContent = 'Withdraw to Real Balance';
+        }
+    });
+
+    // Mobile bottom navigation active state
+    function updateMobileNavActive() {
+        const currentPage = document.body.getAttribute('data-page');
+        const navItems = document.querySelectorAll('.mobile-nav-item');
+
+        navItems.forEach(item => {
+            const route = item.getAttribute('data-route');
+            item.classList.remove('active', 'text-[#10B981]', 'bg-green-50');
+            item.classList.add('text-gray-600');
+
+            // Map page to route
+            const pageRouteMap = {
+                'dashboard': 'dashboard',
+                'profitGrowths': 'profitGrowths',
+                'transactions': 'transactions',
+                'profile': 'profile',
+                'settings': 'settings'
+            };
+
+            if (route === pageRouteMap[currentPage] || (currentPage === 'profitGrowths' && route === 'profitGrowths')) {
+                item.classList.add('active', 'text-[#10B981]', 'bg-green-50');
+                item.classList.remove('text-gray-600');
+            }
+        });
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function () {
+        loadSimulation();
+        updateMobileNavActive();
+    });
+</script>
+
+</html>

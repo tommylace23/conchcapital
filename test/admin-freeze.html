@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Freeze Account | Admin Security</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .border-freeze { border-color: #F59E0B; }
+        .text-freeze { color: #D97706; }
+        .bg-freeze-light { background-color: #FFFBEB; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen" data-page="adminFreezes">
+
+<aside class="w-64 bg-slate-950 text-slate-400 flex flex-col shrink-0 border-r border-slate-800 fixed h-screen">
+    <div class="p-6 border-b border-slate-800/50">
+        <div class="text-2xl font-bold tracking-tight text-white">
+            Conch<span class="text-[#10B981]">Capital</span>
+        </div>
+        <p class="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500 mt-1">Admin Portal</p>
+    </div>
+    <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+        <a href="#" data-route="adminDashboard" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-chart-pie text-sm"></i>
+            <span class="text-sm font-medium">Overview</span>
+        </a>
+        <a href="#" data-route="adminUsers" class="flex items-center space-x-3 p-3 bg-slate-900 text-white rounded-xl transition">
+            <i class="fa-solid fa-users-gear text-sm"></i>
+            <span class="text-sm font-medium">User Management</span>
+        </a>
+        <a href="#" data-route="adminTransactions" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-file-invoice-dollar text-sm"></i>
+            <span class="text-sm font-medium">Transactions</span>
+        </a>
+        <a href="#" data-route="adminCredits" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-money-bill-transfer text-sm"></i>
+            <span class="text-sm font-medium">Credits</span>
+        </a>
+        <a href="#" data-route="adminFreezes" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-snowflake text-sm"></i>
+            <span class="text-sm font-medium">Freezes</span>
+        </a>
+        <div class="pt-4 mt-4 border-t border-slate-800/50">
+            <a href="#" data-route="adminSettings" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+                <i class="fa-solid fa-gear text-sm"></i>
+                <span class="text-sm font-medium">Settings</span>
+            </a>
+        </div>
+    </nav>
+</aside>
+
+<main class="ml-64 flex-1 p-8">
+    
+    <!-- FIX 1: Added Back to User Detail link -->
+    <a href="#" data-route="adminUserDetail" class="inline-flex items-center text-sm text-gray-500 hover:text-gray-800 transition mb-6">
+        <i class="fa-solid fa-arrow-left mr-2"></i> Back to User Detail
+    </a>
+    
+    <!-- FIX 2: Updated heading -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+        <h1 class="text-2xl font-black text-slate-900">Freeze Account: @john123</h1>
+    </div>
+
+    <div class="grid lg:grid-cols-3 gap-8">
+        
+        <div class="lg:col-span-2 space-y-6">
+            <section class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                <div class="p-6 bg-green-50 border-b border-green-100 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="relative flex h-3 w-3">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                        </span>
+                        <p class="text-sm font-bold text-green-800 uppercase">Current Status: Active</p>
+                    </div>
+                </div>
+
+                <form class="p-8 space-y-8">
+                    <!-- FIX 3: Updated Activity Restrictions to match wireframe exactly -->
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <label class="text-xs font-bold text-slate-500 uppercase tracking-widest">Activity Restrictions (Select which to block)</label>
+                            <button type="button" id="selectAll" class="text-[10px] font-bold text-red-600 hover:underline uppercase">Full account freeze (selects all)</button>
+                        </div>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition">
+                                <input type="checkbox" name="restrictions" value="withdrawals" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-500">
+                                <span class="ml-3 text-sm font-medium text-slate-700">Block withdrawals</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition">
+                                <input type="checkbox" name="restrictions" value="deposits" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-500">
+                                <span class="ml-3 text-sm font-medium text-slate-700">Block deposits</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition">
+                                <input type="checkbox" name="restrictions" value="create_simulations" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-500">
+                                <span class="ml-3 text-sm font-medium text-slate-700">Block creating new simulations</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition">
+                                <input type="checkbox" name="restrictions" value="edit_simulations" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-500">
+                                <span class="ml-3 text-sm font-medium text-slate-700">Block editing/deleting existing simulations</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition">
+                                <input type="checkbox" name="restrictions" value="send_funds" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-500">
+                                <span class="ml-3 text-sm font-medium text-slate-700">Block sending simulated funds</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition">
+                                <input type="checkbox" name="restrictions" value="receive_funds" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-500">
+                                <span class="ml-3 text-sm font-medium text-slate-700">Block receiving simulated funds</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition">
+                                <input type="checkbox" name="restrictions" value="profile_visibility" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-500">
+                                <span class="ml-3 text-sm font-medium text-slate-700">Block profile visibility in search</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-100 rounded-xl hover:bg-gray-50 cursor-pointer transition">
+                                <input type="checkbox" name="restrictions" value="profile_updates" class="w-4 h-4 rounded text-amber-500 focus:ring-amber-500">
+                                <span class="ml-3 text-sm font-medium text-slate-700">Block profile updates</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-red-100 bg-red-50/30 rounded-xl cursor-pointer transition">
+                                <input type="checkbox" name="restrictions" value="login" class="w-4 h-4 rounded text-red-600 focus:ring-red-500">
+                                <span class="ml-3 text-sm font-bold text-red-700">Block login/authentication</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Reason</label>
+                            <select class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-sm">
+                                <option>Select Reason</option>
+                                <option>Suspicious Activity</option>
+                                <option>KYC/AML Review</option>
+                                <option>Compliance Investigation</option>
+                                <option>Fraud Prevention</option>
+                                <option>User Request</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <!-- FIX 4: Updated Duration options -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Duration</label>
+                            <select class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-sm">
+                                <option>Permanent</option>
+                                <option>Temporary until [Date Picker]</option>
+                                <option>Auto-unfreeze after [X] days</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Note/Description (Required)</label>
+                        <textarea rows="4" placeholder="Provide details about why this account is being frozen..." 
+                            class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-sm"></textarea>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" id="notify" checked class="h-5 w-5 rounded border-gray-300 text-slate-900 focus:ring-slate-900 cursor-pointer">
+                        <label for="notify" class="text-sm font-medium text-slate-600 cursor-pointer">Send notification to user about this freeze</label>
+                    </div>
+
+                    <!-- FIX 5: Added Summary section -->
+                    <div class="pt-6 border-t border-gray-100">
+                        <div class="bg-gray-900 rounded-2xl p-6 text-white relative overflow-hidden">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-file-invoice-dollar text-amber-500"></i> Summary
+                            </h4>
+                            <div class="space-y-2 relative z-10">
+                                <p class="text-sm">You are about to freeze <span class="font-bold">@john123's</span> account</p>
+                                <p class="text-xs text-slate-400 font-medium">Restrictions: <span id="selectedRestrictions">None selected</span></p>
+                                <p class="text-xs text-slate-400 font-medium italic">Reason: <span id="selectedReason">Not selected</span></p>
+                            </div>
+                            <div class="absolute -right-4 -bottom-4 opacity-10">
+                                <i class="fa-solid fa-shield-check text-8xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 pt-6 border-t border-gray-100">
+                        <button type="button" data-route="adminUserDetail" class="flex-1 py-4 font-bold text-slate-400 hover:bg-gray-50 rounded-xl transition">Cancel</button>
+                        <button type="submit" class="flex-[2] bg-red-600 text-white py-4 rounded-xl font-bold shadow-lg shadow-red-200 hover:bg-red-700 transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-lock"></i> Confirm Freeze
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </div>
+
+        <div class="space-y-6">
+            <div class="bg-slate-900 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Freeze Impact Preview</h3>
+                
+                <div class="space-y-4 mb-8">
+                    <div class="flex items-center gap-4 text-red-400">
+                        <i class="fa-solid fa-ban text-lg"></i>
+                        <p class="text-sm font-medium">Selected restrictions will be applied</p>
+                    </div>
+                    <div class="p-4 bg-white/5 rounded-xl border border-white/10">
+                        <p class="text-[10px] text-slate-500 uppercase font-bold mb-2">User Real Balance</p>
+                        <p class="text-2xl font-black text-white">$120.00</p>
+                        <p class="text-xs text-amber-500 font-bold mt-1">0.0023 BTC</p>
+                    </div>
+                </div>
+                
+                <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-amber-500/10 rounded-full blur-[80px]"></div>
+            </div>
+
+            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-6">
+                <h4 class="text-sm font-bold text-amber-800 mb-2">Important Note:</h4>
+                <p class="text-xs text-amber-700 leading-relaxed">
+                    All freeze actions are logged with full audit trail. Ensure you have provided a detailed reason and note for compliance purposes.
+                </p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    // JavaScript for "Select All" functionality
+    document.getElementById('selectAll').addEventListener('click', function() {
+        const checkboxes = document.querySelectorAll('input[name="restrictions"]');
+        const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+        checkboxes.forEach(cb => cb.checked = !allChecked);
+        updateSummary();
+    });
+
+    // Update summary when restrictions change
+    document.querySelectorAll('input[name="restrictions"]').forEach(cb => {
+        cb.addEventListener('change', updateSummary);
+    });
+
+    document.querySelector('select').addEventListener('change', function() {
+        document.getElementById('selectedReason').textContent = this.value || 'Not selected';
+    });
+
+    function updateSummary() {
+        const checked = Array.from(document.querySelectorAll('input[name="restrictions"]:checked'));
+        const restrictions = checked.map(cb => {
+            const label = cb.closest('label').querySelector('span').textContent;
+            return label;
+        });
+        document.getElementById('selectedRestrictions').textContent = restrictions.length > 0 ? restrictions.join(', ') : 'None selected';
+    }
+</script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/forms.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

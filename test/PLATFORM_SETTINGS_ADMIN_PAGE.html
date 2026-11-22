@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Platform Settings | Admin</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen" data-page="adminSettings">
+
+<aside class="w-64 bg-slate-950 text-slate-400 flex flex-col shrink-0 border-r border-slate-800 fixed h-screen">
+    <div class="p-6 border-b border-slate-800/50">
+        <div class="text-2xl font-bold tracking-tight text-white">
+            Conch<span class="text-[#10B981]">Capital</span>
+        </div>
+        <p class="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500 mt-1">Admin Portal</p>
+    </div>
+    <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+        <a href="#" data-route="adminDashboard" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-chart-pie text-sm"></i>
+            <span class="text-sm font-medium">Overview</span>
+        </a>
+        <a href="#" data-route="adminUsers" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-users-gear text-sm"></i>
+            <span class="text-sm font-medium">User Management</span>
+        </a>
+        <a href="#" data-route="adminTransactions" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-file-invoice-dollar text-sm"></i>
+            <span class="text-sm font-medium">Transactions</span>
+        </a>
+        <a href="#" data-route="adminCredits" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-money-bill-transfer text-sm"></i>
+            <span class="text-sm font-medium">Credits</span>
+        </a>
+        <a href="#" data-route="adminFreezes" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-snowflake text-sm"></i>
+            <span class="text-sm font-medium">Freezes</span>
+        </a>
+        <div class="pt-4 mt-4 border-t border-slate-800/50">
+            <a href="#" data-route="adminSettings" class="flex items-center space-x-3 p-3 bg-slate-900 text-white rounded-xl transition">
+                <i class="fa-solid fa-gear text-sm"></i>
+                <span class="text-sm font-medium">Settings</span>
+            </a>
+        </div>
+    </nav>
+</aside>
+
+<main class="ml-64 flex-1 p-8">
+    
+    <div class="mb-8">
+        <h1 class="text-3xl font-extrabold text-slate-900 mb-2">Platform Settings</h1>
+        <p class="text-slate-500">Configure global platform settings and defaults</p>
+    </div>
+
+    <form id="platformSettingsForm" class="space-y-6">
+        
+        <!-- Live platform settings -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <h2 class="text-lg font-bold text-slate-900 mb-6">Platform Settings</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Support Email</label>
+                    <input id="support_email" type="email" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-slate-800">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Support Phone</label>
+                    <input id="support_phone" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-slate-800">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Minimum Deposit (USD)</label>
+                    <input id="min_deposit" type="number" min="0" step="0.01" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-slate-800">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Maximum Withdrawal (USD)</label>
+                    <input id="max_withdrawal" type="number" min="0" step="0.01" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-slate-800">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Maintenance Mode</label>
+                    <select id="maintenance_mode" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-slate-800">
+                        <option value="">Off</option>
+                        <option value="1">On</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Maintenance Message</label>
+                    <input id="maintenance_message" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-slate-800">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Administrator (single-admin mode) -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <h2 class="text-lg font-bold text-slate-900 mb-1">Administrator</h2>
+            <p class="text-xs text-slate-500 mb-5">One operator runs this platform. Change the email or password from the account settings.</p>
+            <div id="adminList" class="space-y-2 text-sm text-slate-600">Loading…</div>
+            <div id="adminCreateWrap" class="hidden mt-5">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                    <input id="newAdminName" placeholder="Name" class="p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-slate-800">
+                    <input id="newAdminEmail" type="email" placeholder="Email" class="p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-slate-800">
+                    <input id="newAdminPassword" type="password" placeholder="Password" class="p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-slate-800">
+                    <button type="button" id="createAdminBtn" class="px-4 py-3 bg-slate-900 text-white rounded-xl text-sm font-bold hover:bg-black">Create Admin</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Default Simulation Strategies -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <h2 class="text-lg font-bold text-slate-900 mb-6">Default Simulation Strategies</h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 uppercase tracking-widest mb-2">Available Strategies</label>
+                    <div class="space-y-3">
+                        <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer">
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" checked class="w-5 h-5 rounded border-gray-300 text-slate-800 focus:ring-slate-800 cursor-pointer">
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">Fixed Monthly Growth (5%)</p>
+                                    <p class="text-xs text-slate-500">Default rate: 5% per month</p>
+                                </div>
+                            </div>
+                            <button type="button" class="text-xs font-bold text-slate-600 hover:text-slate-800">Edit</button>
+                        </label>
+                        
+                        <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer">
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" checked class="w-5 h-5 rounded border-gray-300 text-slate-800 focus:ring-slate-800 cursor-pointer">
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">Aggressive Growth</p>
+                                    <p class="text-xs text-slate-500">Variable rate: 7-12% per month</p>
+                                </div>
+                            </div>
+                            <button type="button" class="text-xs font-bold text-slate-600 hover:text-slate-800">Edit</button>
+                        </label>
+                        
+                        <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer">
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" checked class="w-5 h-5 rounded border-gray-300 text-slate-800 focus:ring-slate-800 cursor-pointer">
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800">Conservative Growth</p>
+                                    <p class="text-xs text-slate-500">Fixed rate: 3% per month</p>
+                                </div>
+                            </div>
+                            <button type="button" class="text-xs font-bold text-slate-600 hover:text-slate-800">Edit</button>
+                        </label>
+                    </div>
+                    <button type="button" class="mt-4 px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-bold hover:bg-gray-50 transition">
+                        <i class="fa-solid fa-plus mr-2"></i> Add New Strategy
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Global Disclaimers -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <h2 class="text-lg font-bold text-slate-900 mb-6">Global Disclaimers</h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 uppercase tracking-widest mb-2">Simulation Disclaimer</label>
+                    <textarea 
+                        rows="4"
+                        class="w-full p-3.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-slate-800 outline-none resize-none"
+                    >This simulation is hypothetical. It does not represent actual performance or a promise of future results. You cannot withdraw this simulated value.</textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 uppercase tracking-widest mb-2">Transfer Disclaimer</label>
+                    <textarea 
+                        rows="4"
+                        class="w-full p-3.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-slate-800 outline-none resize-none"
+                    >This is a SIMULATED transfer only. The recipient will receive simulated funds that are NOT real money and CANNOT be withdrawn. This is for educational/social purposes only.</textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Banner Messages -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <h2 class="text-lg font-bold text-slate-900 mb-6">Banner Messages</h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="flex items-center justify-between mb-2">
+                        <span class="text-sm font-bold text-slate-700 uppercase tracking-widest">Platform Maintenance Banner</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-slate-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-slate-800"></div>
+                        </label>
+                    </label>
+                    <textarea 
+                        rows="2"
+                        placeholder="Enter maintenance message..."
+                        class="w-full p-3.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-slate-800 outline-none resize-none"
+                    ></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Search Settings -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <h2 class="text-lg font-bold text-slate-900 mb-6">Profile Search Settings</h2>
+            
+            <div class="space-y-4">
+                <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer">
+                    <div>
+                        <p class="text-sm font-bold text-slate-800">Enable Profile Search</p>
+                        <p class="text-xs text-slate-500">Allow users to search for other users</p>
+                    </div>
+                    <input type="checkbox" checked class="w-5 h-5 rounded border-gray-300 text-slate-800 focus:ring-slate-800 cursor-pointer">
+                </label>
+                
+                <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer">
+                    <div>
+                        <p class="text-sm font-bold text-slate-800">Default Profile Visibility</p>
+                        <p class="text-xs text-slate-500">Default setting for new user profiles</p>
+                    </div>
+                    <select class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium outline-none focus:ring-2 focus:ring-slate-800">
+                        <option>Public</option>
+                        <option>Private</option>
+                    </select>
+                </label>
+            </div>
+        </div>
+
+        <!-- Privacy Defaults -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <h2 class="text-lg font-bold text-slate-900 mb-6">Privacy Defaults</h2>
+            
+            <div class="space-y-4">
+                <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer">
+                    <div>
+                        <p class="text-sm font-bold text-slate-800">Default: Accept Simulated Fund Transfers</p>
+                        <p class="text-xs text-slate-500">New users will accept transfers by default</p>
+                    </div>
+                    <input type="checkbox" checked class="w-5 h-5 rounded border-gray-300 text-slate-800 focus:ring-slate-800 cursor-pointer">
+                </label>
+                
+                <label class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer">
+                    <div>
+                        <p class="text-sm font-bold text-slate-800">Default: Show Public Simulation Statistics</p>
+                        <p class="text-xs text-slate-500">New users will show stats by default</p>
+                    </div>
+                    <input type="checkbox" class="w-5 h-5 rounded border-gray-300 text-slate-800 focus:ring-slate-800 cursor-pointer">
+                </label>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-4 pt-6">
+            <button type="button" data-route="adminDashboard" class="flex-1 px-6 py-3 bg-white border-2 border-gray-200 text-slate-600 rounded-xl font-bold hover:bg-gray-50 transition">
+                Cancel
+            </button>
+            <button type="submit" class="flex-1 md:flex-[2] px-6 py-3 bg-slate-800 text-white rounded-xl font-bold hover:opacity-90 transition">
+                Save Platform Settings
+            </button>
+        </div>
+    </form>
+
+</main>
+
+<script>
+    const keys = ['support_email','support_phone','min_deposit','max_withdrawal','maintenance_mode','maintenance_message'];
+    (async function loadAdmins() {
+        const box = document.getElementById('adminList');
+        if (!box) return;
+        try {
+            const data = await API.admin.getAdmins();
+            const admins = data.admins || [];
+
+            if (!admins.length) {
+                box.innerHTML = '<p class="text-slate-500">No administrator yet — create one below.</p>';
+                document.getElementById('adminCreateWrap')?.classList.remove('hidden');
+                return;
+            }
+
+            box.innerHTML = admins.map(a => `
+                <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
+                    <div>
+                        <p class="font-bold text-slate-800">@${Utils.escapeHtml(a.username)}</p>
+                        <p class="text-xs text-slate-500">${Utils.escapeHtml(a.email)}</p>
+                    </div>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">${a.last_login_at ? 'last seen ' + new Date(a.last_login_at).toLocaleDateString() : 'never logged in'}</span>
+                </div>`).join('');
+        } catch (e) {
+            console.error(e);
+            box.textContent = 'Failed to load administrators.';
+        }
+    })();
+
+    document.getElementById('createAdminBtn')?.addEventListener('click', async () => {
+        const name = document.getElementById('newAdminName').value.trim();
+        const email = document.getElementById('newAdminEmail').value.trim();
+        const password = document.getElementById('newAdminPassword').value;
+
+        if (!name || !email || password.length < 8) {
+            Utils?.showToast?.('Name, email and an 8+ char password are required', 'error');
+            return;
+        }
+
+        try {
+            await API.admin.createAdmin({ name, email, password });
+            Utils?.showToast?.('Admin created', 'success');
+            document.getElementById('newAdminName').value = '';
+            document.getElementById('newAdminEmail').value = '';
+            document.getElementById('newAdminPassword').value = '';
+            window.location.reload();
+        } catch (err) {
+            Utils?.showToast?.(err.response?.message || 'Failed to create admin', 'error');
+        }
+    });
+
+    (async function loadPlatformSettings() {
+        try {
+            const data = await API.admin.getPlatformSettings();
+            keys.forEach(k => {
+                const el = document.getElementById(k);
+                if (el && data.settings[k] !== null && data.settings[k] !== undefined) el.value = data.settings[k];
+            });
+        } catch (e) { console.error('Failed to load platform settings', e); }
+    })();
+
+    document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        // In production, this would be an API call
+        console.log('Saving platform settings...');
+        const payload = {};
+        keys.forEach(k => { const el = document.getElementById(k); if (el) payload[k] = el.value.trim(); });
+
+        API.admin.updatePlatformSettings(payload)
+            .then(() => Utils?.showToast?.('Platform settings saved', 'success'))
+            .catch(() => Utils?.showToast?.('Failed to save settings', 'error'));
+    });
+</script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/forms.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

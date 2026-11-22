@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example Updated Page | ConchCapital</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Custom Main CSS -->
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+    <!-- Example: Login Form with Validation -->
+    <div class="min-h-screen flex items-center justify-center p-6">
+        <div class="w-full max-w-md bg-white rounded-2xl border border-gray-200 shadow-lg p-8">
+            
+            <div class="mb-8 text-center">
+                <h1 class="text-3xl font-bold tracking-tight text-slate-800">
+                    Conch<span class="text-real">Capital</span>
+                </h1>
+                <p class="text-slate-500 mt-2">Sign in to your account</p>
+            </div>
+
+            <form id="login-form" data-validate data-rules='{"email":{"required":true,"email":true},"password":{"required":true,"minLength":8}}'>
+                <div class="space-y-6">
+                    <!-- Email Field -->
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input 
+                            type="email" 
+                            name="email"
+                            id="email"
+                            placeholder="Enter your email"
+                            class="form-input"
+                            required
+                        >
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <div class="relative">
+                            <input 
+                                type="password" 
+                                name="password"
+                                id="password"
+                                placeholder="Enter your password"
+                                class="form-input pr-12"
+                                required
+                            >
+                            <button 
+                                type="button" 
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                                data-toggle-password="password"
+                            >
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Remember Me -->
+                    <div class="flex items-center">
+                        <input 
+                            type="checkbox" 
+                            name="remember"
+                            id="remember"
+                            class="w-4 h-4 rounded border-gray-300 text-real focus:ring-real cursor-pointer"
+                        >
+                        <label for="remember" class="ml-2 text-sm text-gray-600 cursor-pointer">
+                            Remember me
+                        </label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary w-full">
+                        Sign In
+                    </button>
+
+                    <!-- Links -->
+                    <div class="text-center">
+                        <a href="FORGOT_PASSWORD_PAGE.html" class="text-sm text-real hover:underline">
+                            Forgot password?
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/forms.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/main.js"></script>
+
+    <!-- Page-specific JavaScript -->
+    <script>
+        // Form submission handler
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validate form
+            const rules = {
+                email: { required: true, email: true },
+                password: { required: true, minLength: 8 }
+            };
+            
+            if (!Forms.validateForm(this, rules)) {
+                Utils.showToast('Please fix the errors in the form', 'error');
+                return;
+            }
+            
+            // Get form data
+            const formData = Forms.getFormData(this);
+            
+            // Show loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Signing in...';
+            
+            try {
+                // In production, use: await API.auth.login(formData.email, formData.password);
+                // For demo, simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                Utils.showToast('Login successful!', 'success');
+                
+                // Redirect to dashboard
+                // window.location.href = 'dashboard.html';
+                
+            } catch (error) {
+                Utils.showToast('Login failed. Please check your credentials.', 'error');
+                console.error('Login error:', error);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        });
+
+        // Example: Character counter for textarea (if you have one)
+        // const bioTextarea = document.getElementById('bio');
+        // const charCounter = document.getElementById('char-counter');
+        // if (bioTextarea && charCounter) {
+        //     Forms.setupCharacterCounter(bioTextarea, charCounter, 500);
+        // }
+
+        // Example: Confirmation modal
+        // document.getElementById('delete-btn').addEventListener('click', async function() {
+        //     const confirmed = await Modals.confirm({
+        //         title: 'Delete Item',
+        //         message: 'Are you sure you want to delete this item? This action cannot be undone.',
+        //         confirmText: 'Delete',
+        //         cancelText: 'Cancel'
+        //     });
+        //     
+        //     if (confirmed) {
+        //         // Perform delete action
+        //         Utils.showToast('Item deleted', 'success');
+        //     }
+        // });
+    </script>
+</body>
+</html>

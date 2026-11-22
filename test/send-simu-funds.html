@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Send Simulated Funds | ConchCapital</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .text-sim { color: #3B82F6; }
+        .bg-sim { background-color: #3B82F6; }
+        .border-sim { border-color: #3B82F6; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen" data-page="sendSimFunds">
+
+<nav class="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between">
+    <div class="text-xl font-bold tracking-tight text-slate-800">Conch<span class="text-[#10B981]">Capital</span></div>
+    <div class="flex items-center gap-6">
+        <a href="#" data-route="dashboard" class="text-sm font-medium text-slate-500 hover:text-slate-800">Dashboard</a>
+        <a href="#" data-route="profitGrowths" class="text-sm font-medium text-slate-500 hover:text-slate-800">Profit Growth</a>
+        <a href="#" data-route="profile" class="text-sm font-medium text-slate-500 hover:text-slate-800">Profile</a>
+        <a href="#" data-route="settings" class="text-sm font-medium text-slate-500 hover:text-slate-800">Settings</a>
+        <div class="flex items-center gap-4">
+            <div class="relative">
+                <button onclick="toggleNotificationDropdown()" class="relative text-slate-400 hover:text-slate-600 transition">
+                    <i class="fa-solid fa-bell text-xl"></i>
+                    <span id="notificationBadge" class="hidden absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
+                </button>
+                <!-- Notification Dropdown -->
+                <div id="notificationDropdown" class="hidden absolute right-0 top-full mt-2 w-80 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden z-50 max-h-96 overflow-y-auto">
+                    <div class="p-4 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white">
+                        <h3 class="text-sm font-bold text-slate-900">Notifications</h3>
+                        <a href="#" data-route="notifications" class="text-xs font-bold text-blue-600 hover:text-blue-800">View All</a>
+                    </div>
+                    <div id="notificationDropdownList" class="divide-y divide-gray-100">
+                        <div class="p-4 text-center text-slate-500">
+                            <i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i>
+                            <p class="text-sm">Loading notifications...</p>
+                        </div>
+                    </div>
+                    <div class="p-3 border-t border-gray-200 bg-gray-50 text-center">
+                        <a href="#" data-route="notifications" class="text-xs font-bold text-blue-600 hover:text-blue-800">View All Notifications</a>
+                    </div>
+                </div>
+            </div>
+            <div class="w-8 h-8 rounded-full bg-slate-200"></div>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-2xl mx-auto py-10 px-6">
+    
+    <!-- Back Link -->
+    <a href="#" data-route="dashboard" class="inline-flex items-center text-sm text-gray-500 hover:text-gray-800 transition mb-6">
+        <i class="fa-solid fa-arrow-left mr-2"></i> Back to Dashboard
+    </a>
+
+    <div class="mb-8">
+        <h1 class="text-3xl font-extrabold text-slate-900 mb-2">Send Funds</h1>
+        <p class="text-slate-500">Transfer funds from your real wallet balance to another user</p>
+    </div>
+
+    <!-- Available Balance -->
+    <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl border-2 border-green-200 p-6 mb-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-xs font-bold text-green-600 uppercase tracking-widest mb-1">Available Real Balance</p>
+                <p class="text-3xl font-extrabold text-green-700" id="availableBalance">$0.00</p>
+            </div>
+            <i class="fa-solid fa-wallet text-green-400 text-4xl"></i>
+        </div>
+    </div>
+
+    <form class="space-y-6" id="sendFundsForm">
+        <!-- Recipient Selector -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <label class="block text-sm font-bold text-slate-700 uppercase tracking-widest mb-3">Recipient</label>
+            
+            <!-- Search Input -->
+            <div class="relative mb-3">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+                <input 
+                    type="text" 
+                    id="recipientSearch"
+                    placeholder="Search for user by username or display name..."
+                    class="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-sim focus:border-sim outline-none"
+                    autocomplete="off"
+                >
+                <div id="searchResults" class="hidden absolute z-10 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                    <!-- Search results will appear here -->
+                </div>
+            </div>
+            
+            <!-- Selected Recipient Display -->
+            <div id="selectedRecipient" class="hidden p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3 flex-1 min-w-0">
+                        <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold relative overflow-hidden shrink-0">
+                            <span>JD</span>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-bold text-slate-800 truncate">@username123</p>
+                            <p class="text-xs text-slate-500 truncate">Display Name</p>
+                        </div>
+                    </div>
+                    <button type="button" id="clearRecipient" class="text-red-500 hover:text-red-700 shrink-0 ml-2">
+                        <i class="fa-solid fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Amount Input -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <label class="block text-sm font-bold text-slate-700 uppercase tracking-widest mb-3">Amount</label>
+            <div class="relative">
+                <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-600 font-bold">$</span>
+                <input 
+                    type="number" 
+                    id="amountInput"
+                    name="amount"
+                    step="0.01"
+                    min="0.01"
+                    placeholder="0.00"
+                    class="w-full pl-8 pr-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-sim focus:border-sim outline-none text-lg font-bold"
+                    required
+                >
+            </div>
+            <div class="flex items-center justify-between mt-2">
+                <p class="text-xs text-slate-500">Max: <span id="maxAmount">$245.50</span></p>
+                <button type="button" id="useMax" class="text-xs font-bold text-sim hover:underline">Use Max</button>
+            </div>
+            <p id="amountError" class="hidden text-xs text-red-600 mt-2">
+                <i class="fa-solid fa-exclamation-circle"></i> Amount exceeds available balance
+            </p>
+        </div>
+
+        <!-- Source Profit Growth Selector - REMOVED -->
+        <!-- Users can only send real balance funds, not profit growth funds -->
+        <!-- Profit growth funds must be withdrawn to real balance first -->
+
+        <!-- Optional Message -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <label class="block text-sm font-bold text-slate-700 uppercase tracking-widest mb-3">
+                Message <span class="text-slate-400 font-normal normal-case">(Optional)</span>
+            </label>
+            <textarea 
+                name="message"
+                rows="4"
+                placeholder="Add a note to the recipient..."
+                maxlength="500"
+                class="w-full p-3.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-sim focus:border-sim outline-none resize-none"
+            ></textarea>
+            <p class="text-xs text-slate-500 mt-2">Let the recipient know why you're sending these funds</p>
+        </div>
+
+        <!-- Info Box -->
+        <div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-6">
+            <div class="flex items-start gap-4">
+                <i class="fa-solid fa-info-circle text-blue-600 text-2xl shrink-0 mt-1"></i>
+                <div>
+                    <h3 class="text-lg font-bold text-blue-900 mb-2">ℹ️ Transfer Information</h3>
+                    <p class="text-sm text-blue-800 leading-relaxed">
+                        You are sending <strong>real funds</strong> from your wallet balance. The recipient will receive these funds in their <strong>real wallet balance</strong> and can withdraw them.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmation Checkbox -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <label class="flex items-start gap-3 cursor-pointer">
+                <input 
+                    type="checkbox" 
+                    id="confirmationCheckbox"
+                    name="confirmation"
+                    required
+                    class="w-5 h-5 rounded border-gray-300 text-green-600 focus:ring-green-600 cursor-pointer mt-0.5"
+                >
+                <div>
+                    <p class="text-sm font-bold text-slate-800">I confirm I want to send real funds to this recipient</p>
+                    <p class="text-xs text-slate-500 mt-1">You must confirm this to proceed with the transfer</p>
+                </div>
+            </label>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col md:flex-row gap-4 pt-6">
+            <button type="button" data-route="dashboard" class="flex-1 px-6 py-3 bg-white border-2 border-gray-200 text-slate-600 rounded-xl font-bold hover:bg-gray-50 transition">
+                Cancel
+            </button>
+                    <button type="submit" id="sendButton" class="flex-1 md:flex-[2] px-6 py-3 bg-real text-white rounded-xl font-bold shadow-lg shadow-green-200 hover:opacity-90 transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-paper-plane"></i> Send Funds
+                    </button>
+        </div>
+    </form>
+
+</main>
+
+<!-- Success Modal -->
+<div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center animate-fade-in">
+        <!-- Success Icon -->
+        <div class="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
+            <i class="fa-solid fa-check-circle text-green-600 text-4xl"></i>
+        </div>
+        
+        <!-- Success Message -->
+        <h2 class="text-2xl font-bold text-slate-900 mb-3">Funds Sent Successfully!</h2>
+        <p class="text-slate-600 mb-6">Your transfer has been completed</p>
+        
+        <!-- Transaction Details -->
+        <div class="bg-green-50 border-2 border-green-200 rounded-xl p-6 mb-6">
+            <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <span class="text-sm font-medium text-slate-600">Amount Sent:</span>
+                    <span class="text-lg font-bold text-green-700" id="successAmount">$0.00</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-sm font-medium text-slate-600">Recipient:</span>
+                    <span class="text-sm font-bold text-slate-800" id="successRecipient">-</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-sm font-medium text-slate-600">New Balance:</span>
+                    <span class="text-sm font-bold text-slate-800" id="successBalance">$0.00</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="flex flex-col gap-3">
+            <button onclick="closeSuccessModal()" class="w-full px-6 py-3 bg-real text-white rounded-xl font-bold hover:opacity-90 transition">
+                <i class="fa-solid fa-check mr-2"></i> Done
+            </button>
+            <button onclick="sendMoreFunds()" class="w-full px-6 py-3 bg-white border-2 border-gray-200 text-slate-600 rounded-xl font-bold hover:bg-gray-50 transition">
+                <i class="fa-solid fa-paper-plane mr-2"></i> Send More Funds
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    .animate-fade-in {
+        animation: fade-in 0.3s ease-out;
+    }
+</style>
+
+<script>
+    let availableBalance = 0;
+    let selectedUserId = null;
+    let searchTimeout = null;
+    
+    const amountInput = document.getElementById('amountInput');
+    const maxAmount = document.getElementById('maxAmount');
+    const amountError = document.getElementById('amountError');
+    const useMaxBtn = document.getElementById('useMax');
+    const confirmationCheckbox = document.getElementById('confirmationCheckbox');
+    const sendButton = document.getElementById('sendButton');
+    const recipientSearch = document.getElementById('recipientSearch');
+    const searchResults = document.getElementById('searchResults');
+    const selectedRecipient = document.getElementById('selectedRecipient');
+    const clearRecipient = document.getElementById('clearRecipient');
+
+    // Load user real balance (users can only send real balance funds)
+    async function loadData() {
+        try {
+            // Load user's real balance
+            const profileData = await API.user.getProfile();
+            if (profileData.user) {
+                availableBalance = parseFloat(profileData.user.real_balance || 0);
+                document.getElementById('availableBalance').textContent = `$${availableBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                maxAmount.textContent = `$${availableBalance.toFixed(2)}`;
+            }
+        } catch (error) {
+            console.error('Failed to load data:', error);
+            Utils?.showToast?.('Failed to load balance', 'error');
+        }
+    }
+
+    // Use Max button
+    useMaxBtn.addEventListener('click', function() {
+        amountInput.value = availableBalance.toFixed(2);
+        validateAmount();
+    });
+
+    // Amount validation
+    function validateAmount() {
+        const amount = parseFloat(amountInput.value);
+        if (amount > availableBalance) {
+            amountError.classList.remove('hidden');
+            amountInput.classList.add('border-red-500');
+            return false;
+        } else {
+            amountError.classList.add('hidden');
+            amountInput.classList.remove('border-red-500');
+            return true;
+        }
+    }
+
+    amountInput.addEventListener('input', validateAmount);
+    amountInput.addEventListener('blur', validateAmount);
+
+    // Recipient search with API
+    recipientSearch.addEventListener('input', function() {
+        const query = this.value.trim();
+        
+        // Clear previous timeout
+        if (searchTimeout) {
+            clearTimeout(searchTimeout);
+        }
+
+        // Hide results if empty
+        if (query.length < 2) {
+            searchResults.classList.add('hidden');
+            return;
+        }
+
+        // Debounce search
+        searchTimeout = setTimeout(async () => {
+            try {
+                const data = await API.user.searchUsers(query);
+                const users = data.users || [];
+
+                if (users.length > 0) {
+                    searchResults.innerHTML = users.map(user => {
+                        const initials = getInitials(user.display_name || user.name || user.username || user.email || 'U');
+                        const displayName = user.display_name || user.name || user.username || 'Unknown';
+                        const username = user.username ? `@${user.username}` : user.email || '';
+                        const avatarUrl = user.avatar_url || '';
+                        
+                        // Handle avatar URL (same pattern as main.js)
+                        let imageUrl = '';
+                        if (avatarUrl) {
+                            if (avatarUrl.startsWith('/storage/')) {
+                                imageUrl = avatarUrl;
+                            } else if (!avatarUrl.startsWith('http://') && !avatarUrl.startsWith('https://')) {
+                                imageUrl = '/' + avatarUrl.replace(/^\//, '');
+                            } else {
+                                imageUrl = avatarUrl;
+                            }
+                        }
+                        
+                        return `
+                            <div class="p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-0" onclick="selectRecipient(${user.id}, '${username}', '${displayName.replace(/'/g, "\\'")}', '${initials}', '${imageUrl.replace(/'/g, "\\'")}')">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold relative overflow-hidden shrink-0">
+                                        ${imageUrl ? `<img src="${imageUrl}" alt="${displayName}" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />` : ''}
+                                        <span class="${imageUrl ? 'hidden' : ''}">${initials}</span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-bold text-slate-800 truncate">${username}</p>
+                                        <p class="text-xs text-slate-500 truncate">${displayName}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                    searchResults.classList.remove('hidden');
+                } else {
+                    searchResults.innerHTML = '<div class="p-3 text-sm text-slate-500 text-center">No users found</div>';
+                    searchResults.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Search error:', error);
+                const errorMessage = error.response?.message || error.message || 'Search failed';
+                searchResults.innerHTML = `<div class="p-3 text-sm text-red-500 text-center">Search failed: ${errorMessage}</div>`;
+                searchResults.classList.remove('hidden');
+            }
+        }, 300);
+    });
+
+    // Select recipient
+    window.selectRecipient = function(userId, username, displayName, initials, avatarUrl = '') {
+        selectedUserId = userId;
+        recipientSearch.value = username;
+        
+        const recipientContent = selectedRecipient.querySelector('.flex.items-center.gap-3');
+        const hasAvatar = avatarUrl && avatarUrl.trim() !== '';
+        
+        recipientContent.innerHTML = `
+            <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold relative overflow-hidden shrink-0">
+                ${hasAvatar ? `<img src="${avatarUrl}" alt="${displayName}" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />` : ''}
+                <span class="${hasAvatar ? 'hidden' : ''}">${initials}</span>
+            </div>
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-bold text-slate-800 truncate">${username}</p>
+                <p class="text-xs text-slate-500 truncate">${displayName}</p>
+            </div>
+        `;
+        
+        selectedRecipient.classList.remove('hidden');
+        searchResults.classList.add('hidden');
+    };
+
+    // Clear recipient
+    clearRecipient.addEventListener('click', function() {
+        recipientSearch.value = '';
+        selectedUserId = null;
+        selectedRecipient.classList.add('hidden');
+    });
+
+    // Close search results when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!recipientSearch.contains(e.target) && !searchResults.contains(e.target)) {
+            searchResults.classList.add('hidden');
+        }
+    });
+
+    // Form submission
+    document.getElementById('sendFundsForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        if (!selectedUserId) {
+            Utils?.showToast?.('Please select a recipient', 'error');
+            return;
+        }
+
+        if (!validateAmount()) {
+            return;
+        }
+
+        if (!confirmationCheckbox.checked) {
+            Utils?.showToast?.('Please confirm that you want to send real funds', 'error');
+            return;
+        }
+
+        sendButton.disabled = true;
+        const originalText = sendButton.innerHTML;
+        sendButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+
+        try {
+            const formData = {
+                to_user_id: selectedUserId,
+                amount: parseFloat(amountInput.value),
+                message: document.querySelector('textarea[name="message"]').value.trim() || null,
+                currency: 'USD',
+                // Note: profit_growth_id removed - users can only send real balance funds
+                // Profit growth funds must be withdrawn to real balance first, then sent
+            };
+
+            const response = await API.user.sendSimulatedFunds(formData);
+            
+            // Get recipient info for success modal
+            const recipientInfo = selectedRecipient.querySelector('.flex.items-center.gap-3');
+            const recipientName = recipientInfo ? recipientInfo.querySelector('p.text-sm.font-bold')?.textContent || 'Recipient' : 'Recipient';
+            const amount = parseFloat(amountInput.value);
+            
+            // Show success modal
+            showSuccessModal(amount, recipientName);
+            
+            // Reload balance after sending
+            await loadData();
+
+        } catch (error) {
+            console.error('Send error:', error);
+            const message = error.response?.message || error.message || 'Failed to send funds';
+            Utils?.showToast?.(message, 'error');
+        } finally {
+            sendButton.disabled = false;
+            sendButton.innerHTML = originalText;
+        }
+    });
+
+    // Show success modal
+    function showSuccessModal(amount, recipientName) {
+        const modal = document.getElementById('successModal');
+        const successAmount = document.getElementById('successAmount');
+        const successRecipient = document.getElementById('successRecipient');
+        const successBalance = document.getElementById('successBalance');
+        
+        // Update modal content
+        successAmount.textContent = `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        successRecipient.textContent = recipientName;
+        
+        // Update balance (will be updated after loadData completes)
+        setTimeout(async () => {
+            try {
+                const profileData = await API.user.getProfile();
+                if (profileData.user) {
+                    const balance = parseFloat(profileData.user.real_balance || 0);
+                    successBalance.textContent = `$${balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                }
+            } catch (error) {
+                console.error('Failed to load balance for modal:', error);
+            }
+        }, 500);
+        
+        // Show modal
+        modal.classList.remove('hidden');
+    }
+    
+    // Close success modal
+    function closeSuccessModal() {
+        const modal = document.getElementById('successModal');
+        modal.classList.add('hidden');
+        // Redirect to dashboard after a short delay
+        setTimeout(() => {
+            window.location.href = '/dashboard.html';
+        }, 300);
+    }
+    
+    // Send more funds (reset form and close modal)
+    function sendMoreFunds() {
+        const modal = document.getElementById('successModal');
+        modal.classList.add('hidden');
+        
+        // Reset form
+        document.getElementById('sendFundsForm').reset();
+        selectedUserId = null;
+        selectedRecipient.classList.add('hidden');
+        recipientSearch.value = '';
+        
+        // Reload balance
+        loadData();
+    }
+
+    // Check if user_id is in URL and pre-select user
+    function checkUrlForUserId() {
+        const params = new URLSearchParams(window.location.search);
+        const userId = params.get('user_id');
+        
+        if (userId) {
+            // Load user data and pre-select
+            API.user.getUserProfile(userId).then(data => {
+                const user = data.user;
+                if (user) {
+                    const username = user.username ? `@${user.username}` : user.email || 'Unknown';
+                    const displayName = user.display_name || user.name || username;
+                    const initials = getInitials(user.display_name || user.name || user.username);
+                    
+                    selectedUserId = user.id;
+                    recipientSearch.value = username;
+                    
+                    const recipientContent = selectedRecipient.querySelector('.flex.items-center.gap-3');
+                    if (recipientContent) {
+                        const avatarUrl = user.avatar_url || '';
+                        let imageUrl = '';
+                        if (avatarUrl) {
+                            if (avatarUrl.startsWith('/storage/')) {
+                                imageUrl = avatarUrl;
+                            } else if (!avatarUrl.startsWith('http://') && !avatarUrl.startsWith('https://')) {
+                                imageUrl = '/' + avatarUrl.replace(/^\//, '');
+                            } else {
+                                imageUrl = avatarUrl;
+                            }
+                        }
+                        const hasAvatar = imageUrl && imageUrl.trim() !== '';
+                        
+                        recipientContent.innerHTML = `
+                            <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold relative overflow-hidden shrink-0">
+                                ${hasAvatar ? `<img src="${imageUrl}" alt="${displayName}" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />` : ''}
+                                <span class="${hasAvatar ? 'hidden' : ''}">${initials}</span>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-bold text-slate-800 truncate">${username}</p>
+                                <p class="text-xs text-slate-500 truncate">${displayName}</p>
+                            </div>
+                        `;
+                    }
+                    selectedRecipient.classList.remove('hidden');
+                }
+            }).catch(error => {
+                console.error('Failed to load user:', error);
+            });
+        }
+    }
+
+    // Get initials helper
+    function getInitials(name) {
+        if (!name) return 'U';
+        const parts = name.trim().split(' ');
+        if (parts.length >= 2) {
+            return (parts[0][0] + parts[1][0]).toUpperCase();
+        }
+        return name.substring(0, 2).toUpperCase();
+    }
+
+    // Notification Dropdown Functions
+    window.toggleNotificationDropdown = function() {
+        const dropdown = document.getElementById('notificationDropdown');
+        if (dropdown) {
+            const isHidden = dropdown.classList.contains('hidden');
+            dropdown.classList.toggle('hidden');
+            if (isHidden) {
+                loadNotificationDropdown();
+            }
+        }
+    };
+
+    async function loadNotificationDropdown() {
+        const dropdownList = document.getElementById('notificationDropdownList');
+        if (!dropdownList) return;
+        try {
+            dropdownList.innerHTML = '<div class="p-4 text-center text-slate-500"><i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i><p class="text-sm">Loading notifications...</p></div>';
+            const dashboardData = await API.user.getDashboard();
+            const transactions = dashboardData.recent_transactions || [];
+            const activityLogs = dashboardData.recent_activity || [];
+            const allNotifications = [];
+            transactions.slice(0, 10).forEach(tx => {
+                allNotifications.push({ type: 'transaction', id: tx.id, action: tx.type, amount: tx.amount, currency: tx.currency || 'USD', description: tx.description || '', status: tx.status, created_at: tx.created_at });
+            });
+            activityLogs.slice(0, 10).forEach(activity => {
+                allNotifications.push({ type: 'activity', id: activity.id, action: activity.action, description: activity.description || '', created_at: activity.created_at });
+            });
+            allNotifications.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            const recentNotifications = allNotifications.slice(0, 5);
+            const badge = document.getElementById('notificationBadge');
+            if (badge) badge.classList.toggle('hidden', recentNotifications.length === 0);
+            if (recentNotifications.length === 0) {
+                dropdownList.innerHTML = '<div class="p-4 text-center text-slate-500"><p class="text-sm">No notifications</p></div>';
+                return;
+            }
+            dropdownList.innerHTML = recentNotifications.map(notif => {
+                const date = formatNotificationDate(notif.created_at);
+                const icon = getNotificationIcon(notif.action || notif.type);
+                const title = getNotificationTitle(notif);
+                const description = notif.description || '';
+                return `<div class="p-4 hover:bg-gray-50 transition cursor-pointer" onclick="handleNotificationClick('${notif.type}', ${notif.id})"><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full ${icon.bg} flex items-center justify-center shrink-0"><i class="fa-solid ${icon.icon} ${icon.color} text-sm"></i></div><div class="flex-1 min-w-0"><p class="text-sm font-bold text-slate-800 mb-1">${title}</p>${description ? `<p class="text-xs text-slate-500 line-clamp-2 mb-1">${description}</p>` : ''}<p class="text-xs text-slate-400">${date}</p></div></div></div>`;
+            }).join('');
+        } catch (error) {
+            console.error('Failed to load notifications:', error);
+            dropdownList.innerHTML = '<div class="p-4 text-center text-red-500"><p class="text-sm">Failed to load notifications</p></div>';
+        }
+    }
+
+    function formatNotificationDate(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+        if (diffMins < 1) return 'Just now';
+        if (diffMins < 60) return `${diffMins}m ago`;
+        if (diffHours < 24) return `${diffHours}h ago`;
+        if (diffDays < 7) return `${diffDays}d ago`;
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    function getNotificationIcon(action) {
+        const icons = { 'deposit': { icon: 'fa-arrow-down', color: 'text-green-600', bg: 'bg-green-100' }, 'withdrawal': { icon: 'fa-arrow-up', color: 'text-red-600', bg: 'bg-red-100' }, 'credit': { icon: 'fa-gift', color: 'text-blue-600', bg: 'bg-blue-100' }, 'debit': { icon: 'fa-minus', color: 'text-orange-600', bg: 'bg-orange-100' }, 'transfer_sent': { icon: 'fa-paper-plane', color: 'text-blue-600', bg: 'bg-blue-100' }, 'transfer_received': { icon: 'fa-inbox', color: 'text-green-600', bg: 'bg-green-100' }, 'profit_growth_created': { icon: 'fa-chart-line', color: 'text-purple-600', bg: 'bg-purple-100' }, 'profit_growth_updated': { icon: 'fa-sync', color: 'text-blue-600', bg: 'bg-blue-100' } };
+        return icons[action] || { icon: 'fa-bell', color: 'text-slate-600', bg: 'bg-slate-100' };
+    }
+
+    function getNotificationTitle(notif) {
+        const action = notif.action || notif.type;
+        const actionNames = { 'deposit': 'Deposit', 'withdrawal': 'Withdrawal', 'credit': 'Credit', 'debit': 'Debit', 'transfer_sent': 'Funds Sent', 'transfer_received': 'Funds Received', 'profit_growth_created': 'Profit Growth Created', 'profit_growth_updated': 'Profit Growth Updated' };
+        const actionName = actionNames[action] || action.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        if (notif.amount) {
+            const amount = parseFloat(notif.amount);
+            const sign = action === 'deposit' || action === 'credit' || action === 'transfer_received' ? '+' : '-';
+            return `${actionName}: ${sign}$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+        return actionName;
+    }
+
+    window.handleNotificationClick = function(type, id) {
+        window.location.href = type === 'transaction' ? '#transactions' : '#notifications';
+    };
+
+    // Close notification dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        const notificationDropdown = document.getElementById('notificationDropdown');
+        const notificationButton = event.target.closest('[onclick="toggleNotificationDropdown()"]');
+        if (notificationDropdown && !notificationDropdown.contains(event.target) && !notificationButton) {
+            notificationDropdown.classList.add('hidden');
+        }
+    });
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        loadData();
+        checkUrlForUserId();
+    });
+</script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/forms.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

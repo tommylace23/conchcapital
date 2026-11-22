@@ -1,0 +1,15 @@
+.DS_Store
+test.zip
+
+# Backend dependencies (restore with: composer install)
+test/backend/vendor/
+
+# Secrets and local state
+test/backend/.env
+test/backend/.env.backup
+test/backend/storage/logs/*.log
+test/backend/bootstrap/cache/*.php
+test/backend/database/*.sqlite
+
+# Editor
+.vscode/

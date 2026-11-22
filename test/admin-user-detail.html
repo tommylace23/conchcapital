@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>User Detail | Admin Panel</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .bg-real { background-color: #10B981; }
+        .text-real { color: #10B981; }
+        .bg-sim { background-color: #3B82F6; }
+        .text-sim { color: #3B82F6; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen" data-page="adminUserDetail" id="adminUserDetailPage">
+
+<aside class="w-64 bg-slate-950 text-slate-400 flex flex-col shrink-0 border-r border-slate-800 fixed h-screen">
+    <div class="p-6 border-b border-slate-800/50">
+        <div class="text-2xl font-bold tracking-tight text-white">
+            Conch<span class="text-real">Capital</span>
+        </div>
+        <p class="text-[10px] uppercase tracking-[0.2em] font-bold text-slate-500 mt-1">Admin Portal</p>
+    </div>
+    <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+        <a href="#" data-route="adminDashboard" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-chart-pie text-sm"></i>
+            <span class="text-sm font-medium">Overview</span>
+        </a>
+        <a href="#" data-route="adminUsers" class="flex items-center space-x-3 p-3 bg-slate-900 text-white rounded-xl transition">
+            <i class="fa-solid fa-users-gear text-sm"></i>
+            <span class="text-sm font-medium">User Management</span>
+        </a>
+        <a href="#" data-route="adminTransactions" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-file-invoice-dollar text-sm"></i>
+            <span class="text-sm font-medium">Transactions</span>
+        </a>
+        <a href="#" data-route="adminCredits" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-money-bill-transfer text-sm"></i>
+            <span class="text-sm font-medium">Credits</span>
+        </a>
+        <a href="#" data-route="adminFreezes" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+            <i class="fa-solid fa-snowflake text-sm"></i>
+            <span class="text-sm font-medium">Freezes</span>
+        </a>
+        <div class="pt-4 mt-4 border-t border-slate-800/50">
+            <a href="#" data-route="adminSettings" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+                <i class="fa-solid fa-gear text-sm"></i>
+                <span class="text-sm font-medium">Settings</span>
+            </a>
+        </div>
+    </nav>
+</aside>
+
+<main class="ml-64 flex-1 p-8">
+    
+    <!-- FIX: Added Back to Users link -->
+    <a href="#" data-route="adminUsers" class="inline-flex items-center text-sm text-gray-500 hover:text-gray-800 transition mb-6">
+        <i class="fa-solid fa-arrow-left mr-2"></i> Back to Users
+    </a>
+    
+    <!-- Header with user info and action buttons -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+        <div>
+            <h1 id="userTitle" class="text-2xl font-black text-slate-900 mb-1">User: Loading...</h1>
+        </div>
+        <div class="flex gap-3 flex-wrap">
+            <button onclick="impersonateUser()" class="bg-slate-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-black transition shadow-sm">
+                <i class="fa-solid fa-user-secret mr-2"></i>Impersonate
+            </button>
+            <button onclick="freezeUser()" class="bg-red-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-red-700 transition shadow-sm">
+                <i class="fa-solid fa-snowflake mr-2"></i>Freeze
+            </button>
+            <button onclick="creditUser()" class="bg-real text-white px-6 py-3 rounded-xl font-bold hover:bg-[#059669] transition shadow-sm">
+                <i class="fa-solid fa-money-bill-transfer mr-2"></i>Credit
+            </button>
+            <button onclick="withdrawUser()" class="bg-amber-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-amber-700 transition shadow-sm">
+                <i class="fa-solid fa-arrow-up-from-bracket mr-2"></i>Withdraw
+            </button>
+            <button onclick="openCreateProfitGrowthModal()" class="bg-sim text-white px-6 py-3 rounded-xl font-bold hover:opacity-90 transition shadow-sm">
+                <i class="fa-solid fa-chart-line mr-2"></i>Create Profit Growth
+            </button>
+            <button onclick="checkProfitGrowthCalculation()" class="bg-purple-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-purple-700 transition shadow-sm">
+                <i class="fa-solid fa-calculator mr-2"></i>Check Growth Calculation
+            </button>
+            <button onclick="triggerProfitGrowthCalculation()" class="bg-green-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-green-700 transition shadow-sm">
+                <i class="fa-solid fa-chart-line mr-2"></i>Calculate Growth Now
+            </button>
+        </div>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-6 mb-6">
+        <!-- Account Information Card -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-user text-slate-400"></i> Account Information
+            </h3>
+            <div class="space-y-3">
+                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                    <span class="text-sm text-slate-500">Email:</span>
+                    <span id="userEmail" class="text-sm font-medium text-slate-900">Loading...</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                    <span class="text-sm text-slate-500">Registered:</span>
+                    <span id="userRegistered" class="text-sm font-medium text-slate-900">Loading...</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                    <span class="text-sm text-slate-500">Status:</span>
+                    <span id="userStatus" class="px-2.5 py-1 bg-green-100 text-green-700 rounded-full text-[10px] font-black uppercase">Loading...</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                    <span class="text-sm text-slate-500">Freeze Status:</span>
+                    <span id="userFreezeStatus" class="text-sm font-medium text-slate-900">Loading...</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                    <span class="text-sm text-slate-500">Last Login:</span>
+                    <span id="userLastLogin" class="text-sm font-medium text-slate-900">—</span>
+                </div>
+                <div class="flex justify-between items-center py-2">
+                    <span class="text-sm text-slate-500">Last IP:</span>
+                    <span id="userLastIp" class="text-sm font-mono font-medium text-slate-900">—</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Balance Summary Card -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+            <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-wallet text-slate-400"></i> Balance Summary
+            </h3>
+            <div class="space-y-4">
+                <div class="p-4 bg-green-50 border border-green-200 rounded-xl">
+                    <p class="text-xs font-bold text-green-700 uppercase tracking-wider mb-1">Real Balance</p>
+                    <p id="userRealBalance" class="text-2xl font-bold text-real">$0.00</p>
+                    <p id="userRealBalanceBTC" class="text-sm text-green-600 mt-1">0 BTC</p>
+                </div>
+                <div class="p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                    <p class="text-xs font-bold text-blue-700 uppercase tracking-wider mb-1">Total Profit Growth Balance</p>
+                    <p id="userSimulatedBalance" class="text-2xl font-bold text-sim">$0.00</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Transactions Card -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-6">
+        <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-file-invoice-dollar text-slate-400"></i> Recent Transactions
+        </h3>
+        <div id="recentTransactionsList" class="space-y-3">
+            <div class="text-center py-8 text-slate-400">
+                <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
+                <p class="text-sm">Loading transactions...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profit Growths Card -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+        <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-chart-line text-slate-400"></i> Profit Growths (<span id="profitGrowthsCount">0</span> active)
+        </h3>
+        <div id="profitGrowthsList" class="space-y-3">
+            <div class="text-center py-8 text-slate-400">
+                <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
+                <p class="text-sm">Loading profit growths...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Referral Program Card -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mt-6">
+        <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-user-plus text-slate-400"></i> Referral Program
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Referral Code</label>
+                <div class="flex gap-2">
+                    <input id="referralCodeInput" type="text" readonly value="—"
+                        class="flex-1 p-3 border border-gray-200 rounded-xl bg-gray-50 font-mono font-bold tracking-widest text-slate-800 outline-none">
+                    <button type="button" onclick="copyReferralCode()"
+                        class="px-4 py-3 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-black transition">Copy</button>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Bonus per signup (USD)</label>
+                <div class="flex gap-2">
+                    <input id="referralBonusInput" type="number" min="0" step="0.01" placeholder="e.g. 25.00"
+                        class="flex-1 p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-sim">
+                    <button type="button" id="saveReferralBonusBtn"
+                        class="px-5 py-3 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition">Save</button>
+                </div>
+                <p id="referralBonusHelp" class="text-xs text-slate-500 mt-1">Leave blank to use the platform default.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mt-4">
+            <div class="p-4 bg-slate-50 border border-gray-100 rounded-xl">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">People referred</p>
+                <p id="referralCount" class="text-xl font-black text-slate-800">0</p>
+            </div>
+            <div class="p-4 bg-slate-50 border border-gray-100 rounded-xl">
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Bonus awarded</p>
+                <p id="referralTotal" class="text-xl font-black text-slate-800">$0.00</p>
+            </div>
+        </div>
+
+        <p id="referredByLine" class="text-xs text-slate-500 mt-3 hidden"></p>
+    </div>
+
+    <!-- Create Profit Growth Modal -->
+    <div id="createProfitGrowthModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-gray-200 flex items-center justify-between">
+                <h2 class="text-xl font-bold text-slate-900">Create Profit Growth</h2>
+                <button onclick="closeCreateProfitGrowthModal()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <form id="createProfitGrowthForm" class="p-6 space-y-6">
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Profit Growth Name *</label>
+                    <input type="text" id="pgName" required
+                        class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-sim outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Description</label>
+                    <textarea id="pgDescription" rows="3"
+                        class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-sim outline-none"></textarea>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Amount (USD) *</label>
+                        <input type="number" id="pgInitialBalance" step="0.01" min="0.01" required
+                            class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-sim outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Currency</label>
+                        <select id="pgCurrency" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-sim outline-none">
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="GBP">GBP</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Growth Percentage (1-100%) *</label>
+                        <input type="number" id="pgGrowthPercentage" step="0.01" min="1" max="100" value="20" required
+                            class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-sim outline-none">
+                        <p class="text-xs text-slate-500 mt-1">Percentage increase per calculation period (Default: 20%)</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Growth Frequency *</label>
+                        <select id="pgGrowthFrequency" required
+                            class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-sim outline-none">
+                            <option value="test">Test (5 minutes)</option>
+                            <option value="daily">Daily</option>
+                            <option value="weekly" selected>Weekly</option>
+                            <option value="monthly">Monthly</option>
+                            <option value="quarterly">Quarterly</option>
+                            <option value="yearly">Yearly</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex gap-4 pt-4 border-t border-gray-200">
+                    <button type="button" onclick="closeCreateProfitGrowthModal()" class="flex-1 py-3 font-bold text-slate-500 hover:bg-gray-50 rounded-xl transition">
+                        Cancel
+                    </button>
+                    <button type="submit" id="createProfitGrowthBtn" class="flex-[2] bg-sim text-white py-3 rounded-xl font-bold hover:opacity-90 transition">
+                        Create Profit Growth
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Profit Growth Calculation Check Modal -->
+    <div id="profitGrowthCheckModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+                <h2 class="text-xl font-bold text-slate-900">Profit Growth Calculation Check</h2>
+                <button onclick="closeProfitGrowthCheckModal()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-times text-xl"></i>
+                </button>
+            </div>
+            <div id="profitGrowthCheckContent" class="p-6">
+                <div class="text-center py-8">
+                    <i class="fa-solid fa-spinner fa-spin text-3xl text-slate-400 mb-2"></i>
+                    <p class="text-slate-500">Loading calculation details...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/forms.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+<script>
+    let currentUserId = null;
+
+    // Helper function to always get user ID (with multiple fallbacks)
+    // Define this early so buttons can use it
+    function getUserIdAlways() {
+        // Method 1: Try URLSearchParams (most reliable)
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            let userId = urlParams.get('user_id');
+            if (userId) {
+                console.log('getUserIdAlways: Found via URLSearchParams:', userId);
+                return userId;
+            }
+        } catch (e) {
+            console.warn('URLSearchParams failed:', e);
+        }
+        
+        // Method 2: Try regex from full URL
+        const match = window.location.href.match(/[?&]user_id=(\d+)/);
+        if (match && match[1]) {
+            console.log('getUserIdAlways: Found via regex:', match[1]);
+            return match[1];
+        }
+        
+        // Method 3: Try currentUserId variable
+        if (currentUserId) {
+            console.log('getUserIdAlways: Found via currentUserId:', currentUserId);
+            return currentUserId;
+        }
+        
+        // Method 4: Try data attribute
+        const pageElement = document.getElementById('adminUserDetailPage');
+        if (pageElement) {
+            const userId = pageElement.getAttribute('data-user-id');
+            if (userId) {
+                console.log('getUserIdAlways: Found via data attribute:', userId);
+                return userId;
+            }
+        }
+        
+        console.error('getUserIdAlways: No user ID found. URL:', window.location.href);
+        return null;
+    }
+    
+    // Make it globally available
+    window.getUserIdAlways = getUserIdAlways;
+
+    // Debug function - can be called from console (make sure it's on window)
+    window.debugUserDetail = function() {
+        console.log('=== User Detail Debug Info ===');
+        console.log('Full URL:', window.location.href);
+        console.log('Search params:', window.location.search);
+        console.log('currentUserId variable:', currentUserId);
+        console.log('getUserIdFromUrl() result:', getUserIdFromUrl());
+        console.log('getUserIdAlways() result:', getUserIdAlways());
+        
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            console.log('URL params object:', urlParams.toString());
+            console.log('user_id from URLSearchParams:', urlParams.get('user_id'));
+        } catch (e) {
+            console.error('Error parsing URL params:', e);
+        }
+        
+        // Check data attribute
+        const pageElement = document.getElementById('adminUserDetailPage');
+        if (pageElement) {
+            console.log('data-user-id attribute:', pageElement.getAttribute('data-user-id'));
+        }
+        
+        const result = {
+            url: window.location.href,
+            search: window.location.search,
+            currentUserId: currentUserId,
+            userIdFromUrl: getUserIdFromUrl(),
+            userIdAlways: getUserIdAlways()
+        };
+        
+        console.log('=== Result Object ===', result);
+        return result;
+    };
+    
+    // Also expose it globally for easier access
+    if (typeof window !== 'undefined') {
+        window.debug = window.debugUserDetail;
+    }
+
+    // Get user ID from URL
+    function getUserIdFromUrl() {
+        try {
+            const fullUrl = window.location.href;
+            const url = new URL(fullUrl);
+            const userId = url.searchParams.get('user_id') || url.searchParams.get('id');
+            
+            if (userId) {
+                console.log('User ID from URL:', userId, 'Full URL:', fullUrl);
+                return userId;
+            } else {
+                // Fallback: try parsing manually
+                const match = fullUrl.match(/[?&]user_id=(\d+)/);
+                if (match) {
+                    console.log('User ID from regex match:', match[1]);
+                    return match[1];
+                }
+                console.warn('No user_id parameter found in URL:', fullUrl);
+                console.warn('Search params:', url.searchParams.toString());
+            }
+        } catch (error) {
+            console.error('Error parsing URL:', error);
+            // Fallback: try simple string parsing
+            const match = window.location.href.match(/[?&]user_id=(\d+)/);
+            if (match) {
+                console.log('User ID from fallback regex:', match[1]);
+                return match[1];
+            }
+        }
+        return null;
+    }
+
+    // Load user data
+    async function loadUserData() {
+        const userId = getUserIdAlways(); // Use the robust function
+        if (!userId) {
+            // Don't show error on page load, just log it
+            console.warn('No user ID found when loading user data');
+            return;
+        }
+        currentUserId = userId;
+        
+        try {
+            // Load user details
+            const userResponse = await API.admin.getUser(userId);
+            if (userResponse.user) {
+                const user = userResponse.user;
+                
+                // Update page title
+                const titleElement = document.getElementById('userTitle') || document.querySelector('h1');
+                if (titleElement) {
+                    titleElement.textContent = `User: @${user.username || user.name || 'user'}`;
+                }
+                
+                // Update account information
+                document.getElementById('userEmail').textContent = user.email || '-';
+                if (user.created_at) {
+                    const registeredDate = new Date(user.created_at);
+                    document.getElementById('userRegistered').textContent = registeredDate.toLocaleDateString('en-US', { 
+                        year: 'numeric', 
+                        month: 'short', 
+                        day: 'numeric' 
+                    });
+                } else {
+                    document.getElementById('userRegistered').textContent = '-';
+                }
+                
+                // Update status
+                const statusElement = document.getElementById('userStatus');
+                if (user.is_frozen) {
+                    statusElement.textContent = 'Frozen';
+                    statusElement.className = 'px-2.5 py-1 bg-red-100 text-red-700 rounded-full text-[10px] font-black uppercase';
+                } else {
+                    statusElement.textContent = 'Active';
+                    statusElement.className = 'px-2.5 py-1 bg-green-100 text-green-700 rounded-full text-[10px] font-black uppercase';
+                }
+                
+                // Update freeze status
+                document.getElementById('userFreezeStatus').textContent = user.is_frozen ? 'Frozen' : 'None';
+                
+                // Update balances
+                const realBalance = parseFloat(user.real_balance || 0);
+                
+                // Calculate total profit growth balance from statistics (sum of all profit growths' current_balance)
+                // Use total_profit_growth_balance from statistics if available, otherwise calculate from profit growths
+                let totalProfitGrowthBalance = 0;
+                if (userResponse.statistics && userResponse.statistics.total_profit_growth_balance !== undefined) {
+                    totalProfitGrowthBalance = parseFloat(userResponse.statistics.total_profit_growth_balance || 0);
+                } else if (user.profit_growths && Array.isArray(user.profit_growths)) {
+                    // Fallback: calculate from profit growths array
+                    totalProfitGrowthBalance = user.profit_growths
+                        .filter(pg => pg.status === 'active' || pg.status === 'paused')
+                        .reduce((sum, pg) => sum + parseFloat(pg.current_balance || 0), 0);
+                } else if (user.profitGrowths && Array.isArray(user.profitGrowths)) {
+                    // Fallback: calculate from profitGrowths array (camelCase)
+                    totalProfitGrowthBalance = user.profitGrowths
+                        .filter(pg => pg.status === 'active' || pg.status === 'paused')
+                        .reduce((sum, pg) => sum + parseFloat(pg.current_balance || 0), 0);
+                } else {
+                    // Last fallback: use legacy simulated_balance
+                    totalProfitGrowthBalance = parseFloat(user.simulated_balance || 0);
+                }
+                
+                document.getElementById('userRealBalance').textContent = `$${realBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                document.getElementById('userSimulatedBalance').textContent = `$${totalProfitGrowthBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                
+                // BTC conversion (simplified - 1 BTC = $50,000 for display)
+                const btcAmount = (realBalance / 50000).toFixed(6);
+                document.getElementById('userRealBalanceBTC').textContent = `${btcAmount} BTC`;
+
+                // Referral program panel
+                renderReferralPanel(userId, userResponse.referral_stats || {});
+
+                // Login / security history
+                const sec = userResponse.security || {};
+                document.getElementById('userLastLogin').textContent = sec.last_login_at ? new Date(sec.last_login_at).toLocaleString() : '—';
+                document.getElementById('userLastIp').textContent = sec.last_login_ip || '—';
+                
+                // Load transactions (from user data if available, otherwise fetch separately)
+                if (user.transactions && user.transactions.length > 0) {
+                    displayTransactions(user.transactions);
+                } else {
+                    await loadUserTransactions(userId);
+                }
+                
+                // Load profit growths (from user data if available, otherwise fetch separately)
+                // Check both snake_case and camelCase
+                if (user.profit_growths && Array.isArray(user.profit_growths) && user.profit_growths.length > 0) {
+                    console.log('Using profit_growths from user data:', user.profit_growths);
+                    displayProfitGrowths(user.profit_growths);
+                } else if (user.profitGrowths && Array.isArray(user.profitGrowths) && user.profitGrowths.length > 0) {
+                    console.log('Using profitGrowths from user data:', user.profitGrowths);
+                    displayProfitGrowths(user.profitGrowths);
+                } else {
+                    console.log('Profit growths not in user data, fetching separately...');
+                    await loadUserProfitGrowths(userId);
+                }
+                
+            }
+        } catch (error) {
+            console.error('Failed to load user:', error);
+            Utils?.showToast?.('Failed to load user data', 'error');
+        }
+    }
+    
+    // Display transactions
+    function displayTransactions(transactions) {
+        const container = document.getElementById('recentTransactionsList');
+        
+        if (!transactions || transactions.length === 0) {
+            container.innerHTML = '<div class="text-center py-8 text-slate-400"><p class="text-sm">No transactions found</p></div>';
+            return;
+        }
+        
+        container.innerHTML = transactions.map(txn => {
+            const date = new Date(txn.created_at || txn.date);
+            const isDeposit = txn.type === 'deposit';
+            const isCredit = txn.type === 'credit';
+            const iconClass = isDeposit ? 'fa-arrow-down' : isCredit ? 'fa-money-bill-transfer' : 'fa-arrow-up';
+            const bgClass = isDeposit ? 'bg-green-100' : isCredit ? 'bg-blue-100' : 'bg-red-100';
+            const textClass = isDeposit ? 'text-real' : isCredit ? 'text-sim' : 'text-red-600';
+            const statusClass = txn.status === 'completed' || txn.status === 'confirmed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700';
+            const statusText = txn.status === 'completed' || txn.status === 'confirmed' ? 'Completed' : txn.status || 'Pending';
+            
+            return `
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full ${bgClass} flex items-center justify-center">
+                            <i class="fa-solid ${iconClass} ${textClass} text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-800">${txn.type ? txn.type.charAt(0).toUpperCase() + txn.type.slice(1) : 'Transaction'}</p>
+                            <p class="text-xs text-slate-500">$${parseFloat(txn.amount || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${txn.currency || 'USD'}</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-slate-500">${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                        <span class="px-2 py-0.5 ${statusClass} rounded-full text-[10px] font-bold uppercase mt-1 inline-block">${statusText}</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+    
+    // Load user transactions
+    async function loadUserTransactions(userId) {
+        try {
+            const response = await API.admin.getTransactions({ user_id: userId, limit: 5 });
+            const transactions = response.data || response.transactions || [];
+            displayTransactions(transactions);
+        } catch (error) {
+            console.error('Failed to load transactions:', error);
+            document.getElementById('recentTransactionsList').innerHTML = '<div class="text-center py-8 text-slate-400"><p class="text-sm">Failed to load transactions</p></div>';
+        }
+    }
+    
+    // Display profit growths
+    function displayProfitGrowths(profitGrowths) {
+        const activeCount = profitGrowths.filter(pg => pg.status === 'active').length;
+        document.getElementById('profitGrowthsCount').textContent = activeCount;
+        
+        const container = document.getElementById('profitGrowthsList');
+        
+        if (!profitGrowths || profitGrowths.length === 0) {
+            container.innerHTML = '<div class="text-center py-8 text-slate-400"><p class="text-sm">No profit growths found</p></div>';
+            return;
+        }
+        
+        container.innerHTML = profitGrowths.map(pg => {
+            const statusClass = pg.status === 'active' ? 'bg-blue-100 text-blue-700' : pg.status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700';
+            const statusText = pg.status ? pg.status.charAt(0).toUpperCase() + pg.status.slice(1) : 'Unknown';
+            const canDelete = pg.status !== 'completed' && pg.status !== 'cancelled';
+            
+            return `
+                <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-100">
+                    <div class="flex-1">
+                        <p class="text-sm font-bold text-slate-800">${pg.name || 'Unnamed Profit Growth'}</p>
+                        <p class="text-xs text-slate-500">${pg.description || 'No description'}</p>
+                        ${pg.growth_percentage ? `<p class="text-xs text-slate-400 mt-1">Growth: ${pg.growth_percentage}% ${pg.growth_frequency || ''}</p>` : ''}
+                    </div>
+                    <div class="text-right flex items-center gap-3">
+                        <div>
+                            <p class="text-sm font-bold text-sim">$${parseFloat(pg.current_balance || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                            <span class="px-2 py-0.5 ${statusClass} rounded-full text-[10px] font-bold uppercase mt-1 inline-block">${statusText}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="editProfitGrowth(${pg.id})" class="text-blue-600 hover:text-blue-800 transition" title="Edit Profit Growth">
+                                <i class="fa-solid fa-pencil text-sm"></i>
+                            </button>
+                            ${canDelete ? `<button onclick="deleteProfitGrowth(${pg.id})" class="text-red-600 hover:text-red-800 transition" title="Delete Profit Growth">
+                                <i class="fa-solid fa-trash text-sm"></i>
+                            </button>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+    
+    // Load user profit growths
+    async function loadUserProfitGrowths(userId) {
+        try {
+            // Reload user data to get fresh profit growths (including newly created ones)
+            console.log('Reloading user data to get fresh profit growths for user:', userId);
+            const userResponse = await API.admin.getUser(userId);
+            const user = userResponse.user;
+            
+            // Check for profit growths in the response
+            let profitGrowths = [];
+            if (user.profit_growths && Array.isArray(user.profit_growths)) {
+                profitGrowths = user.profit_growths;
+                console.log('Found profit_growths in user data:', profitGrowths.length);
+            } else if (user.profitGrowths && Array.isArray(user.profitGrowths)) {
+                profitGrowths = user.profitGrowths;
+                console.log('Found profitGrowths in user data:', profitGrowths.length);
+            }
+            
+            if (profitGrowths.length > 0) {
+                displayProfitGrowths(profitGrowths);
+                return;
+            }
+            
+            // If not in user data, try fetching directly (this shouldn't happen if backend includes it)
+            console.log('Profit growths not in user data, trying direct fetch...');
+            const response = await API.admin.getUserProfitGrowths(userId);
+            
+            // Handle paginated response
+            let allProfitGrowths = [];
+            if (response.data && Array.isArray(response.data)) {
+                allProfitGrowths = response.data;
+            } else if (response.profit_growths) {
+                allProfitGrowths = response.profit_growths;
+            } else if (response.simulations) {
+                allProfitGrowths = response.simulations;
+            } else if (Array.isArray(response)) {
+                allProfitGrowths = response;
+            }
+            
+            // Filter for this specific user
+            const userProfitGrowths = allProfitGrowths.filter(pg => pg.user_id == userId);
+            console.log('Filtered profit growths for user:', userProfitGrowths.length, userProfitGrowths);
+            displayProfitGrowths(userProfitGrowths);
+        } catch (e) {
+            console.error('Could not fetch profit growths:', e);
+            document.getElementById('profitGrowthsList').innerHTML = '<div class="text-center py-8 text-slate-400"><p class="text-sm">Failed to load profit growths</p></div>';
+        }
+    }
+
+    // Open create profit growth modal
+    function openCreateProfitGrowthModal() {
+        const userId = getUserIdAlways();
+        console.log('Opening modal - userId:', userId, 'currentUserId:', currentUserId, 'URL:', window.location.href);
+        
+        if (!userId) {
+            Utils?.showToast?.('No user selected. Please go to User Management and click "View Details" on a user.', 'error');
+            console.error('No user ID found. URL:', window.location.href);
+            console.error('URL params:', new URLSearchParams(window.location.search).toString());
+            return;
+        }
+        
+        currentUserId = userId;
+        const modal = document.getElementById('createProfitGrowthModal');
+        if (!modal) {
+            console.error('Modal element not found');
+            return;
+        }
+        modal.classList.remove('hidden');
+    }
+
+    // Close modal
+    function closeCreateProfitGrowthModal() {
+        document.getElementById('createProfitGrowthModal').classList.add('hidden');
+        document.getElementById('createProfitGrowthForm').reset();
+        // Reset button to create mode
+        const submitBtn = document.getElementById('createProfitGrowthBtn');
+        if (submitBtn) {
+            submitBtn.textContent = 'Create Profit Growth';
+            submitBtn.onclick = null; // Remove edit handler
+        }
+    }
+
+    // Handle form submission
+    function attachFormHandler() {
+        const form = document.getElementById('createProfitGrowthForm');
+        if (!form) {
+            console.error('Create profit growth form not found');
+            return;
+        }
+        
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const userId = getUserIdAlways();
+            if (!userId) {
+                Utils?.showToast?.('No user selected. Please navigate from the user list.', 'error');
+                console.error('No user ID found. URL:', window.location.href);
+                return;
+            }
+            currentUserId = userId;
+
+            const btn = document.getElementById('createProfitGrowthBtn');
+            btn.disabled = true;
+            const originalText = btn.textContent;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Creating...';
+
+            try {
+                const data = {
+                    user_id: userId,
+                    name: document.getElementById('pgName').value.trim(),
+                    description: document.getElementById('pgDescription').value.trim() || null,
+                    initial_balance: parseFloat(document.getElementById('pgInitialBalance').value),
+                    currency: document.getElementById('pgCurrency').value,
+                    growth_percentage: parseFloat(document.getElementById('pgGrowthPercentage').value),
+                    growth_frequency: document.getElementById('pgGrowthFrequency').value,
+                };
+
+                const submitBtn = document.getElementById('createProfitGrowthBtn');
+                const isEditMode = submitBtn && submitBtn.textContent.includes('Update');
+                
+                if (isEditMode) {
+                    // This is an update, not a create - should not happen here
+                    Utils?.showToast?.('Please use the Edit button to update profit growths', 'error');
+                    return;
+                }
+                
+                const response = await API.admin.createProfitGrowth(data);
+                
+                Utils?.showToast?.('Profit Growth created successfully!', 'success');
+                closeCreateProfitGrowthModal();
+                
+                // Reload profit growths list and user data to show the new profit growth
+                // userId is already declared above, just use it
+                if (userId) {
+                    console.log('Refreshing profit growths for user:', userId);
+                    // Reload user data which includes profit growths
+                    await loadUserData();
+                } else {
+                    // Fallback to full reload if we don't have user ID
+                    console.warn('No user ID found, doing full page reload');
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                }
+
+            } catch (error) {
+                console.error('Create profit growth error:', error);
+                const message = error.response?.data?.message || error.message || 'Failed to create profit growth';
+                Utils?.showToast?.(message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Create Profit Growth';
+            }
+        });
+    }
+
+    // Close modal on outside click
+    document.getElementById('createProfitGrowthModal')?.addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeCreateProfitGrowthModal();
+        }
+    });
+
+    // Check profit growth calculation
+    async function checkProfitGrowthCalculation() {
+        const userId = getUserIdAlways();
+        if (!userId) {
+            Utils?.showToast?.('User ID not found', 'error');
+            return;
+        }
+
+        const modal = document.getElementById('profitGrowthCheckModal');
+        const content = document.getElementById('profitGrowthCheckContent');
+        modal.classList.remove('hidden');
+        content.innerHTML = '<div class="text-center py-8"><i class="fa-solid fa-spinner fa-spin text-3xl text-slate-400 mb-2"></i><p class="text-slate-500">Loading calculation details...</p></div>';
+
+        try {
+            const response = await API.admin.checkUserProfitGrowth(userId);
+            
+            let html = `
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold text-slate-900 mb-4">User Information</h3>
+                    <div class="bg-gray-50 rounded-xl p-4 space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-slate-600">Username:</span>
+                            <span class="font-bold text-slate-900">@${response.user.username}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-600">Email:</span>
+                            <span class="font-bold text-slate-900">${response.user.email}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-600">Account Created:</span>
+                            <span class="font-bold text-slate-900">${new Date(response.user.created_at).toLocaleString()}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-600">Real Balance:</span>
+                            <span class="font-bold text-real">$${parseFloat(response.user.real_balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-600">Simulated Balance:</span>
+                            <span class="font-bold text-sim">$${parseFloat(response.user.simulated_balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            if (response.profit_growths && response.profit_growths.length > 0) {
+                html += `<h3 class="text-lg font-bold text-slate-900 mb-4">Profit Growth Accounts (${response.profit_growths.length})</h3>`;
+                
+                response.profit_growths.forEach((pg, index) => {
+                    const isCorrect = pg.expected_calculation?.is_correct !== false;
+                    const statusColor = isCorrect ? 'green' : 'amber';
+                    
+                    html += `
+                        <div class="bg-white border-2 border-${statusColor}-200 rounded-xl p-6 mb-4">
+                            <div class="flex items-center justify-between mb-4">
+                                <h4 class="text-lg font-bold text-slate-900">${pg.name || `Profit Growth #${pg.id}`}</h4>
+                                <span class="px-3 py-1 bg-${statusColor}-100 text-${statusColor}-700 rounded-full text-xs font-bold">${pg.status.toUpperCase()}</span>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                                <div>
+                                    <span class="text-slate-600">Initial Balance:</span>
+                                    <span class="font-bold text-slate-900 ml-2">$${parseFloat(pg.initial_balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                </div>
+                                <div>
+                                    <span class="text-slate-600">Current Balance:</span>
+                                    <span class="font-bold text-slate-900 ml-2">$${parseFloat(pg.current_balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                </div>
+                                <div>
+                                    <span class="text-slate-600">Growth Rate:</span>
+                                    <span class="font-bold text-slate-900 ml-2">${pg.growth_percentage}% ${pg.growth_frequency}</span>
+                                </div>
+                                <div>
+                                    <span class="text-slate-600">Total Growth:</span>
+                                    <span class="font-bold text-real ml-2">$${parseFloat(pg.total_growth).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${pg.growth_percent}%)</span>
+                                </div>
+                            </div>
+
+                            ${pg.expected_calculation ? `
+                                <div class="bg-${statusColor}-50 border border-${statusColor}-200 rounded-lg p-4 mb-4">
+                                    <h5 class="font-bold text-${statusColor}-900 mb-2">Expected Growth Calculation (2.8% daily)</h5>
+                                    <div class="space-y-1 text-sm">
+                                        <div class="flex justify-between">
+                                            <span class="text-slate-600">Days since start:</span>
+                                            <span class="font-bold text-slate-900">${pg.expected_calculation.days_since_start} days</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-slate-600">Daily rate:</span>
+                                            <span class="font-bold text-slate-900">${pg.expected_calculation.daily_rate}%</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-slate-600">Expected balance:</span>
+                                            <span class="font-bold text-slate-900">$${parseFloat(pg.expected_calculation.expected_balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-slate-600">Expected growth:</span>
+                                            <span class="font-bold text-slate-900">$${parseFloat(pg.expected_calculation.expected_growth).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-slate-600">Actual balance:</span>
+                                            <span class="font-bold text-slate-900">$${parseFloat(pg.expected_calculation.actual_balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-slate-600">Difference:</span>
+                                            <span class="font-bold ${Math.abs(pg.expected_calculation.difference) < 0.01 ? 'text-green-600' : 'text-red-600'}">$${parseFloat(pg.expected_calculation.difference).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                                        </div>
+                                        <div class="mt-2 pt-2 border-t border-${statusColor}-200">
+                                            <span class="font-bold text-${statusColor}-700">
+                                                ${isCorrect ? '✅ Growth calculation is correct!' : '⚠️ Growth may need recalculation'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ` : ''}
+
+                            <div class="text-xs text-slate-500 space-y-1">
+                                <div><strong>Created:</strong> ${new Date(pg.created_at).toLocaleString()}</div>
+                                ${pg.last_transfer_date ? `<div><strong>Last Transfer:</strong> ${new Date(pg.last_transfer_date).toLocaleString()}</div>` : ''}
+                                ${pg.last_growth_calculated_at ? `<div><strong>Last Growth Calculated:</strong> ${new Date(pg.last_growth_calculated_at).toLocaleString()}</div>` : '<div><strong>Last Growth Calculated:</strong> Never</div>'}
+                                ${pg.next_growth_calculation_at ? `<div><strong>Next Calculation Due:</strong> ${new Date(pg.next_growth_calculation_at).toLocaleString()} ${pg.growth_due ? '<span class="text-red-600 font-bold">(OVERDUE!)</span>' : ''}</div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                html += '<div class="text-center py-8 text-slate-400"><p>No profit growth accounts found for this user.</p></div>';
+            }
+
+            content.innerHTML = html;
+        } catch (error) {
+            console.error('Failed to check profit growth:', error);
+            const message = error.response?.data?.message || error.message || 'Failed to check profit growth calculation';
+            content.innerHTML = `
+                <div class="text-center py-8">
+                    <i class="fa-solid fa-exclamation-triangle text-3xl text-red-400 mb-2"></i>
+                    <p class="text-red-600 font-bold">Error: ${message}</p>
+                </div>
+            `;
+        }
+    }
+
+    function closeProfitGrowthCheckModal() {
+        document.getElementById('profitGrowthCheckModal').classList.add('hidden');
+    }
+
+    document.getElementById('profitGrowthCheckModal')?.addEventListener('click', function(e) {
+        if (e.target.id === 'profitGrowthCheckModal') {
+            closeProfitGrowthCheckModal();
+        }
+    });
+
+    // Trigger profit growth calculation for this user
+    async function triggerProfitGrowthCalculation() {
+        const userId = getUserIdAlways();
+        if (!userId) {
+            Utils?.showToast?.('User ID not found', 'error');
+            return;
+        }
+
+        if (!confirm('This will calculate and add growth to all profit growth accounts for this user. The growth will appear in the user\'s recent activity. Continue?')) {
+            return;
+        }
+
+        try {
+            Utils?.showToast?.('Calculating growth...', 'info');
+            
+            // Get user's profit growths first
+            const userResponse = await API.admin.getUser(userId);
+            const profitGrowths = userResponse.user?.profit_growths || userResponse.user?.profitGrowths || [];
+            
+            if (!profitGrowths || profitGrowths.length === 0) {
+                Utils?.showToast?.('No profit growth accounts found for this user', 'info');
+                return;
+            }
+
+            // Trigger growth calculation with force=true to calculate even if not due
+            // Pass null for profit_growth_id to calculate all, and true for force
+            const response = await API.admin.triggerGrowthCalculation(null, true);
+            
+            const calculatedCount = response.result?.calculated_count || 0;
+            const totalGrowth = response.result?.total_growth || 0;
+            
+            if (calculatedCount > 0) {
+                Utils?.showToast?.(
+                    `Growth calculated successfully! ${calculatedCount} profit growth(s) updated. Total growth: $${parseFloat(totalGrowth).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+                    'success'
+                );
+                
+                // Reload user data to show updated balances
+                setTimeout(() => {
+                    loadUserData();
+                }, 1000);
+            } else {
+                Utils?.showToast?.('No profit growths were due for calculation', 'info');
+            }
+        } catch (error) {
+            console.error('Failed to trigger growth calculation:', error);
+            const message = error.response?.data?.message || error.message || 'Failed to trigger growth calculation';
+            Utils?.showToast?.(message, 'error');
+        }
+    }
+
+    // Freeze user
+    function freezeUser() {
+        const userId = getUserIdAlways();
+        console.log('Freeze user - userId:', userId, 'URL:', window.location.href);
+        
+        if (!userId) {
+            Utils?.showToast?.('No user selected. Please go to User Management and click "View Details" on a user.', 'error');
+            console.error('No user ID found. URL:', window.location.href);
+            return;
+        }
+        window.location.href = `/admin-freeze.html?user_id=${userId}`;
+    }
+
+    // Credit user
+    function creditUser() {
+        const userId = getUserIdAlways();
+        console.log('Credit user - userId:', userId, 'URL:', window.location.href);
+        
+        if (!userId) {
+            Utils?.showToast?.('No user selected. Please go to User Management and click "View Details" on a user.', 'error');
+            console.error('No user ID found. URL:', window.location.href);
+            return;
+        }
+        window.location.href = `/admin-credit-funds-page.html?user_id=${userId}`;
+    }
+
+    // Withdraw funds for user
+    function withdrawUser() {
+        const userId = getUserIdAlways();
+        console.log('Withdraw user - userId:', userId, 'URL:', window.location.href);
+        
+        if (!userId) {
+            Utils?.showToast?.('No user selected. Please go to User Management and click "View Details" on a user.', 'error');
+            console.error('No user ID found. URL:', window.location.href);
+            return;
+        }
+        window.location.href = `/admin-withdraw-funds-page.html?user_id=${userId}`;
+    }
+
+    // Delete profit growth (admin can delete any user's profit growth)
+    // Edit profit growth (Admin only)
+    async function editProfitGrowth(profitGrowthId) {
+        try {
+            // Load profit growth details
+            const response = await API.admin.getProfitGrowth(profitGrowthId);
+            const pg = response.profit_growth || response.simulation || response;
+            
+            if (!pg) {
+                Utils?.showToast?.('Profit growth not found', 'error');
+                return;
+            }
+            
+            // Populate edit modal (reuse create modal structure)
+            document.getElementById('pgName').value = pg.name || '';
+            document.getElementById('pgDescription').value = pg.description || '';
+            document.getElementById('pgGrowthPercentage').value = pg.growth_percentage || 20;
+            document.getElementById('pgGrowthFrequency').value = pg.growth_frequency || 'weekly';
+            
+            // Show modal and change button text
+            const modal = document.getElementById('createProfitGrowthModal');
+            const submitBtn = document.getElementById('createProfitGrowthBtn');
+            if (modal && submitBtn) {
+                modal.classList.remove('hidden');
+                submitBtn.textContent = 'Update Profit Growth';
+                submitBtn.onclick = async function() {
+                    await updateProfitGrowth(profitGrowthId);
+                };
+            }
+        } catch (error) {
+            console.error('Failed to load profit growth:', error);
+            Utils?.showToast?.('Failed to load profit growth details', 'error');
+        }
+    }
+    
+    // Update profit growth
+    async function updateProfitGrowth(profitGrowthId) {
+        try {
+            const data = {
+                name: document.getElementById('pgName').value,
+                description: document.getElementById('pgDescription').value,
+                growth_percentage: parseFloat(document.getElementById('pgGrowthPercentage').value),
+                growth_frequency: document.getElementById('pgGrowthFrequency').value,
+            };
+            
+            await API.admin.updateProfitGrowth(profitGrowthId, data);
+            Utils?.showToast?.('Profit growth updated successfully!', 'success');
+            
+            // Close modal
+            document.getElementById('createProfitGrowthModal').classList.add('hidden');
+            
+            // Reload user data to show updated percentage
+            const userId = getUserIdAlways();
+            if (userId) {
+                await loadUserData();
+            }
+        } catch (error) {
+            console.error('Failed to update profit growth:', error);
+            const message = error.response?.data?.message || error.message || 'Failed to update profit growth';
+            Utils?.showToast?.(message, 'error');
+        }
+    }
+    
+    async function deleteProfitGrowth(profitGrowthId) {
+        if (!confirm('Are you sure you want to delete this profit growth? This action cannot be undone.')) {
+            return;
+        }
+
+        try {
+            // Use the admin API endpoint
+            await API.admin.deleteProfitGrowth(profitGrowthId);
+            Utils?.showToast?.('Profit growth deleted successfully', 'success');
+            
+            // Reload user data to refresh the list
+            const userId = getUserIdAlways();
+            if (userId) {
+                await loadUserData();
+            }
+        } catch (error) {
+            console.error('Failed to delete profit growth:', error);
+            const message = error.response?.data?.message || error.message || 'Failed to delete profit growth';
+            Utils?.showToast?.(message, 'error');
+        }
+    }
+
+    async function impersonateUser() {
+        const userId = currentUserId || getUserIdFromUrl();
+        if (!userId) return;
+        try {
+            await API.admin.impersonate(userId);
+            window.location.href = 'dashboard.html';
+        } catch (err) {
+            Utils?.showToast?.(err.response?.message || 'Failed to impersonate', 'error');
+        }
+    }
+
+    // --- Referral program panel ---
+    function renderReferralPanel(userId, stats) {
+        const codeInput = document.getElementById('referralCodeInput');
+        const bonusInput = document.getElementById('referralBonusInput');
+        const help = document.getElementById('referralBonusHelp');
+        const countEl = document.getElementById('referralCount');
+        const totalEl = document.getElementById('referralTotal');
+        const referredBy = document.getElementById('referredByLine');
+
+        if (!codeInput) return;
+
+        codeInput.value = stats.referral_code || '—';
+        codeInput.dataset.userId = userId;
+
+        const override = stats.referral_bonus_amount;
+        bonusInput.value = (override === null || override === undefined || override === '') ? '' : Number(override).toFixed(2);
+
+        const defaultBonus = Number(stats.default_bonus ?? 0);
+        help.textContent = `Leave blank to use the platform default ($${defaultBonus.toFixed(2)}).`;
+
+        countEl.textContent = stats.total_referrals ?? 0;
+        totalEl.textContent = `$${Number(stats.total_bonus_awarded ?? 0).toFixed(2)}`;
+
+        if (stats.referred_by_name) {
+            referredBy.textContent = `This user was referred by @${stats.referred_by_name}.`;
+            referredBy.classList.remove('hidden');
+        } else {
+            referredBy.classList.add('hidden');
+        }
+
+        const saveBtn = document.getElementById('saveReferralBonusBtn');
+        if (saveBtn && !saveBtn.dataset.bound) {
+            saveBtn.dataset.bound = '1';
+            saveBtn.addEventListener('click', async () => {
+                const amountRaw = document.getElementById('referralBonusInput').value.trim();
+                const amount = amountRaw === '' ? null : parseFloat(amountRaw);
+
+                if (amount !== null && (isNaN(amount) || amount < 0)) {
+                    Utils?.showToast?.('Enter a valid non-negative amount', 'error');
+                    return;
+                }
+
+                saveBtn.disabled = true;
+                const original = saveBtn.textContent;
+                saveBtn.textContent = 'Saving...';
+                try {
+                    await API.admin.setReferralBonus(userId, amount);
+                    Utils?.showToast?.('Referral bonus updated', 'success');
+                    await loadUserData();
+                } catch (err) {
+                    console.error('Failed to set referral bonus:', err);
+                    Utils?.showToast?.(err.response?.message || 'Failed to update referral bonus', 'error');
+                } finally {
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = original;
+                }
+            });
+        }
+    }
+
+    function copyReferralCode() {
+        const input = document.getElementById('referralCodeInput');
+        if (!input || !input.value || input.value === '—') return;
+        navigator.clipboard?.writeText(input.value).then(() => {
+            Utils?.showToast?.('Referral code copied', 'success');
+        }).catch(() => {
+            input.select();
+            Utils?.showToast?.('Copy failed — select and copy manually', 'error');
+        });
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set currentUserId immediately from URL
+        currentUserId = getUserIdFromUrl();
+        console.log('Page loaded - currentUserId:', currentUserId, 'URL:', window.location.href);
+        
+        // Store user ID in page data attribute as backup
+        if (currentUserId) {
+            const pageElement = document.getElementById('adminUserDetailPage');
+            if (pageElement) {
+                pageElement.setAttribute('data-user-id', currentUserId);
+            }
+        }
+        
+        if (!currentUserId) {
+            console.error('No user_id found in URL on page load');
+            console.error('Full URL:', window.location.href);
+            console.error('Search:', window.location.search);
+            // Show warning but don't redirect immediately - user might have navigated here intentionally
+            const titleElement = document.getElementById('userTitle') || document.querySelector('h1');
+            if (titleElement) {
+                titleElement.innerHTML = '<span class="text-red-600">⚠️ No user selected. Please navigate from the user list.</span>';
+            }
+            // Only redirect if user tries to use buttons without user_id
+            // Don't auto-redirect on page load
+        } else {
+            console.log('User ID successfully loaded:', currentUserId);
+        }
+        
+        loadUserData();
+        attachFormHandler();
+    });
+</script>
+</body>
+</html>

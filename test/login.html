@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | ConchCapital</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#10B981',
+                        secondary: '#3B82F6',
+                        darkSlate: '#0F172A',
+                        slate800: '#1E293B',
+                        success: '#10B981',
+                        error: '#EF4444',
+                        background: '#F9FAFB',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap');
+
+        body {
+            background-color: #F9FAFB;
+            overflow-x: hidden;
+        }
+
+        .gradient-bg {
+            background: radial-gradient(circle at top right, #10b98120, transparent),
+                        radial-gradient(circle at bottom left, #3b82f620, transparent);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .animate-success-pulse {
+            animation: successPulse 0.6s ease-out forwards;
+        }
+
+        @keyframes successPulse {
+            0% { 
+                opacity: 0; 
+                transform: scale(0.95);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+            100% { 
+                opacity: 1; 
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-group:focus-within label {
+            color: #10B981;
+        }
+
+        .custom-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 
+                        0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen flex flex-col lg:flex-row" data-page="login">
+
+    <div class="hidden lg:flex lg:w-1/2 bg-[#0F172A] relative items-center justify-center p-12 overflow-hidden">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-[#10B981] opacity-10 rounded-full -mr-48 -mt-48 blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-[#3B82F6] opacity-10 rounded-full -ml-48 -mb-48 blur-3xl"></div>
+        
+        <div class="relative z-10 max-w-lg text-center animate-fade-in">
+            <div class="inline-flex items-center gap-2 mb-8 bg-[#1E293B]/50 p-3 rounded-2xl border border-slate-700">
+                <div class="w-10 h-10 bg-[#10B981] rounded-xl flex items-center justify-center shadow-lg shadow-[#10B981]/20">
+                    <i class="fa-solid fa-chart-line text-white text-xl"></i>
+                </div>
+                <span class="text-2xl font-bold text-white tracking-tight">Conch<span class="text-[#10B981]">Capital</span></span>
+            </div>
+            <h1 class="text-4xl font-bold text-white mb-6 leading-tight">Master the Markets with Precision.</h1>
+            <p class="text-slate-400 text-lg mb-10 leading-relaxed">
+                Join a community of thousands mastering real-world investment strategies with professional-grade tools.
+            </p>
+            
+            <div class="grid grid-cols-2 gap-4 text-left">
+                <div class="p-4 rounded-xl bg-[#1E293B]/40 border border-slate-700/50">
+                    <i class="fa-solid fa-chart-line text-[#3B82F6] mb-2 block text-xl"></i>
+                    <h3 class="text-white font-semibold text-sm">Portfolio Lab</h3>
+                    <p class="text-slate-500 text-xs">Advanced strategy development</p>
+                </div>
+                <div class="p-4 rounded-xl bg-[#1E293B]/40 border border-slate-700/50">
+                    <i class="fa-solid fa-graduation-cap text-[#10B981] mb-2 block text-xl"></i>
+                    <h3 class="text-white font-semibold text-sm">Expert Curriculum</h3>
+                    <p class="text-slate-500 text-xs">Guided investment paths</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex-1 flex items-center justify-center p-6 sm:p-12">
+        <div class="w-full max-w-md animate-slide-up">
+            
+            <div class="lg:hidden flex justify-center mb-8">
+                <div class="inline-flex items-center gap-2">
+                    <div class="w-8 h-8 bg-[#10B981] rounded-lg flex items-center justify-center shadow-md">
+                        <i class="fa-solid fa-chart-line text-white text-sm"></i>
+                    </div>
+                    <span class="text-xl font-bold text-[#0F172A]">Conch<span class="text-[#10B981]">Capital</span></span>
+                </div>
+            </div>
+
+            <div class="glass-card p-8 sm:p-10 rounded-3xl custom-shadow border border-white/60">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-[#0F172A] mb-2">Welcome back</h2>
+                    <p class="text-slate-500">Please enter your credentials to access your account.</p>
+                </div>
+
+                <!-- Error Alert Box (hidden by default) -->
+                <div id="loginErrorAlert" class="hidden mb-6 p-4 rounded-xl bg-red-50 border-2 border-red-200 flex items-start gap-3 animate-fade-in">
+                    <i class="fa-solid fa-circle-exclamation text-red-600 mt-0.5"></i>
+                    <div class="flex-1">
+                        <h3 class="text-sm font-bold text-red-800 mb-1">Login Failed</h3>
+                        <p id="loginErrorMessage" class="text-sm text-red-700 leading-snug"></p>
+                    </div>
+                    <button type="button" onclick="closeLoginError()" class="text-red-400 hover:text-red-600 transition-colors">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <!-- Success Alert Box (hidden by default) -->
+                <div id="loginSuccessAlert" class="hidden mb-6 p-4 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 flex items-start gap-3 animate-success-pulse shadow-lg shadow-green-200/50">
+                    <div class="flex-shrink-0 mt-0.5">
+                        <div class="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center shadow-md shadow-green-500/30">
+                            <i class="fa-solid fa-check text-white text-sm"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-sm font-bold text-green-800 mb-1 flex items-center gap-2">
+                            <span>Login Successful!</span>
+                            <i class="fa-solid fa-sparkles text-green-600 text-xs animate-pulse"></i>
+                        </h3>
+                        <p id="loginSuccessMessage" class="text-sm text-green-700 leading-snug">Redirecting you to your dashboard...</p>
+                    </div>
+                </div>
+
+                <!-- Initial Login Form -->
+                <form id="loginForm" class="space-y-6">
+                    <div class="input-group">
+                        <label for="identifier" class="block text-sm font-semibold text-slate-700 mb-2 transition-colors">Email or Username</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+                                <i class="fa-solid fa-envelope"></i>
+                            </span>
+                            <input type="text" id="identifier" name="identifier" placeholder="name@example.com or @username" required
+                                class="block w-full pl-11 pr-4 py-3 bg-[#F9FAFB] border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-[#10B981]/20 focus:border-[#10B981] transition-all outline-none">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <div class="flex justify-between items-center mb-2">
+                            <label for="password" class="block text-sm font-semibold text-slate-700 transition-colors">Password</label>
+                            <a href="#" data-route="forgotPassword" class="text-xs font-semibold text-[#3B82F6] hover:text-[#3B82F6]/80 transition-colors">Forgot password?</a>
+                        </div>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+                                <i class="fa-solid fa-lock"></i>
+                            </span>
+                            <input type="password" id="password" name="password" placeholder="••••••••" required
+                                class="block w-full pl-11 pr-12 py-3 bg-[#F9FAFB] border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-[#10B981]/20 focus:border-[#10B981] transition-all outline-none">
+                            <button type="button" data-toggle-password="password" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 hover:text-slate-600 transition-colors">
+                                <i class="fa-regular fa-eye text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Inline error message for password field -->
+                    <div id="passwordError" class="hidden text-sm text-red-600 mt-1 flex items-center gap-2">
+                        <i class="fa-solid fa-exclamation-circle text-xs"></i>
+                        <span>Please enter your password</span>
+                    </div>
+
+                    <div class="flex items-center">
+                        <input id="remember-me" type="checkbox" class="h-4 w-4 text-[#10B981] focus:ring-[#10B981] border-slate-300 rounded cursor-pointer transition-colors">
+                        <label for="remember-me" class="ml-2 block text-sm text-slate-600 cursor-pointer select-none">Remember this device</label>
+                    </div>
+
+                    <button type="submit" id="loginBtn" class="group relative w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl text-white bg-[#10B981] hover:bg-[#059669] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#10B981] font-bold text-md transition-all duration-200 shadow-lg shadow-[#10B981]/20 overflow-hidden">
+                        <span id="loginBtnText" class="relative z-10 flex items-center gap-2">Sign In</span>
+                        <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                    </button>
+                </form>
+
+                <!-- 2FA Verification Form (hidden by default) -->
+                <form id="twoFactorForm" class="space-y-6 hidden">
+                    <div class="text-center mb-6">
+                        <div class="w-16 h-16 bg-[#10B981]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fa-solid fa-shield-halved text-[#10B981] text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-[#0F172A] mb-2">Two-Factor Authentication</h3>
+                        <p class="text-sm text-slate-600">Enter the 6-digit code from your authenticator app</p>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="twoFactorCode" class="block text-sm font-semibold text-slate-700 mb-2 transition-colors">Verification Code</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+                                <i class="fa-solid fa-key"></i>
+                            </span>
+                            <input type="text" id="twoFactorCode" name="twoFactorCode" placeholder="000000" maxlength="6" pattern="[0-9]{6}" required
+                                class="block w-full pl-11 pr-4 py-3 text-center text-2xl font-mono tracking-widest bg-[#F9FAFB] border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-[#10B981]/20 focus:border-[#10B981] transition-all outline-none">
+                        </div>
+                        <p class="text-xs text-slate-500 mt-2 text-center">Open your authenticator app and enter the 6-digit code</p>
+                    </div>
+
+                    <button type="submit" id="verify2FABtn" class="group relative w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl text-white bg-[#10B981] hover:bg-[#059669] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#10B981] font-bold text-md transition-all duration-200 shadow-lg shadow-[#10B981]/20 overflow-hidden">
+                        <span id="verify2FABtnText" class="relative z-10 flex items-center gap-2">Verify & Continue</span>
+                        <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                    </button>
+
+                    <button type="button" id="backToLoginBtn" class="w-full text-sm text-slate-600 hover:text-slate-800 transition-colors">
+                        <i class="fa-solid fa-arrow-left mr-2"></i>Back to login
+                    </button>
+                </form>
+
+                <div class="mt-8 text-center">
+                    <p class="text-sm text-slate-500">
+                        Don't have an account? 
+                        <a href="#" data-route="register" class="font-bold text-[#3B82F6] hover:text-[#3B82F6]/80 transition-colors underline-offset-4 hover:underline">Create Account</a>
+                    </p>
+                </div>
+            </div>
+
+            <p class="mt-8 text-center text-xs text-slate-400 px-6">
+                By signing in, you agree to our <a href="#" data-route="termsOfService" class="text-[#3B82F6] hover:text-[#3B82F6]/80 hover:underline transition-colors">Terms of Service</a> and <a href="#" data-route="privacyPolicy" class="text-[#3B82F6] hover:text-[#3B82F6]/80 hover:underline transition-colors">Privacy Policy</a>.
+            </p>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js?v=20250123"></script>
+    <script src="js/forms.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/routes.js"></script>
+    <script src="js/main.js"></script>
+
+    <script>
+        /**
+         * Function to show login success alert
+         */
+        function showLoginSuccess(user) {
+            const successAlert = document.getElementById('loginSuccessAlert');
+            const successMessage = document.getElementById('loginSuccessMessage');
+            
+            if (successAlert && successMessage) {
+                const userName = user?.name || user?.display_name || 'User';
+                const dashboardType = user?.is_admin ? 'admin dashboard' : 'dashboard';
+                successMessage.textContent = `Welcome back, ${userName}! Redirecting you to your ${dashboardType}...`;
+                
+                // Hide error alert if visible
+                const errorAlert = document.getElementById('loginErrorAlert');
+                if (errorAlert) {
+                    errorAlert.classList.add('hidden');
+                }
+                
+                // Show success alert
+                successAlert.classList.remove('hidden');
+                successAlert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        /**
+         * Function to show login error alert
+         */
+        function showLoginError(message) {
+            const errorAlert = document.getElementById('loginErrorAlert');
+            const errorMessage = document.getElementById('loginErrorMessage');
+            
+            if (errorAlert && errorMessage) {
+                if (message === 'Invalid credentials.') {
+                    errorMessage.textContent = 'The email/username or password you entered is incorrect. Please check your credentials and try again.';
+                } else {
+                    errorMessage.textContent = message;
+                }
+                
+                // Hide success alert if visible
+                const successAlert = document.getElementById('loginSuccessAlert');
+                if (successAlert) {
+                    successAlert.classList.add('hidden');
+                }
+                
+                errorAlert.classList.remove('hidden');
+                errorAlert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        /**
+         * Function to close login error alert
+         */
+        function closeLoginError() {
+            const errorAlert = document.getElementById('loginErrorAlert');
+            if (errorAlert) {
+                errorAlert.classList.add('hidden');
+            }
+            const identifierInput = document.getElementById('identifier');
+            const passwordInput = document.getElementById('password');
+            if (identifierInput) {
+                identifierInput.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+            }
+            if (passwordInput) {
+                passwordInput.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+            }
+        }
+
+        let rememberDevice = false;
+
+        /**
+         * Show 2FA form and hide login form
+         */
+        function show2FAForm() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('twoFactorForm').classList.remove('hidden');
+            document.getElementById('twoFactorCode').focus();
+        }
+
+        /**
+         * Show login form and hide 2FA form
+         */
+        function showLoginForm() {
+            document.getElementById('twoFactorForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('loginErrorAlert').classList.add('hidden');
+        }
+
+        /**
+         * Form Submission Handler
+         */
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const identifierInput = document.getElementById('identifier');
+            const passwordInput = document.getElementById('password');
+            const rememberCheckbox = document.getElementById('remember-me');
+            const loginBtn = document.getElementById('loginBtn');
+            const loginBtnText = document.getElementById('loginBtnText');
+            
+            const identifier = identifierInput.value.trim();
+            const password = passwordInput.value;
+            rememberDevice = rememberCheckbox.checked;
+
+            if (!identifier || !password) {
+                Utils?.showToast?.('Please enter both email/username and password', 'error');
+                return;
+            }
+
+            // Show loading state
+            loginBtn.disabled = true;
+            loginBtnText.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Signing in...';
+
+            try {
+                // Get CSRF token first
+                await API.auth.csrf();
+                
+                // Attempt login
+                const response = await API.auth.login(identifier, password, rememberDevice);
+                
+                // Check if 2FA is required
+                if (response.requires_2fa) {
+                    // Show 2FA form
+                    show2FAForm();
+                    closeLoginError();
+                    return;
+                }
+                
+                // Show success alert
+                showLoginSuccess(response.user);
+                
+                // Clear any error states
+                closeLoginError();
+                identifierInput.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+                passwordInput.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+                
+                // Redirect based on user type after showing success message
+                setTimeout(() => {
+                    if (response.user && response.user.is_admin) {
+                        window.location.href = '/admin-dashboard.html';
+                    } else {
+                        window.location.href = '/dashboard.html';
+                    }
+                }, 1500);
+
+            } catch (error) {
+                console.error('Login error:', error);
+                const message = error.response?.message || error.message || 'Invalid credentials.';
+                
+                // Show styled error alert instead of toast
+                showLoginError(message);
+                
+                // Add visual feedback to input fields
+                identifierInput.classList.add('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+                passwordInput.classList.add('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+                
+                // Clear error styling when user starts typing
+                identifierInput.addEventListener('input', function() {
+                    this.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+                }, { once: true });
+                
+                passwordInput.addEventListener('input', function() {
+                    this.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+                }, { once: true });
+                
+            } finally {
+                loginBtn.disabled = false;
+                loginBtnText.textContent = 'Sign In';
+            }
+        });
+
+        /**
+         * 2FA Form Submission Handler
+         */
+        document.getElementById('twoFactorForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const twoFactorCodeInput = document.getElementById('twoFactorCode');
+            const verify2FABtn = document.getElementById('verify2FABtn');
+            const verify2FABtnText = document.getElementById('verify2FABtnText');
+            
+            const code = twoFactorCodeInput.value.trim();
+
+            if (!code || code.length !== 6 || !/^\d+$/.test(code)) {
+                Utils?.showToast?.('Please enter a valid 6-digit code', 'error');
+                twoFactorCodeInput.focus();
+                return;
+            }
+
+            // Show loading state
+            verify2FABtn.disabled = true;
+            verify2FABtnText.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Verifying...';
+
+            try {
+                // Get CSRF token first
+                await API.auth.csrf();
+                
+                // Verify 2FA code
+                const response = await API.auth.verify2FALogin(code, rememberDevice);
+                
+                // Show success alert
+                showLoginSuccess(response.user);
+                
+                // Redirect based on user type after showing success message
+                setTimeout(() => {
+                    if (response.user && response.user.is_admin) {
+                        window.location.href = '/admin-dashboard.html';
+                    } else {
+                        window.location.href = '/dashboard.html';
+                    }
+                }, 1500);
+
+            } catch (error) {
+                console.error('2FA verification error:', error);
+                const message = error.response?.message || error.message || 'Invalid 2FA code. Please try again.';
+                
+                // Show error
+                showLoginError(message);
+                twoFactorCodeInput.value = '';
+                twoFactorCodeInput.focus();
+                twoFactorCodeInput.classList.add('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+                
+                // Clear error styling when user starts typing
+                twoFactorCodeInput.addEventListener('input', function() {
+                    this.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+                }, { once: true });
+                
+            } finally {
+                verify2FABtn.disabled = false;
+                verify2FABtnText.textContent = 'Verify & Continue';
+            }
+        });
+
+        /**
+         * Back to login button
+         */
+        document.getElementById('backToLoginBtn')?.addEventListener('click', function() {
+            showLoginForm();
+            document.getElementById('twoFactorCode').value = '';
+        });
+    </script>
+
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/697274b44e6a21197c2ff10d/1jfjhfop2';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
+</body>
+</html>

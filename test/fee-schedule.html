@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Schedule | ConchCapital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #F9FAFB; }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50" data-page="fees">
+
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="home.html" class="flex items-center gap-2">
+                <div class="w-9 h-9 bg-[#10B981] rounded-xl flex items-center justify-center shadow-lg shadow-[#10B981]/20">
+                    <i class="fa-solid fa-chart-line text-white text-lg"></i>
+                </div>
+                <span class="text-2xl font-bold text-[#0F172A] tracking-tight">Conch<span class="text-[#10B981]">Capital</span></span>
+            </a>
+            <a href="dashboard.html" class="text-sm font-bold text-[#10B981] hover:underline">Back to Dashboard</a>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 md:p-12">
+            <h1 class="text-4xl font-extrabold text-[#0F172A] mb-4">Fee Schedule</h1>
+            <p class="text-sm text-gray-500 mb-10">Effective 22 November, 2025</p>
+
+            <div class="space-y-8 text-gray-700">
+                <section>
+                    <h2 class="text-2xl font-bold text-[#0F172A] mb-4">Account Fees</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm border border-gray-200 rounded-xl overflow-hidden">
+                            <thead class="bg-slate-50 text-slate-500 uppercase text-[11px] tracking-widest font-bold">
+                                <tr>
+                                    <th class="px-4 py-3">Item</th>
+                                    <th class="px-4 py-3">Fee</th>
+                                    <th class="px-4 py-3">Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr><td class="px-4 py-3 font-semibold text-slate-900">Account opening</td><td class="px-4 py-3">Free</td><td class="px-4 py-3 text-slate-600">No charge to open an account.</td></tr>
+                                <tr><td class="px-4 py-3 font-semibold text-slate-900">Monthly maintenance</td><td class="px-4 py-3">Free</td><td class="px-4 py-3 text-slate-600">No monthly fee.</td></tr>
+                                <tr><td class="px-4 py-3 font-semibold text-slate-900">Incoming transfer (crypto)</td><td class="px-4 py-3">Free</td><td class="px-4 py-3 text-slate-600">Network fees charged by the blockchain may apply.</td></tr>
+                                <tr><td class="px-4 py-3 font-semibold text-slate-900">Incoming transfer (bank)</td><td class="px-4 py-3">Free</td><td class="px-4 py-3 text-slate-600">Your sending bank may apply its own charges.</td></tr>
+                                <tr><td class="px-4 py-3 font-semibold text-slate-900">Withdrawal processing</td><td class="px-4 py-3">1.5%</td><td class="px-4 py-3 text-slate-600">Deducted from the withdrawn amount.</td></tr>
+                                <tr><td class="px-4 py-3 font-semibold text-slate-900">Internal transfer</td><td class="px-4 py-3">Free</td><td class="px-4 py-3 text-slate-600">Between your Real Wallet and Profit Growth accounts.</td></tr>
+                                <tr><td class="px-4 py-3 font-semibold text-slate-900">Statement / account letter</td><td class="px-4 py-3">Free</td><td class="px-4 py-3 text-slate-600">Available on request.</td></tr>
+                                <tr><td class="px-4 py-3 font-semibold text-slate-900">Dormancy (12 months inactive)</td><td class="px-4 py-3">$10 / month</td><td class="px-4 py-3 text-slate-600">Applied only to inactive accounts.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-2xl font-bold text-[#0F172A] mb-4">Settlement Times</h2>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li>Crypto withdrawals: typically within 24 hours of approval.</li>
+                        <li>Bank withdrawals: 1–3 business days after approval.</li>
+                        <li>Deposits are credited after network confirmations and internal review.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-2xl font-bold text-[#0F172A] mb-4">Profit Growth Accounts</h2>
+                    <p class="leading-relaxed">No entry or exit fee is charged on Profit Growth allocations. Growth is calculated on your recorded balance according to the parameters of your account. Funds are subject to the published lock period.</p>
+                </section>
+
+                <section>
+                    <h2 class="text-2xl font-bold text-[#0F172A] mb-4">Changes to Fees</h2>
+                    <p class="leading-relaxed">We may revise this schedule from time to time. The version published on this page at the time of the relevant transaction applies.</p>
+                </section>
+
+                <a href="dashboard.html" class="inline-flex items-center gap-2 text-[#10B981] font-bold hover:underline">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/forms.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/routes.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

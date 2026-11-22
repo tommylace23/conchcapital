@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Edit Profile | ConchCapital</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .text-sim { color: #3B82F6; }
+        .bg-sim { background-color: #3B82F6; }
+        .border-sim { border-color: #3B82F6; }
+
+        /* Mobile Bottom Navigation Styles */
+        .mobile-nav-item {
+            color: #6B7280;
+            transition: all 0.2s;
+        }
+
+        .mobile-nav-item.active {
+            color: #10B981;
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+
+        .mobile-nav-item:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen pb-20 lg:pb-0" data-page="profile">
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 shadow-lg">
+        <div class="flex items-center justify-around px-2 py-2">
+            <a href="#" data-route="dashboard" class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition">
+                <i class="fa-solid fa-house text-lg"></i>
+                <span class="text-[10px] font-medium">Dashboard</span>
+            </a>
+            <a href="#" data-route="profitGrowths" class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition">
+                <i class="fa-solid fa-chart-line text-lg"></i>
+                <span class="text-[10px] font-medium">Growth</span>
+            </a>
+            <a href="#" data-route="transactions" class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition">
+                <i class="fa-solid fa-file-invoice-dollar text-lg"></i>
+                <span class="text-[10px] font-medium">Transactions</span>
+            </a>
+            <a href="#" data-route="profile" class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition active">
+                <i class="fa-solid fa-user text-lg"></i>
+                <span class="text-[10px] font-medium">Profile</span>
+            </a>
+            <a href="#" data-route="settings" class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition">
+                <i class="fa-solid fa-gear text-lg"></i>
+                <span class="text-[10px] font-medium">Settings</span>
+            </a>
+        </div>
+    </nav>
+
+<nav class="hidden lg:flex bg-white border-b border-gray-200 px-8 py-4 items-center justify-between">
+    <div class="text-xl font-bold tracking-tight text-slate-800">Conch<span class="text-[#10B981]">Capital</span></div>
+    <div class="flex items-center gap-6">
+        <a href="#" data-route="dashboard" class="text-sm font-medium text-slate-500 hover:text-slate-800">Dashboard</a>
+        <a href="#" data-route="profitGrowths" class="text-sm font-medium text-slate-500 hover:text-slate-800">Profit Growth</a>
+        <a href="#" data-route="profile" class="text-sm font-bold text-sim border-b-2 border-sim pb-4 mt-4">Profile</a>
+        <a href="#" data-route="settings" class="text-sm font-medium text-slate-500 hover:text-slate-800">Settings</a>
+        <div class="flex items-center gap-4">
+            <div class="relative">
+                <button onclick="toggleNotificationDropdown()" class="relative text-slate-400 hover:text-slate-600 transition">
+                    <i class="fa-solid fa-bell text-xl"></i>
+                    <span id="notificationBadge" class="hidden absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
+                </button>
+                <!-- Notification Dropdown -->
+                <div id="notificationDropdown" class="hidden absolute right-0 top-full mt-2 w-80 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden z-50 max-h-96 overflow-y-auto">
+                    <div class="p-4 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white">
+                        <h3 class="text-sm font-bold text-slate-900">Notifications</h3>
+                        <a href="#" data-route="notifications" class="text-xs font-bold text-blue-600 hover:text-blue-800">View All</a>
+                    </div>
+                    <div id="notificationDropdownList" class="divide-y divide-gray-100">
+                        <div class="p-4 text-center text-slate-500">
+                            <i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i>
+                            <p class="text-sm">Loading notifications...</p>
+                        </div>
+                    </div>
+                    <div class="p-3 border-t border-gray-200 bg-gray-50 text-center">
+                        <a href="#" data-route="notifications" class="text-xs font-bold text-blue-600 hover:text-blue-800">View All Notifications</a>
+                    </div>
+                </div>
+            </div>
+            <div class="w-8 h-8 rounded-full bg-slate-200"></div>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-3xl mx-auto py-6 lg:py-10 px-4 lg:px-6">
+    
+    <!-- Back Link -->
+    <a href="#" data-route="profile" class="inline-flex items-center text-xs lg:text-sm text-gray-500 hover:text-gray-800 transition mb-4 lg:mb-6">
+        <i class="fa-solid fa-arrow-left mr-2"></i> Back to Profile
+    </a>
+
+    <div class="mb-6 lg:mb-8">
+        <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-900 mb-1 lg:mb-2">Edit Profile</h1>
+        <p class="text-xs lg:text-sm text-slate-500">Update your profile information and privacy settings</p>
+    </div>
+
+    <form id="editProfileForm" class="space-y-4 lg:space-y-6">
+        <!-- Profile Picture Section -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 lg:p-6">
+            <label class="block text-xs lg:text-sm font-bold text-slate-700 uppercase tracking-widest mb-3 lg:mb-4">Profile Picture</label>
+            <div class="flex flex-col md:flex-row items-start gap-4 lg:gap-6">
+                <div class="relative mx-auto md:mx-0">
+                    <div class="w-24 h-24 lg:w-32 lg:h-32 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-3xl lg:text-4xl shrink-0" id="avatarPreview">
+                        <span>JD</span>
+                    </div>
+                    <img id="avatarImage" src="" alt="Profile" class="hidden w-24 h-24 lg:w-32 lg:h-32 rounded-full object-cover">
+                </div>
+                <div class="flex-1 w-full md:w-auto space-y-2 lg:space-y-3">
+                    <div>
+                        <input type="file" id="avatarUpload" accept="image/*" class="hidden" onchange="handleAvatarUpload(event)">
+                        <button type="button" onclick="document.getElementById('avatarUpload').click()" class="w-full md:w-auto px-5 lg:px-6 py-2 lg:py-2.5 bg-gray-100 border border-gray-300 text-slate-700 rounded-xl text-sm font-bold hover:bg-gray-200 transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-upload"></i> Upload New Picture
+                        </button>
+                    </div>
+                    <div>
+                        <button type="button" id="removeAvatar" class="w-full md:w-auto px-5 lg:px-6 py-2 lg:py-2.5 bg-white border border-red-200 text-red-600 rounded-xl text-sm font-bold hover:bg-red-50 transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-trash-can"></i> Remove Picture
+                        </button>
+                    </div>
+                    <p class="text-[10px] lg:text-xs text-slate-500">Recommended: Square image, at least 400x400 pixels</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Username Field -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 lg:p-6">
+            <label class="block text-xs lg:text-sm font-bold text-slate-700 uppercase tracking-widest mb-2">Username</label>
+            <input 
+                type="text" 
+                id="usernameInput"
+                disabled
+                class="w-full p-3 lg:p-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-slate-600 cursor-not-allowed"
+            >
+            <p class="text-[10px] lg:text-xs text-slate-500 mt-2">
+                <i class="fa-solid fa-info-circle"></i> Username cannot be changed
+            </p>
+        </div>
+
+        <!-- Display Name Field -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 lg:p-6">
+            <label class="block text-xs lg:text-sm font-bold text-slate-700 uppercase tracking-widest mb-2">Display Name</label>
+            <input 
+                type="text" 
+                name="display_name"
+                id="displayNameInput"
+                placeholder="Enter your display name"
+                maxlength="50"
+                class="w-full p-3 lg:p-3.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-sim focus:border-sim outline-none"
+            >
+            <p class="text-[10px] lg:text-xs text-slate-500 mt-2">This is how your name appears to other users</p>
+        </div>
+
+        <!-- Bio/Description Field -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 lg:p-6">
+            <div class="flex justify-between items-center mb-2">
+                <label class="block text-xs lg:text-sm font-bold text-slate-700 uppercase tracking-widest">Bio/Description</label>
+                <span class="text-[10px] lg:text-xs text-slate-500">
+                    <span id="bioCount">0</span>/500 characters
+                </span>
+            </div>
+            <textarea 
+                name="bio"
+                rows="5"
+                placeholder="Tell others about yourself..."
+                maxlength="500"
+                class="w-full p-3 lg:p-3.5 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-sim focus:border-sim outline-none resize-none"
+                id="bioInput"
+            ></textarea>
+            <p class="text-[10px] lg:text-xs text-slate-500 mt-2">Share your interests, goals, or what you're learning about</p>
+        </div>
+
+        <!-- Privacy Settings Section -->
+        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 lg:p-6">
+            <h2 class="text-base lg:text-lg font-bold text-slate-900 mb-4 lg:mb-6">Privacy Settings</h2>
+            
+            <!-- Profile Visibility -->
+            <div class="mb-4 lg:mb-6">
+                <label class="block text-xs lg:text-sm font-bold text-slate-700 uppercase tracking-widest mb-2 lg:mb-3">Profile Visibility</label>
+                <div class="space-y-2 lg:space-y-3">
+                    <label class="flex items-center p-3 lg:p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer">
+                        <input type="radio" name="profile_visibility" value="public" checked class="w-4 h-4 text-sim focus:ring-sim cursor-pointer shrink-0">
+                        <div class="ml-2 lg:ml-3 flex-1 min-w-0">
+                            <p class="text-xs lg:text-sm font-bold text-slate-800">Public (visible in search)</p>
+                            <p class="text-[10px] lg:text-xs text-slate-500">Other users can find and view your profile</p>
+                        </div>
+                    </label>
+                    <label class="flex items-center p-3 lg:p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer">
+                        <input type="radio" name="profile_visibility" value="private" class="w-4 h-4 text-sim focus:ring-sim cursor-pointer shrink-0">
+                        <div class="ml-2 lg:ml-3 flex-1 min-w-0">
+                            <p class="text-xs lg:text-sm font-bold text-slate-800">Private (hidden from search)</p>
+                            <p class="text-[10px] lg:text-xs text-slate-500">Your profile will not appear in search results</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Who Can Send Funds -->
+            <div class="mb-4 lg:mb-6">
+                <label class="block text-xs lg:text-sm font-bold text-slate-700 uppercase tracking-widest mb-2 lg:mb-3">Who Can Send Funds</label>
+                <div class="space-y-2 lg:space-y-3">
+                    <label class="flex items-center p-3 lg:p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer">
+                        <input type="radio" name="who_can_send" value="everyone" checked class="w-4 h-4 text-sim focus:ring-sim cursor-pointer shrink-0">
+                        <div class="ml-2 lg:ml-3 flex-1 min-w-0">
+                            <p class="text-xs lg:text-sm font-bold text-slate-800">Everyone</p>
+                            <p class="text-[10px] lg:text-xs text-slate-500">Any user can send you funds</p>
+                        </div>
+                    </label>
+                    <label class="flex items-center p-3 lg:p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer">
+                        <input type="radio" name="who_can_send" value="followed" class="w-4 h-4 text-sim focus:ring-sim cursor-pointer shrink-0">
+                        <div class="ml-2 lg:ml-3 flex-1 min-w-0">
+                            <p class="text-xs lg:text-sm font-bold text-slate-800">Only people I follow</p>
+                            <p class="text-[10px] lg:text-xs text-slate-500">Only users you follow can send funds</p>
+                        </div>
+                    </label>
+                    <label class="flex items-center p-3 lg:p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer">
+                        <input type="radio" name="who_can_send" value="no_one" class="w-4 h-4 text-sim focus:ring-sim cursor-pointer shrink-0">
+                        <div class="ml-2 lg:ml-3 flex-1 min-w-0">
+                            <p class="text-xs lg:text-sm font-bold text-slate-800">No one</p>
+                            <p class="text-[10px] lg:text-xs text-slate-500">Disable all fund transfers to your account</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Show Statistics -->
+            <div>
+                <label class="flex items-center p-3 lg:p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer">
+                    <input type="checkbox" name="show_stats" class="w-4 h-4 lg:w-5 lg:h-5 rounded border-gray-300 text-sim focus:ring-sim cursor-pointer shrink-0">
+                    <div class="ml-2 lg:ml-3 flex-1 min-w-0">
+                        <p class="text-xs lg:text-sm font-bold text-slate-800">Show public portfolio statistics</p>
+                        <p class="text-[10px] lg:text-xs text-slate-500">Display your portfolio stats on your public profile</p>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-3 lg:gap-4 pt-4 lg:pt-6">
+            <button type="button" data-route="profile" class="flex-1 px-5 lg:px-6 py-2.5 lg:py-3 bg-white border-2 border-gray-200 text-slate-600 rounded-xl text-sm lg:text-base font-bold hover:bg-gray-50 transition">
+                Cancel
+            </button>
+            <button type="submit" id="saveBtn" class="flex-1 sm:flex-[2] px-5 lg:px-6 py-2.5 lg:py-3 bg-sim text-white rounded-xl text-sm lg:text-base font-bold shadow-lg shadow-blue-200 hover:opacity-90 transition">
+                <span id="saveBtnText">Save Changes</span>
+            </button>
+        </div>
+    </form>
+
+</main>
+
+<script>
+    // Bio character counter
+    const bioInput = document.getElementById('bioInput');
+    const bioCount = document.getElementById('bioCount');
+    
+    bioInput.addEventListener('input', function() {
+        bioCount.textContent = this.value.length;
+        if (this.value.length > 450) {
+            bioCount.classList.add('text-red-500');
+        } else {
+            bioCount.classList.remove('text-red-500');
+        }
+    });
+    
+    // Initialize counter
+    bioCount.textContent = bioInput.value.length;
+
+    // Avatar upload handler
+    function handleAvatarUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+            // Validate file type
+            const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp'];
+            if (!validTypes.includes(file.type)) {
+                Utils?.showToast?.('Please select a valid image file (JPEG, PNG, GIF, or WebP)', 'error');
+                event.target.value = '';
+                return;
+            }
+
+            // Validate file size (2MB max)
+            if (file.size > 2 * 1024 * 1024) {
+                Utils?.showToast?.('Image size must be less than 2MB', 'error');
+                event.target.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const avatarImage = document.getElementById('avatarImage');
+                const avatarPreview = document.getElementById('avatarPreview');
+                const avatarPreviewSpan = avatarPreview.querySelector('span');
+                
+                avatarImage.src = e.target.result;
+                avatarImage.classList.remove('hidden');
+                avatarPreviewSpan.classList.add('hidden');
+                shouldRemoveAvatar = false; // Reset removal flag since we're uploading a new image
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // Track if avatar should be removed
+    let shouldRemoveAvatar = false;
+
+    // Remove avatar handler
+    document.getElementById('removeAvatar').addEventListener('click', function() {
+        const avatarImage = document.getElementById('avatarImage');
+        const avatarPreview = document.getElementById('avatarPreview');
+        const avatarUpload = document.getElementById('avatarUpload');
+        
+        avatarImage.src = '';
+        avatarImage.classList.add('hidden');
+        avatarPreview.classList.remove('hidden');
+        avatarUpload.value = '';
+        shouldRemoveAvatar = true;
+    });
+
+    // Get initials from name
+    function getInitials(name) {
+        if (!name) return 'U';
+        const parts = name.trim().split(' ');
+        if (parts.length >= 2) {
+            return (parts[0][0] + parts[1][0]).toUpperCase();
+        }
+        return name.substring(0, 2).toUpperCase();
+    }
+
+    // Load current profile data
+    async function loadProfile() {
+        try {
+            const data = await API.user.getProfile();
+            const user = data.user;
+            
+            if (!user) return;
+
+            // Update username
+            const username = user.username ? `@${user.username}` : user.email || 'User';
+            document.getElementById('usernameInput').value = username;
+
+            // Update display name
+            document.getElementById('displayNameInput').value = user.display_name || user.name || '';
+
+            // Update bio
+            document.getElementById('bioInput').value = user.bio || '';
+            bioCount.textContent = (user.bio || '').length;
+
+            // Update avatar
+            const initials = getInitials(user.display_name || user.name || user.username);
+            const avatarPreview = document.getElementById('avatarPreview');
+            const avatarPreviewSpan = avatarPreview.querySelector('span');
+            const avatarImage = document.getElementById('avatarImage');
+            
+            avatarPreviewSpan.textContent = initials;
+            avatarPreviewSpan.classList.remove('hidden');
+            avatarImage.classList.add('hidden');
+            shouldRemoveAvatar = false; // Reset removal flag
+            
+            if (user.avatar_url) {
+                avatarImage.src = user.avatar_url;
+                avatarImage.classList.remove('hidden');
+                avatarPreviewSpan.classList.add('hidden');
+            }
+        } catch (error) {
+            console.error('Failed to load profile:', error);
+            Utils?.showToast?.('Failed to load profile', 'error');
+        }
+    }
+
+    // Form submission
+    document.getElementById('editProfileForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const saveBtn = document.getElementById('saveBtn');
+        const saveBtnText = document.getElementById('saveBtnText');
+        
+        saveBtn.disabled = true;
+        saveBtnText.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Saving...';
+
+        try {
+            const avatarFile = document.getElementById('avatarUpload').files[0];
+            const displayName = document.getElementById('displayNameInput').value.trim();
+            const bio = document.getElementById('bioInput').value.trim();
+
+            // If there's an avatar file or should remove avatar, use FormData
+            if (avatarFile || shouldRemoveAvatar) {
+                const formData = new FormData();
+                if (avatarFile) {
+                    formData.append('avatar', avatarFile);
+                }
+                if (shouldRemoveAvatar) {
+                    formData.append('remove_avatar', '1');
+                }
+                formData.append('display_name', displayName);
+                formData.append('bio', bio);
+
+                await API.user.updateProfile(formData, true);
+                shouldRemoveAvatar = false; // Reset flag
+            } else {
+                // Otherwise, use regular JSON
+                const formData = {
+                    display_name: displayName,
+                    bio: bio,
+                };
+
+                await API.user.updateProfile(formData);
+            }
+            
+            Utils?.showToast?.('Profile updated successfully!', 'success');
+            
+            setTimeout(() => {
+                window.location.href = '/my-profile-page.html';
+            }, 1500);
+        } catch (error) {
+            console.error('Failed to update profile:', error);
+            const message = error.response?.message || error.message || 'Failed to update profile';
+            Utils?.showToast?.(message, 'error');
+        } finally {
+            saveBtn.disabled = false;
+            saveBtnText.textContent = 'Save Changes';
+        }
+    });
+
+    // Notification Dropdown Functions
+    window.toggleNotificationDropdown = function() {
+        const dropdown = document.getElementById('notificationDropdown');
+        if (dropdown) {
+            const isHidden = dropdown.classList.contains('hidden');
+            dropdown.classList.toggle('hidden');
+            if (isHidden) {
+                loadNotificationDropdown();
+            }
+        }
+    };
+
+    async function loadNotificationDropdown() {
+        const dropdownList = document.getElementById('notificationDropdownList');
+        if (!dropdownList) return;
+        try {
+            dropdownList.innerHTML = '<div class="p-4 text-center text-slate-500"><i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i><p class="text-sm">Loading notifications...</p></div>';
+            const dashboardData = await API.user.getDashboard();
+            const transactions = dashboardData.recent_transactions || [];
+            const activityLogs = dashboardData.recent_activity || [];
+            const allNotifications = [];
+            transactions.slice(0, 10).forEach(tx => {
+                allNotifications.push({ type: 'transaction', id: tx.id, action: tx.type, amount: tx.amount, currency: tx.currency || 'USD', description: tx.description || '', status: tx.status, created_at: tx.created_at });
+            });
+            activityLogs.slice(0, 10).forEach(activity => {
+                allNotifications.push({ type: 'activity', id: activity.id, action: activity.action, description: activity.description || '', created_at: activity.created_at });
+            });
+            allNotifications.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            const recentNotifications = allNotifications.slice(0, 5);
+            const badge = document.getElementById('notificationBadge');
+            if (badge) badge.classList.toggle('hidden', recentNotifications.length === 0);
+            if (recentNotifications.length === 0) {
+                dropdownList.innerHTML = '<div class="p-4 text-center text-slate-500"><p class="text-sm">No notifications</p></div>';
+                return;
+            }
+            dropdownList.innerHTML = recentNotifications.map(notif => {
+                const date = formatNotificationDate(notif.created_at);
+                const icon = getNotificationIcon(notif.action || notif.type);
+                const title = getNotificationTitle(notif);
+                const description = notif.description || '';
+                return `<div class="p-4 hover:bg-gray-50 transition cursor-pointer" onclick="handleNotificationClick('${notif.type}', ${notif.id})"><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-full ${icon.bg} flex items-center justify-center shrink-0"><i class="fa-solid ${icon.icon} ${icon.color} text-sm"></i></div><div class="flex-1 min-w-0"><p class="text-sm font-bold text-slate-800 mb-1">${title}</p>${description ? `<p class="text-xs text-slate-500 line-clamp-2 mb-1">${description}</p>` : ''}<p class="text-xs text-slate-400">${date}</p></div></div></div>`;
+            }).join('');
+        } catch (error) {
+            console.error('Failed to load notifications:', error);
+            dropdownList.innerHTML = '<div class="p-4 text-center text-red-500"><p class="text-sm">Failed to load notifications</p></div>';
+        }
+    }
+
+    function formatNotificationDate(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+        if (diffMins < 1) return 'Just now';
+        if (diffMins < 60) return `${diffMins}m ago`;
+        if (diffHours < 24) return `${diffHours}h ago`;
+        if (diffDays < 7) return `${diffDays}d ago`;
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    function getNotificationIcon(action) {
+        const icons = { 'deposit': { icon: 'fa-arrow-down', color: 'text-green-600', bg: 'bg-green-100' }, 'withdrawal': { icon: 'fa-arrow-up', color: 'text-red-600', bg: 'bg-red-100' }, 'credit': { icon: 'fa-gift', color: 'text-blue-600', bg: 'bg-blue-100' }, 'debit': { icon: 'fa-minus', color: 'text-orange-600', bg: 'bg-orange-100' }, 'transfer_sent': { icon: 'fa-paper-plane', color: 'text-blue-600', bg: 'bg-blue-100' }, 'transfer_received': { icon: 'fa-inbox', color: 'text-green-600', bg: 'bg-green-100' }, 'profit_growth_created': { icon: 'fa-chart-line', color: 'text-purple-600', bg: 'bg-purple-100' }, 'profit_growth_updated': { icon: 'fa-sync', color: 'text-blue-600', bg: 'bg-blue-100' } };
+        return icons[action] || { icon: 'fa-bell', color: 'text-slate-600', bg: 'bg-slate-100' };
+    }
+
+    function getNotificationTitle(notif) {
+        const action = notif.action || notif.type;
+        const actionNames = { 'deposit': 'Deposit', 'withdrawal': 'Withdrawal', 'credit': 'Credit', 'debit': 'Debit', 'transfer_sent': 'Funds Sent', 'transfer_received': 'Funds Received', 'profit_growth_created': 'Profit Growth Created', 'profit_growth_updated': 'Profit Growth Updated' };
+        const actionName = actionNames[action] || action.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        if (notif.amount) {
+            const amount = parseFloat(notif.amount);
+            const sign = action === 'deposit' || action === 'credit' || action === 'transfer_received' ? '+' : '-';
+            return `${actionName}: ${sign}$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+        return actionName;
+    }
+
+    window.handleNotificationClick = function(type, id) {
+        window.location.href = type === 'transaction' ? '#transactions' : '#notifications';
+    };
+
+    // Close notification dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        const notificationDropdown = document.getElementById('notificationDropdown');
+        const notificationButton = event.target.closest('[onclick="toggleNotificationDropdown()"]');
+        if (notificationDropdown && !notificationDropdown.contains(event.target) && !notificationButton) {
+            notificationDropdown.classList.add('hidden');
+        }
+    });
+
+    // Mobile bottom navigation active state
+    function updateMobileNavActive() {
+        const currentPage = document.body.getAttribute('data-page');
+        const navItems = document.querySelectorAll('.mobile-nav-item');
+        
+        navItems.forEach(item => {
+            const route = item.getAttribute('data-route');
+            item.classList.remove('active', 'text-[#10B981]', 'bg-green-50');
+            item.classList.add('text-gray-600');
+            
+            // Map page to route
+            const pageRouteMap = {
+                'dashboard': 'dashboard',
+                'profitGrowths': 'profitGrowths',
+                'transactions': 'transactions',
+                'profile': 'profile',
+                'settings': 'settings'
+            };
+            
+            if (route === pageRouteMap[currentPage] || (currentPage === 'profile' && route === 'profile')) {
+                item.classList.add('active', 'text-[#10B981]', 'bg-green-50');
+                item.classList.remove('text-gray-600');
+            }
+        });
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        loadProfile();
+        updateMobileNavActive();
+    });
+</script>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/forms.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

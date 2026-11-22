@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Withdraw Funds | ConchCapital Admin</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .bg-real { background-color: #10B981; }
+        .text-real { color: #10B981; }
+        .bg-amber { background-color: #F59E0B; }
+        .text-amber { color: #F59E0B; }
+        .currency-card.selected { border-color: #10B981; background-color: rgba(16, 185, 129, 0.05); }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen" data-page="adminWithdrawFunds">
+
+<header class="bg-slate-900 text-white px-8 py-4 flex items-center justify-between sticky top-0 z-30">
+    <div class="flex items-center gap-8">
+        <div class="text-lg font-bold tracking-widest uppercase">
+            Conch<span class="text-real">Capital</span> <span class="text-slate-500 font-light text-xs ml-2">Admin</span>
+        </div>
+        <nav class="hidden md:flex space-x-6 text-sm font-medium text-slate-400">
+            <a href="#" data-route="adminUsers" class="hover:text-white transition">Users</a>
+            <a href="#" data-route="adminTransactions" class="hover:text-white transition">Transactions</a>
+            <a href="#" data-route="adminWithdrawals" class="text-white border-b-2 border-amber-500 pb-1">Withdrawals</a>
+            <a href="#" data-route="adminFreezes" class="hover:text-white transition">Freezes</a>
+        </nav>
+    </div>
+    <div class="flex items-center gap-4">
+        <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold">A</div>
+    </div>
+</header>
+
+<main class="max-w-4xl mx-auto py-10 px-6">
+    
+    <div class="mb-8">
+        <a href="#" id="backToUserDetailLink" class="text-xs font-bold text-slate-400 hover:text-slate-900 transition flex items-center gap-2 mb-4">
+            <i class="fa-solid fa-arrow-left"></i> BACK TO USER DETAIL
+        </a>
+        <h1 class="text-2xl font-black text-slate-900">Withdraw Funds: <span class="text-slate-500">@user</span></h1>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-8 flex flex-col md:flex-row justify-between gap-6">
+        <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center text-xl font-bold text-slate-400">U</div>
+            <div>
+                <h2 class="text-lg font-bold text-slate-900" id="userName">@user</h2>
+                <p class="text-sm text-slate-500" id="userTier">Loading...</p>
+            </div>
+        </div>
+        <div class="flex flex-col justify-center gap-2 md:text-right border-t md:border-t-0 md:border-l border-gray-100 pt-4 md:pt-0 md:pl-8">
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Real Balance: <span class="text-real" id="realBalance">$0.00</span></p>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Available: <span class="text-amber-600" id="availableBalance">$0.00</span></p>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden mb-12">
+        <form id="withdrawForm" class="p-8 space-y-8">
+            
+            <!-- Crypto Currency Selection -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">1. Select Currency</label>
+                <div class="grid grid-cols-3 gap-4">
+                    <button type="button" class="currency-card p-4 rounded-xl border-2 border-gray-200 hover:bg-gray-50 flex flex-col items-center gap-2 transition" data-currency="BTC">
+                        <i class="fa-brands fa-bitcoin text-2xl text-[#F7931A]"></i>
+                        <span class="text-sm font-bold text-gray-900">Bitcoin</span>
+                    </button>
+                    <button type="button" class="currency-card p-4 rounded-xl border-2 border-gray-200 hover:bg-gray-50 flex flex-col items-center gap-2 transition" data-currency="USDT">
+                        <i class="fa-solid fa-dollar-sign text-2xl text-[#26A17B]"></i>
+                        <span class="text-sm font-bold text-gray-900">USDT</span>
+                    </button>
+                    <button type="button" class="currency-card p-4 rounded-xl border-2 border-gray-200 hover:bg-gray-50 flex flex-col items-center gap-2 transition" data-currency="ETH">
+                        <i class="fa-brands fa-ethereum text-2xl text-[#627EEA]"></i>
+                        <span class="text-sm font-bold text-gray-900">Ethereum</span>
+                    </button>
+                </div>
+                <input type="hidden" id="selectedCurrency" name="crypto_currency" value="BTC">
+            </div>
+
+            <!-- Withdrawal Address -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">2. Withdrawal Address</label>
+                <div class="relative">
+                    <input type="text" id="withdrawalAddress" name="crypto_address" placeholder="Enter user's crypto address" required
+                        class="w-full px-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-amber-500 transition font-mono text-sm">
+                    <button type="button" onclick="pasteAddress()" class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-amber-600 hover:text-amber-700 font-semibold">
+                        <i class="fa-solid fa-paste mr-1"></i> Paste
+                    </button>
+                </div>
+                <p class="mt-2 text-xs text-slate-400">Make sure this address is correct. Withdrawals cannot be reversed.</p>
+            </div>
+
+            <!-- Amount -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">3. Amount (USD)</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">$</span>
+                        <input type="number" id="withdrawAmount" name="amount" placeholder="0.00" step="0.01" min="0.01" required
+                            class="w-full pl-8 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-amber-500 transition font-mono">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">4. Reason</label>
+                    <select id="withdrawReason" name="reason" class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-amber-500 transition text-sm">
+                        <option value="">Select Reason</option>
+                        <option value="User Request">User Request</option>
+                        <option value="Refund">Refund</option>
+                        <option value="Account Closure">Account Closure</option>
+                        <option value="Other">Other (Specify Below)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">5. Note/Description (Required)</label>
+                <textarea id="withdrawDescription" name="description" rows="3" placeholder="Enter a detailed explanation for this withdrawal for audit purposes..." required
+                    class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-amber-500 transition text-sm"></textarea>
+            </div>
+
+            <!-- Transaction Summary -->
+            <div class="pt-8 border-t border-gray-100">
+                <div class="bg-gray-900 rounded-2xl p-6 text-white relative overflow-hidden">
+                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-file-invoice-dollar text-amber-500"></i> Transaction Summary
+                    </h4>
+                    <div class="space-y-2 relative z-10">
+                        <p class="text-sm">You are about to withdraw <span id="summaryAmount" class="text-amber-500 font-black">$0.00</span> USD from <span id="summaryUser" class="font-bold">-</span></p>
+                        <p class="text-xs text-slate-400 font-medium">Crypto: <span id="summaryCrypto" class="text-amber-500">0.0000 BTC</span></p>
+                        <p class="text-xs text-slate-400 font-medium">Platform fee: <span id="summaryFee" class="text-amber-500">$0.00</span> &middot; Net payout: <span id="summaryNet" class="text-white font-bold">$0.00</span></p>
+                        <p class="text-xs text-slate-400 font-medium italic">Reason: <span id="summaryReason">-</span></p>
+                        <p class="text-xs text-slate-400 font-medium">Address: <span id="summaryAddress" class="font-mono text-[10px] break-all">-</span></p>
+                    </div>
+                    <div class="absolute -right-4 -bottom-4 opacity-10">
+                        <i class="fa-solid fa-shield-check text-8xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-4">
+                <button type="button" id="cancelBtn" class="flex-1 py-4 font-bold text-slate-400 hover:bg-gray-50 rounded-xl transition">Cancel</button>
+                <button type="submit" id="submitBtn" class="flex-[2] bg-amber-600 text-white py-4 rounded-xl font-bold shadow-lg shadow-amber-600/20 hover:opacity-90 transition transform active:scale-[0.98]">
+                    Create Withdrawal Request
+                </button>
+            </div>
+
+        </form>
+    </div>
+    
+    <script>
+        let targetUserId = null;
+        let targetUser = null;
+        let selectedCurrency = 'BTC';
+        let exchangeRates = {
+            'BTC': 70000.00,
+            'USDT': 1.00,
+            'ETH': 3500.00
+        };
+        let transactionFees = {
+            'BTC': 0.0005,
+            'USDT': 1.00,
+            'ETH': 0.001
+        };
+
+        // Get user ID from URL params
+        function getUserIdFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('user_id');
+        }
+
+        // Update back to user detail link
+        function updateBackLink() {
+            const userId = getUserIdFromUrl();
+            const backLink = document.getElementById('backToUserDetailLink');
+            if (backLink && userId) {
+                backLink.href = `/admin-user-detail.html?user_id=${userId}`;
+                backLink.onclick = function(e) {
+                    e.preventDefault();
+                    window.location.href = `/admin-user-detail.html?user_id=${userId}`;
+                };
+            }
+        }
+
+        // Load user data
+        async function loadUserData() {
+            const userId = getUserIdFromUrl();
+            if (!userId) {
+                Utils?.showToast?.('No user ID provided. Please select a user first.', 'error');
+                setTimeout(() => {
+                    window.location.href = '/admin-user-list.html';
+                }, 2000);
+                return;
+            }
+            
+            updateBackLink();
+
+            try {
+                const data = await API.admin.getUser(userId);
+                targetUser = data.user;
+                targetUserId = userId;
+                
+                // Update UI with user info
+                const username = targetUser.username || targetUser.name || 'user';
+                document.querySelector('h1 span').textContent = `@${username}`;
+                document.getElementById('userName').textContent = `@${username}`;
+                document.querySelector('.w-14.h-14').textContent = (targetUser.name || 'U')[0].toUpperCase();
+                document.getElementById('realBalance').textContent = `$${parseFloat(targetUser.real_balance || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                document.getElementById('availableBalance').textContent = `$${parseFloat(targetUser.real_balance || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                document.getElementById('summaryUser').textContent = `@${username}`;
+                
+                updateBackLink();
+            } catch (error) {
+                console.error('Failed to load user:', error);
+                Utils?.showToast?.('Failed to load user data', 'error');
+            }
+        }
+
+        // Currency selection
+        document.querySelectorAll('.currency-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.currency-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedCurrency = this.getAttribute('data-currency');
+                document.getElementById('selectedCurrency').value = selectedCurrency;
+                updateSummary();
+            });
+        });
+
+        // Set initial selection
+        document.querySelector('.currency-card[data-currency="BTC"]').classList.add('selected');
+
+                const PLATFORM_FEE_PERCENT = 1.5; // matches config('banking.withdrawal_fee_percent')
+
+// Update summary
+        function updateSummary() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value) || 0;
+            const reason = document.getElementById('withdrawReason').value || '-';
+            const address = document.getElementById('withdrawalAddress').value || '-';
+            const rate = exchangeRates[selectedCurrency];
+            const fee = transactionFees[selectedCurrency];
+            const cryptoAmount = amount / rate;
+            const netCrypto = Math.max(0, cryptoAmount - fee);
+
+            const platformFee = Math.round(amount * (PLATFORM_FEE_PERCENT / 100) * 100) / 100;
+            const netUsd = Math.max(0, amount - platformFee);
+
+            document.getElementById('summaryAmount').textContent = `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            const feeEl = document.getElementById('summaryFee');
+            if (feeEl) feeEl.textContent = `$${platformFee.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            const netEl = document.getElementById('summaryNet');
+            if (netEl) netEl.textContent = `$${netUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            document.getElementById('summaryCrypto').textContent = `${netCrypto.toFixed(selectedCurrency === 'BTC' ? 6 : selectedCurrency === 'ETH' ? 4 : 2)} ${selectedCurrency}`;
+            document.getElementById('summaryReason').textContent = reason;
+            document.getElementById('summaryAddress').textContent = address;
+        }
+
+        // Paste address
+        async function pasteAddress() {
+            try {
+                const text = await navigator.clipboard.readText();
+                document.getElementById('withdrawalAddress').value = text;
+                updateSummary();
+                Utils?.showToast?.('Address pasted', 'success');
+            } catch (error) {
+                Utils?.showToast?.('Failed to paste address', 'error');
+            }
+        }
+
+        // Form submission
+        document.getElementById('withdrawForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!targetUserId) {
+                Utils?.showToast?.('No user selected', 'error');
+                return;
+            }
+
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const address = document.getElementById('withdrawalAddress').value.trim();
+            const reason = document.getElementById('withdrawReason').value;
+            const description = document.getElementById('withdrawDescription').value;
+
+            if (!amount || amount <= 0) {
+                Utils?.showToast?.('Please enter a valid amount', 'error');
+                return;
+            }
+
+            if (amount > parseFloat(targetUser.real_balance || 0)) {
+                Utils?.showToast?.('Insufficient balance', 'error');
+                return;
+            }
+
+            if (!address) {
+                Utils?.showToast?.('Please enter a withdrawal address', 'error');
+                return;
+            }
+
+            // Basic address validation
+            if (selectedCurrency === 'BTC' && !address.match(/^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,62}$/)) {
+                Utils?.showToast?.('Please enter a valid Bitcoin address', 'error');
+                return;
+            }
+            if ((selectedCurrency === 'ETH' || selectedCurrency === 'USDT') && !address.match(/^0x[a-fA-F0-9]{40}$/)) {
+                Utils?.showToast?.('Please enter a valid Ethereum/USDT address', 'error');
+                return;
+            }
+
+            if (!description.trim()) {
+                Utils?.showToast?.('Description is required', 'error');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Processing...';
+
+            try {
+                const fee = transactionFees[selectedCurrency];
+                const rate = exchangeRates[selectedCurrency];
+                const cryptoAmount = amount / rate;
+                const netCrypto = Math.max(0, cryptoAmount - fee);
+
+                const withdrawalData = {
+                    amount: amount,
+                    currency: 'USD',
+                    description: description,
+                    metadata: {
+                        crypto_currency: selectedCurrency,
+                        crypto_address: address,
+                        crypto_amount: netCrypto,
+                        transaction_fee: fee,
+                        exchange_rate: rate,
+                        reason: reason || description
+                    }
+                };
+
+                await API.admin.createWithdrawal(targetUserId, withdrawalData);
+                
+                Utils?.showToast?.('Withdrawal request created successfully!', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = `/admin-user-detail.html?user_id=${targetUserId}`;
+                }, 1500);
+
+            } catch (error) {
+                console.error('Withdrawal error:', error);
+                const message = error.response?.message || error.message || 'Failed to create withdrawal';
+                Utils?.showToast?.(message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        });
+
+        // Update summary on input changes
+        document.getElementById('withdrawAmount').addEventListener('input', updateSummary);
+        document.getElementById('withdrawReason').addEventListener('change', updateSummary);
+        document.getElementById('withdrawalAddress').addEventListener('input', updateSummary);
+
+        // Handle cancel button
+        document.getElementById('cancelBtn').addEventListener('click', function() {
+            const userId = getUserIdFromUrl();
+            if (userId) {
+                window.location.href = `/admin-user-detail.html?user_id=${userId}`;
+            } else {
+                window.location.href = '/admin-user-list.html';
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateBackLink();
+            loadUserData();
+            updateSummary();
+        });
+    </script>
+
+    <p class="text-center text-[10px] text-slate-400 uppercase tracking-widest">
+        Authorization Protocol 4.2-A // All manual withdrawals are logged for security review.
+    </p>
+</main>
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/forms.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

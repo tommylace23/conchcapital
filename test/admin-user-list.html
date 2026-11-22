@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+
+<html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <script src="https://cdn.tailwindcss.com"></script> <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"> <link rel="stylesheet" href="css/main.css"> <title>User Management | Admin Panel</title> <style> body { font-family: 'Inter', sans-serif; } .bg-real { color: #10B981; } .status-active { background-color: #DCFCE7; color: #166534; } .status-frozen { background-color: #FEE2E2; color: #991B1B; } </style> </head> <body class="bg-gray-50 min-h-screen" data-page="adminUsers">
+
+<header class="bg-slate-900 text-white px-8 py-4 flex items-center justify-between sticky top-0 z-30">
+    <div class="flex items-center gap-8">
+        <div class="text-xl font-bold tracking-widest uppercase">
+            Conch<span class="text-[#10B981]">Capital</span> <span class="text-slate-500 font-light text-xs ml-2">Admin</span>
+        </div>
+<nav class="hidden md:flex space-x-6 text-sm font-medium text-slate-400">
+            <a href="#" data-route="adminUsers" class="text-white border-b-2 border-[#10B981] pb-1">Users</a>
+            <a href="#" data-route="adminTransactions" class="hover:text-white transition">Transactions</a>
+            <a href="#" data-route="adminCredits" class="hover:text-white transition">Credits</a>
+            <a href="#" data-route="adminFreezes" class="hover:text-white transition">Freezes</a>
+            <a href="#" data-route="adminSettings" class="hover:text-white transition">Settings</a>
+        </nav>
+    </div>
+    <div class="flex items-center gap-4">
+        <div class="relative">
+            <i class="fa-regular fa-bell text-slate-400"></i>
+            <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full border-2 border-slate-900"></span>
+        </div>
+        <div class="flex items-center gap-2 border-l border-slate-700 pl-4">
+            <span class="text-xs font-medium text-slate-300">Super Admin</span>
+            <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold">SA</div>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto py-10 px-6">
+    
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+        <h1 class="text-2xl font-black text-slate-900 uppercase tracking-tight">User Management</h1>
+        <div class="relative w-full md:w-80">
+            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input type="text" id="searchInput" placeholder="Search by username, email, or ID..." 
+                class="w-full pl-11 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-slate-900 outline-none transition">
+        </div>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-4 mb-6">
+        <div class="bg-white border border-gray-200 rounded-lg px-3 py-2 flex items-center gap-2 text-sm font-medium text-slate-600 shadow-sm">
+            <span class="text-slate-400 text-xs font-bold uppercase">Status:</span>
+            <select id="statusFilter" class="outline-none bg-transparent cursor-pointer">
+                <option value="">All Statuses</option>
+                <option value="active">Active</option>
+                <option value="frozen">Frozen</option>
+            </select>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-lg px-3 py-2 flex items-center gap-2 text-sm font-medium text-slate-600 shadow-sm">
+            <span class="text-slate-400 text-xs font-bold uppercase">Freeze:</span>
+            <select class="outline-none bg-transparent cursor-pointer">
+                <option>All Freeze Status</option>
+                <option>None</option>
+                <option>Permanent</option>
+                <option>Temporary</option>
+            </select>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-lg px-3 py-2 flex items-center gap-2 text-sm font-medium text-slate-600 shadow-sm">
+            <span class="text-slate-400 text-xs font-bold uppercase text-nowrap">Date Range:</span>
+            <input type="date" class="outline-none bg-transparent">
+        </div>
+        <button class="ml-auto text-sm font-bold text-slate-500 hover:text-slate-900 transition flex items-center gap-2">
+            <i class="fa-solid fa-arrow-rotate-left"></i> Reset Filters
+        </button>
+    </div>
+
+    <div id="bulkBar" class="hidden mb-4 bg-slate-900 text-white rounded-xl px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <p class="text-sm font-bold"><span id="bulkCount">0</span> selected</p>
+        <div class="flex gap-2">
+            <button id="bulkFreeze" class="px-4 py-2 bg-red-500 rounded-lg text-xs font-bold hover:bg-red-600">Freeze</button>
+            <button id="bulkUnfreeze" class="px-4 py-2 bg-emerald-500 rounded-lg text-xs font-bold hover:bg-emerald-600">Unfreeze</button>
+            <button id="bulkClear" class="px-4 py-2 bg-white/10 rounded-lg text-xs font-bold hover:bg-white/20">Clear</button>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-xl overflow-hidden">
+        <table class="w-full text-left text-sm border-collapse">
+            <thead class="bg-slate-50 border-b border-gray-200 text-slate-500 font-bold uppercase text-[11px] tracking-widest">
+                <tr>
+                    <th class="px-4 py-4 w-10"><input type="checkbox" id="selectAllUsers" class="w-4 h-4 rounded border-gray-300 text-slate-900 cursor-pointer"></th>
+                    <th class="px-6 py-4 cursor-pointer hover:bg-slate-100 transition">User <i class="fa-solid fa-sort ml-1 opacity-30"></i></th>
+                    <th class="px-6 py-4">Email</th>
+                    <th class="px-6 py-4 cursor-pointer hover:bg-slate-100 transition">Balance <i class="fa-solid fa-sort ml-1 opacity-30"></i></th>
+                    <th class="px-6 py-4">Referral</th>
+                    <th class="px-6 py-4">Status</th>
+                    <th class="px-6 py-4 text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="usersTableBody" class="divide-y divide-gray-100">
+                <!-- Users will be loaded dynamically -->
+            </tbody>
+        </table>
+
+        <div class="bg-slate-50 px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+            <p id="paginationInfo" class="text-xs font-medium text-slate-500 italic">Loading users...</p>
+            <div class="flex items-center gap-2">
+                <button id="prevBtn" class="px-4 py-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-slate-400 cursor-not-allowed" disabled>Previous</button>
+                <button id="nextBtn" class="px-4 py-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-slate-700 hover:bg-slate-900 hover:text-white transition">Next</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Delete User Confirmation Modal -->
+<div id="deleteUserModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4">
+        <div class="p-6">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+                    <i class="fa-solid fa-exclamation-triangle text-red-600 text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900">Delete User Account</h3>
+                    <p class="text-sm text-slate-500">This action cannot be undone</p>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <p class="text-sm text-slate-700 mb-2">
+                    Are you sure you want to delete this user account?
+                </p>
+                <div class="bg-slate-50 rounded-lg p-3 border border-slate-200">
+                    <p class="text-sm font-bold text-slate-900" id="deleteUserInfo"></p>
+                </div>
+                <p class="text-xs text-red-600 mt-3">
+                    <i class="fa-solid fa-exclamation-circle"></i> This will permanently delete the user and all associated data (transactions, profit growths, transfers, etc.)
+                </p>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <button id="cancelDeleteBtn" onclick="if(typeof closeDeleteModal === 'function') closeDeleteModal(); else console.error('closeDeleteModal not found');" class="flex-1 px-4 py-2.5 bg-slate-100 text-slate-700 rounded-lg text-sm font-bold hover:bg-slate-200 transition">
+                    Cancel
+                </button>
+                <button id="confirmDeleteBtn" onclick="if(typeof deleteUserConfirmed === 'function') deleteUserConfirmed(); else console.error('deleteUserConfirmed not found');" class="flex-1 px-4 py-2.5 bg-red-600 text-white rounded-lg text-sm font-bold hover:bg-red-700 transition">
+                    <i class="fa-solid fa-trash"></i> Delete User
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/api.js?v=20250122"></script>
+<script src="js/forms.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/routes.js"></script>
+<script src="js/main.js"></script>
+<script>
+    let currentPage = 1;
+
+    // Bulk selection
+    const bulkBar = document.getElementById('bulkBar');
+    const bulkCount = document.getElementById('bulkCount');
+
+    function selectedIds() {
+        return Array.from(document.querySelectorAll('.bulk-checkbox:checked')).map(cb => Number(cb.value));
+    }
+
+    function refreshBulk() {
+        const ids = selectedIds();
+        bulkCount.textContent = ids.length;
+        bulkBar.classList.toggle('hidden', ids.length === 0);
+    }
+
+    document.getElementById('selectAllUsers')?.addEventListener('change', function () {
+        document.querySelectorAll('.bulk-checkbox').forEach(cb => { cb.checked = this.checked; });
+        refreshBulk();
+    });
+
+    document.addEventListener('change', (e) => {
+        if (e.target.classList.contains('bulk-checkbox')) refreshBulk();
+    });
+
+    document.getElementById('bulkClear')?.addEventListener('click', () => {
+        document.querySelectorAll('.bulk-checkbox').forEach(cb => { cb.checked = false; });
+        const all = document.getElementById('selectAllUsers');
+        if (all) all.checked = false;
+        refreshBulk();
+    });
+
+    async function runBulk(action) {
+        const ids = selectedIds();
+        if (!ids.length) return;
+        try {
+            const res = await API.admin.bulkUsers(action, ids, `Bulk ${action} from user list`);
+            Utils?.showToast?.(res.message || 'Updated', 'success');
+            loadUsers(currentPage);
+        } catch (err) {
+            Utils?.showToast?.(err.response?.message || 'Bulk action failed', 'error');
+        }
+    }
+
+    document.getElementById('bulkFreeze')?.addEventListener('click', () => runBulk('freeze'));
+    document.getElementById('bulkUnfreeze')?.addEventListener('click', () => runBulk('unfreeze'));
+
+    // Sortable headers
+    document.querySelectorAll('thead th').forEach(th => {
+        if (!th.classList.contains('cursor-pointer')) return;
+        const label = th.textContent.trim().toLowerCase();
+        const field = label.startsWith('user') ? 'username' : (label.startsWith('balance') ? 'real_balance' : null);
+        if (!field) return;
+
+        th.addEventListener('click', () => {
+            if (sortField === field) {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortField = field;
+                sortDirection = 'asc';
+            }
+            loadUsers(1);
+        });
+    });
+    let perPage = 20;
+    let searchTerm = '';
+    let isFrozen = null;
+    let sortField = null;
+    let sortDirection = 'desc';
+
+    // Load users from API
+    async function loadUsers(page = 1) {
+        try {
+            const tbody = document.getElementById('usersTableBody');
+            tbody.innerHTML = '<tr><td colspan="7" class="px-6 py-8 text-center text-slate-500">Loading users...</td></tr>';
+
+            const params = {
+                page: page,
+                per_page: perPage
+            };
+
+            if (searchTerm) {
+                params.search = searchTerm;
+            }
+
+            if (sortField) {
+                params.sort = sortField;
+                params.direction = sortDirection;
+            }
+
+            if (isFrozen !== null) {
+                params.is_frozen = isFrozen;
+            }
+
+            const response = await API.admin.getUsers(params);
+            const users = response.data || [];
+            const pagination = response;
+
+            // Clear table
+            tbody.innerHTML = '';
+
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="px-6 py-8 text-center text-slate-500">No users found</td></tr>';
+                return;
+            }
+
+            // Render users
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-slate-50 transition duration-150';
+                
+                const initial = (user.name || user.email || 'U')[0].toUpperCase();
+                const username = Utils.escapeHtml(user.username || user.name || 'user');
+                const email = Utils.escapeHtml(user.email || '-');
+                const realBalance = parseFloat(user.real_balance || 0);
+                const isUserFrozen = user.is_frozen;
+                const statusClass = isUserFrozen ? 'status-frozen' : 'status-active';
+                const statusText = isUserFrozen ? 'Frozen' : 'Active';
+
+                row.innerHTML = `
+                    <td class="px-4 py-4"><input type="checkbox" class="bulk-checkbox w-4 h-4 rounded border-gray-300 cursor-pointer" value="${user.id}"></td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-400 text-xs">${initial}</div>
+                            <span class="font-bold text-slate-900">@${username}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-slate-600">${email}</td>
+                    <td class="px-6 py-4 font-mono font-bold text-slate-700">$${realBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex flex-col gap-1">
+                            <span class="font-mono text-[11px] font-bold tracking-widest text-slate-700">${user.referral_code || '—'}</span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider ${(user.referral_bonus_amount ?? null) === null ? 'text-slate-400' : 'text-emerald-600'}">
+                                ${(user.referral_bonus_amount ?? null) === null ? 'default' : '$' + Number(user.referral_bonus_amount).toFixed(2)}
+                            </span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="${statusClass} px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter">${statusText}</span>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <div class="flex items-center justify-end gap-2">
+                            <button onclick="viewUserDetails(${user.id})" class="bg-slate-900 text-white px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-black transition shadow-sm">View Details</button>
+                            <button data-user-id="${user.id}" data-username="${username}" data-email="${email}" class="delete-user-btn bg-red-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-red-700 transition shadow-sm">
+                                <i class="fa-solid fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Update pagination
+            updatePagination(pagination);
+
+        } catch (error) {
+            console.error('Failed to load users:', error);
+            const tbody = document.getElementById('usersTableBody');
+            
+            // Show more detailed error message
+            let errorMessage = 'Failed to load users. Please try again.';
+            if (error.response?.message) {
+                errorMessage = error.response.message;
+            } else if (error.status === 403) {
+                errorMessage = 'Access denied. Please log in as admin.';
+            } else if (error.status === 401) {
+                errorMessage = 'Not authenticated. Please log in again.';
+            } else if (error.message) {
+                errorMessage = error.message;
+            }
+            
+            tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-8 text-center text-red-500">${errorMessage}<br><span class="text-xs text-slate-400">Error: ${error.status || 'Unknown'}</span></td></tr>`;
+            Utils?.showToast?.(errorMessage, 'error');
+        }
+    }
+
+    // Update pagination info and buttons
+    function updatePagination(pagination) {
+        const info = document.getElementById('paginationInfo');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        const from = ((pagination.current_page - 1) * pagination.per_page) + 1;
+        const to = Math.min(pagination.current_page * pagination.per_page, pagination.total);
+        
+        info.textContent = `Showing ${from}-${to} of ${pagination.total} users`;
+
+        prevBtn.disabled = !pagination.prev_page_url;
+        prevBtn.className = prevBtn.disabled 
+            ? 'px-4 py-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-slate-400 cursor-not-allowed'
+            : 'px-4 py-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-slate-700 hover:bg-slate-900 hover:text-white transition';
+
+        nextBtn.disabled = !pagination.next_page_url;
+        nextBtn.className = nextBtn.disabled
+            ? 'px-4 py-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-slate-400 cursor-not-allowed'
+            : 'px-4 py-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-slate-700 hover:bg-slate-900 hover:text-white transition';
+    }
+
+    // View user details (navigate to user detail page)
+    function viewUserDetails(userId) {
+        window.location.href = `/admin-user-detail.html?user_id=${userId}`;
+    }
+
+    // Search functionality
+    let searchTimeout;
+    document.getElementById('searchInput').addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            searchTerm = this.value.trim();
+            currentPage = 1;
+            loadUsers(currentPage);
+        }, 500);
+    });
+
+    // Status filter
+    document.getElementById('statusFilter').addEventListener('change', function() {
+        const value = this.value;
+        isFrozen = value === 'frozen' ? true : value === 'active' ? false : null;
+        currentPage = 1;
+        loadUsers(currentPage);
+    });
+
+    // Pagination buttons
+    document.getElementById('prevBtn').addEventListener('click', function() {
+        if (!this.disabled && currentPage > 1) {
+            currentPage--;
+            loadUsers(currentPage);
+        }
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', function() {
+        if (!this.disabled) {
+            currentPage++;
+            loadUsers(currentPage);
+        }
+    });
+
+    // Reset filters
+    document.querySelector('button[class*="Reset"]')?.addEventListener('click', function() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('statusFilter').value = '';
+        searchTerm = '';
+        isFrozen = null;
+        currentPage = 1;
+        loadUsers(currentPage);
+    });
+
+    // Delete user functionality
+    let userToDelete = null;
+    
+    function confirmDeleteUser(userId, username, email) {
+        console.log('confirmDeleteUser called with:', { userId, username, email });
+        userToDelete = userId;
+        const modal = document.getElementById('deleteUserModal');
+        const info = document.getElementById('deleteUserInfo');
+        
+        if (!modal) {
+            console.error('Delete modal not found');
+            return;
+        }
+        
+        if (!info) {
+            console.error('Delete user info element not found');
+            return;
+        }
+        
+        info.textContent = `@${username} (${email})`;
+        modal.classList.remove('hidden');
+        console.log('Modal should be visible now');
+    }
+    
+    function closeDeleteModal() {
+        const modal = document.getElementById('deleteUserModal');
+        if (modal) {
+            modal.classList.add('hidden');
+        }
+        userToDelete = null;
+    }
+    
+    async function deleteUserConfirmed() {
+        if (!userToDelete) {
+            console.error('No user selected for deletion');
+            return;
+        }
+        
+        console.log('Attempting to delete user:', userToDelete);
+        
+        const confirmBtn = document.getElementById('confirmDeleteBtn');
+        if (!confirmBtn) {
+            console.error('Confirm delete button not found');
+            return;
+        }
+        
+        const originalText = confirmBtn.innerHTML;
+        confirmBtn.disabled = true;
+        confirmBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Deleting...';
+        
+        try {
+            console.log('Calling API.admin.deleteUser with userId:', userToDelete);
+            console.log('API.admin object:', API.admin);
+            console.log('API.admin.deleteUser type:', typeof API.admin?.deleteUser);
+            
+            // Check if the method exists
+            if (!API.admin || typeof API.admin.deleteUser !== 'function') {
+                throw new Error('API.admin.deleteUser is not available. Please refresh the page to load the latest JavaScript files.');
+            }
+            
+            const response = await API.admin.deleteUser(userToDelete);
+            console.log('Delete response:', response);
+            
+            // Show success message
+            if (Utils?.showToast) {
+                Utils.showToast('User account deleted successfully', 'success');
+            } else {
+                alert('User account deleted successfully');
+            }
+            
+            // Close modal
+            closeDeleteModal();
+            
+            // Reload users list
+            loadUsers(currentPage);
+            
+        } catch (error) {
+            console.error('Failed to delete user:', error);
+            console.error('Error details:', {
+                message: error.message,
+                status: error.status,
+                response: error.response
+            });
+            
+            let errorMessage = 'Failed to delete user. Please try again.';
+            if (error.response?.message) {
+                errorMessage = error.response.message;
+            } else if (error.message) {
+                errorMessage = error.message;
+            } else if (error.status === 403) {
+                errorMessage = 'Access denied. Admin access required.';
+            } else if (error.status === 422) {
+                errorMessage = error.response?.message || 'Cannot delete this user.';
+            }
+            
+            if (Utils?.showToast) {
+                Utils.showToast(errorMessage, 'error');
+            } else {
+                alert(errorMessage);
+            }
+            
+            confirmBtn.disabled = false;
+            confirmBtn.innerHTML = originalText;
+        }
+    }
+    
+    // Make functions globally available (after they're defined)
+    window.confirmDeleteUser = confirmDeleteUser;
+    window.deleteUserConfirmed = deleteUserConfirmed;
+    window.closeDeleteModal = closeDeleteModal;
+    
+    // Close modal when clicking outside
+    document.getElementById('deleteUserModal')?.addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeDeleteModal();
+        }
+    });
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeDeleteModal();
+        }
+    });
+    
+    // Set up delete button handlers using event delegation
+    document.addEventListener('click', function(e) {
+        // Handle delete button clicks (using event delegation)
+        if (e.target.closest('.delete-user-btn')) {
+            const btn = e.target.closest('.delete-user-btn');
+            const userId = parseInt(btn.getAttribute('data-user-id'));
+            const username = btn.getAttribute('data-username');
+            const email = btn.getAttribute('data-email');
+            console.log('Delete button clicked:', { userId, username, email });
+            confirmDeleteUser(userId, username, email);
+        }
+    });
+    
+    // Set up modal button event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set up delete modal buttons
+        const cancelBtn = document.getElementById('cancelDeleteBtn');
+        const confirmBtn = document.getElementById('confirmDeleteBtn');
+        
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                closeDeleteModal();
+            });
+        } else {
+            console.error('Cancel delete button not found');
+        }
+        
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Confirm delete button clicked');
+                deleteUserConfirmed();
+            });
+        } else {
+            console.error('Confirm delete button not found');
+        }
+        
+        // Load users on page load
+        loadUsers(1);
+    });
+</script>
+</body> </html>

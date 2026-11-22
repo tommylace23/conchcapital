@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <!-- QR Code Library - Using reliable CDN -->
+    <script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <title>Deposit Funds | ConchCapital</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #F9FAFB; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .step-line { height: 2px; flex-grow: 1; background-color: #E5E7EB; margin: 0 12px; margin-bottom: 24px; }
+        .currency-card.selected { border-color: #10B981; background-color: rgba(16, 185, 129, 0.05); }
+    </style>
+</head>
+<body class="min-h-screen pb-20" data-page="deposits">
+
+    <nav class="bg-white border-b border-gray-200 h-16 flex items-center px-8 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto w-full flex justify-between items-center">
+            <div class="text-xl font-bold text-[#111827]">Conch<span class="text-[#10B981]">Capital</span></div>
+            <a href="#" data-route="dashboard" class="text-sm font-semibold text-gray-500 hover:text-gray-800 transition">Cancel Deposit</a>
+        </div>
+    </nav>
+
+    <main class="max-w-3xl mx-auto mt-8 px-6">
+        
+        <a href="#" data-route="dashboard" class="inline-flex items-center text-sm text-gray-500 hover:text-gray-800 transition mb-8">
+            <i class="fa-solid fa-arrow-left mr-2"></i> Back to Dashboard
+        </a>
+
+        <div class="flex items-center justify-between mb-12">
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-10 h-10 rounded-full border-2 border-[#10B981] bg-green-50 flex items-center justify-center text-[#10B981] font-bold">1</div>
+                <span class="text-xs font-bold text-[#10B981]">Configure</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-10 h-10 rounded-full border-2 border-gray-200 bg-white flex items-center justify-center text-gray-400 font-bold">2</div>
+                <span class="text-xs font-bold text-gray-400">Transfer</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-10 h-10 rounded-full border-2 border-gray-200 bg-white flex items-center justify-center text-gray-400 font-bold">3</div>
+                <span class="text-xs font-bold text-gray-400">Confirm</span>
+            </div>
+        </div>
+
+        <section class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm space-y-8">
+            <h2 class="text-xl font-bold text-gray-900">Deposit Configuration</h2>
+
+            <div class="p-4 bg-slate-900 rounded-xl">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Your Deposit Reference</p>
+                        <p id="depositReference" class="mono text-lg font-black tracking-widest text-emerald-400">Loading…</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button type="button" id="copyDepositRef" class="px-4 py-2 bg-emerald-500 text-white rounded-lg text-xs font-bold hover:bg-emerald-600 transition">Copy</button>
+                        <a href="bank-details.html" class="px-4 py-2 bg-white/10 text-white rounded-lg text-xs font-bold hover:bg-white/20 transition">Bank Details</a>
+                    </div>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-2">Include this reference with every transfer so your deposit is credited correctly.</p>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Select Currency</label>
+                <div class="grid grid-cols-3 gap-4">
+                    <button class="currency-card p-4 rounded-xl border-2 border-gray-200 hover:bg-gray-50 flex flex-col items-center gap-2 transition" data-currency="BTC">
+                        <i class="fa-brands fa-bitcoin text-2xl text-[#F7931A]"></i>
+                        <span class="text-sm font-bold text-gray-900">Bitcoin</span>
+                    </button>
+                    <button class="currency-card p-4 rounded-xl border-2 border-gray-200 hover:bg-gray-50 flex flex-col items-center gap-2 transition" data-currency="USDT">
+                        <i class="fa-solid fa-dollar-sign text-2xl text-[#26A17B]"></i>
+                        <span class="text-sm font-bold text-gray-900">USDT</span>
+                    </button>
+                    <button class="currency-card p-4 rounded-xl border-2 border-gray-200 hover:bg-gray-50 flex flex-col items-center gap-2 transition" data-currency="ETH">
+                        <i class="fa-brands fa-ethereum text-2xl text-[#627EEA]"></i>
+                        <span class="text-sm font-bold text-gray-900">Ethereum</span>
+                    </button>
+                </div>
+                <input type="hidden" id="selectedCurrency" value="BTC">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Fund Type</label>
+                <div class="mb-6">
+                    <div class="p-4 rounded-xl border-2 border-[#10B981] bg-green-50 flex flex-col items-center gap-2">
+                        <i class="fa-solid fa-wallet text-2xl text-[#10B981]"></i>
+                        <span class="text-sm font-bold text-gray-900">Real Funds</span>
+                        <span class="text-xs text-gray-500">Withdrawable</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Deposit Amount</label>
+                <div class="relative">
+                    <input type="number" id="depositAmount" placeholder="0.00" step="0.01" min="0.01" class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#10B981] transition mono text-lg" required>
+                    <span class="absolute right-5 top-1/2 -translate-y-1/2 font-bold text-gray-400">USD</span>
+                </div>
+                <p class="mt-2 text-sm text-gray-400">Amount: <span id="amountDisplay" class="text-gray-900 font-semibold">$0.00 USD</span></p>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Description (Optional)</label>
+                <input type="text" id="depositDescription" placeholder="Add a note about this deposit..." class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#10B981] transition text-sm">
+            </div>
+
+            <button id="depositBtn" onclick="processDeposit()" class="w-full bg-[#10B981] hover:bg-[#059669] text-white py-4 rounded-xl font-bold text-lg transition shadow-md">
+                Process Deposit
+            </button>
+        </section>
+
+        <div id="addressSection" class="hidden mt-8 space-y-8">
+            <!-- Success Message Banner -->
+            <div class="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-2xl p-6 shadow-sm">
+                <div class="flex items-start gap-4">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                            <i class="fa-solid fa-check-circle text-green-600 text-2xl"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-lg font-bold text-green-900 mb-1">Deposit Address Ready!</h3>
+                        <p class="text-sm text-green-700">Your secure deposit address has been generated. Send the exact amount of crypto to complete your deposit.</p>
+                    </div>
+                </div>
+            </div>
+
+            <section class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm flex flex-col md:flex-row gap-8 items-center">
+                <div class="w-[200px] h-[200px] bg-gray-50 border-2 border-gray-200 rounded-2xl flex items-center justify-center shrink-0" id="qrCodeContainer">
+                    <i class="fa-solid fa-qrcode text-7xl text-gray-300"></i>
+                </div>
+
+                <div class="flex-1 space-y-4 w-full">
+                    <div class="flex items-center gap-2 mb-2">
+                        <h3 class="font-bold text-gray-900">Send Funds to this Address</h3>
+                        <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded uppercase">Blockchain Secured</span>
+                    </div>
+                    <p class="text-sm text-gray-500">Ensure you are sending <span id="networkName" class="font-bold text-gray-800">BTC</span> via the <span id="networkType" class="font-bold text-gray-800">BTC Network</span></p>
+                    <p class="text-xs text-gray-400">This address is secured on the blockchain for maximum security.</p>
+                    
+                    <div class="flex gap-2">
+                        <input type="text" readonly id="cryptoAddress" value="" class="flex-1 bg-gray-100 border border-gray-200 px-4 py-3 rounded-lg text-xs mono text-gray-700">
+                        <button id="copyAddressBtn" onclick="copyAddress()" class="bg-white border border-gray-200 px-4 py-3 rounded-lg hover:bg-gray-50 transition text-[#10B981]">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-500" id="copyStatus"></p>
+                </div>
+            </section>
+
+            <div class="space-y-4">
+                <div class="bg-[#FEF3C7] border border-[#FDE68A] p-4 rounded-xl flex items-center gap-3">
+                    <span class="text-amber-600">⚠️</span>
+                    <p class="text-sm font-bold text-[#92400E]">Send exactly <span class="underline" id="cryptoAmount">0.00</span> <span id="cryptoCurrencyDisplay">BTC</span> to this address</p>
+                </div>
+                <div class="bg-[#FEF3C7] border border-[#FDE68A] p-4 rounded-xl flex items-center gap-3">
+                    <span class="text-amber-600">⚠️</span>
+                    <p class="text-sm font-bold text-[#92400E]">Your balance will update after confirmation (approx. 20 minutes)</p>
+                </div>
+            </div>
+
+            <section class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm">
+                <div class="flex justify-between items-center mb-6">
+                    <h4 class="text-xs font-bold text-gray-900 uppercase tracking-widest flex items-center">
+                        <span class="inline-block w-2 h-2 bg-amber-500 rounded-full mr-2 animate-pulse"></span>
+                        Transaction Status Tracker
+                    </h4>
+                </div>
+                <div class="grid grid-cols-4 gap-2 mb-4">
+                    <div class="h-2 bg-[#10B981] rounded-full"></div>
+                    <div class="h-2 bg-gray-100 rounded-full"></div>
+                    <div class="h-2 bg-gray-100 rounded-full"></div>
+                    <div class="h-2 bg-gray-100 rounded-full"></div>
+                </div>
+                <p class="text-center text-[10px] font-bold text-gray-400 uppercase tracking-widest">Waiting for network broadcast...</p>
+            </section>
+
+            <div class="bg-[#EFF6FF] border border-[#BFDBFE] p-6 rounded-2xl space-y-3">
+                <h4 class="text-sm font-bold text-[#1E40AF]">Things to remember:</h4>
+                <ul class="space-y-2">
+                    <li class="text-xs text-[#1E40AF] flex items-center gap-2">• Minimum deposit: 0.0001 BTC</li>
+                    <li class="text-xs text-[#1E40AF] flex items-center gap-2">• This address is secured on the blockchain and can be reused</li>
+                    <li class="text-xs text-[#1E40AF] flex items-center gap-2">• Funds will be credited after 2 network confirmations (approx. 20 mins)</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let selectedFundType = 'real';
+        let selectedCurrency = 'BTC';
+
+        // Currency selection
+        document.querySelectorAll('.currency-card').forEach(btn => {
+            btn.addEventListener('click', function() {
+                selectedCurrency = this.getAttribute('data-currency');
+                document.getElementById('selectedCurrency').value = selectedCurrency;
+                
+                document.querySelectorAll('.currency-card').forEach(b => {
+                    b.classList.remove('selected', 'border-[#10B981]', 'bg-green-50');
+                    b.classList.add('border-gray-200');
+                });
+                this.classList.add('selected', 'border-[#10B981]', 'bg-green-50');
+                this.classList.remove('border-gray-200');
+            });
+        });
+
+        // Set default currency
+        document.querySelector('.currency-card[data-currency="BTC"]').click();
+
+        // Fund type is always 'real' for crypto deposits
+        selectedFundType = 'real';
+
+        // Amount input formatting
+        const amountInput = document.getElementById('depositAmount');
+        const amountDisplay = document.getElementById('amountDisplay');
+        
+        if (amountInput) {
+            amountInput.addEventListener('input', function() {
+                const amount = parseFloat(this.value) || 0;
+                amountDisplay.textContent = `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`;
+            });
+        }
+
+        // Generate QR code using multiple methods
+        function generateQRCode(address) {
+            const qrContainer = document.getElementById('qrCodeContainer');
+            if (!qrContainer) {
+                console.error('QR code container not found');
+                return;
+            }
+            
+            if (!address) {
+                console.error('No address provided for QR code');
+                return;
+            }
+            
+            console.log('Generating QR code for address:', address);
+            qrContainer.innerHTML = '<div class="w-full h-full flex items-center justify-center"><i class="fa-solid fa-spinner fa-spin text-4xl text-gray-400"></i></div>';
+            
+            // Method 1: Try QRCode library (most common)
+            function tryQRCode() {
+                if (typeof QRCode !== 'undefined') {
+                    console.log('Using QRCode library');
+                    qrContainer.innerHTML = '';
+                    const canvas = document.createElement('canvas');
+                    qrContainer.appendChild(canvas);
+                    
+                    QRCode.toCanvas(canvas, address, {
+                        width: 200,
+                        margin: 2,
+                        color: {
+                            dark: '#000000',
+                            light: '#FFFFFF'
+                        }
+                    }, function (error) {
+                        if (error) {
+                            console.error('QRCode.toCanvas error:', error);
+                            tryQRCodeJS();
+                        } else {
+                            console.log('QR code generated successfully with QRCode');
+                        }
+                    });
+                    return true;
+                }
+                return false;
+            }
+            
+            // Method 2: Try QRCodeJS library (alternative)
+            function tryQRCodeJS() {
+                if (typeof QRCodeJS !== 'undefined') {
+                    console.log('Using QRCodeJS library');
+                    qrContainer.innerHTML = '';
+                    new QRCodeJS(qrContainer, {
+                        text: address,
+                        width: 200,
+                        height: 200,
+                        colorDark: '#000000',
+                        colorLight: '#FFFFFF',
+                        correctLevel: QRCodeJS.CorrectLevel.M
+                    });
+                    return true;
+                }
+                return false;
+            }
+            
+            // Method 3: Use online QR code API as fallback
+            function useOnlineQR() {
+                console.log('Using online QR code API');
+                const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(address)}`;
+                qrContainer.innerHTML = `<img src="${qrUrl}" alt="QR Code" class="w-full h-full object-contain rounded-xl">`;
+            }
+            
+            // Try methods in order
+            if (!tryQRCode()) {
+                // Wait a bit for library to load
+                setTimeout(function() {
+                    if (!tryQRCode() && !tryQRCodeJS()) {
+                        // Use online API as fallback
+                        useOnlineQR();
+                    }
+                }, 500);
+            }
+        }
+
+        // Copy address function
+        function copyAddress() {
+            const addressInput = document.getElementById('cryptoAddress');
+            const copyStatus = document.getElementById('copyStatus');
+            
+            addressInput.select();
+            addressInput.setSelectionRange(0, 99999); // For mobile devices
+            
+            try {
+                document.execCommand('copy');
+                copyStatus.textContent = '✓ Address copied to clipboard!';
+                copyStatus.classList.remove('text-gray-500');
+                copyStatus.classList.add('text-green-600');
+                
+                setTimeout(() => {
+                    copyStatus.textContent = '';
+                }, 3000);
+            } catch (err) {
+                copyStatus.textContent = 'Failed to copy. Please select and copy manually.';
+                copyStatus.classList.remove('text-gray-500');
+                copyStatus.classList.add('text-red-600');
+            }
+        }
+
+
+        async function processDeposit() {
+            const amountInput = document.getElementById('depositAmount');
+            const descriptionInput = document.getElementById('depositDescription');
+            const depositBtn = document.getElementById('depositBtn');
+
+            const amount = parseFloat(amountInput.value);
+            if (!amount || amount <= 0) {
+                Utils?.showToast?.('Please enter a valid deposit amount', 'error');
+                return;
+            }
+
+            const originalText = depositBtn.textContent;
+            depositBtn.disabled = true;
+            depositBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Processing...';
+
+            try {
+                const data = {
+                    amount: amount,
+                    fund_type: selectedFundType,
+                    currency: 'USD',
+                    crypto_currency: selectedCurrency,
+                    description: descriptionInput.value || null
+                };
+
+                const response = await API.user.deposit(data);
+                
+                // Show address section
+                const addressSection = document.getElementById('addressSection');
+                const cryptoAddress = document.getElementById('cryptoAddress');
+                const cryptoAmount = document.getElementById('cryptoAmount');
+                const cryptoCurrencyDisplay = document.getElementById('cryptoCurrencyDisplay');
+                const networkName = document.getElementById('networkName');
+                const networkType = document.getElementById('networkType');
+                
+                // Update address and amount
+                cryptoAddress.value = response.crypto_address;
+                cryptoAmount.textContent = parseFloat(response.crypto_amount).toFixed(8);
+                cryptoCurrencyDisplay.textContent = response.crypto_currency;
+                networkName.textContent = response.crypto_currency;
+                
+                // Set network type based on currency
+                const networkTypes = {
+                    'BTC': 'BTC Network',
+                    'ETH': 'Ethereum Network',
+                    'USDT': 'Ethereum Network (ERC-20)'
+                };
+                networkType.textContent = networkTypes[response.crypto_currency] || 'Network';
+                
+                // Generate QR code
+                generateQRCode(response.crypto_address);
+                
+                // Show address section
+                addressSection.classList.remove('hidden');
+                
+                // Scroll to address section
+                addressSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+                // Update step indicator
+                document.querySelectorAll('.step-line').forEach((line, index) => {
+                    if (index === 0) {
+                        const step2 = line.nextElementSibling?.querySelector('.w-10');
+                        if (step2) {
+                            step2.classList.remove('border-gray-200', 'bg-white', 'text-gray-400');
+                            step2.classList.add('border-[#10B981]', 'bg-green-50', 'text-[#10B981]');
+                            step2.nextElementSibling?.classList.remove('text-gray-400');
+                            step2.nextElementSibling?.classList.add('text-[#10B981]');
+                        }
+                    }
+                });
+                
+                // Success message is now shown in the banner above
+
+            } catch (error) {
+                console.error('Deposit error:', error);
+                const message = error.response?.message || error.message || 'Failed to process deposit';
+                Utils?.showToast?.(message, 'error');
+            } finally {
+                depositBtn.disabled = false;
+                depositBtn.textContent = originalText;
+            }
+        }
+    </script>
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/forms.js"></script>
+    <script src="js/modals.js"></script>
+    <script src="js/routes.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // Load the client's deposit reference
+        (async function loadDepositReference() {
+            const el = document.getElementById('depositReference');
+            if (!el) return;
+
+            try {
+                const data = await API.get('/api/bank-details');
+                el.textContent = data.deposit_reference || '—';
+
+                const btn = document.getElementById('copyDepositRef');
+                if (btn) {
+                    btn.addEventListener('click', () => {
+                        navigator.clipboard?.writeText(el.textContent.trim()).then(() => {
+                            const original = btn.textContent;
+                            btn.textContent = 'Copied';
+                            setTimeout(() => { btn.textContent = original; }, 1500);
+                        }).catch(() => Utils?.showToast?.('Copy failed', 'error'));
+                    });
+                }
+            } catch (err) {
+                console.error('Failed to load deposit reference:', err);
+                el.textContent = '—';
+            }
+        })();
+    </script>
+</body>
+</html>
