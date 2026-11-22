@@ -13,8 +13,11 @@ return new class extends Migration
     public function up(): void
     {
         // Modify the enum to include 'test' (5 minutes for testing)
-        // MySQL requires dropping and recreating the column to modify enum
-        DB::statement("ALTER TABLE profit_growths MODIFY COLUMN growth_frequency ENUM('daily', 'weekly', 'monthly', 'quarterly', 'yearly', 'test') DEFAULT 'daily'");
+        // MySQL requires dropping and recreating the column to modify enum.
+        // Postgres/SQLite use VARCHAR + CHECK constraints, so nothing to alter.
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE profit_growths MODIFY COLUMN growth_frequency ENUM('daily', 'weekly', 'monthly', 'quarterly', 'yearly', 'test') DEFAULT 'daily'");
+        }
     }
 
     /**
@@ -23,6 +26,8 @@ return new class extends Migration
     public function down(): void
     {
         // Remove 'test' from enum
-        DB::statement("ALTER TABLE profit_growths MODIFY COLUMN growth_frequency ENUM('daily', 'weekly', 'monthly', 'quarterly', 'yearly') DEFAULT 'daily'");
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE profit_growths MODIFY COLUMN growth_frequency ENUM('daily', 'weekly', 'monthly', 'quarterly', 'yearly') DEFAULT 'daily'");
+        }
     }
 };
