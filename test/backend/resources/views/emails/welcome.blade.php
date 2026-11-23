@@ -118,49 +118,49 @@
             <p>Welcome to {{ $appName }}. Your client account has been successfully opened and is ready for use.</p>
 
             <div class="highlight-box">
-                <p><strong>How to fund your account</strong></p>
-                <p style="margin: 8px 0 6px 0;">
-                    Bank transfer (USD)<br>
-                    Beneficiary: <strong>{{ $bank['bank_account_holder'] }}</strong><br>
-                    Bank: <strong>{{ $bank['bank_name'] }}</strong><br>
-                    SWIFT / BIC: <strong>{{ $bank['bank_swift'] }}</strong><br>
-                    Routing Number: <strong>{{ $bank['bank_routing'] }}</strong><br>
-                    Bank Address: {{ $bank['bank_address'] }}<br>
-                    Your Deposit Reference: <strong>{{ $depositReference }}</strong>
-                </p>
-                <p style="margin: 6px 0 0 0; font-size: 13px;">
-                    Always include your deposit reference so the transfer is matched to your profile.
-                    Digital assets (BTC, ETH, USDT) are also accepted from the Deposit page.
-                </p>
+                <p><strong>Your Client Reference: {{ $depositReference }}</strong></p>
+                <p style="margin: 6px 0 0 0;">Sign in with: <strong>{{ $user->email }}</strong></p>
+                <p style="margin: 6px 0 0 0; font-size: 13px;">Quote your client reference in any correspondence with us.</p>
             </div>
 
-            <p>You may now proceed with the following:</p>
+            <p>To get started:</p>
 
-            <ul class="features-list">
-                <li>Fund your account by bank transfer or digital asset deposit</li>
-                <li>Allocate capital to a Profit Growth account</li>
-                <li>Transfer funds to other clients on the platform</li>
-                <li>Request withdrawals at any time, subject to settlement terms</li>
-            </ul>
+            <ol class="features-list" style="list-style: decimal; padding-left: 20px;">
+                <li>Sign in to your dashboard using the email address above</li>
+                <li>Open <strong>Deposit</strong> and use the banking details shown in your profile to fund your account</li>
+                <li>Allocate capital to a Profit Growth account once your funds have been credited</li>
+            </ol>
 
-            <div style="text-align: center;">
+            <div style="text-align: center; margin: 30px 0;">
                 <a href="{{ $appUrl }}/dashboard.html" class="cta-button">Access Your Dashboard</a>
             </div>
 
-            <p style="margin-top: 40px; font-size: 14px; color: #9CA3AF;">
-                Should you require assistance, our client services team is available through your dashboard.
+            <div class="highlight-box" style="background-color: #F8FAFC;">
+                <p><strong>Security</strong></p>
+                <p style="margin: 6px 0 0 0; font-size: 13px;">
+                    {{ $appName }} will never ask for your password by email. If you did not open this account,
+                    please contact us through your dashboard.
+                </p>
+            </div>
+
+            <p style="margin-top: 28px; font-size: 13px; color: #6B7280;">
+                Your capital is at risk — the value of investments may fall as well as rise. Please read our
+                <a href="{{ $appUrl }}/risk-disclosure.html" style="color:#10B981;">Risk Disclosure</a>,
+                <a href="{{ $appUrl }}/fee-schedule.html" style="color:#10B981;">Fee Schedule</a> and
+                <a href="{{ $appUrl }}/terms-of-service.html" style="color:#10B981;">Terms of Service</a>.
             </p>
+
         </div>
         
         <div class="email-footer">
             <p><strong>{{ $appName }}</strong></p>
-            <p>Private investment management and portfolio growth.</p>
+            <p>{{ $bank['bank_address'] }}</p>
             <p style="margin-top: 20px;">
-                <a href="{{ $appUrl }}">Visit Website</a> | 
+                <a href="{{ $appUrl }}">Visit Website</a> |
                 <a href="{{ $appUrl }}/SETTINGS_PAGE.html">Account Settings</a>
             </p>
             <p style="font-size: 12px; color: #9CA3AF; margin-top: 20px;">
-                This email was sent to {{ $user->email }}. If you didn't create an account, please ignore this email.
+                This email was sent to {{ $user->email }}.
             </p>
         </div>
     </div>
