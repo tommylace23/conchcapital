@@ -33,6 +33,11 @@ document.addEventListener('DOMContentLoaded', function() {
         guardAdminPage();
     }
 
+    // Account completion nudges (email verification, 2FA)
+    if (page === 'dashboard' || page === 'profile') {
+        initAccountNudges();
+    }
+
     // Show the impersonation banner wherever it applies
     if (page !== 'adminLogin') {
         initImpersonationBanner();
@@ -720,3 +725,74 @@ window.addEventListener('unhandledrejection', function(event) {
     console.error('Unhandled Promise Rejection:', event.reason);
     // You can add error reporting here
 });
+
+/**
+ * Prompt the client to verify their email and enable 2FA until both are done.
+ */
+async function initAccountNudges() {
+    if (typeof API === 'undefined' || !API.user?.getProfile) return;
+
+    let user;
+    try {
+        const res = await API.user.getProfile();
+        user = (res && res.user) || res;
+    } catch (e) {
+        return;
+    }
+    if (!user) return;
+
+    const needsEmail = !user.email_verified_at;
+    const needsTwoFactor = !user.two_factor_enabled;
+    if (!needsEmail && !needsTwoFactor) return;
+
+    const host = document.querySelector('main') || document.body;
+    const wrap = document.createElement('div');
+    wrap.className = 'space-y-3 mb-5';
+    wrap.id = 'accountNudges';
+
+    if (needsEmail) {
+        const b = document.createElement('div');
+        b.className = 'flex flex-col sm:flex-row sm:items-center gap-3 p-4 rounded-xl border border-amber-200 bg-amber-50';
+        b.innerHTML = `
+            <div class="flex items-start gap-3 flex-1">
+                <i class="fa-solid fa-envelope-circle-check text-amber-500 mt-0.5"></i>
+                <div>
+                    <p class="text-sm font-bold text-amber-900">Verify your email address</p>
+                    <p class="text-xs text-amber-700">Confirm ${Utils.escapeHtml(user.email || 'your email')} so we can keep your account secure.</p>
+                </div>
+            </div>
+            <div class="flex gap-2 shrink-0">
+                <button data-nudge="resend" class="px-4 py-2 bg-white border border-amber-300 text-amber-800 rounded-lg text-xs font-bold hover:bg-amber-100 transition">Resend email</button>
+                <a href="EMAIL_VERIFICATION_PAGE.html" class="px-4 py-2 bg-amber-500 text-white rounded-lg text-xs font-bold hover:bg-amber-600 transition">Verify now</a>
+            </div>`;
+        b.querySelector('[data-nudge="resend"]')?.addEventListener('click', async function () {
+            this.disabled = true;
+            try {
+                await API.auth.resendVerification();
+                Utils?.showToast?.('Verification email sent', 'success');
+            } catch (err) {
+                Utils?.showToast?.(err.message || 'Could not send email', 'error');
+            } finally {
+                this.disabled = false;
+            }
+        });
+        wrap.appendChild(b);
+    }
+
+    if (needsTwoFactor) {
+        const b = document.createElement('div');
+        b.className = 'flex flex-col sm:flex-row sm:items-center gap-3 p-4 rounded-xl border border-slate-200 bg-white';
+        b.innerHTML = `
+            <div class="flex items-start gap-3 flex-1">
+                <i class="fa-solid fa-shield-halved text-slate-500 mt-0.5"></i>
+                <div>
+                    <p class="text-sm font-bold text-slate-900">Add two-factor authentication</p>
+                    <p class="text-xs text-slate-600">Protect withdrawals and sign-ins with an authenticator app.</p>
+                </div>
+            </div>
+            <a href="SETTINGS_PAGE.html" class="px-4 py-2 bg-slate-900 text-white rounded-lg text-xs font-bold hover:bg-black transition shrink-0">Set up 2FA</a>`;
+        wrap.appendChild(b);
+    }
+
+    host.insertBefore(wrap, host.firstChild);
+}
