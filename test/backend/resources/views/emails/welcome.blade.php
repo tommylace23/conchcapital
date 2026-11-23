@@ -118,14 +118,19 @@
             <p>Welcome to {{ $appName }}. Your client account has been successfully opened and is ready for use.</p>
 
             <div class="highlight-box">
-                <p><strong>Your Account Details</strong></p>
-                <p style="margin: 8px 0 0 0;">
-                    Account Holder: <strong>{{ $user->display_name ?? $user->name }}</strong><br>
-                    Account Number: <strong>{{ $user->account_number ?? '—' }}</strong><br>
-                    @if(!empty($user->account_iban))
-                    IBAN: <strong>{{ $user->account_iban }}</strong><br>
-                    @endif
-                    Currency: <strong>USD</strong>
+                <p><strong>How to fund your account</strong></p>
+                <p style="margin: 8px 0 6px 0;">
+                    Bank transfer (USD)<br>
+                    Beneficiary: <strong>{{ $bank['bank_account_holder'] }}</strong><br>
+                    Bank: <strong>{{ $bank['bank_name'] }}</strong><br>
+                    SWIFT / BIC: <strong>{{ $bank['bank_swift'] }}</strong><br>
+                    Routing Number: <strong>{{ $bank['bank_routing'] }}</strong><br>
+                    Bank Address: {{ $bank['bank_address'] }}<br>
+                    Your Deposit Reference: <strong>{{ $depositReference }}</strong>
+                </p>
+                <p style="margin: 6px 0 0 0; font-size: 13px;">
+                    Always include your deposit reference so the transfer is matched to your profile.
+                    Digital assets (BTC, ETH, USDT) are also accepted from the Deposit page.
                 </p>
             </div>
 

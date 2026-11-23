@@ -41,6 +41,8 @@ class WelcomeEmail extends Mailable
                 'user' => $this->user,
                 'appName' => config('app.name', 'ConchCapital'),
                 'appUrl' => config('app.url'),
+                'bank' => \App\Support\BankSettings::all(),
+                'depositReference' => (config('banking.deposit_reference_prefix') ?: 'DEP') . '-' . str_pad((string) $this->user->id, 6, '0', STR_PAD_LEFT),
             ],
         );
     }

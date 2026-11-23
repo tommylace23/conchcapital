@@ -102,15 +102,6 @@ class User extends Authenticatable implements MustVerifyEmail
                 $user->referral_code = $code;
             }
 
-            if (empty($user->account_number)) {
-                do {
-                    $number = \App\Support\BankAccount::generateNumber();
-                } while (static::where('account_number', $number)->exists());
-
-                $user->account_number = $number;
-                $user->account_iban = \App\Support\BankAccount::toIban($number);
-                $user->account_issued_at = now();
-            }
         });
     }
 

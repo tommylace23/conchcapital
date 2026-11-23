@@ -71,6 +71,7 @@ class TransactionController extends Controller
             'currency' => 'nullable|string|in:USD,BTC,USDT,ETH',
             'crypto_currency' => 'nullable|string|in:BTC,USDT,ETH',
             'fund_type' => 'required|in:real,simulated',
+            'method' => 'nullable|in:crypto,bank',
             'description' => 'nullable|string|max:500',
             'metadata' => 'nullable|array',
         ]);
@@ -83,32 +84,54 @@ class TransactionController extends Controller
         }
 
         return DB::transaction(function () use ($user, $validated) {
-            $cryptoCurrency = $validated['crypto_currency'] ?? 'BTC';
+            $method = $validated['method'] ?? 'crypto';
             $usdAmount = $validated['amount'];
-            
-            // Get current crypto exchange rates (in production, use a real API)
-            $exchangeRates = $this->getCryptoExchangeRates();
-            $cryptoAmount = $usdAmount / ($exchangeRates[$cryptoCurrency] ?? 1);
-            
-            // Get Trezor-secured address for this crypto currency
-            $cryptoAddress = $this->getTrezorAddress($cryptoCurrency);
-            
-            // Create transaction with pending status (will be completed when crypto is received)
+
+            $bankReference = (config('banking.deposit_reference_prefix') ?: 'DEP') . '-' . str_pad((string) $user->id, 6, '0', STR_PAD_LEFT);
+
+            $cryptoCurrency = null;
+            $cryptoAmount = null;
+            $cryptoAddress = null;
+            $exchangeRate = null;
+            $metadata = $validated['metadata'] ?? [];
+            $metadata['method'] = $method;
+
+            if ($method === 'bank') {
+                $metadata['channel'] = 'bank_transfer';
+                $metadata['bank_reference'] = $bankReference;
+                $reference = $bankReference;
+            } else {
+                $cryptoCurrency = $validated['crypto_currency'] ?? 'BTC';
+
+                // Get current crypto exchange rates (in production, use a real API)
+                $exchangeRates = $this->getCryptoExchangeRates();
+                $exchangeRate = $exchangeRates[$cryptoCurrency] ?? null;
+                $cryptoAmount = $usdAmount / ($exchangeRate ?: 1);
+
+                // Get Trezor-secured address for this crypto currency
+                $cryptoAddress = $this->getTrezorAddress($cryptoCurrency);
+
+                $metadata = array_merge($metadata, [
+                    'crypto_currency' => $cryptoCurrency,
+                    'crypto_amount' => $cryptoAmount,
+                    'crypto_address' => $cryptoAddress,
+                    'exchange_rate' => $exchangeRate,
+                ]);
+
+                $reference = 'DEP-' . strtoupper(uniqid());
+            }
+
+            // Create transaction with pending status; balance is credited by an admin
             $transaction = Transaction::create([
                 'user_id' => $user->id,
                 'type' => 'deposit',
                 'fund_type' => $validated['fund_type'],
                 'amount' => $usdAmount,
                 'currency' => $validated['currency'] ?? 'USD',
-                'status' => 'pending', // Pending until crypto is received
-                'description' => $validated['description'] ?? 'Deposit',
-                'reference' => 'DEP-' . strtoupper(uniqid()),
-                'metadata' => array_merge($validated['metadata'] ?? [], [
-                    'crypto_currency' => $cryptoCurrency,
-                    'crypto_amount' => $cryptoAmount,
-                    'crypto_address' => $cryptoAddress,
-                    'exchange_rate' => $exchangeRates[$cryptoCurrency] ?? null,
-                ]),
+                'status' => 'pending',
+                'description' => $validated['description'] ?? ($method === 'bank' ? 'Bank transfer deposit' : 'Crypto deposit'),
+                'reference' => $reference,
+                'metadata' => $metadata,
             ]);
 
             // Don't update balance yet - wait for crypto confirmation
@@ -120,6 +143,7 @@ class TransactionController extends Controller
             return response()->json([
                 'transaction' => $transaction->fresh(),
                 'user' => $user->fresh(),
+                'method' => $method,
                 'crypto_address' => $cryptoAddress,
                 'crypto_amount' => $cryptoAmount,
                 'crypto_currency' => $cryptoCurrency,

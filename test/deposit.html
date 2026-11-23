@@ -56,6 +56,35 @@
         <section class="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm space-y-8">
             <h2 class="text-xl font-bold text-gray-900">Deposit Configuration</h2>
 
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Payment Method</label>
+                <div class="grid grid-cols-2 gap-3">
+                    <button type="button" id="methodBank" class="method-btn p-4 rounded-xl border-2 border-[#10B981] bg-green-50 text-left transition">
+                        <i class="fa-solid fa-building-columns text-lg text-[#10B981] mb-1"></i>
+                        <p class="text-sm font-bold text-gray-900">Bank Transfer</p>
+                        <p class="text-xs text-gray-500">Send USD to our bank</p>
+                    </button>
+                    <button type="button" id="methodCrypto" class="method-btn p-4 rounded-xl border-2 border-gray-200 hover:bg-gray-50 text-left transition">
+                        <i class="fa-brands fa-bitcoin text-lg text-[#F7931A] mb-1"></i>
+                        <p class="text-sm font-bold text-gray-900">Crypto</p>
+                        <p class="text-xs text-gray-500">BTC, ETH or USDT</p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bank transfer details -->
+            <div id="bankPanel" class="p-5 bg-slate-50 border border-gray-200 rounded-xl space-y-3">
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Send your transfer to</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                    <div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Bank</p><p id="bdBankName" class="font-bold text-slate-900">Loading…</p></div>
+                    <div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Beneficiary</p><p id="bdHolder" class="font-bold text-slate-900">—</p></div>
+                    <div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">SWIFT / BIC</p><p id="bdSwift" class="mono font-bold text-slate-900">—</p></div>
+                    <div><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Routing Number</p><p id="bdRouting" class="mono font-bold text-slate-900">—</p></div>
+                    <div class="sm:col-span-2"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Bank Address</p><p id="bdAddress" class="text-slate-700">—</p></div>
+                </div>
+                <p class="text-[11px] text-slate-500">Send the exact amount and use your deposit reference so the transfer is matched to your profile.</p>
+            </div>
+
             <div class="p-4 bg-slate-900 rounded-xl">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div>
@@ -70,7 +99,7 @@
                 <p class="text-[11px] text-slate-400 mt-2">Include this reference with every transfer so your deposit is credited correctly.</p>
             </div>
 
-            <div>
+            <div id="cryptoCurrencyBlock" class="hidden">
                 <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Select Currency</label>
                 <div class="grid grid-cols-3 gap-4">
                     <button class="currency-card p-4 rounded-xl border-2 border-gray-200 hover:bg-gray-50 flex flex-col items-center gap-2 transition" data-currency="BTC">
@@ -338,6 +367,48 @@
         }
 
 
+        let depositMethod = 'bank';
+
+        function setMethod(method) {
+            depositMethod = method;
+            const bankBtn = document.getElementById('methodBank');
+            const cryptoBtn = document.getElementById('methodCrypto');
+            const bankPanel = document.getElementById('bankPanel');
+            const cryptoBlock = document.getElementById('cryptoCurrencyBlock');
+
+            const active = 'p-4 rounded-xl border-2 border-[#10B981] bg-green-50 text-left transition';
+            const idle = 'p-4 rounded-xl border-2 border-gray-200 hover:bg-gray-50 text-left transition';
+
+            if (method === 'bank') {
+                bankBtn.className = 'method-btn ' + active;
+                cryptoBtn.className = 'method-btn ' + idle;
+                bankPanel?.classList.remove('hidden');
+                cryptoBlock?.classList.add('hidden');
+            } else {
+                cryptoBtn.className = 'method-btn ' + active;
+                bankBtn.className = 'method-btn ' + idle;
+                bankPanel?.classList.add('hidden');
+                cryptoBlock?.classList.remove('hidden');
+            }
+        }
+
+        document.getElementById('methodBank')?.addEventListener('click', () => setMethod('bank'));
+        document.getElementById('methodCrypto')?.addEventListener('click', () => setMethod('crypto'));
+
+        (async function loadBankDepositDetails() {
+            try {
+                const d = await API.get('/api/bank-details');
+                const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v || '—'; };
+                set('bdBankName', d.bank.name);
+                set('bdHolder', d.bank.account_holder);
+                set('bdSwift', d.bank.swift);
+                set('bdRouting', d.bank.routing);
+                set('bdAddress', d.bank.address);
+            } catch (e) {
+                console.error('Failed to load bank details', e);
+            }
+        })();
+
         async function processDeposit() {
             const amountInput = document.getElementById('depositAmount');
             const descriptionInput = document.getElementById('depositDescription');
@@ -358,12 +429,27 @@
                     amount: amount,
                     fund_type: selectedFundType,
                     currency: 'USD',
-                    crypto_currency: selectedCurrency,
+                    method: depositMethod,
                     description: descriptionInput.value || null
                 };
 
+                if (depositMethod === 'crypto') {
+                    data.crypto_currency = selectedCurrency;
+                }
+
                 const response = await API.user.deposit(data);
-                
+
+                // Bank transfer: nothing else to show, the admin credits after matching
+                if (depositMethod === 'bank') {
+                    Utils?.showToast?.('Deposit submitted. Your transfer will be credited once confirmed.', 'success');
+                    amountInput.value = '';
+                    const amountEl = document.getElementById('amountDisplay');
+                    if (amountEl) amountEl.textContent = '$0.00 USD';
+                    depositBtn.disabled = false;
+                    depositBtn.textContent = originalText;
+                    return;
+                }
+
                 // Show address section
                 const addressSection = document.getElementById('addressSection');
                 const cryptoAddress = document.getElementById('cryptoAddress');
@@ -428,6 +514,9 @@
     <script src="js/routes.js?v=20261123"></script>
     <script src="js/main.js?v=20261123"></script>
     <script>
+        // Default payment method
+        document.addEventListener('DOMContentLoaded', () => setMethod('bank'));
+
         // Load the client's deposit reference
         (async function loadDepositReference() {
             const el = document.getElementById('depositReference');

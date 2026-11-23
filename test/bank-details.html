@@ -36,43 +36,8 @@
     <main class="max-w-5xl mx-auto px-4 lg:px-6 py-8 lg:py-12 space-y-6">
 
         <div>
-            <h1 class="text-2xl lg:text-3xl font-extrabold text-[#0F172A]">Banking Details</h1>
-            <p class="text-sm text-gray-500 mt-1">Your account information and deposit instructions.</p>
-        </div>
-
-        <!-- Your Account -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 lg:p-8">
-            <div class="flex items-center justify-between mb-5">
-                <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-                    <i class="fa-solid fa-id-card text-slate-400"></i> Your Account
-                </h2>
-                <span id="accountBadge" class="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-emerald-100 text-emerald-700">Active</span>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="p-4 bg-slate-50 border border-gray-100 rounded-xl">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Account Holder</p>
-                    <p id="accountHolder" class="text-sm font-bold text-slate-900">—</p>
-                </div>
-                <div class="p-4 bg-slate-50 border border-gray-100 rounded-xl">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Currency</p>
-                    <p id="accountCurrency" class="text-sm font-bold text-slate-900">—</p>
-                </div>
-                <div class="p-4 bg-emerald-50 border border-emerald-100 rounded-xl md:col-span-2">
-                    <p class="text-[10px] font-bold text-emerald-700 uppercase tracking-widest mb-1">Account Number</p>
-                    <div class="flex items-center justify-between gap-3">
-                        <p id="accountNumber" class="mono text-lg lg:text-2xl font-black tracking-widest text-slate-900">—</p>
-                        <button type="button" data-copy="accountNumber" class="shrink-0 px-4 py-2 bg-slate-900 text-white rounded-lg text-xs font-bold hover:bg-black transition">Copy</button>
-                    </div>
-                </div>
-                <div class="p-4 bg-slate-50 border border-gray-100 rounded-xl md:col-span-2">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">IBAN</p>
-                    <div class="flex items-center justify-between gap-3">
-                        <p id="accountIban" class="mono text-sm lg:text-base font-bold tracking-wider text-slate-800 break-all">—</p>
-                        <button type="button" data-copy="accountIban" class="shrink-0 px-4 py-2 bg-slate-900 text-white rounded-lg text-xs font-bold hover:bg-black transition">Copy</button>
-                    </div>
-                </div>
-            </div>
+            <h1 class="text-2xl lg:text-3xl font-extrabold text-[#0F172A]">Deposit Banking Details</h1>
+            <p class="text-sm text-gray-500 mt-1">Use the details below to fund your ConchCapital profile by bank transfer.</p>
         </div>
 
         <!-- Bank / deposit instructions -->
@@ -172,17 +137,8 @@
             try {
                 const data = await API.get('/api/bank-details');
 
-                set('accountNumber', data.client.account_number_formatted);
-                set('accountIban', data.client.iban_formatted);
-                set('accountCurrency', data.client.currency);
                 set('depositReference', data.deposit_reference);
 
-                // Account holder name comes from the signed-in profile
-                try {
-                    const profile = await API.user.getProfile();
-                    const name = profile?.user?.display_name || profile?.user?.name || profile?.user?.username;
-                    if (name) set('accountHolder', name);
-                } catch (e) { /* non-fatal: leave placeholder */ }
 
                 set('bankName', data.bank.name);
                 set('bankSwift', data.bank.swift);
