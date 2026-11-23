@@ -637,7 +637,7 @@
 <script src="js/routes.js?v=20261123b"></script>
 <script src="js/main.js?v=20261123b">
     // Fill header avatar + page avatar initial
-    (function primeAvatarInitials() {
+    window.addEventListener('load', function () {
         API.user.getProfile().then((res) => {
             const u = (res && res.user) || res || {};
             const name = u.display_name || u.name || u.username || '?';
@@ -647,7 +647,7 @@
             const pageInitials = document.getElementById('avatarInitials');
             if (pageInitials) pageInitials.textContent = initial;
         }).catch(() => {});
-    })();
+    });
 </script>
 </body>
 </html>
