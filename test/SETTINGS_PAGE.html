@@ -371,9 +371,9 @@
                         <img id="twoFactorQRCode" src="" alt="QR Code" class="w-48 h-48 mx-auto">
                     </div>
                     <p class="text-xs text-gray-500 mb-2">Or enter this code manually:</p>
-                    <div class="flex items-center justify-center gap-2 mb-4">
-                        <code id="twoFactorSecret" class="bg-gray-100 px-4 py-2 rounded-lg text-sm font-mono text-gray-800"></code>
-                        <button onclick="copy2FASecret()" class="px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition text-sm font-medium">
+                    <div class="flex items-start gap-2 mb-4">
+                        <code id="twoFactorSecret" class="flex-1 min-w-0 bg-gray-100 px-3 py-2 rounded-lg text-xs sm:text-sm font-mono text-gray-800 break-all text-left leading-relaxed"></code>
+                        <button onclick="copy2FASecret()" class="px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition text-sm font-medium shrink-0">
                             <i class="fa-solid fa-copy"></i>
                         </button>
                     </div>
@@ -564,7 +564,7 @@
             
             // Show modal with QR code
             document.getElementById('twoFactorQRCode').src = twoFactorQRCodeURL;
-            document.getElementById('twoFactorSecret').textContent = twoFactorSecret;
+            document.getElementById('twoFactorSecret').textContent = twoFactorSecret.replace(/(.{4})/g, '$1 ').trim();
             document.getElementById('twoFactorModal').classList.remove('hidden');
             show2FAStep1();
         } catch (error) {
@@ -594,7 +594,7 @@
     }
 
     function copy2FASecret() {
-        const secret = document.getElementById('twoFactorSecret').textContent;
+        const secret = twoFactorSecret || document.getElementById('twoFactorSecret').textContent.replace(/\s+/g, '');
         navigator.clipboard.writeText(secret).then(() => {
             Utils?.showToast?.('Secret copied to clipboard!', 'success');
         }).catch(() => {

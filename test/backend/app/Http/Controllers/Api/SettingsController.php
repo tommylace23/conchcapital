@@ -261,7 +261,8 @@ class SettingsController extends Controller
         }
 
         // Generate a proper TOTP secret
-        $totp = TOTP::create();
+        // 20 random bytes → 32-char Base32 secret (160-bit)
+        $totp = TOTP::create(null, 30, 'sha1', 6, TOTP::DEFAULT_EPOCH, null, 20);
         $totp->setLabel($user->email);
         $totp->setIssuer('ConchCapital');
         
