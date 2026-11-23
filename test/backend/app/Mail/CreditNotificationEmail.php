@@ -29,7 +29,7 @@ class CreditNotificationEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Funds Credited to Your Account - ' . config('app.name', 'InvestEdu'),
+            subject: 'Funds Credited to Your Account - ' . config('app.name', 'ConchCapital'),
         );
     }
 
@@ -45,7 +45,7 @@ class CreditNotificationEmail extends Mailable
                 'fundType' => $this->fundType,
                 'currency' => $this->currency,
                 'reason' => $this->reason,
-                'appName' => config('app.name', 'InvestEdu'),
+                'appName' => config('app.name', 'ConchCapital'),
                 'appUrl' => config('app.url'),
             ],
         );

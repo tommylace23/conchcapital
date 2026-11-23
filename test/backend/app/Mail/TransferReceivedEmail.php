@@ -29,7 +29,7 @@ class TransferReceivedEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'You Received Funds - ' . config('app.name', 'InvestEdu'),
+            subject: 'You Received Funds - ' . config('app.name', 'ConchCapital'),
         );
     }
 
@@ -45,7 +45,7 @@ class TransferReceivedEmail extends Mailable
                 'sender' => $this->sender,
                 'currency' => $this->currency,
                 'senderMessage' => $this->senderMessage,
-                'appName' => config('app.name', 'InvestEdu'),
+                'appName' => config('app.name', 'ConchCapital'),
                 'appUrl' => config('app.url'),
             ],
         );

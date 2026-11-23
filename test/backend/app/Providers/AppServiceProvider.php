@@ -27,7 +27,12 @@ class AppServiceProvider extends ServiceProvider
 
         // Send welcome email when user registers
         Event::listen(Registered::class, function (Registered $event) {
-            Mail::to($event->user->email)->send(new WelcomeEmail($event->user));
+            try {
+                Mail::to($event->user->email)->send(new WelcomeEmail($event->user));
+            } catch (\Throwable $e) {
+                // A mail outage must never block account creation.
+                \Log::warning('Welcome email failed: ' . $e->getMessage());
+            }
         });
     }
 }

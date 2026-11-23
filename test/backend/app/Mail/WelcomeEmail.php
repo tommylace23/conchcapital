@@ -26,7 +26,7 @@ class WelcomeEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Welcome to InvestEdu - Start Your Investment Journey!',
+            subject: 'Welcome to ConchCapital - Start Your Investment Journey!',
         );
     }
 
@@ -39,7 +39,7 @@ class WelcomeEmail extends Mailable
             view: 'emails.welcome',
             with: [
                 'user' => $this->user,
-                'appName' => config('app.name', 'InvestEdu'),
+                'appName' => config('app.name', 'ConchCapital'),
                 'appUrl' => config('app.url'),
             ],
         );
