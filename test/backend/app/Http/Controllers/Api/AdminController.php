@@ -445,6 +445,11 @@ class AdminController extends Controller
             'type' => 'nullable|in:deposit,withdrawal,credit,debit',
             'fund_type' => 'nullable|in:real,simulated',
             'status' => 'nullable|in:pending,completed,failed,cancelled',
+            'search' => 'nullable|string|max:255',
+            'date_from' => 'nullable|date',
+            'date_to' => 'nullable|date|after_or_equal:date_from',
+            'min_amount' => 'nullable|numeric|min:0',
+            'max_amount' => 'nullable|numeric|min:0',
             'page' => 'nullable|integer|min:1',
             'per_page' => 'nullable|integer|min:1|max:100',
         ]);
@@ -465,6 +470,36 @@ class AdminController extends Controller
 
         if (isset($validated['status'])) {
             $query->where('status', $validated['status']);
+        }
+
+        if (! empty($validated['search'])) {
+            $search = $validated['search'];
+            $query->where(function ($q) use ($search) {
+                $q->where('reference', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('id', $search)
+                  ->orWhereHas('user', function ($u) use ($search) {
+                      $u->where('username', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        if (! empty($validated['date_from'])) {
+            $query->whereDate('created_at', '>=', $validated['date_from']);
+        }
+
+        if (! empty($validated['date_to'])) {
+            $query->whereDate('created_at', '<=', $validated['date_to']);
+        }
+
+        if (isset($validated['min_amount'])) {
+            $query->where('amount', '>=', $validated['min_amount']);
+        }
+
+        if (isset($validated['max_amount'])) {
+            $query->where('amount', '<=', $validated['max_amount']);
         }
 
         $perPage = $validated['per_page'] ?? 20;
