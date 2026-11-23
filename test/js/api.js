@@ -544,6 +544,10 @@ const API = {
             return API.get(`/api/admin/profit-growths/${profitGrowthId}`);
         },
 
+        async createUser(data) {
+            return API.post('/api/admin/users', data);
+        },
+
         async bulkUsers(action, userIds, reason = null) {
             return API.post('/api/admin/users/bulk', { action, user_ids: userIds, reason });
         },

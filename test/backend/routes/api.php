@@ -143,6 +143,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('platform-settings', [\App\Http\Controllers\Api\AdminOpsController::class, 'getPlatformSettings']);
         Route::get('users/{id}/profit-growths', [\App\Http\Controllers\Api\AdminOpsController::class, 'userProfitGrowths']);
         Route::post('users/bulk', [\App\Http\Controllers\Api\AdminOpsController::class, 'bulkUsers']);
+        Route::post('users', [\App\Http\Controllers\Api\AdminOpsController::class, 'createUser']);
         Route::get('admins', [\App\Http\Controllers\Api\AdminOpsController::class, 'admins']);
         Route::post('admins', [\App\Http\Controllers\Api\AdminOpsController::class, 'createAdmin']);
         Route::get('profit-growths/{id}', [\App\Http\Controllers\Api\AdminOpsController::class, 'profitGrowth']);

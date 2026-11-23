@@ -423,4 +423,53 @@ class AdminOpsController extends Controller
             'changed' => $changed,
         ]);
     }
+
+    /**
+     * Create a client account from the admin panel.
+     */
+    public function createUser(Request $request)
+    {
+        $actor = $this->ensureAdmin($request);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:50',
+            'email' => 'required|email|max:255|unique:users,email',
+            'username' => ['nullable', 'regex:/^[A-Za-z0-9._-]+$/', 'min:3', 'max:20', 'unique:users,username'],
+            'password' => 'required|string|min:8',
+            'real_balance' => 'nullable|numeric|min:0',
+            'is_frozen' => 'nullable|boolean',
+        ], [
+            'username.regex' => 'Usernames may only contain letters, numbers, dots, hyphens and underscores.',
+            'username.unique' => 'That username is already taken.',
+            'email.unique' => 'That email is already registered.',
+        ]);
+
+        $user = User::create([
+            'name' => $validated['name'],
+            'display_name' => $validated['name'],
+            'email' => $validated['email'],
+            'username' => $validated['username'] ?? null,
+            'password' => $validated['password'],
+            'is_admin' => false,
+            'is_frozen' => (bool) ($validated['is_frozen'] ?? false),
+            'email_verified_at' => now(),
+            'real_balance' => $validated['real_balance'] ?? 0,
+        ]);
+
+        AdminAction::create([
+            'admin_id' => $actor->id,
+            'action' => 'create_user',
+            'target_user_id' => $user->id,
+            'entity_type' => User::class,
+            'entity_id' => $user->id,
+            'description' => "Created client {$user->email}",
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+
+        return response()->json([
+            'message' => 'User created.',
+            'user' => $user->fresh(),
+        ], 201);
+    }
 }

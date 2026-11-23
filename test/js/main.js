@@ -14,6 +14,14 @@ document.addEventListener('DOMContentLoaded', function() {
     initTooltips();
     initSidebar();
     
+    // Global safety net: never let a rejected promise surface raw JSON
+    window.addEventListener('unhandledrejection', (event) => {
+        const err = event.reason;
+        if (!err) return;
+        const msg = (err && err.message) ? err.message : 'Something went wrong. Please try again.';
+        Utils?.showToast?.(msg, 'error');
+    });
+
     // Initialize page-specific features
     const page = document.body.getAttribute('data-page');
     if (page === 'dashboard') {

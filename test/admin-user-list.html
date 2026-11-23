@@ -43,10 +43,15 @@
     
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <h1 class="text-2xl font-black text-slate-900 uppercase tracking-tight">User Management</h1>
-        <div class="relative w-full md:w-80">
-            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-            <input type="text" id="searchInput" placeholder="Search by username, email, or ID..." 
-                class="w-full pl-11 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-slate-900 outline-none transition">
+        <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+            <div class="relative flex-1 md:w-80">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="text" id="searchInput" placeholder="Search by username, email, or ID..." 
+                    class="w-full pl-11 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-slate-900 outline-none transition">
+            </div>
+            <button id="newUserBtn" class="px-5 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-bold hover:bg-black transition shrink-0">
+                <i class="fa-solid fa-user-plus mr-2"></i> New User
+            </button>
         </div>
     </div>
 
@@ -108,6 +113,45 @@
             <div class="flex items-center gap-2">
                 <button id="prevBtn" class="px-4 py-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-slate-400 cursor-not-allowed" disabled>Previous</button>
                 <button id="nextBtn" class="px-4 py-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-slate-700 hover:bg-slate-900 hover:text-white transition">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create User Modal -->
+    <div id="createUserModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="text-lg font-bold text-slate-900">Create User</h3>
+                <button id="closeCreateUser" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Full Name</label>
+                    <input id="cuName" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-slate-900">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Email</label>
+                    <input id="cuEmail" type="email" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-slate-900">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Username</label>
+                    <input id="cuUsername" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-slate-900">
+                    <p class="text-[11px] text-slate-500 mt-1">Letters, numbers, dots, hyphens, underscores (3–20).</p>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Password</label>
+                    <input id="cuPassword" type="password" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-slate-900">
+                    <p class="text-[11px] text-slate-500 mt-1">Minimum 8 characters. Share it with the client.</p>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Starting Balance (optional)</label>
+                    <input id="cuBalance" type="number" min="0" step="0.01" class="w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-slate-900">
+                </div>
+                <p id="cuError" class="text-xs text-red-600 hidden"></p>
+            </div>
+            <div class="flex gap-3 mt-6">
+                <button id="cancelCreateUser" class="flex-1 px-4 py-3 border border-gray-200 rounded-xl text-sm font-bold text-slate-600 hover:bg-gray-50">Cancel</button>
+                <button id="submitCreateUser" class="flex-1 px-4 py-3 bg-slate-900 text-white rounded-xl text-sm font-bold hover:bg-black">Create User</button>
             </div>
         </div>
     </div>
@@ -603,6 +647,56 @@
             console.error('Confirm delete button not found');
         }
         
+        // Create user modal
+        const createModal = document.getElementById('createUserModal');
+        const openCreate = () => {
+            ['cuName', 'cuEmail', 'cuUsername', 'cuPassword', 'cuBalance'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            const err = document.getElementById('cuError');
+            if (err) { err.textContent = ''; err.classList.add('hidden'); }
+            createModal?.classList.remove('hidden');
+        };
+        const closeCreate = () => createModal?.classList.add('hidden');
+
+        document.getElementById('newUserBtn')?.addEventListener('click', openCreate);
+        document.getElementById('closeCreateUser')?.addEventListener('click', closeCreate);
+        document.getElementById('cancelCreateUser')?.addEventListener('click', closeCreate);
+        createModal?.addEventListener('click', (e) => { if (e.target === createModal) closeCreate(); });
+
+        document.getElementById('submitCreateUser')?.addEventListener('click', async function () {
+            const err = document.getElementById('cuError');
+            const showErr = (msg) => { if (err) { err.textContent = msg; err.classList.remove('hidden'); } };
+
+            const payload = {
+                name: document.getElementById('cuName').value.trim(),
+                email: document.getElementById('cuEmail').value.trim(),
+                username: document.getElementById('cuUsername').value.trim() || null,
+                password: document.getElementById('cuPassword').value,
+                real_balance: document.getElementById('cuBalance').value || null
+            };
+
+            if (!payload.name || !payload.email) return showErr('Name and email are required.');
+            if (!payload.password || payload.password.length < 8) return showErr('Password must be at least 8 characters.');
+
+            const btn = this;
+            btn.disabled = true;
+            const original = btn.textContent;
+            btn.textContent = 'Creating...';
+            try {
+                await API.admin.createUser(payload);
+                Utils?.showToast?.('User created successfully', 'success');
+                closeCreate();
+                loadUsers(1);
+            } catch (e) {
+                showErr(e.message || 'Failed to create user.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = original;
+            }
+        });
+
         // Load users on page load
         loadUsers(1);
 
