@@ -19,12 +19,14 @@ class AuthController extends Controller
     public function register(Request $request, \App\Services\ReferralService $referrals)
     {
         $validated = $request->validate([
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email:rfc,dns|unique:users,email',
             'password' => ['required', 'confirmed', PasswordRule::defaults()],
             'username' => ['nullable', 'regex:/^[A-Za-z0-9._-]+$/', 'min:3', 'max:20', 'unique:users,username'],
             'display_name' => 'nullable|string|max:50',
             'referral_code' => 'nullable|string|max:16',
         ], [
+            'email.email' => 'Please enter a valid email address — we check that the domain exists.',
+            'email.unique' => 'That email is already registered. Try logging in instead.',
             'username.regex' => 'Usernames may only contain letters, numbers, dots, hyphens and underscores.',
             'username.min' => 'Username must be at least 3 characters.',
             'username.max' => 'Username may not be longer than 20 characters.',

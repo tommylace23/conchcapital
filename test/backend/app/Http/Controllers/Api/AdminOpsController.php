@@ -433,7 +433,7 @@ class AdminOpsController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:50',
-            'email' => 'required|email|max:255|unique:users,email',
+            'email' => 'required|email:rfc,dns|max:255|unique:users,email',
             'username' => ['nullable', 'regex:/^[A-Za-z0-9._-]+$/', 'min:3', 'max:20', 'unique:users,username'],
             'password' => 'required|string|min:8',
             'real_balance' => 'nullable|numeric|min:0',

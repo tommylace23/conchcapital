@@ -568,3 +568,69 @@ body {
         font-size: 13px;
     }
 }
+
+/* ---------------------------------------------------------------
+   Toasts (Utils.showToast)
+   --------------------------------------------------------------- */
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: min(92vw, 380px);
+}
+
+.toast {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.45;
+    color: #0F172A;
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-left: 4px solid #64748B;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+    animation: toastIn 0.22s ease-out;
+    word-break: break-word;
+}
+
+.toast::before {
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands";
+    font-weight: 900;
+    font-size: 14px;
+    line-height: 1.3;
+    flex: 0 0 auto;
+}
+
+.toast-success { border-left-color: #10B981; }
+.toast-success::before { content: "\f058"; color: #10B981; }
+
+.toast-error { border-left-color: #EF4444; }
+.toast-error::before { content: "\f06a"; color: #EF4444; }
+
+.toast-warning { border-left-color: #F59E0B; }
+.toast-warning::before { content: "\f071"; color: #F59E0B; }
+
+.toast-info { border-left-color: #3B82F6; }
+.toast-info::before { content: "\f05a"; color: #3B82F6; }
+
+@keyframes toastIn {
+    from { opacity: 0; transform: translateX(24px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@media (max-width: 640px) {
+    #toast-container {
+        top: 12px;
+        right: 12px;
+        left: 12px;
+        max-width: none;
+    }
+}
