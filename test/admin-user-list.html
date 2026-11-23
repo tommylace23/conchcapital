@@ -4,26 +4,34 @@
 
 <header class="bg-slate-900 text-white px-8 py-4 flex items-center justify-between sticky top-0 z-30">
     <div class="flex items-center gap-8">
-        <div class="text-xl font-bold tracking-widest uppercase">
+        <a href="admin-dashboard.html" class="text-xl font-bold tracking-widest uppercase hover:opacity-80 transition">
             Conch<span class="text-[#10B981]">Capital</span> <span class="text-slate-500 font-light text-xs ml-2">Admin</span>
-        </div>
-<nav class="hidden md:flex space-x-6 text-sm font-medium text-slate-400">
+        </a>
+<nav class="flex space-x-6 text-sm font-medium text-slate-400 overflow-x-auto whitespace-nowrap">
+            <a href="#" data-route="adminDashboard" class="hover:text-white transition">Dashboard</a>
             <a href="#" data-route="adminUsers" class="text-white border-b-2 border-[#10B981] pb-1">Users</a>
             <a href="#" data-route="adminTransactions" class="hover:text-white transition">Transactions</a>
+            <a href="#" data-route="adminDeposits" class="hover:text-white transition">Deposits</a>
+            <a href="#" data-route="adminWithdrawals" class="hover:text-white transition">Withdrawals</a>
             <a href="#" data-route="adminCredits" class="hover:text-white transition">Credits</a>
             <a href="#" data-route="adminFreezes" class="hover:text-white transition">Freezes</a>
+            <a href="#" data-route="adminReports" class="hover:text-white transition">Reports</a>
             <a href="#" data-route="adminSettings" class="hover:text-white transition">Settings</a>
         </nav>
     </div>
     <div class="flex items-center gap-4">
-        <div class="relative">
+        <a href="ADMIN_ACTIONS_LOG_PAGE.html" title="Admin activity log" class="relative hover:text-white transition">
             <i class="fa-regular fa-bell text-slate-400"></i>
             <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full border-2 border-slate-900"></span>
-        </div>
+        </a>
         <div class="flex items-center gap-2 border-l border-slate-700 pl-4">
-            <span class="text-xs font-medium text-slate-300">Super Admin</span>
-            <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold">SA</div>
+            <span id="headerAdminName" class="text-xs font-medium text-slate-300">Administrator</span>
+            <div id="headerAdminAvatar" class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold">A</div>
         </div>
+        <button onclick="handleLogout()" title="Log out"
+            class="ml-2 w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">
+            <i class="fa-solid fa-right-from-bracket text-sm"></i>
+        </button>
     </div>
 </header>
 
@@ -49,18 +57,17 @@
         </div>
         <div class="bg-white border border-gray-200 rounded-lg px-3 py-2 flex items-center gap-2 text-sm font-medium text-slate-600 shadow-sm">
             <span class="text-slate-400 text-xs font-bold uppercase">Freeze:</span>
-            <select class="outline-none bg-transparent cursor-pointer">
-                <option>All Freeze Status</option>
-                <option>None</option>
-                <option>Permanent</option>
-                <option>Temporary</option>
+            <select id="freezeFilter" class="outline-none bg-transparent cursor-pointer">
+                <option value="">All Freeze Status</option>
+                <option value="0">Active</option>
+                <option value="1">Frozen</option>
             </select>
         </div>
         <div class="bg-white border border-gray-200 rounded-lg px-3 py-2 flex items-center gap-2 text-sm font-medium text-slate-600 shadow-sm">
             <span class="text-slate-400 text-xs font-bold uppercase text-nowrap">Date Range:</span>
-            <input type="date" class="outline-none bg-transparent">
+            <input type="date" id="dateFilter" class="outline-none bg-transparent">
         </div>
-        <button class="ml-auto text-sm font-bold text-slate-500 hover:text-slate-900 transition flex items-center gap-2">
+        <button id="resetFiltersBtn" class="ml-auto text-sm font-bold text-slate-500 hover:text-slate-900 transition flex items-center gap-2">
             <i class="fa-solid fa-arrow-rotate-left"></i> Reset Filters
         </button>
     </div>
@@ -74,8 +81,8 @@
         </div>
     </div>
 
-    <div class="bg-white rounded-2xl border border-gray-200 shadow-xl overflow-hidden">
-        <table class="w-full text-left text-sm border-collapse">
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-xl overflow-x-auto">
+        <table class="w-full min-w-[720px] text-left text-sm border-collapse">
             <thead class="bg-slate-50 border-b border-gray-200 text-slate-500 font-bold uppercase text-[11px] tracking-widest">
                 <tr>
                     <th class="px-4 py-4 w-10"><input type="checkbox" id="selectAllUsers" class="w-4 h-4 rounded border-gray-300 text-slate-900 cursor-pointer"></th>
@@ -238,6 +245,16 @@
                 params.direction = sortDirection;
             }
 
+            const freezeVal = document.getElementById('freezeFilter')?.value;
+            if (freezeVal !== undefined && freezeVal !== '') {
+                params.is_frozen = freezeVal;
+            }
+
+            const dateVal = document.getElementById('dateFilter')?.value;
+            if (dateVal) {
+                params.date_from = dateVal;
+            }
+
             if (isFrozen !== null) {
                 params.is_frozen = isFrozen;
             }
@@ -353,6 +370,28 @@
 
     // Search functionality
     let searchTimeout;
+    document.getElementById('freezeFilter')?.addEventListener('change', () => {
+        currentPage = 1;
+        loadUsers(1);
+    });
+
+    document.getElementById('dateFilter')?.addEventListener('change', () => {
+        currentPage = 1;
+        loadUsers(1);
+    });
+
+    document.getElementById('resetFiltersBtn')?.addEventListener('click', () => {
+        const search = document.getElementById('searchInput');
+        const freeze = document.getElementById('freezeFilter');
+        const date = document.getElementById('dateFilter');
+        if (search) search.value = '';
+        if (freeze) freeze.value = '';
+        if (date) date.value = '';
+        searchTerm = '';
+        currentPage = 1;
+        loadUsers(1);
+    });
+
     document.getElementById('searchInput').addEventListener('input', function() {
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(() => {
@@ -562,6 +601,19 @@
         
         // Load users on page load
         loadUsers(1);
+
+        // Show the signed-in admin in the header
+        (async function loadAdminIdentity() {
+            try {
+                const res = await API.user.getProfile();
+                const u = (res && res.user) || res || {};
+                const name = u.display_name || u.name || u.username || 'Administrator';
+                const nameEl = document.getElementById('headerAdminName');
+                const avatarEl = document.getElementById('headerAdminAvatar');
+                if (nameEl) nameEl.textContent = name;
+                if (avatarEl) avatarEl.textContent = name.trim().charAt(0).toUpperCase();
+            } catch (e) { /* header falls back to defaults */ }
+        })();
     });
 </script>
 </body> </html>

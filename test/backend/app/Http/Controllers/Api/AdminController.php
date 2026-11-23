@@ -61,6 +61,8 @@ class AdminController extends Controller
             'is_admin' => 'nullable|boolean',
             'sort' => 'nullable|in:created_at,real_balance,username,last_active_at',
             'direction' => 'nullable|in:asc,desc',
+            'date_from' => 'nullable|date',
+            'date_to' => 'nullable|date|after_or_equal:date_from',
             'page' => 'nullable|integer|min:1',
             'per_page' => 'nullable|integer|min:1|max:100',
         ]);
@@ -82,6 +84,14 @@ class AdminController extends Controller
 
         if (isset($validated['is_admin'])) {
             $query->where('is_admin', $validated['is_admin']);
+        }
+
+        if (! empty($validated['date_from'])) {
+            $query->whereDate('created_at', '>=', $validated['date_from']);
+        }
+
+        if (! empty($validated['date_to'])) {
+            $query->whereDate('created_at', '<=', $validated['date_to']);
         }
 
         $perPage = $validated['per_page'] ?? 20;
