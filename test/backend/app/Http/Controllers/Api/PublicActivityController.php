@@ -13,16 +13,25 @@ class PublicActivityController extends Controller
      */
     public function recentPayouts()
     {
-        $limit = 12;
-
-        $payouts = Transaction::query()
+        $base = fn () => Transaction::query()
             ->with('user:id,display_name,username,name')
             ->where('type', 'withdrawal')
-            ->where('status', 'completed')
-            ->latest('processed_at')
-            ->latest('id')
-            ->limit($limit)
-            ->get()
+            ->where('status', 'completed');
+
+        // A blend reads more naturally than twelve identical "just now" entries:
+        // most from the last day, a few from the previous week.
+        $recent = $base()->where('processed_at', '>=', now()->subDay())
+            ->latest('processed_at')->limit(8)->get();
+
+        // Older entries split across two buckets so ages vary (2-4 days / 4-10 days)
+        $midAgo = $base()->whereBetween('processed_at', [now()->subDays(10), now()->subDays(4)])
+            ->latest('processed_at')->limit(2)->get();
+
+        $midRecent = $base()->whereBetween('processed_at', [now()->subDays(4), now()->subDay()])
+            ->latest('processed_at')->limit(2)->get();
+
+        $payouts = $recent->concat($midRecent)->concat($midAgo)
+            ->shuffle()
             ->map(function (Transaction $t) {
                 $name = $t->user?->display_name
                     ?: $t->user?->name
