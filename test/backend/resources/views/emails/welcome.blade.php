@@ -143,8 +143,7 @@
             </div>
 
             <p style="margin-top: 40px; font-size: 14px; color: #9CA3AF;">
-                For assistance, please contact our client services team at
-                <a href="mailto:support@conchcapital.co">support@conchcapital.co</a>.
+                Should you require assistance, our client services team is available through your dashboard.
             </p>
         </div>
         

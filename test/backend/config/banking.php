@@ -30,7 +30,7 @@ return [
 
     'withdrawal_fee_percent' => (float) env('BANK_WITHDRAWAL_FEE_PERCENT', 1.5),
 
-    'support_email' => env('BANK_SUPPORT_EMAIL', 'support@conchcapital.co'),
+    'support_email' => env('BANK_SUPPORT_EMAIL', ''),
 
     'support_phone' => env('BANK_SUPPORT_PHONE', '+1 (345) 949-8800'),
 

@@ -147,7 +147,6 @@
                     <i class="fa-solid fa-headset text-slate-400"></i> Client Support
                 </h2>
                 <div class="space-y-2 text-sm">
-                    <p><i class="fa-solid fa-envelope text-slate-400 mr-2"></i><a id="supportEmail" class="text-emerald-600 font-semibold hover:underline" href="#">—</a></p>
                     <p><i class="fa-solid fa-phone text-slate-400 mr-2"></i><span id="supportPhone" class="text-slate-700">—</span></p>
                 </div>
                 <p class="text-[11px] text-slate-500 mt-4 leading-relaxed">
@@ -198,8 +197,6 @@
                 const rmEmail = document.getElementById('rmEmail');
                 if (rmEmail) { rmEmail.textContent = data.relationship_manager.email; rmEmail.href = 'mailto:' + data.relationship_manager.email; }
 
-                const supportEmail = document.getElementById('supportEmail');
-                if (supportEmail) { supportEmail.textContent = data.bank.support_email; supportEmail.href = 'mailto:' + data.bank.support_email; }
                 set('supportPhone', data.bank.support_phone);
 
                 // Copy buttons
