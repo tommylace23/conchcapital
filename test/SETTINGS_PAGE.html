@@ -53,7 +53,8 @@
             <a href="#" data-route="dashboard" class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition">
                 <i class="fa-solid fa-house text-lg"></i>
                 <span class="text-[10px] font-medium">Dashboard</span>
-            </a><a href="#" data-route="profitGrowths" class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition">
+            </a>
+            <a href="#" data-route="profitGrowths" class="mobile-nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition">
                 <i class="fa-solid fa-chart-line text-lg"></i>
                 <span class="text-[10px] font-medium">Growth</span>
             </a>
@@ -72,43 +73,58 @@
         </div>
     </nav>
 
-<nav class="hidden lg:flex bg-white border-b border-gray-200 px-8 py-4 items-center justify-between">
-    <a href="home.html" class="text-xl font-bold tracking-tight text-slate-800">Conch<span class="text-[#10B981]">Capital</span></a>
-    <div class="flex items-center gap-6">
-        <a href="#" data-route="dashboard" class="text-sm font-medium text-slate-500 hover:text-slate-800">Dashboard</a>
-        <a href="#" data-route="deposits" class="text-sm font-medium text-slate-500 hover:text-slate-800">Deposit</a>
-        <a href="#" data-route="withdrawals" class="text-sm font-medium text-slate-500 hover:text-slate-800">Withdraw</a>
-        <a href="bank-details.html" class="text-sm font-medium text-slate-500 hover:text-slate-800">Bank</a>
-        <a href="#" data-route="profitGrowths" class="text-sm font-medium text-slate-500 hover:text-slate-800">Profit Growth</a>
-        <a href="#" data-route="profile" class="text-sm font-medium text-slate-500 hover:text-slate-800">Profile</a>
-        <a href="#" data-route="settings" class="text-sm font-bold text-slate-800 border-b-2 border-slate-800 pb-4 mt-4">Settings</a>
-        <div class="flex items-center gap-4">
-            <div class="relative">
-                <button onclick="toggleNotificationDropdown()" class="relative text-slate-400 hover:text-slate-600 transition">
-                    <i class="fa-solid fa-bell text-xl"></i>
-                    <span id="notificationBadge" class="hidden absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
-                </button>
-                <!-- Notification Dropdown -->
-                <div id="notificationDropdown" class="hidden absolute right-0 top-full mt-2 w-80 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden z-50 max-h-96 overflow-y-auto">
-                    <div class="p-4 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white">
-                        <h3 class="text-sm font-bold text-slate-900">Notifications</h3>
-                        <a href="#" data-route="notifications" class="text-xs font-bold text-blue-600 hover:text-blue-800">View All</a>
-                    </div>
-                    <div id="notificationDropdownList" class="divide-y divide-gray-100">
-                        <div class="p-4 text-center text-slate-500">
-                            <i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i>
-                            <p class="text-sm">Loading notifications...</p>
-                        </div>
-                    </div>
-                    <div class="p-3 border-t border-gray-200 bg-gray-50 text-center">
-                        <a href="#" data-route="notifications" class="text-xs font-bold text-blue-600 hover:text-blue-800">View All Notifications</a>
-                    </div>
-                </div>
+<header class="hidden lg:flex sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-gray-200">
+  <div class="w-full px-6 h-16 flex items-center justify-between gap-6">
+
+    <a href="dashboard.html" class="text-xl font-bold tracking-tight text-slate-800 shrink-0">
+      Conch<span class="text-[#10B981]">Capital</span>
+    </a>
+
+    <nav class="flex items-center gap-1 overflow-x-auto">
+      <a href="#" data-route="dashboard" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-900 hover:bg-gray-100 transition whitespace-nowrap">Dashboard</a>
+      <a href="#" data-route="deposits" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-900 hover:bg-gray-100 transition whitespace-nowrap">Deposit</a>
+      <a href="#" data-route="withdrawals" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-900 hover:bg-gray-100 transition whitespace-nowrap">Withdraw</a>
+      <a href="bank-details.html" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-900 hover:bg-gray-100 transition whitespace-nowrap">Bank</a>
+      <a href="#" data-route="profitGrowths" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-900 hover:bg-gray-100 transition whitespace-nowrap">Profit Growth</a>
+      <a href="#" data-route="profile" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-900 hover:bg-gray-100 transition whitespace-nowrap">Profile</a>
+      <a href="#" data-route="settings" class="px-3 py-2 rounded-lg text-sm font-bold text-slate-900 bg-gray-100 transition whitespace-nowrap">Settings</a>
+    </nav>
+
+    <div class="flex items-center gap-3 shrink-0">
+      <div class="relative">
+        <button onclick="toggleNotificationDropdown()" class="relative p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-gray-100 transition">
+          <i class="fa-solid fa-bell text-lg"></i>
+          <span id="notificationBadge" class="hidden absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
+        </button>
+        <div id="notificationDropdown" class="hidden absolute right-0 top-full mt-2 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-50 max-h-96 overflow-y-auto">
+          <div class="p-4 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white">
+            <h3 class="text-sm font-bold text-slate-900">Notifications</h3>
+            <a href="#" data-route="notifications" class="text-xs font-bold text-emerald-600 hover:text-emerald-800">View All</a>
+          </div>
+          <div id="notificationDropdownList" class="divide-y divide-gray-100">
+            <div class="p-4 text-center text-slate-500">
+              <i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i>
+              <p class="text-sm">Loading notifications...</p>
             </div>
-            <div class="w-8 h-8 rounded-full bg-slate-200"></div>
+          </div>
+          <div class="p-3 border-t border-gray-200 bg-gray-50 text-center">
+            <a href="#" data-route="notifications" class="text-xs font-bold text-emerald-600 hover:text-emerald-800">View All Notifications</a>
+          </div>
         </div>
+      </div>
+
+      <div class="relative">
+        <button id="headerAvatarBtn" class="w-9 h-9 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-bold hover:opacity-90 transition">?</button>
+        <div id="headerAvatarMenu" class="hidden absolute right-0 top-full mt-2 w-44 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-50">
+          <a href="#" data-route="profile" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-gray-50">My Profile</a>
+          <a href="#" data-route="settings" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-gray-50">Settings</a>
+          <button onclick="handleLogout()" class="w-full text-left px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 border-t border-gray-100">Log out</button>
+        </div>
+      </div>
     </div>
-</nav>
+
+  </div>
+</header>
 
 <main class="max-w-4xl mx-auto py-6 lg:py-10 px-4 lg:px-6">
     
@@ -944,6 +960,23 @@
 <script src="js/forms.js?v=20261123b"></script>
 <script src="js/modals.js?v=20261123b"></script>
 <script src="js/routes.js?v=20261123b"></script>
-<script src="js/main.js?v=20261123b"></script>
+<script src="js/main.js?v=20261123b">
+    // Header avatar menu
+    (function initHeaderAvatar() {
+        const btn = document.getElementById('headerAvatarBtn');
+        const menu = document.getElementById('headerAvatarMenu');
+        btn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menu?.classList.toggle('hidden');
+        });
+        document.addEventListener('click', () => menu?.classList.add('hidden'));
+
+        API.user.getProfile().then((res) => {
+            const u = (res && res.user) || res || {};
+            const name = u.display_name || u.name || u.username || '?';
+            if (btn) btn.textContent = name.trim().charAt(0).toUpperCase();
+        }).catch(() => {});
+    })();
+</script>
 </body>
 </html>
