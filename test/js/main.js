@@ -794,5 +794,11 @@ async function initAccountNudges() {
         wrap.appendChild(b);
     }
 
-    host.insertBefore(wrap, host.firstChild);
+    // Keep the payouts ticker above the nudges when present
+    const ticker = document.getElementById('payoutsTicker');
+    if (ticker && ticker.parentElement === host) {
+        host.insertBefore(wrap, ticker.nextSibling);
+    } else {
+        host.insertBefore(wrap, host.firstChild);
+    }
 }
