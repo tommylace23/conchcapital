@@ -13,3 +13,6 @@ test/backend/database/*.sqlite
 
 # Editor
 .vscode/
+
+# local-only
+vps details.rtf
