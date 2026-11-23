@@ -14,10 +14,12 @@
 <body class="bg-gray-50 min-h-screen" data-page="notifications">
 
 <nav class="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between">
-    <div class="text-xl font-bold tracking-tight text-slate-800">Conch<span class="text-[#10B981]">Capital</span></div>
+    <a href="home.html" class="text-xl font-bold tracking-tight text-slate-800">Conch<span class="text-[#10B981]">Capital</span></a>
     <div class="flex items-center gap-6">
-        <a href="#" data-route="dashboard" class="text-sm font-medium text-slate-500 hover:text-slate-800">Dashboard</a>
-        <a href="#" data-route="profitGrowths" class="text-sm font-medium text-slate-500 hover:text-slate-800">Profit Growth</a>
+        <a href="#" data-route="dashboard" class="text-sm font-medium text-slate-500 hover:text-slate-800">Dashboard</a>        <a href="#" data-route="deposits" class="text-sm font-medium text-slate-500 hover:text-slate-800">Deposit</a>
+        <a href="#" data-route="withdrawals" class="text-sm font-medium text-slate-500 hover:text-slate-800">Withdraw</a>
+        <a href="bank-details.html" class="text-sm font-medium text-slate-500 hover:text-slate-800">Bank</a>
+<a href="#" data-route="profitGrowths" class="text-sm font-medium text-slate-500 hover:text-slate-800">Profit Growth</a>
         <a href="#" data-route="profile" class="text-sm font-medium text-slate-500 hover:text-slate-800">Profile</a>
         <a href="#" data-route="notifications" class="text-sm font-bold text-slate-800 border-b-2 border-slate-800 pb-4 mt-4">Notifications</a>
         <a href="#" data-route="settings" class="text-sm font-medium text-slate-500 hover:text-slate-800">Settings</a>
@@ -203,7 +205,7 @@
                                     <button onclick="declineRequest(${request.id})" class="px-4 py-2 bg-red-600 text-white rounded-lg text-xs font-bold hover:bg-red-700 transition">
                                         <i class="fa-solid fa-times"></i> Decline
                                     </button>
-                                    <a href="/user-profile-view.html?user_id=${requester.id}" class="px-4 py-2 bg-gray-100 text-slate-600 rounded-lg text-xs font-bold hover:bg-gray-200 transition inline-block">
+                                    <a href="user-profile-view.html?user_id=${requester.id}" class="px-4 py-2 bg-gray-100 text-slate-600 rounded-lg text-xs font-bold hover:bg-gray-200 transition inline-block">
                                         View Their Profile
                                     </a>
                                 </div>
