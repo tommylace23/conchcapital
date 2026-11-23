@@ -65,6 +65,8 @@
                     <input type="text" name="username" id="username" placeholder="username"
                         class="w-full pl-8 pr-4 py-2.5 rounded-[8px] border border-[#E5E7EB] text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#10B981] focus:ring-1 focus:ring-[#10B981] transition">
                 </div>
+                <p class="text-xs text-gray-500 mt-1">Letters, numbers, dots, hyphens and underscores (3–20).</p>
+                <p id="usernameError" class="text-xs text-red-600 mt-1 hidden"></p>
             </div>
 
             <div>
@@ -238,6 +240,28 @@
                     }
                     
                     console.error('Full error details:', error);
+
+                    // Inline field errors when the API returns them
+                    if (error.errors && typeof error.errors === 'object') {
+                        Object.entries(error.errors).forEach(([field, messages]) => {
+                            const input = document.getElementById(field);
+                            const slot = document.getElementById(field + 'Error');
+                            const msg = Array.isArray(messages) ? messages[0] : messages;
+                            if (slot) {
+                                slot.textContent = msg;
+                                slot.classList.remove('hidden');
+                            }
+                            if (input) {
+                                input.classList.add('border-red-400');
+                                input.addEventListener('input', function clearOnce() {
+                                    input.classList.remove('border-red-400');
+                                    if (slot) slot.classList.add('hidden');
+                                    input.removeEventListener('input', clearOnce);
+                                });
+                            }
+                        });
+                    }
+
                     Utils.showToast(errorMessage, 'error');
                     
                     // Re-enable submit button

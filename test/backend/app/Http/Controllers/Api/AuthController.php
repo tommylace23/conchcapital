@@ -21,9 +21,14 @@ class AuthController extends Controller
         $validated = $request->validate([
             'email' => 'required|email|unique:users,email',
             'password' => ['required', 'confirmed', PasswordRule::defaults()],
-            'username' => 'nullable|alpha_dash|min:3|max:20|unique:users,username',
+            'username' => ['nullable', 'regex:/^[A-Za-z0-9._-]+$/', 'min:3', 'max:20', 'unique:users,username'],
             'display_name' => 'nullable|string|max:50',
             'referral_code' => 'nullable|string|max:16',
+        ], [
+            'username.regex' => 'Usernames may only contain letters, numbers, dots, hyphens and underscores.',
+            'username.min' => 'Username must be at least 3 characters.',
+            'username.max' => 'Username may not be longer than 20 characters.',
+            'username.unique' => 'That username is already taken.',
         ]);
 
         $username = $validated['username'] ?? $this->generateUsername($validated['email']);

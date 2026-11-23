@@ -120,6 +120,12 @@ const Utils = {
      * @param {number} duration - Duration in milliseconds
      */
     showToast(message, type = 'info', duration = 5000) {
+        // Never show "[object Object]" or raw JSON to the user
+        if (message && typeof message === 'object') {
+            const first = message.errors ? Object.values(message.errors)[0] : null;
+            message = (Array.isArray(first) ? first[0] : first) || message.message || JSON.stringify(message);
+        }
+
         // Create toast element
         const toast = document.createElement('div');
         toast.className = `toast toast-${type}`;

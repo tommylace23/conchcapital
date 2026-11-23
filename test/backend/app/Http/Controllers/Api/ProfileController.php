@@ -29,7 +29,7 @@ class ProfileController extends Controller
             'remove_avatar' => 'nullable|boolean',
             'username' => [
                 'nullable',
-                'alpha_dash',
+                'regex:/^[A-Za-z0-9._-]+$/',
                 'min:3',
                 'max:20',
                 Rule::unique('users', 'username')->ignore($user->id),

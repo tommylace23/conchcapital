@@ -336,7 +336,7 @@ class AdminOpsController extends Controller
             'name' => 'required|string|max:50',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8',
-            'username' => 'nullable|alpha_dash|min:3|max:20|unique:users,username',
+            'username' => ['nullable', 'regex:/^[A-Za-z0-9._-]+$/', 'min:3', 'max:20', 'unique:users,username'],
         ]);
 
         $user = User::create([

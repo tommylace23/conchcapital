@@ -85,8 +85,24 @@ const API = {
                     }
                 }
 
-                const error = new Error(`API Error: ${response.status} ${response.statusText}`);
+                // Build a human-readable message (never dump raw JSON at the user)
+                let friendly = null;
+                if (data && data.errors && typeof data.errors === 'object') {
+                    const first = Object.values(data.errors)[0];
+                    friendly = Array.isArray(first) ? first[0] : first;
+                }
+                if (!friendly && data && typeof data.message === 'string' && data.message.trim()) {
+                    friendly = data.message;
+                }
+                if (!friendly) {
+                    friendly = response.status === 422
+                        ? 'Please check the highlighted fields and try again.'
+                        : `Request failed (${response.status}). Please try again.`;
+                }
+
+                const error = new Error(friendly);
                 error.response = data;
+                error.errors = (data && data.errors) || null;
                 error.status = response.status;
                 throw error;
             }
