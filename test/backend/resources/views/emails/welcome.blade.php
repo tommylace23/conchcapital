@@ -113,36 +113,44 @@
         </div>
         
         <div class="email-body">
-            <h2>Hello {{ $user->display_name ?? $user->name }}!</h2>
-            
-            <p>Thank you for joining {{ $appName }}! We're excited to have you on board and help you start your investment education journey.</p>
-            
+            <h2>Dear {{ $user->display_name ?? $user->name }},</h2>
+
+            <p>Welcome to {{ $appName }}. Your client account has been successfully opened and is ready for use.</p>
+
             <div class="highlight-box">
-                <p><strong>🎓 Educational Platform</strong><br>
-                Remember: This platform distinguishes between <strong>real funds</strong> (withdrawable) and <strong>simulated funds</strong> (educational only, not real money).</p>
+                <p><strong>Your Account Details</strong></p>
+                <p style="margin: 8px 0 0 0;">
+                    Account Holder: <strong>{{ $user->display_name ?? $user->name }}</strong><br>
+                    Account Number: <strong>{{ $user->account_number ?? '—' }}</strong><br>
+                    @if(!empty($user->account_iban))
+                    IBAN: <strong>{{ $user->account_iban }}</strong><br>
+                    @endif
+                    Currency: <strong>USD</strong>
+                </p>
             </div>
-            
-            <p>Here's what you can do next:</p>
-            
+
+            <p>You may now proceed with the following:</p>
+
             <ul class="features-list">
-                <li>Explore our simulation playground to practice investment strategies</li>
-                <li>Deposit real funds to track your actual portfolio</li>
-                <li>Learn from the community and share your insights</li>
-                <li>Access educational resources and tutorials</li>
+                <li>Fund your account by bank transfer or digital asset deposit</li>
+                <li>Allocate capital to a Profit Growth account</li>
+                <li>Transfer funds to other clients on the platform</li>
+                <li>Request withdrawals at any time, subject to settlement terms</li>
             </ul>
-            
+
             <div style="text-align: center;">
-                <a href="{{ $appUrl }}/dashboard.html" class="cta-button">Go to Dashboard</a>
+                <a href="{{ $appUrl }}/dashboard.html" class="cta-button">Access Your Dashboard</a>
             </div>
-            
+
             <p style="margin-top: 40px; font-size: 14px; color: #9CA3AF;">
-                If you have any questions or need assistance, don't hesitate to reach out to our support team. We're here to help!
+                For assistance, please contact our client services team at
+                <a href="mailto:support@conchcapital.co">support@conchcapital.co</a>.
             </p>
         </div>
         
         <div class="email-footer">
             <p><strong>{{ $appName }}</strong></p>
-            <p>Empowering the next generation of investors through immersive simulation and education.</p>
+            <p>Private investment management and portfolio growth.</p>
             <p style="margin-top: 20px;">
                 <a href="{{ $appUrl }}">Visit Website</a> | 
                 <a href="{{ $appUrl }}/SETTINGS_PAGE.html">Account Settings</a>

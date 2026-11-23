@@ -114,7 +114,7 @@
         
         <div class="email-footer">
             <p><strong>{{ $appName }}</strong></p>
-            <p>Empowering the next generation of investors through immersive simulation and education.</p>
+            <p>Private investment management and portfolio growth.</p>
             <p style="margin-top: 20px;">
                 <a href="{{ $appUrl }}">Visit Website</a> | 
                 <a href="{{ $appUrl }}/dashboard.html">Dashboard</a>

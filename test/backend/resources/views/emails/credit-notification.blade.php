@@ -169,7 +169,7 @@
                 <p style="margin-top: 15px;">
                     <strong>Fund Type:</strong> 
                     <span class="fund-type-badge fund-type-{{ $fundType === 'real' ? 'real' : 'simulated' }}">
-                        {{ $fundType === 'real' ? 'Real Funds' : 'Simulated Funds' }}
+                        {{ $fundType === 'real' ? 'Real Balance' : 'Profit Growth Balance' }}
                     </span>
                 </p>
                 @if($reason)
@@ -198,7 +198,7 @@
                 <strong>What's Next?</strong><br>
                 • Check your account balance in the dashboard<br>
                 • Review the transaction in your activity log<br>
-                • Start using your funds for investments or simulations
+                • Your balance is available for investment allocations and withdrawals
             </p>
             
             <p style="margin-top: 40px; font-size: 14px; color: #9CA3AF;">
@@ -208,7 +208,7 @@
         
         <div class="email-footer">
             <p><strong>{{ $appName }}</strong></p>
-            <p>Empowering the next generation of investors through immersive simulation and education.</p>
+            <p>Private investment management and portfolio growth.</p>
             <p style="margin-top: 20px;">
                 <a href="{{ $appUrl }}">Visit Website</a> | 
                 <a href="{{ $appUrl }}/dashboard.html">Dashboard</a> | 
