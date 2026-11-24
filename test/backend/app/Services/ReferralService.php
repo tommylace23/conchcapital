@@ -79,6 +79,18 @@ class ReferralService
                     'processed_at' => now(),
                 ]);
 
+                try {
+                    \Illuminate\Support\Facades\Mail::to($referee->email)
+                        ->send(new \App\Mail\ReferralBonusEmail(
+                            $referee,
+                            (float) $bonus,
+                            $referrer->display_name ?: $referrer->username,
+                            $reference
+                        ));
+                } catch (\Throwable $e) {
+                    \Log::warning('Referral bonus email failed: ' . $e->getMessage());
+                }
+
                 ActivityLog::create([
                     'user_id' => $referee->id,
                     'action' => 'referral_bonus',
