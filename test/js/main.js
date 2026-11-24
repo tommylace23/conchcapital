@@ -263,6 +263,9 @@ async function initDashboard() {
         
         // Update statistics
         updateStatistics(data.statistics);
+
+        // Growth earnings strip
+        updateGrowthStats(data.growth_stats);
         
     } catch (error) {
         console.error('Failed to load dashboard:', error);
@@ -812,4 +815,47 @@ async function initAccountNudges() {
     } else {
         host.insertBefore(wrap, host.firstChild);
     }
+}
+
+/**
+ * Populate the growth earnings strip and run the next-credit countdown.
+ */
+let nextCreditTimer = null;
+function updateGrowthStats(stats) {
+    if (!stats) return;
+
+    const money = (n) => '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    const sevenEl = document.getElementById('earned7d');
+    const totalEl = document.getElementById('earnedTotal');
+    const availEl = document.getElementById('growthAvailable');
+    const nextEl = document.getElementById('nextCredit');
+
+    if (sevenEl) sevenEl.textContent = money(stats.earned_last_7_days);
+    if (totalEl) totalEl.textContent = money(stats.earned_total);
+    if (availEl) availEl.textContent = money(stats.available_to_withdraw);
+
+    if (!nextEl) return;
+    if (nextCreditTimer) clearInterval(nextCreditTimer);
+
+    if (!stats.next_credit_at) {
+        nextEl.textContent = '—';
+        return;
+    }
+
+    const target = new Date(stats.next_credit_at).getTime();
+    const tick = () => {
+        const left = target - Date.now();
+        if (left <= 0) {
+            nextEl.textContent = 'crediting…';
+            clearInterval(nextCreditTimer);
+            return;
+        }
+        const h = Math.floor(left / 3600000);
+        const m = Math.floor((left % 3600000) / 60000);
+        const sec = Math.floor((left % 60000) / 1000);
+        nextEl.textContent = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+    };
+    tick();
+    nextCreditTimer = setInterval(tick, 1000);
 }

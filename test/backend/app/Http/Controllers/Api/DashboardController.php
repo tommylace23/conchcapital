@@ -36,6 +36,27 @@ class DashboardController extends Controller
             ->whereIn('status', ['active', 'paused'])
             ->sum('current_balance');
         
+        // Growth earnings summary (drives the performance strip on the dashboard)
+        $earnedTotal = (float) $user->transactions()->where('type', 'growth')->sum('amount');
+        $earned7d = (float) $user->transactions()
+            ->where('type', 'growth')
+            ->where('created_at', '>=', now()->subDays(7))
+            ->sum('amount');
+        $lockedTotal = (float) $user->profitGrowths()
+            ->whereIn('status', ['active', 'paused'])
+            ->sum('locked_amount');
+        $nextCreditAt = $user->profitGrowths()
+            ->where('status', 'active')
+            ->whereNotNull('next_growth_calculation_at')
+            ->min('next_growth_calculation_at');
+
+        $growthStats = [
+            'earned_total' => round($earnedTotal, 2),
+            'earned_last_7_days' => round($earned7d, 2),
+            'available_to_withdraw' => round(max(0, (float) $totalProfitGrowthBalance - $lockedTotal), 2),
+            'next_credit_at' => $nextCreditAt ? \Carbon\Carbon::parse($nextCreditAt)->toIso8601String() : null,
+        ];
+
         // Legacy: also get simulations count for backward compatibility
         $simulationsCount = $user->simulations()->count();
         $activeSimulationsCount = $user->simulations()->where('status', 'active')->count();
@@ -54,6 +75,7 @@ class DashboardController extends Controller
             ],
             'recent_transactions' => $recentTransactions,
             'recent_activity' => $recentActivity,
+            'growth_stats' => $growthStats,
             'statistics' => [
                 'total_profit_growths' => $profitGrowthsCount,
                 'active_profit_growths' => $activeProfitGrowthsCount,
