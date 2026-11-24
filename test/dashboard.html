@@ -251,6 +251,12 @@
         </header>
 
         <div class="p-4 lg:p-10 space-y-6 lg:space-y-10">
+            <!-- Market strip -->
+            <div id="marketTicker" class="hidden">
+                <div class="mkt-label"><i class="fa-solid fa-arrow-trend-up"></i> Markets</div>
+                <div class="mkt-viewport"><div class="mkt-track"></div></div>
+            </div>
+
             <!-- Recent Payouts ticker -->
             <div id="payoutsTicker" class="hidden">
                 <div class="payout-label"><span class="payout-live-dot"></span> Recent Payouts</div>
@@ -1923,6 +1929,7 @@
     <script src="js/routes.js?v=20261123c"></script>
     <script src="js/main.js?v=20261123c"></script>
     <script src="js/payouts.js?v=20261123c"></script>
+    <script src="js/market.js?v=20261123c"></script>
     <script>
         // Referral program card
         (async function loadReferralCard() {

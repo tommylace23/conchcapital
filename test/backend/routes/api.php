@@ -20,6 +20,9 @@ Route::post('newsletter/unsubscribe', [NewsletterController::class, 'unsubscribe
 // Public (unauthenticated) social proof feed
 Route::get('activity/public', [\App\Http\Controllers\Api\PublicActivityController::class, 'recentPayouts']);
 
+// Public market snapshot (US equities + crypto)
+Route::get('market/overview', [\App\Http\Controllers\Api\MarketController::class, 'overview']);
+
 Route::prefix('auth')->group(function () {
     Route::post('register', [AuthController::class, 'register'])->middleware('throttle:10,1');
     Route::post('login', [AuthController::class, 'login'])->middleware('throttle:10,1');
