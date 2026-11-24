@@ -19,39 +19,47 @@
 </head>
 <body class="bg-gray-50 min-h-screen" data-page="simulationEdit">
 
-<nav class="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between">
-    <a href="home.html" class="text-xl font-bold tracking-tight text-slate-800">Conch<span class="text-[#10B981]">Capital</span></a>
-    <div class="flex items-center gap-6">
-        <a href="#" data-route="dashboard" class="text-sm font-medium text-slate-500 hover:text-slate-800">Dashboard</a><a href="#" data-route="profitGrowths" class="text-sm font-bold text-sim border-b-2 border-sim pb-4 mt-4">Profit Growth</a>
-        <a href="#" data-route="profile" class="text-sm font-medium text-slate-500 hover:text-slate-800">Profile</a>
-        <a href="#" data-route="settings" class="text-sm font-medium text-slate-500 hover:text-slate-800">Settings</a>
-        <div class="flex items-center gap-4">
-            <div class="relative">
-                <button onclick="toggleNotificationDropdown()" class="relative text-slate-400 hover:text-slate-600 transition">
-                    <i class="fa-solid fa-bell text-xl"></i>
-                    <span id="notificationBadge" class="hidden absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
-                </button>
-                <!-- Notification Dropdown -->
-                <div id="notificationDropdown" class="hidden absolute right-0 top-full mt-2 w-80 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden z-50 max-h-96 overflow-y-auto">
-                    <div class="p-4 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white">
-                        <h3 class="text-sm font-bold text-slate-900">Notifications</h3>
-                        <a href="#" data-route="notifications" class="text-xs font-bold text-blue-600 hover:text-blue-800">View All</a>
-                    </div>
-                    <div id="notificationDropdownList" class="divide-y divide-gray-100">
-                        <div class="p-4 text-center text-slate-500">
-                            <i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i>
-                            <p class="text-sm">Loading notifications...</p>
-                        </div>
-                    </div>
-                    <div class="p-3 border-t border-gray-200 bg-gray-50 text-center">
-                        <a href="#" data-route="notifications" class="text-xs font-bold text-blue-600 hover:text-blue-800">View All Notifications</a>
-                    </div>
-                </div>
-            </div>
-            <div class="w-8 h-8 rounded-full bg-slate-200"></div>
+<header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-gray-200">
+  <div class="w-full px-4 lg:px-6 h-16 flex items-center justify-between gap-6">
+    <a href="dashboard.html" class="text-xl font-bold tracking-tight text-slate-800 shrink-0">Conch<span class="text-[#10B981]">Capital</span></a>
+    <nav class="hidden lg:flex items-center gap-1 overflow-x-auto">
+      <a href="#" data-route="dashboard" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-900 hover:bg-gray-100 transition whitespace-nowrap">Dashboard</a>
+      <a href="#" data-route="deposits" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-900 hover:bg-gray-100 transition whitespace-nowrap">Deposit</a>
+      <a href="#" data-route="withdrawals" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-900 hover:bg-gray-100 transition whitespace-nowrap">Withdraw</a>
+      <a href="#" data-route="profitGrowths" class="px-3 py-2 rounded-lg text-sm font-bold text-slate-900 bg-gray-100 transition whitespace-nowrap">Profit Growth</a>
+      <a href="#" data-route="profile" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-900 hover:bg-gray-100 transition whitespace-nowrap">Profile</a>
+      <a href="#" data-route="settings" class="px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-900 hover:bg-gray-100 transition whitespace-nowrap">Settings</a>
+    </nav>
+    <div class="flex items-center gap-3 shrink-0">
+      <div class="relative">
+        <button onclick="toggleNotificationDropdown()" class="relative p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-gray-100 transition">
+          <i class="fa-solid fa-bell text-lg"></i>
+          <span id="notificationBadge" class="hidden absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
+        </button>
+        <div id="notificationDropdown" class="hidden absolute right-0 top-full mt-2 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden z-50 max-h-96 overflow-y-auto">
+          <div class="p-4 border-b border-gray-200 flex items-center justify-between sticky top-0 bg-white">
+            <h3 class="text-sm font-bold text-slate-900">Notifications</h3>
+            <a href="#" data-route="notifications" class="text-xs font-bold text-emerald-600 hover:text-emerald-800">View All</a>
+          </div>
+          <div id="notificationDropdownList" class="divide-y divide-gray-100">
+            <div class="p-4 text-center text-slate-500"><i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i><p class="text-sm">Loading notifications...</p></div>
+          </div>
+          <div class="p-3 border-t border-gray-200 bg-gray-50 text-center">
+            <a href="#" data-route="notifications" class="text-xs font-bold text-emerald-600 hover:text-emerald-800">View All Notifications</a>
+          </div>
         </div>
+      </div>
+      <div class="relative">
+        <button id="headerAvatarBtn" class="w-9 h-9 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-bold hover:opacity-90 transition">?</button>
+        <div id="headerAvatarMenu" class="hidden absolute right-0 top-full mt-2 w-44 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-50">
+          <a href="#" data-route="profile" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-gray-50">My Profile</a>
+          <a href="#" data-route="settings" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-gray-50">Settings</a>
+          <button onclick="handleLogout()" class="w-full text-left px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 border-t border-gray-100">Log out</button>
+        </div>
+      </div>
     </div>
-</nav>
+  </div>
+</header>
 
 <main class="max-w-3xl mx-auto py-10 px-6">
     
@@ -65,120 +73,96 @@
         <p class="text-slate-500">Update your profit growth settings and strategy</p>
     </div>
 
-    <form class="space-y-6">
-        <!-- Profit Growth Name -->
+    <form id="editGrowthForm" class="space-y-6">
+        <!-- Name -->
         <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-            <label class="block text-sm font-bold text-slate-700 uppercase tracking-widest mb-2">Profit Growth Name</label>
-            <input 
-                type="text" 
+            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Profit Growth Name</label>
+            <input
+                type="text"
+                id="growthName"
                 name="name"
-                value="Growth Portfolio #1"
-                placeholder="Enter profit growth name"
-                class="w-full p-3.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-sim focus:border-sim outline-none"
+                placeholder="e.g. Growth Portfolio"
+                class="w-full p-3.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                required
             >
+            <p class="text-xs text-slate-500 mt-2">Shown on your dashboard and statements.</p>
         </div>
 
-        <!-- Base Amount (Read-only) -->
+        <!-- Account position (read-only) -->
         <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-            <label class="block text-sm font-bold text-slate-700 uppercase tracking-widest mb-2">Base Amount</label>
-            <input 
-                type="text" 
-                value="$10.00"
-                disabled
-                class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl text-slate-600 cursor-not-allowed"
-            >
-            <p class="text-xs text-slate-500 mt-2">
-                <i class="fa-solid fa-info-circle"></i> Base amount cannot be changed after profit growth creation
+            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Account Position</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Opening Balance</p>
+                    <p id="baseAmount" class="text-lg font-extrabold text-slate-900">—</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Current Value</p>
+                    <p id="currentValue" class="text-lg font-extrabold text-slate-900">—</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Growth Rate</p>
+                    <p id="growthRateLabel" class="text-lg font-extrabold text-emerald-600">—</p>
+                </div>
+            </div>
+            <p class="text-xs text-slate-500 mt-4">
+                <i class="fa-solid fa-info-circle mr-1"></i> Opening balance and growth rate are fixed by the platform and cannot be edited.
             </p>
         </div>
 
-        <!-- Growth Strategy -->
+        <!-- Projection -->
         <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-            <label class="block text-sm font-bold text-slate-700 uppercase tracking-widest mb-2">Growth Strategy</label>
-            <select 
-                name="strategy"
-                class="w-full p-3.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-sim focus:border-sim outline-none"
+            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Projection Horizon</label>
+            <select
+                id="projectionHorizon"
+                name="horizon"
+                class="w-full p-3.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
             >
-                <option>Fixed Monthly Growth (5%)</option>
-                <option>Fixed Monthly Growth (3%)</option>
-                <option>Fixed Monthly Growth (7%)</option>
-                <option>Fixed Monthly Growth (10%)</option>
-                <option>Aggressive Growth</option>
-                <option>Conservative Growth</option>
-                <option>Custom Rate</option>
+                <option value="1">1 month</option>
+                <option value="3" selected>3 months</option>
+                <option value="6">6 months</option>
+                <option value="12">12 months</option>
             </select>
-            <p class="text-xs text-slate-500 mt-2">Select a growth strategy for this profit growth</p>
-        </div>
-
-        <!-- Time Period -->
-        <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-            <label class="block text-sm font-bold text-slate-700 uppercase tracking-widest mb-2">Time Period</label>
-            <select 
-                name="time_period"
-                class="w-full p-3.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-sim focus:border-sim outline-none"
-            >
-                <option>1 month</option>
-                <option>3 months</option>
-                <option>6 months</option>
-                <option>1 year</option>
-                <option>2 years</option>
-                <option>Custom</option>
-            </select>
+            <p class="text-xs text-slate-500 mt-2">Projects the current balance forward at the account's compounding rate.</p>
         </div>
 
         <!-- Preview -->
-        <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl border-2 border-blue-200 p-6">
-            <h3 class="text-sm font-bold text-blue-700 uppercase tracking-widest mb-4">Updated Preview</h3>
+        <div class="bg-emerald-50 rounded-2xl border border-emerald-200 p-6">
+            <h3 class="text-xs font-bold text-emerald-700 uppercase tracking-widest mb-4">Projected Value</h3>
             <div class="grid grid-cols-3 gap-4">
                 <div>
-                    <p class="text-xs text-blue-600 font-bold uppercase mb-1">Base Amount</p>
-                    <p class="text-lg font-extrabold text-blue-700">$10.00</p>
+                    <p class="text-[10px] font-bold text-emerald-700 uppercase mb-1">Current</p>
+                    <p id="previewBase" class="text-lg font-extrabold text-emerald-900">—</p>
                 </div>
                 <div>
-                    <p class="text-xs text-blue-600 font-bold uppercase mb-1">Projected Value</p>
-                    <p class="text-lg font-extrabold text-blue-700">$15.50</p>
+                    <p class="text-[10px] font-bold text-emerald-700 uppercase mb-1">Projected</p>
+                    <p id="previewProjected" class="text-lg font-extrabold text-emerald-900">—</p>
                 </div>
                 <div>
-                    <p class="text-xs text-blue-600 font-bold uppercase mb-1">Projected Growth</p>
-                    <p class="text-lg font-extrabold text-blue-700">+55%</p>
+                    <p class="text-[10px] font-bold text-emerald-700 uppercase mb-1">Growth</p>
+                    <p id="previewGrowth" class="text-lg font-extrabold text-emerald-900">—</p>
                 </div>
             </div>
         </div>
 
-        <!-- Disclaimer -->
-        <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-6">
-            <div class="flex items-start gap-4">
-                <i class="fa-solid fa-triangle-exclamation text-amber-600 text-xl shrink-0 mt-1"></i>
-                <div>
-                    <h3 class="text-sm font-bold text-amber-900 mb-2">⚠️ DISCLAIMER</h3>
-                    <p class="text-xs text-amber-800 leading-relaxed">
-                        This profit growth is hypothetical. It does not represent actual performance or a promise of future results. You cannot withdraw this simulated value.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Confirmation Checkbox -->
+        <!-- Confirmation -->
         <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
             <label class="flex items-start gap-3 cursor-pointer">
-                <input 
-                    type="checkbox" 
-                    required
-                    class="w-5 h-5 rounded border-gray-300 text-sim focus:ring-sim cursor-pointer mt-0.5"
-                >
+                <input type="checkbox" id="confirmChanges" required
+                    class="w-5 h-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer mt-0.5">
                 <div>
-                    <p class="text-sm font-bold text-slate-800">I understand this is a profit growth and not real money</p>
-                    <p class="text-xs text-slate-500 mt-1">You must confirm this to update the profit growth</p>
+                    <p class="text-sm font-bold text-slate-800">Confirm these details are correct</p>
+                    <p class="text-xs text-slate-500 mt-1">Required before saving changes to this allocation.</p>
                 </div>
             </label>
         </div>
 
-        <!-- Action Buttons -->
-        <div class="flex flex-col md:flex-row gap-4 pt-6">
-            <button type="button" data-route="simulationDetail" class="flex-1 px-6 py-3 bg-white border-2 border-gray-200 text-slate-600 rounded-xl font-bold hover:bg-gray-50 transition">
+        <!-- Actions -->
+        <div class="flex flex-col md:flex-row gap-4 pt-2">
+            <button type="button" id="cancelEdit" class="flex-1 px-6 py-3 bg-white border border-gray-200 text-slate-600 rounded-xl font-bold hover:bg-gray-50 transition">
                 Cancel
             </button>
-            <button type="submit" class="flex-1 md:flex-[2] px-6 py-3 bg-sim text-white rounded-xl font-bold shadow-lg shadow-blue-200 hover:opacity-90 transition">
+            <button type="submit" class="flex-1 md:flex-[2] px-6 py-3 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition">
                 Save Changes
             </button>
         </div>
@@ -187,29 +171,96 @@
 </main>
 
 <script>
-    // Update preview when strategy or time period changes
-    document.querySelector('select[name="strategy"]').addEventListener('change', updatePreview);
-    document.querySelector('select[name="time_period"]').addEventListener('change', updatePreview);
+    // ---- Load the allocation and wire the form ----
+    const params = new URLSearchParams(window.location.search);
+    const growthId = params.get('simulation_id') || params.get('id');
+    let growth = null;
 
-    function updatePreview() {
-        // In production, this would calculate based on selected strategy and time period
-        console.log('Updating preview...');
+    const money = (n) => '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    function renderPreview() {
+        if (!growth) return;
+        const current = parseFloat(growth.current_balance || 0);
+        const ratePct = parseFloat(growth.growth_percentage || 0);
+        const freq = growth.growth_frequency || 'weekly';
+
+        // Convert the stored rate into a weekly factor
+        let weeklyRate;
+        if (freq === 'weekly') weeklyRate = ratePct / 100;
+        else if (freq === 'daily') weeklyRate = Math.pow(1 + ratePct / 100, 7) - 1;
+        else if (freq === 'monthly') weeklyRate = Math.pow(1 + ratePct / 100, 12 / 52) - 1;
+        else weeklyRate = ratePct / 100;
+
+        const months = Number(document.getElementById('projectionHorizon')?.value || 3);
+        const weeks = months * (52 / 12);
+        const projected = current * Math.pow(1 + weeklyRate, weeks);
+        const growthPct = current > 0 ? ((projected - current) / current) * 100 : 0;
+
+        document.getElementById('previewBase').textContent = money(current);
+        document.getElementById('previewProjected').textContent = money(projected);
+        document.getElementById('previewGrowth').textContent = '+' + growthPct.toFixed(1) + '%';
     }
 
-    // Form submission
-    document.querySelector('form').addEventListener('submit', function(e) {
+    async function loadGrowth() {
+        if (!growthId) {
+            Utils?.showToast?.('No allocation selected', 'error');
+            setTimeout(() => window.location.href = 'simu-list-page.html', 1500);
+            return;
+        }
+        try {
+            const data = await API.user.getSimulation(growthId);
+            growth = data.simulation || data.profit_growth || data;
+
+            document.getElementById('growthName').value = growth.name || '';
+            document.getElementById('baseAmount').textContent = money(growth.initial_balance);
+            document.getElementById('currentValue').textContent = money(growth.current_balance);
+            document.getElementById('growthRateLabel').textContent =
+                `${parseFloat(growth.growth_percentage || 0)}% ${growth.growth_frequency || 'weekly'}`;
+
+            renderPreview();
+        } catch (err) {
+            console.error('Failed to load allocation:', err);
+            Utils?.showToast?.('Failed to load allocation', 'error');
+        }
+    }
+
+    document.getElementById('projectionHorizon')?.addEventListener('change', renderPreview);
+
+    document.getElementById('cancelEdit')?.addEventListener('click', () => {
+        window.location.href = growthId ? `simu-detail-page.html?simulation_id=${growthId}` : 'simu-list-page.html';
+    });
+
+    document.getElementById('editGrowthForm')?.addEventListener('submit', async function (e) {
         e.preventDefault();
-        
-        // In production, this would be an API call
-        const formData = {
-            name: document.querySelector('input[name="name"]').value,
-            strategy: document.querySelector('select[name="strategy"]').value,
-            time_period: document.querySelector('select[name="time_period"]').value
-        };
-        
-        console.log('Saving profit growth:', formData);
-        alert('Profit Growth updated successfully!');
-        // window.location.href = '/profit-growths';
+        const name = document.getElementById('growthName').value.trim();
+        if (!name) {
+            Utils?.showToast?.('Enter a name for this allocation', 'error');
+            return;
+        }
+        try {
+            await API.user.updateProfitGrowth(growthId, { name });
+            Utils?.showToast?.('Allocation updated', 'success');
+            setTimeout(() => {
+                window.location.href = `simu-detail-page.html?simulation_id=${growthId}`;
+            }, 800);
+        } catch (err) {
+            Utils?.showToast?.(err.message || 'Failed to update allocation', 'error');
+        }
+    });
+
+    // Header avatar
+    window.addEventListener('load', function () {
+        const btn = document.getElementById('headerAvatarBtn');
+        const menu = document.getElementById('headerAvatarMenu');
+        if (!btn || !menu) return;
+        btn.addEventListener('click', (e) => { e.stopPropagation(); menu.classList.toggle('hidden'); });
+        document.addEventListener('click', () => menu.classList.add('hidden'));
+        API.user.getProfile().then((res) => {
+            const u = (res && res.user) || res || {};
+            const n = u.display_name || u.name || u.username || '?';
+            btn.textContent = n.trim().charAt(0).toUpperCase();
+        }).catch(() => {});
+        loadGrowth();
     });
 
     // Notification Dropdown Functions
