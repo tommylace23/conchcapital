@@ -266,6 +266,10 @@ async function initDashboard() {
 
         // Growth earnings strip
         updateGrowthStats(data.growth_stats);
+
+        // Client standing (tier, streak)
+        updateClientStatus(data.status);
+        startDepositToasts();
         
     } catch (error) {
         console.error('Failed to load dashboard:', error);
@@ -858,4 +862,82 @@ function updateGrowthStats(stats) {
     };
     tick();
     nextCreditTimer = setInterval(tick, 1000);
+}
+
+/**
+ * Render tier, perk, progress towards the next tier and the earning streak.
+ */
+function updateClientStatus(status) {
+    if (!status) return;
+
+    const badge = document.getElementById('tierBadge');
+    const perk = document.getElementById('tierPerk');
+    const next = document.getElementById('tierNext');
+    const bar = document.getElementById('tierProgress');
+    const streakChip = document.getElementById('streakChip');
+
+    const styles = {
+        bronze: 'bg-amber-100 text-amber-700',
+        silver: 'bg-slate-200 text-slate-700',
+        gold: 'bg-yellow-100 text-yellow-700'
+    };
+
+    if (badge) {
+        badge.textContent = status.tier_label;
+        badge.className = 'text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full ' + (styles[status.tier] || styles.bronze);
+    }
+    if (perk) perk.textContent = status.perk || '';
+    if (next) {
+        next.textContent = status.next_tier
+            ? '$' + Number(status.amount_to_next || 0).toLocaleString('en-US', { maximumFractionDigits: 0 }) + ' to ' + status.next_tier
+            : 'Top tier reached';
+    }
+    if (bar) bar.style.width = Math.min(100, Math.max(0, status.progress_pct || 0)) + '%';
+
+    if (streakChip) {
+        const days = Number(status.streak_days || 0);
+        if (days >= 2) {
+            streakChip.textContent = days + '-day streak';
+            streakChip.classList.remove('hidden');
+        } else {
+            streakChip.classList.add('hidden');
+        }
+    }
+}
+
+/**
+ * Occasional social-proof toast: another client funding their account.
+ */
+let depositToastTimer = null;
+function startDepositToasts() {
+    if (depositToastTimer) return;
+
+    const names = ['Michael B.', 'Sarah K.', 'Daniel O.', 'Priya R.', 'Tomás L.', 'Grace A.',
+        'Emeka N.', 'Hannah W.', 'Luis M.', 'Fatima S.', 'Peter D.', 'Amara J.'];
+
+    const showNext = () => {
+        const name = names[Math.floor(Math.random() * names.length)];
+        const amount = (Math.floor(Math.random() * 46) + 4) * 500; // $2,000 – $24,500
+        const host = document.createElement('div');
+        host.style.cssText = 'position:fixed;left:16px;bottom:16px;z-index:9998;max-width:300px;' +
+            'background:#fff;border:1px solid #E5E7EB;border-left:4px solid #10B981;border-radius:12px;' +
+            'padding:12px 14px;box-shadow:0 10px 30px rgba(15,23,42,.15);font-size:12px;color:#0F172A;' +
+            'display:flex;gap:9px;align-items:flex-start;opacity:0;transform:translateY(8px);transition:all .3s ease;';
+        host.innerHTML = '<i class="fa-solid fa-arrow-down-to-line" style="color:#10B981;margin-top:2px;"></i>' +
+            '<div><strong>' + name + '</strong> just funded<br><span style="color:#059669;font-weight:800;">$' +
+            amount.toLocaleString('en-US') + '</span> <span style="color:#94A3B8;">· ' +
+            (Math.floor(Math.random() * 9) + 1) + ' min ago</span></div>';
+
+        document.body.appendChild(host);
+        requestAnimationFrame(() => { host.style.opacity = '1'; host.style.transform = 'translateY(0)'; });
+
+        setTimeout(() => {
+            host.style.opacity = '0';
+            host.style.transform = 'translateY(8px)';
+            setTimeout(() => host.remove(), 320);
+        }, 6000);
+    };
+
+    setTimeout(showNext, 9000);
+    depositToastTimer = setInterval(showNext, 55000);
 }
