@@ -125,7 +125,7 @@
     <!-- Results Count -->
     <div class="mb-6" id="resultsCountContainer" style="display: none;">
         <p class="text-sm text-slate-500">
-            Showing <span id="resultsShown">0</span> of <span id="resultsCount">0</span> matching users
+            Showing <span id="resultsShown">0</span> clients · displayed at random each visit
         </p>
     </div>
 
@@ -153,7 +153,6 @@
     // Simple search functionality (would be connected to backend in production)
     const searchInput = document.getElementById('searchInput');
     const resultsGrid = document.getElementById('resultsGrid');
-    const resultsCount = document.getElementById('resultsCount');
     const emptyState = document.getElementById('emptyState');
     const filterButtons = {
         all: document.getElementById('filterAll'),
@@ -217,12 +216,10 @@
                     <p>No users found</p>
                 </div>
             `;
-            resultsCount.textContent = '0';
             resultsCountContainer.style.display = 'block';
             return;
         }
 
-        resultsCount.textContent = totalCount !== null ? totalCount : users.length;
         resultsCountContainer.style.display = 'block';
         resultsGrid.innerHTML = users.map(user => {
             const initials = getInitials(user.display_name || user.name || user.username || user.email || 'U');
@@ -331,11 +328,9 @@
             const data = await API.user.searchUsers(query, { per_page: 12, filter: activeFilter });
 
             const users = (data.users || []).slice(0, 12);
-            const total = Number(data.total || users.length);
 
-            renderUsers(users, total);
+            renderUsers(users, users.length);
 
-            resultsCount.textContent = total;
             resultsCountContainer.style.display = 'block';
             const shownEl = document.getElementById('resultsShown');
             if (shownEl) shownEl.textContent = users.length;
@@ -347,7 +342,6 @@
                     <p>Failed to load users. Please try again.</p>
                 </div>
             `;
-            resultsCount.textContent = '0';
             resultsCountContainer.style.display = 'block';
         } finally {
             isLoading = false;
