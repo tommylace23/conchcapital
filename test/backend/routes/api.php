@@ -137,6 +137,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('bank-settings', [\App\Http\Controllers\Api\AdminBankSettingsController::class, 'index']);
         Route::put('bank-settings', [\App\Http\Controllers\Api\AdminBankSettingsController::class, 'update']);
         Route::post('bank-settings/reset', [\App\Http\Controllers\Api\AdminBankSettingsController::class, 'reset']);
+        Route::get('crypto-addresses', [\App\Http\Controllers\Api\AdminBankSettingsController::class, 'cryptoIndex']);
+        Route::put('crypto-addresses', [\App\Http\Controllers\Api\AdminBankSettingsController::class, 'cryptoUpdate']);
 
         // Ops: audit log, simulated transfers, frozen accounts, exports, platform settings
         Route::get('actions-log', [\App\Http\Controllers\Api\AdminOpsController::class, 'actionsLog']);

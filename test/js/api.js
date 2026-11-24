@@ -592,6 +592,14 @@ const API = {
             return API.put('/api/admin/platform-settings', data);
         },
 
+        async getCryptoAddresses() {
+            return API.get('/api/admin/crypto-addresses');
+        },
+
+        async updateCryptoAddresses(data) {
+            return API.put('/api/admin/crypto-addresses', data);
+        },
+
         async getBankSettings() {
             return API.get('/api/admin/bank-settings');
         },

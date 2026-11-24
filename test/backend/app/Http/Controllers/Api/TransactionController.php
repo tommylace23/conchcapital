@@ -189,15 +189,8 @@ class TransactionController extends Controller
      */
     private function getTrezorAddress($cryptoCurrency)
     {
-        // Trezor-secured addresses from your hardware wallet
-        // Store these in .env file for security
-        $addresses = [
-            'BTC' => env('TREZOR_BTC_ADDRESS', 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh'),
-            'ETH' => env('TREZOR_ETH_ADDRESS', '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'),
-            'USDT' => env('TREZOR_USDT_ADDRESS', '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'), // USDT on Ethereum network (ERC-20)
-        ];
-        
-        return $addresses[$cryptoCurrency] ?? $addresses['BTC'];
+        // Addresses come from the admin settings, falling back to config/env
+        return \App\Support\CryptoAddresses::for($cryptoCurrency) ?? \App\Support\CryptoAddresses::for('BTC');
     }
 
     /**

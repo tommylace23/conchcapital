@@ -90,4 +90,52 @@ class AdminBankSettingsController extends Controller
 
         return response()->json(['message' => 'Banking details reset to defaults.']);
     }
+
+    /**
+     * Current crypto deposit addresses plus config defaults.
+     */
+    public function cryptoIndex(Request $request)
+    {
+        $this->ensureAdmin($request);
+
+        $defaults = [];
+        foreach (\App\Support\CryptoAddresses::KEYS as $key => $path) {
+            $defaults[$key] = config($path);
+        }
+
+        return response()->json([
+            'addresses' => \App\Support\CryptoAddresses::all(),
+            'defaults' => $defaults,
+        ]);
+    }
+
+    /**
+     * Save crypto deposit addresses.
+     */
+    public function cryptoUpdate(Request $request)
+    {
+        $admin = $this->ensureAdmin($request);
+
+        $validated = $request->validate([
+            'btc_address' => 'nullable|string|max:120',
+            'eth_address' => 'nullable|string|max:120',
+            'usdt_address' => 'nullable|string|max:120',
+        ]);
+
+        \App\Support\CryptoAddresses::put(array_filter($validated, fn ($v) => $v !== null));
+
+        AdminAction::create([
+            'admin_id' => $admin->id,
+            'action' => 'update_crypto_addresses',
+            'entity_type' => 'platform_settings',
+            'description' => 'Updated crypto deposit addresses',
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+
+        return response()->json([
+            'message' => 'Crypto addresses updated.',
+            'addresses' => \App\Support\CryptoAddresses::all(),
+        ]);
+    }
 }

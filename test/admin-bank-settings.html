@@ -75,6 +75,31 @@
                 </div>
             </section>
 
+
+            <section class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+                <h2 class="font-bold text-slate-900 mb-1 flex items-center gap-2">
+                    <i class="fa-brands fa-bitcoin text-slate-400"></i> Crypto Deposit Addresses
+                </h2>
+                <p class="text-xs text-slate-500 mb-4">Shown to clients on the deposit screen. Leave blank to use the built-in defaults.</p>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Bitcoin (BTC)</label>
+                        <input id="btc_address" class="mono w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Ethereum (ETH)</label>
+                        <input id="eth_address" class="mono w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">USDT (ERC-20)</label>
+                        <input id="usdt_address" class="mono w-full p-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                </div>
+                <button type="button" id="saveCryptoBtn" class="mt-5 px-5 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-bold hover:bg-black transition">
+                    Save Addresses
+                </button>
+            </section>
+
             <section class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
                 <h2 class="font-bold text-slate-900 mb-4 flex items-center gap-2">
                     <i class="fa-solid fa-headset text-slate-400"></i> Support
@@ -194,6 +219,40 @@
                 Utils?.showToast?.('Failed to reset', 'error');
             }
         });
-    </script>
+    
+        // Crypto addresses
+        (async function loadCrypto() {
+            try {
+                const data = await API.admin.getCryptoAddresses();
+                ['btc_address', 'eth_address', 'usdt_address'].forEach(k => {
+                    const el = document.getElementById(k);
+                    if (!el) return;
+                    el.value = data.addresses[k] || '';
+                    el.placeholder = data.defaults[k] || '';
+                });
+            } catch (e) { console.error('Failed to load crypto addresses', e); }
+        })();
+
+        document.getElementById('saveCryptoBtn')?.addEventListener('click', async function () {
+            const payload = {};
+            ['btc_address', 'eth_address', 'usdt_address'].forEach(k => {
+                const el = document.getElementById(k);
+                if (el) payload[k] = el.value.trim();
+            });
+            const btn = this;
+            btn.disabled = true;
+            const original = btn.textContent;
+            btn.textContent = 'Saving...';
+            try {
+                await API.admin.updateCryptoAddresses(payload);
+                Utils?.showToast?.('Crypto addresses saved', 'success');
+            } catch (err) {
+                Utils?.showToast?.(err.message || 'Failed to save', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = original;
+            }
+        });
+</script>
 </body>
 </html>
