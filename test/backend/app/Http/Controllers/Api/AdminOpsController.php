@@ -141,7 +141,7 @@ class AdminOpsController extends Controller
         $validated = $request->validate([
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
-            'type' => 'nullable|in:deposit,withdrawal,credit,debit',
+            'type' => 'nullable|in:deposit,withdrawal,credit,debit,growth',
             'format' => 'nullable|in:csv,json',
         ]);
 

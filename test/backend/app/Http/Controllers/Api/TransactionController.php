@@ -19,7 +19,7 @@ class TransactionController extends Controller
         $user = $request->user();
         
         $validated = $request->validate([
-            'type' => 'nullable|in:deposit,withdrawal,credit,debit',
+            'type' => 'nullable|in:deposit,withdrawal,credit,debit,growth',
             'fund_type' => 'nullable|in:real,simulated',
             'status' => 'nullable|in:pending,completed,failed,cancelled',
             'page' => 'nullable|integer|min:1',

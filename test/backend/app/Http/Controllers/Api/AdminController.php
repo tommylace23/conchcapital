@@ -442,7 +442,7 @@ class AdminController extends Controller
 
         $validated = $request->validate([
             'user_id' => 'nullable|exists:users,id',
-            'type' => 'nullable|in:deposit,withdrawal,credit,debit',
+            'type' => 'nullable|in:deposit,withdrawal,credit,debit,growth',
             'fund_type' => 'nullable|in:real,simulated',
             'status' => 'nullable|in:pending,completed,failed,cancelled',
             'search' => 'nullable|string|max:255',

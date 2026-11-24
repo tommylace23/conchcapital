@@ -166,6 +166,7 @@
                     <button id="filterTypeDeposit" onclick="filterByType('deposit')" class="px-3 lg:px-4 py-1.5 lg:py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-xs lg:text-sm font-medium hover:bg-gray-50">Deposits</button>
                     <button id="filterTypeWithdrawal" onclick="filterByType('withdrawal')" class="px-3 lg:px-4 py-1.5 lg:py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-xs lg:text-sm font-medium hover:bg-gray-50">Withdrawals</button>
                     <button id="filterTypeCredit" onclick="filterByType('credit')" class="px-3 lg:px-4 py-1.5 lg:py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-xs lg:text-sm font-medium hover:bg-gray-50">Credits</button>
+                    <button id="filterTypeGrowth" onclick="filterByType('growth')" class="px-3 lg:px-4 py-1.5 lg:py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-xs lg:text-sm font-medium hover:bg-gray-50">Growth</button>
                 </div>
             </div>
             
@@ -348,6 +349,8 @@
             return { icon: 'fa-arrow-up', bg: 'bg-red-100', color: 'text-red-600' };
         } else if (type === 'credit') {
             return { icon: 'fa-gift', bg: 'bg-blue-100', color: 'text-blue-600' };
+        } else if (type === 'growth') {
+            return { icon: 'fa-chart-line', bg: 'bg-emerald-100', color: 'text-emerald-600' };
         }
         return { icon: 'fa-exchange', bg: 'bg-gray-100', color: 'text-gray-600' };
     }
@@ -442,7 +445,7 @@
             const date = formatDate(tx.created_at);
             const iconData = getTransactionIcon(tx.type, tx.status);
             const amount = parseFloat(tx.amount || 0);
-            const isPositive = tx.type === 'deposit' || tx.type === 'credit';
+            const isPositive = ['deposit', 'credit', 'growth'].includes(tx.type);
             const amountColor = isPositive ? 'text-green-600' : 'text-red-600';
             const amountSign = isPositive ? '+' : '-';
 
@@ -456,7 +459,7 @@
                             <i class="fa-solid ${iconData.icon} ${iconData.color}"></i>
                         </div>
                         <div>
-                            <p class="text-sm font-bold text-slate-800">${tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}</p>
+                            <p class="text-sm font-bold text-slate-800">${tx.type === 'growth' ? 'Daily Growth' : tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}</p>
                             <p class="text-xs text-slate-500">${tx.fund_type || 'USD'}</p>
                         </div>
                     </div>
@@ -489,7 +492,7 @@
                             <i class="fa-solid ${iconData.icon} ${iconData.color}"></i>
                         </div>
                         <div>
-                            <p class="text-sm font-bold text-slate-800">${tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}</p>
+                            <p class="text-sm font-bold text-slate-800">${tx.type === 'growth' ? 'Daily Growth' : tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}</p>
                             <p class="text-xs text-slate-500">${date.date} • ${date.time}</p>
                         </div>
                     </div>
@@ -602,7 +605,7 @@
         const iconData = getTransactionIcon(tx.type, tx.status);
         const date = formatDate(tx.created_at);
         const amount = parseFloat(tx.amount || 0);
-        const isPositive = tx.type === 'deposit' || tx.type === 'credit';
+        const isPositive = ['deposit', 'credit', 'growth'].includes(tx.type);
         const amountColor = isPositive ? 'text-green-600' : 'text-red-600';
         const amountSign = isPositive ? '+' : '-';
 

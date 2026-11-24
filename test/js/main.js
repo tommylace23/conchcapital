@@ -459,7 +459,7 @@ async function updateBalances(user, statistics) {
  * Update recent activity table
  */
 function updateRecentActivity(transactions, activityLogs) {
-    const tbody = document.querySelector('table tbody');
+    const tbody = document.getElementById('recentActivityBody') || document.querySelector('table tbody');
     if (!tbody) return;
     
     // Clear existing rows (except the first 3 which are examples)
@@ -497,7 +497,10 @@ function updateRecentActivity(transactions, activityLogs) {
     
     // Add activity logs
     if (activityLogs && activityLogs.length > 0) {
-        activityLogs.slice(0, 5).forEach(log => {
+        activityLogs
+            .filter(log => log.action !== 'profit_growth_calculated') // growth is shown as a transaction
+            .slice(0, 5)
+            .forEach(log => {
             allActivities.push({
                 type: 'activity',
                 action: log.action,
@@ -511,6 +514,13 @@ function updateRecentActivity(transactions, activityLogs) {
         });
     }
     
+    // Keep the feed varied: show at most 3 daily-growth rows so other
+    // activity (allocations, deposits, transfers) is not pushed out
+    const growthRows = allActivities.filter(a => a.action === 'growth').slice(0, 3);
+    const otherRows = allActivities.filter(a => a.action !== 'growth');
+    allActivities.length = 0;
+    allActivities.push(...growthRows, ...otherRows);
+
     // Sort by date (most recent first)
     allActivities.sort((a, b) => new Date(b.date) - new Date(a.date));
     
@@ -544,7 +554,7 @@ function createActivityRow(activity) {
     const fundTypeText = activity.fund_type === 'real' ? 'text-real' : 'text-sim';
     
     const amount = parseFloat(activity.amount || 0);
-    const amountSign = activity.action === 'deposit' || activity.action === 'transfer_received' || activity.action === 'admin_credit' ? '+' : '';
+    const amountSign = ['deposit', 'transfer_received', 'admin_credit', 'credit', 'growth'].includes(activity.action) ? '+' : '';
     const amountDisplay = `${amountSign}$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     
     const statusClass = activity.status === 'completed' ? 'bg-green-100 text-real' : 
@@ -592,7 +602,8 @@ function formatActionName(action) {
         'simulation_cancelled': 'Profit Growth Cancelled', // Legacy mapping
         'transfer_sent': 'Sent Sim Funds',
         'transfer_received': 'Funds Received',
-        'admin_credit': 'Credit'
+        'admin_credit': 'Credit',
+        'growth': 'Daily Growth'
     };
     return names[action] || action.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 }

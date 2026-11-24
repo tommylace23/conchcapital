@@ -538,44 +538,11 @@
                                     <th class="px-4 lg:px-8 py-3 lg:py-4 text-right">Status</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-50">
-                                <tr class="hover:bg-gray-50/50 transition">
-                                    <td class="px-4 lg:px-8 py-4 lg:py-5">
-                                        <p class="font-bold text-slate-900 text-sm">Deposit</p>
-                                        <p class="text-xs text-slate-500">0.001 BTC wallet transfer</p>
-                                    </td>
-                                    <td class="px-3 lg:px-4 py-4 lg:py-5"><span
-                                            class="bg-green-100 text-real text-[9px] font-black px-2 py-1 rounded uppercase">Real</span>
-                                    </td>
-                                    <td class="px-3 lg:px-4 py-4 lg:py-5 mono font-bold text-real text-sm">+0.001 BTC</td>
-                                    <td class="px-4 lg:px-8 py-4 lg:py-5 text-right"><span
-                                            class="bg-green-100 text-real text-[10px] font-bold px-2 lg:px-3 py-1 rounded-full">Confirmed</span>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-50/50 transition">
-                                    <td class="px-4 lg:px-8 py-4 lg:py-5">
-                                        <p class="font-bold text-slate-900 text-sm">Profit Growth Created</p>
-                                        <p class="text-xs text-slate-500">Growth Strategy #1</p>
-                                    </td>
-                                    <td class="px-3 lg:px-4 py-4 lg:py-5"><span
-                                            class="bg-blue-100 text-sim text-[9px] font-black px-2 py-1 rounded uppercase">Profit
-                                            Growth</span></td>
-                                    <td class="px-3 lg:px-4 py-4 lg:py-5 mono font-bold text-sim text-sm">$10.00</td>
-                                    <td class="px-4 lg:px-8 py-4 lg:py-5 text-right"><span
-                                            class="bg-green-100 text-real text-[10px] font-bold px-2 lg:px-3 py-1 rounded-full">Active</span>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-50/50 transition">
-                                    <td class="px-4 lg:px-8 py-4 lg:py-5">
-                                        <p class="font-bold text-slate-900 text-sm">Funds Received</p>
-                                        <p class="text-xs text-slate-500">From @user123</p>
-                                    </td>
-                                    <td class="px-3 lg:px-4 py-4 lg:py-5"><span
-                                            class="bg-blue-100 text-sim text-[9px] font-black px-2 py-1 rounded uppercase">Profit
-                                            Growth</span></td>
-                                    <td class="px-3 lg:px-4 py-4 lg:py-5 mono font-bold text-sim text-sm">+$10.00</td>
-                                    <td class="px-4 lg:px-8 py-4 lg:py-5 text-right"><span
-                                            class="bg-green-100 text-real text-[10px] font-bold px-2 lg:px-3 py-1 rounded-full">Received</span>
+                            <tbody id="recentActivityBody" class="divide-y divide-gray-50">
+                                <tr>
+                                    <td colspan="4" class="px-4 lg:px-8 py-10 text-center text-slate-400">
+                                        <i class="fa-solid fa-spinner fa-spin text-xl mb-2"></i>
+                                        <p class="text-sm">Loading activity...</p>
                                     </td>
                                 </tr>
                             </tbody>
@@ -1781,7 +1748,7 @@
                     });
 
                 // Add activity logs as notifications
-                activityLogs.slice(0, 10).forEach(activity => {
+                activityLogs.filter(a => a.action !== 'profit_growth_calculated').slice(0, 10).forEach(activity => {
                     allNotifications.push({
                         type: 'activity',
                         id: activity.id,
@@ -1791,6 +1758,12 @@
                         created_at: activity.created_at
                     });
                 });
+
+                // Keep the list varied: cap daily-growth rows
+                const growthOnly = allNotifications.filter(n => n.action === 'growth').slice(0, 3);
+                const rest = allNotifications.filter(n => n.action !== 'growth');
+                allNotifications.length = 0;
+                allNotifications.push(...growthOnly, ...rest);
 
                 // Sort by date (most recent first)
                 allNotifications.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));

@@ -110,6 +110,25 @@ class CalculateProfitGrowth extends Command
             
             $pg->save();
 
+            // Record the growth in the transaction ledger so it appears in history
+            \App\Models\Transaction::create([
+                'user_id' => $pg->user_id,
+                'type' => 'growth',
+                'fund_type' => 'simulated',
+                'amount' => round($growthAmount, 2),
+                'currency' => $pg->currency ?? 'USD',
+                'status' => 'completed',
+                'description' => 'Daily growth · ' . number_format((float) $pg->growth_percentage, 2) . '% ' . ($pg->growth_frequency ?: 'weekly'),
+                'reference' => 'PG-GR-' . strtoupper(uniqid()),
+                'metadata' => [
+                    'profit_growth_id' => $pg->id,
+                    'profit_growth_name' => $pg->name,
+                    'balance_before' => round($oldBalance, 2),
+                    'balance_after' => round($newBalance, 2),
+                ],
+                'processed_at' => now(),
+            ]);
+
             // Create activity log
             ActivityLog::create([
                 'user_id' => $pg->user_id,
