@@ -98,22 +98,26 @@
             <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
             <input 
                 type="text" 
-                placeholder="Search by username, display name, or email..." 
-                class="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-sim focus:border-sim outline-none text-sm"
+                placeholder="Search by username or display name..." 
+                class="w-full pl-12 pr-12 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none text-sm"
                 id="searchInput"
+                autocomplete="off"
             >
+            <button id="clearSearch" class="hidden absolute right-3 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full text-slate-400 hover:text-slate-700 hover:bg-gray-200 transition" title="Clear search">
+                <i class="fa-solid fa-times text-xs"></i>
+            </button>
         </div>
     </div>
 
     <!-- Filters -->
     <div class="flex flex-wrap gap-3 mb-8">
-        <button class="px-4 py-2 bg-sim text-white rounded-lg text-sm font-bold transition hover:opacity-90" id="filterAll">
+        <button class="filter-btn px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-bold transition" data-filter="all" id="filterAll">
             All Users
         </button>
-        <button class="px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-gray-50 transition" id="filterAccepts">
+        <button class="filter-btn px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-gray-50 transition" data-filter="accepts" id="filterAccepts">
             Accepts Transfers
         </button>
-        <button class="px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-gray-50 transition" id="filterActive">
+        <button class="filter-btn px-4 py-2 bg-white border border-gray-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-gray-50 transition" data-filter="active" id="filterActive">
             Active Recently
         </button>
     </div>
@@ -121,7 +125,7 @@
     <!-- Results Count -->
     <div class="mb-6" id="resultsCountContainer" style="display: none;">
         <p class="text-sm text-slate-500">
-            <span id="resultsCount">0</span> users found
+            Showing <span id="resultsShown">0</span> of <span id="resultsCount">0</span> matching users
         </p>
     </div>
 
@@ -157,19 +161,40 @@
         active: document.getElementById('filterActive')
     };
 
-    // Filter button functionality
-    Object.values(filterButtons).forEach(btn => {
-        btn.addEventListener('click', function() {
-            // Remove active state from all buttons
-            Object.values(filterButtons).forEach(b => {
-                b.classList.remove('bg-sim', 'text-white');
-                b.classList.add('bg-white', 'border', 'border-gray-200', 'text-slate-600');
-            });
-            // Add active state to clicked button
-            this.classList.remove('bg-white', 'border', 'border-gray-200', 'text-slate-600');
-            this.classList.add('bg-sim', 'text-white');
+    // Filter state
+    let activeFilter = 'all';
+
+    function syncFilterButtons() {
+        Object.entries(filterButtons).forEach(([key, btn]) => {
+            if (!btn) return;
+            const isActive = key === activeFilter;
+            btn.className = 'filter-btn px-4 py-2 rounded-lg text-sm transition ' +
+                (isActive
+                    ? 'bg-emerald-600 text-white font-bold'
+                    : 'bg-white border border-gray-200 text-slate-600 font-medium hover:bg-gray-50');
+        });
+    }
+
+    Object.entries(filterButtons).forEach(([key, btn]) => {
+        btn?.addEventListener('click', () => {
+            activeFilter = key;
+            syncFilterButtons();
+            syncUrl();
+            loadUsers(currentQuery);
         });
     });
+
+    function timeAgo(iso) {
+        const then = new Date(iso).getTime();
+        if (isNaN(then)) return '';
+        const mins = Math.floor((Date.now() - then) / 60000);
+        if (mins < 1) return 'just now';
+        if (mins < 60) return mins + 'm ago';
+        const hrs = Math.floor(mins / 60);
+        if (hrs < 24) return hrs + 'h ago';
+        const days = Math.floor(hrs / 24);
+        return days + 'd ago';
+    }
 
     // Get initials helper
     function getInitials(name) {
@@ -218,10 +243,14 @@
             }
             const hasAvatar = imageUrl && imageUrl.trim() !== '';
             
+            const frozen = !!user.is_frozen;
+            const memberSince = user.created_at ? new Date(user.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : null;
+            const lastActive = user.last_active_at ? timeAgo(user.last_active_at) : null;
+
             return `
-                <div class="bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-lg transition">
+                <div class="bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-lg hover:border-emerald-200 transition">
                     <div class="flex items-start gap-4 mb-4">
-                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-xl shrink-0 relative overflow-hidden">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white font-bold text-xl shrink-0 relative overflow-hidden">
                             ${hasAvatar ? `<img src="${imageUrl}" alt="${displayName}" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />` : ''}
                             <span class="${hasAvatar ? 'hidden' : ''}">${initials}</span>
                         </div>
@@ -235,16 +264,19 @@
                         ${bio}
                     </p>
                     
-                    <div class="flex items-center gap-2 mb-4">
-                        <i class="fa-solid fa-check-circle text-green-500 text-sm"></i>
-                        <span class="text-xs font-medium text-green-600">Accepts fund transfers</span>
+                    <div class="flex flex-wrap items-center gap-3 mb-4 text-[11px]">
+                        ${frozen
+                            ? `<span class="flex items-center gap-1.5 text-red-600 font-semibold"><i class="fa-solid fa-lock"></i> Frozen</span>`
+                            : `<span class="flex items-center gap-1.5 text-emerald-600 font-semibold"><i class="fa-solid fa-check-circle"></i> Accepts transfers</span>`}
+                        ${memberSince ? `<span class="text-slate-400"><i class="fa-regular fa-calendar mr-1"></i>Since ${memberSince}</span>` : ''}
+                        ${lastActive ? `<span class="text-slate-400"><i class="fa-regular fa-clock mr-1"></i>${lastActive}</span>` : ''}
                     </div>
-                    
+
                     <div class="grid grid-cols-2 gap-2">
-                        <button onclick="viewPortfolio(${user.id})" class="py-2 rounded-lg border-2 border-blue-500 text-blue-600 text-xs font-bold hover:bg-blue-50 transition flex items-center justify-center gap-1">
+                        <button onclick="viewPortfolio(${user.id})" class="py-2 rounded-lg border-2 border-slate-200 text-slate-700 text-xs font-bold hover:border-emerald-500 hover:text-emerald-700 transition flex items-center justify-center gap-1">
                             <i class="fa-solid fa-chart-line"></i> View Portfolio
                         </button>
-                        <button onclick="sendFundsToUser(${user.id})" class="py-2 rounded-lg bg-sim text-white text-xs font-bold hover:opacity-90 transition flex items-center justify-center gap-1">
+                        <button onclick="sendFundsToUser(${user.id})" class="py-2 rounded-lg bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition flex items-center justify-center gap-1">
                             <i class="fa-solid fa-paper-plane"></i> Send Funds
                         </button>
                     </div>
@@ -273,41 +305,40 @@
     let searchTimeout;
     const resultsCountContainer = document.getElementById('resultsCountContainer');
     
-    // Load users function
-    async function loadUsers(query = '', page = 1, append = false) {
+    // Load users: always returns a randomised sample of at most 12
+    async function loadUsers(query = '') {
         if (isLoading) return;
         isLoading = true;
-        
-        // Show loading state
-        resultsGrid.innerHTML = `
-            <div class="col-span-full text-center py-12 text-slate-500">
-                <i class="fa-solid fa-spinner fa-spin text-4xl mb-4"></i>
-                <p>Loading users...</p>
+
+        // Skeleton placeholders
+        resultsGrid.innerHTML = Array.from({ length: 6 }).map(() => `
+            <div class="bg-white rounded-2xl border border-gray-200 p-6 animate-pulse">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="w-16 h-16 rounded-full bg-gray-200"></div>
+                    <div class="flex-1 space-y-2">
+                        <div class="h-3 bg-gray-200 rounded w-2/3"></div>
+                        <div class="h-3 bg-gray-100 rounded w-1/2"></div>
+                    </div>
+                </div>
+                <div class="h-3 bg-gray-100 rounded w-full mb-2"></div>
+                <div class="h-3 bg-gray-100 rounded w-3/4 mb-4"></div>
+                <div class="h-9 bg-gray-100 rounded"></div>
             </div>
-        `;
+        `).join('');
         resultsCountContainer.style.display = 'none';
-        
+
         try {
-            const params = { per_page: 12, page: 1 }; // Always show 12 users, no pagination
-            
-            const data = await API.user.searchUsers(query, params);
-            
-            const users = data.users || [];
-            const pagination = data.pagination || {};
-            
-            // Limit to first 12 users (in case API returns more)
-            const displayUsers = users.slice(0, 12);
-            
-            // Replace all users (no pagination)
-            renderUsers(displayUsers, pagination.total);
-            
-            // Update results count
-            if (pagination.total !== undefined) {
-                resultsCount.textContent = pagination.total;
-                resultsCountContainer.style.display = 'block';
-            }
-            
-            
+            const data = await API.user.searchUsers(query, { per_page: 12, filter: activeFilter });
+
+            const users = (data.users || []).slice(0, 12);
+            const total = Number(data.total || users.length);
+
+            renderUsers(users, total);
+
+            resultsCount.textContent = total;
+            resultsCountContainer.style.display = 'block';
+            const shownEl = document.getElementById('resultsShown');
+            if (shownEl) shownEl.textContent = users.length;
         } catch (error) {
             console.error('Load users error:', error);
             resultsGrid.innerHTML = `
@@ -322,75 +353,51 @@
             isLoading = false;
         }
     }
-    
-    // Create user card HTML
-    function createUserCard(user) {
-        const initials = getInitials(user.display_name || user.name || user.username || user.email || 'U');
-        const displayName = user.display_name || user.name || user.username || 'Unknown';
-        const username = user.username ? `@${user.username}` : user.email || '';
-        const bio = user.bio || '(No bio available)';
-        const avatarUrl = user.avatar_url || '';
-        
-        let imageUrl = '';
-        if (avatarUrl) {
-            if (avatarUrl.startsWith('/storage/')) {
-                imageUrl = avatarUrl;
-            } else if (!avatarUrl.startsWith('http://') && !avatarUrl.startsWith('https://')) {
-                imageUrl = '/' + avatarUrl.replace(/^\//, '');
-            } else {
-                imageUrl = avatarUrl;
-            }
-        }
-        const hasAvatar = imageUrl && imageUrl.trim() !== '';
-        
-        return `
-            <div class="bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-lg transition">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-xl shrink-0 relative overflow-hidden">
-                        ${hasAvatar ? `<img src="${imageUrl}" alt="${displayName}" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />` : ''}
-                        <span class="${hasAvatar ? 'hidden' : ''}">${initials}</span>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <h3 class="text-lg font-bold text-slate-800 truncate">${username}</h3>
-                        <p class="text-sm text-slate-600 truncate">${displayName}</p>
-                    </div>
-                </div>
-                
-                <p class="text-sm ${bio === '(No bio available)' ? 'text-slate-400 italic' : 'text-slate-600'} mb-4 line-clamp-2">
-                    ${bio}
-                </p>
-                
-                <div class="flex items-center gap-2 mb-4">
-                    <i class="fa-solid fa-check-circle text-green-500 text-sm"></i>
-                    <span class="text-xs font-medium text-green-600">Accepts fund transfers</span>
-                </div>
-                
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="viewPortfolio(${user.id})" class="py-2 rounded-lg border-2 border-blue-500 text-blue-600 text-xs font-bold hover:bg-blue-50 transition flex items-center justify-center gap-1">
-                        <i class="fa-solid fa-chart-line"></i> View Portfolio
-                    </button>
-                    <button onclick="sendFundsToUser(${user.id})" class="py-2 rounded-lg bg-sim text-white text-xs font-bold hover:opacity-90 transition flex items-center justify-center gap-1">
-                        <i class="fa-solid fa-paper-plane"></i> Send Funds
-                    </button>
-                </div>
-            </div>
-        `;
-    }
-    
-    searchInput.addEventListener('input', async function() {
-        clearTimeout(searchTimeout);
-        const query = this.value.trim();
-        currentQuery = query;
-        
-        if (query.length < 2) {
-            // Load random 12 users when search is cleared
-            await loadUsers('', 1, false);
-            return;
-        }
 
-        searchTimeout = setTimeout(async () => {
-            await loadUsers(query, 1, false);
+    const clearSearchBtn = document.getElementById('clearSearch');
+
+    function applyUrlState() {
+        const params = new URLSearchParams(location.search);
+        const q = params.get('q') || '';
+        const f = params.get('filter') || 'all';
+        if (['all', 'accepts', 'active'].includes(f)) activeFilter = f;
+        currentQuery = q;
+        if (searchInput) searchInput.value = q;
+        toggleClearButton();
+        syncFilterButtons();
+    }
+
+    function syncUrl() {
+        const params = new URLSearchParams();
+        if (currentQuery) params.set('q', currentQuery);
+        if (activeFilter !== 'all') params.set('filter', activeFilter);
+        const qs = params.toString();
+        history.replaceState(null, '', qs ? '?' + qs : location.pathname);
+    }
+
+    function toggleClearButton() {
+        if (!clearSearchBtn) return;
+        clearSearchBtn.classList.toggle('hidden', searchInput.value.trim() === '');
+    }
+
+    searchInput.addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        currentQuery = this.value.trim();
+        toggleClearButton();
+
+        searchTimeout = setTimeout(() => {
+            syncUrl();
+            loadUsers(currentQuery);
         }, 300);
+    });
+
+    clearSearchBtn?.addEventListener('click', () => {
+        searchInput.value = '';
+        currentQuery = '';
+        toggleClearButton();
+        syncUrl();
+        loadUsers('');
+        searchInput.focus();
     });
 
     // Notification Dropdown Functions
@@ -492,12 +499,14 @@
             document.addEventListener('DOMContentLoaded', async function() {
                 // Wait for API to be available
                 await new Promise(resolve => setTimeout(resolve, 200));
-                await loadUsers('', 1, false);
+                applyUrlState();
+                await loadUsers(currentQuery);
             });
         } else {
             // DOM already loaded, wait for scripts
             await new Promise(resolve => setTimeout(resolve, 300));
-            await loadUsers('', 1, false);
+            applyUrlState();
+            await loadUsers(currentQuery);
         }
     })();
 </script>

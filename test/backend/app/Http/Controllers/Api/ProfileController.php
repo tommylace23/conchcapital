@@ -178,48 +178,48 @@ class ProfileController extends Controller
     public function searchUsers(Request $request)
     {
         $validated = $request->validate([
-            'q' => 'nullable|string|min:1|max:255',
-            'page' => 'nullable|integer|min:1',
+            'q' => 'nullable|string|max:255',
+            'filter' => 'nullable|in:all,accepts,active',
             'per_page' => 'nullable|integer|min:1|max:100',
         ]);
 
         $query = $validated['q'] ?? null;
-        $perPage = $validated['per_page'] ?? 12; // Default 12 users
-        $page = $validated['page'] ?? 1;
-        
-        $usersQuery = User::where('id', '!=', $request->user()->id); // Don't show current user
-        
-        // If query provided, search
+        $filter = $validated['filter'] ?? 'all';
+
+        // Results are intentionally capped and randomised: clients browse a
+        // sample of the directory rather than the whole user base.
+        $perPage = min((int) ($validated['per_page'] ?? 12), 12);
+
+        $usersQuery = User::where('id', '!=', $request->user()->id);
+
         if ($query) {
             $usersQuery->where(function ($q) use ($query) {
                 $q->where('username', 'like', "%{$query}%")
-                  ->orWhere('email', 'like', "%{$query}%")
                   ->orWhere('name', 'like', "%{$query}%")
                   ->orWhere('display_name', 'like', "%{$query}%");
             });
-            // For search results, order by relevance (most recently active first)
-            $usersQuery->orderBy('last_active_at', 'desc')
-                       ->orderBy('created_at', 'desc');
-        } else {
-            // For default listing (no search), randomize results for better UX
-            // This ensures different users/families show up on each visit
-            $usersQuery->inRandomOrder();
         }
-        
-        // Paginate results
-        $users = $usersQuery->select(['id', 'username', 'email', 'name', 'display_name', 'avatar_url', 'bio', 'created_at', 'last_active_at'])
-            ->paginate($perPage, ['*'], 'page', $page);
+
+        if ($filter === 'accepts') {
+            $usersQuery->where('is_frozen', false);
+        }
+
+        if ($filter === 'active') {
+            $usersQuery->where('last_active_at', '>=', now()->subDays(30));
+        }
+
+        $total = (clone $usersQuery)->count();
+
+        $users = $usersQuery
+            ->select(['id', 'username', 'name', 'display_name', 'avatar_url', 'bio', 'is_frozen', 'created_at', 'last_active_at'])
+            ->inRandomOrder()
+            ->limit($perPage)
+            ->get();
 
         return response()->json([
-            'users' => $users->items(),
-            'pagination' => [
-                'current_page' => $users->currentPage(),
-                'last_page' => $users->lastPage(),
-                'per_page' => $users->perPage(),
-                'total' => $users->total(),
-                'from' => $users->firstItem(),
-                'to' => $users->lastItem(),
-            ],
+            'users' => $users,
+            'total' => $total,
+            'shown' => $users->count(),
         ]);
     }
 }
