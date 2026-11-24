@@ -230,14 +230,6 @@
                     id="realBalanceAmountAfter" class="font-bold">$0.00</span></p>
         </div>
 
-        <!-- FIX 7: Action buttons (Edit only) - Send to User removed (users can only send real balance) -->
-        <div
-            class="flex flex-col sm:flex-row justify-center items-center gap-3 lg:gap-4 pt-6 lg:pt-8 border-t border-gray-200">
-            <button onclick="editSimulation()"
-                class="w-full sm:w-auto px-5 lg:px-6 py-2.5 lg:py-3 border-2 border-sim text-sim rounded-xl text-sm lg:text-base font-bold hover:bg-sim hover:text-white transition">
-                Edit
-            </button>
-        </div>
 
     </main>
 </body>
@@ -432,13 +424,6 @@
         set('chartStartLabel', fmt(started));
         set('chartMidLabel', fmt(mid));
         set('chartEndLabel', fmt(now));
-    }
-
-    // Edit simulation
-    function editSimulation() {
-        if (simulationId) {
-            window.location.href = `/EDIT_SIMULATION_PAGE.html?simulation_id=${simulationId}`;
-        }
     }
 
     // Delete simulation - REMOVED: Only admins can delete profit growths

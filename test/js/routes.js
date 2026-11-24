@@ -14,12 +14,10 @@ const AppRoutes = {
     // Profit Growths (new)
     profitGrowths: 'simu-list-page.html',
     profitGrowthDetail: 'simu-detail-page.html',
-    profitGrowthEdit: 'EDIT_SIMULATION_PAGE.html',
     profitGrowthCreate: 'simu.html',
     // Simulations (legacy - kept for backward compatibility)
     simulations: 'simu-list-page.html',
     simulationDetail: 'simu-detail-page.html',
-    simulationEdit: 'EDIT_SIMULATION_PAGE.html',
     simulationCreate: 'simu.html',
     transactions: 'transaction-history.html',
     deposits: 'deposit.html',
