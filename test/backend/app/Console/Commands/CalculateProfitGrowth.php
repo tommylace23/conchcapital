@@ -47,17 +47,18 @@ class CalculateProfitGrowth extends Command
         foreach ($profitGrowths as $pg) {
             $oldBalance = $pg->current_balance;
             
-            // Check if this is weekly frequency with 20% growth (2.8% daily growth)
+            // Standard weekly growth is applied daily
             // This applies to ALL funds regardless of whether they were transferred by user or admin
-            $isWeekly20Percent = $pg->growth_frequency === 'weekly' && $pg->growth_percentage == 20.0;
+            $weeklyRate = (float) config('growth.weekly_percent', 5.0);
+            $isWeeklyDefault = $pg->growth_frequency === 'weekly' && abs((float) $pg->growth_percentage - $weeklyRate) < 0.01;
             
             // Check if funds are still locked (for user transfers)
             $isLocked = $pg->lock_until_date && now()->lt($pg->lock_until_date);
             
-            if ($isWeekly20Percent) {
-                // For 20% weekly growth: calculate 2.8% daily on ALL funds (current_balance)
+            if ($isWeeklyDefault) {
+                // Standard weekly growth: apply the daily rate to ALL funds (current_balance)
                 // This applies to both user transfers and admin deposits
-                $dailyGrowthPercentage = 20.0 / 7; // 2.857% per day
+                $dailyGrowthPercentage = $weeklyRate / 7; // daily rate derived from the weekly setting
                 
                 // Calculate growth on full current balance (all funds grow daily)
                 $growthAmount = $oldBalance * ($dailyGrowthPercentage / 100);

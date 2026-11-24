@@ -436,7 +436,7 @@ const API = {
 
         async transferFundsToProfitGrowth(id, amount, options = {}) {
             // If no ID provided, use the new endpoint that auto-creates profit growth
-            // Users cannot set percentage/frequency - defaults to 20% weekly (admin can change)
+            // Users cannot set percentage/frequency - defaults to 5% weekly (admin can change)
             if (!id || id === '') {
                 return API.post('/api/user/profit-growths/transfer-funds', {
                     amount: amount,

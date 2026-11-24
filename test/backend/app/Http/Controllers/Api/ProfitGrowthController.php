@@ -281,7 +281,7 @@ class ProfitGrowthController extends Controller
             'amount' => 'required|numeric|min:0.01|max:999999999.99',
             'name' => 'nullable|string|max:255',
             // growth_percentage and growth_frequency removed - users cannot set these
-            // Defaults to 20% weekly, admin can change via admin panel
+            // Defaults to 5% weekly, admin can change via admin panel
         ]);
 
         return DB::transaction(function () use ($user, $validated) {
@@ -304,9 +304,9 @@ class ProfitGrowthController extends Controller
                 $profitGrowth = $existingProfitGrowth;
             } else {
                 // Create a new profit growth with default settings
-                // Users cannot set percentage/frequency - defaults to 20% weekly
+                // Users cannot set percentage/frequency - defaults to 5% weekly
                 $name = $validated['name'] ?? 'My Profit Growth Account';
-                $growthPercentage = 20.0; // Default 20% (admin can change this)
+                $growthPercentage = (float) config('growth.weekly_percent', 5.0);
                 $growthFrequency = 'weekly'; // Default weekly (admin can change this)
 
                 $nextCalculation = $this->calculateNextGrowthDate($growthFrequency);

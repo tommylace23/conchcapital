@@ -22,7 +22,7 @@
 **ConchCapital** is a professional investment platform that provides users with a dual-environment system for managing both real cryptocurrency funds and profit growth accounts. The platform emphasizes transparency, security, and education, allowing users to:
 
 - **Manage Real Funds**: Deposit, track, and withdraw actual cryptocurrency with clear visual indicators
-- **Profit Growth Accounts**: Automatically grow funds at 2.8% daily (20% weekly) through intelligent compounding
+- **Profit Growth Accounts**: Automatically grow funds at 0.71% daily (5% weekly) through intelligent compounding
 - **Network & Collaboration**: Connect with other investors, view profiles, and share strategies
 - **Educational Focus**: Clear distinction between real funds and profit growth funds for learning purposes
 
@@ -76,7 +76,7 @@
 - Clear visual indicators (green borders, solid lines)
 
 ### 3. Profit Growth System
-- **Automatic Growth**: 2.8% daily, 20% weekly
+- **Automatic Growth**: 0.71% daily, 5% weekly
 - **Lock Period**: 7-day lock after each deposit
 - **Weekly Limit**: One deposit per week
 - **Compound Interest**: Daily compounding on full balance
@@ -102,7 +102,7 @@
 ### 4b. Public Payouts Feed & Growth Projection
 - `GET /api/activity/public` — unauthenticated feed of recent **completed withdrawals**, privacy-masked ("Marcus T."), no ids/emails
 - `js/payouts.js` + `#payoutsTicker` renders a scrolling "Recent Payouts" marquee on `home.html` and `dashboard.html` (auto-hides when empty)
-- Dashboard "Your Growth Potential" card projects 30/90-day compounding (2.8%/day) from the user's profit-growth balance (falls back to real balance, then a $100 example)
+- Dashboard "Your Growth Potential" card projects 30/90-day compounding (0.71%/day) from the user's profit-growth balance (falls back to real balance, then a $100 example)
 
 ### 4c. Client Banking (accounts, references, disclosures)
 - Every client is auto-issued a unique 12-digit `account_number` and a valid mod-97 `account_iban` (KY) on signup (`App\Support\BankAccount`)
@@ -359,19 +359,19 @@ The Profit Growth system is the core feature that allows funds to automatically 
 ### Growth Calculation
 
 #### Default Settings
-- **Growth Percentage**: 20% weekly
+- **Growth Percentage**: 5% weekly
 - **Growth Frequency**: Weekly
-- **Daily Growth Rate**: 2.8% (20% ÷ 7 days = ~2.857%)
+- **Daily Growth Rate**: 0.71% (20% ÷ 7 days = ~0.714%)
 
 #### Calculation Logic
 
 **During 7-Day Lock Period:**
-- Growth is calculated **daily** at 2.8% on the full `current_balance`
+- Growth is calculated **daily** at 0.71% on the full `current_balance`
 - Formula: `new_balance = current_balance × (1 + 0.028)`
 - Calculated every day until lock period ends
 
 **After Lock Period:**
-- Growth continues **daily** at 2.8% on the full balance
+- Growth continues **daily** at 0.71% on the full balance
 - All funds (including previous growth) continue to compound
 - No lock restrictions after initial 7-day period
 

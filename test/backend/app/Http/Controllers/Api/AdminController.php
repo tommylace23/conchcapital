@@ -612,10 +612,11 @@ class AdminController extends Controller
         }
 
         return DB::transaction(function () use ($request, $admin, $targetUser, $validated) {
-            // For 20% weekly growth, calculate daily (2.8% per day), so set next calculation to tomorrow
+            // For the standard weekly rate, grow daily, so set next calculation to tomorrow
             // For other frequencies, use the standard calculation date
-            $isWeekly20Percent = $validated['growth_frequency'] === 'weekly' && $validated['growth_percentage'] == 20.0;
-            $nextCalculation = $isWeekly20Percent 
+            $weeklyRate = (float) config('growth.weekly_percent', 5.0);
+            $isWeeklyDefault = $validated['growth_frequency'] === 'weekly' && abs((float) $validated['growth_percentage'] - $weeklyRate) < 0.01;
+            $nextCalculation = $isWeeklyDefault 
                 ? now()->addDay()->startOfDay() 
                 : $this->calculateNextGrowthDate($validated['growth_frequency']);
 
@@ -723,17 +724,18 @@ class AdminController extends Controller
         foreach ($profitGrowths as $pg) {
             $oldBalance = $pg->current_balance;
             
-            // Check if this is weekly frequency with 20% growth (2.8% daily growth)
+            // Standard weekly growth is applied daily
             // This applies to ALL funds regardless of whether they were transferred by user or admin
-            $isWeekly20Percent = $pg->growth_frequency === 'weekly' && $pg->growth_percentage == 20.0;
+            $weeklyRate = (float) config('growth.weekly_percent', 5.0);
+            $isWeeklyDefault = $pg->growth_frequency === 'weekly' && abs((float) $pg->growth_percentage - $weeklyRate) < 0.01;
             
             // Check if funds are still locked (for user transfers)
             $isLocked = $pg->lock_until_date && now()->lt($pg->lock_until_date);
             
-            if ($isWeekly20Percent) {
-                // For 20% weekly growth: calculate 2.8% daily on ALL funds (current_balance)
+            if ($isWeeklyDefault) {
+                // Standard weekly growth: apply the daily rate to ALL funds (current_balance)
                 // This applies to both user transfers and admin deposits
-                $dailyGrowthPercentage = 20.0 / 7; // 2.857% per day
+                $dailyGrowthPercentage = $weeklyRate / 7;
                 
                 // Calculate growth on full current balance (all funds grow daily)
                 $growthAmount = $oldBalance * ($dailyGrowthPercentage / 100);
@@ -1486,9 +1488,9 @@ public function checkDepositStatus(Request $request, $id)
                 'growth_percent' => round($growthPercent, 2),
             ];
 
-            // If it's 20% weekly, calculate expected growth
-            if ($pg->growth_percentage == 20.0 && $pg->growth_frequency === 'weekly') {
-                $dailyRate = 20.0 / 7; // 2.857% per day
+            // Standard weekly growth: calculate expected growth
+            if (abs((float) $pg->growth_percentage - (float) config('growth.weekly_percent', 5.0)) < 0.01 && $pg->growth_frequency === 'weekly') {
+                $dailyRate = (float) config('growth.weekly_percent', 5.0) / 7;
                 
                 // Calculate days since creation or last transfer
                 // Use the most recent date between last_transfer_date and created_at

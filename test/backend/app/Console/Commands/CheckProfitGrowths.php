@@ -58,19 +58,19 @@ class CheckProfitGrowths extends Command
                 $this->line("  {$status}: " . $pgs->count() . " profit growth(s)");
             }
 
-            // Check if all active/paused are 20% weekly
+            // Check if all active/paused are 5% weekly
             $this->newLine();
             $this->info('=== VERIFICATION ===');
             $activePaused = $profitGrowths->whereIn('status', ['active', 'paused']);
-            $not20Weekly = $activePaused->filter(function($pg) {
-                return $pg->growth_percentage != 20.0 || $pg->growth_frequency != 'weekly';
+            $notStandardWeekly = $activePaused->filter(function($pg) {
+                return abs((float) $pg->growth_percentage - (float) config('growth.weekly_percent', 5.0)) > 0.01 || $pg->growth_frequency != 'weekly';
             });
 
-            if ($not20Weekly->count() == 0) {
-                $this->info('✅ All active/paused profit growths are set to 20% weekly');
+            if ($notStandardWeekly->count() == 0) {
+                $this->info('✅ All active/paused profit growths are set to 5% weekly');
             } else {
-                $this->warn('⚠️  Found ' . $not20Weekly->count() . ' active/paused profit growth(s) NOT set to 20% weekly:');
-                foreach ($not20Weekly as $pg) {
+                $this->warn('⚠️  Found ' . $notStandardWeekly->count() . ' active/paused profit growth(s) NOT set to 5% weekly:');
+                foreach ($notStandardWeekly as $pg) {
                     $this->line("   - ID {$pg->id} (User {$pg->user_id}): {$pg->growth_percentage}% {$pg->growth_frequency}");
                 }
             }
@@ -78,8 +78,8 @@ class CheckProfitGrowths extends Command
             // Check calculation logic
             $this->newLine();
             $this->info('=== CALCULATION LOGIC VERIFICATION ===');
-            $this->line('For 20% weekly growth during 7-day lock period:');
-            $this->line('  - Daily growth percentage: ' . number_format(20.0 / 7, 3) . '% (≈2.857%)');
+            $this->line('For 5% weekly growth during 7-day lock period:');
+            $this->line('  - Daily growth percentage: ' . number_format(config('growth.weekly_percent', 5.0) / 7, 3) . '%');
             $this->line('  - This is calculated incrementally each day during the lock period');
             $this->line('  - After lock period ends, growth switches to weekly frequency');
         } else {

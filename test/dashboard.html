@@ -459,7 +459,7 @@
                         <h3 class="text-base lg:text-lg font-bold text-slate-800">Your Growth Potential</h3>
                         <p id="projectionBasis" class="text-xs text-slate-600 mt-1">Calculating your projection…</p>
                     </div>
-                    <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full uppercase tracking-widest self-start">2.8% daily</span>
+                    <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full uppercase tracking-widest self-start">0.71% daily</span>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3 mt-4">
@@ -473,7 +473,7 @@
                     </div>
                 </div>
 
-                <p class="text-[10px] text-slate-500 mt-3">Projection assumes daily compounding at 2.8% on your profit growth balance. Illustrative only — not a guarantee.</p>
+                <p class="text-[10px] text-slate-500 mt-3">Projection assumes daily compounding at 0.71% on your profit growth balance. Illustrative only — not a guarantee.</p>
             </div>
 
             <!-- Portfolio allocation + relationship manager -->
@@ -644,8 +644,8 @@
                         <h4 class="text-sm font-bold text-amber-900 mb-1">⚠️ Important: 7-Day Lock Period</h4>
                         <p class="text-xs text-amber-800 leading-relaxed">
                             <strong>Funds will be locked for 7 days</strong> after transfer while they grow. During this
-                            period, you cannot withdraw these funds. Growth will be calculated daily (20% weekly =
-                            ~2.857% per day). You can only make one transfer per week.
+                            period, you cannot withdraw these funds. Growth will be calculated daily (5% weekly =
+                            ~0.714% per day). You can only make one transfer per week.
                         </p>
                     </div>
                 </div>
@@ -677,7 +677,7 @@
                                 <h4 class="text-sm font-bold text-blue-900 mb-1">New Profit Growth Account</h4>
                                 <p class="text-xs text-blue-800 leading-relaxed">
                                     You don't have a profit growth account yet. A new account will be created
-                                    automatically when you transfer funds with default settings (20% weekly growth).
+                                    automatically when you transfer funds with default settings (5% weekly growth).
                                 </p>
                             </div>
                         </div>
@@ -735,7 +735,7 @@
                 <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
                     <p class="text-xs text-blue-800">
                         <i class="fa-solid fa-info-circle mr-1"></i>
-                        <strong>Note:</strong> Funds will be locked for 7 days and will grow at 20% weekly. You can only
+                        <strong>Note:</strong> Funds will be locked for 7 days and will grow at 5% weekly. You can only
                         transfer once per week.
                     </p>
                 </div>
@@ -1972,7 +1972,7 @@
             const basisEl = document.getElementById('projectionBasis');
             if (!basisEl) return;
 
-            const DAILY_RATE = 20.0 / 7 / 100; // 2.857% per day
+            const DAILY_RATE = 5.0 / 7 / 100; // 0.714% per day derived from 5% weekly
 
             function fmt(n) {
                 return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });

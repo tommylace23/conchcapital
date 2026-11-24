@@ -149,10 +149,10 @@ class ProfileController extends Controller
         if ($profitGrowths->count() > 0) {
             // Get the maximum growth percentage from existing profit growths
             $maxPercentage = $profitGrowths->max('growth_percentage');
-            $bestGrowth = $maxPercentage && $maxPercentage > 0 ? $maxPercentage : 20.0; // Default to 20% if null/0
+            $bestGrowth = $maxPercentage && $maxPercentage > 0 ? $maxPercentage : (float) config('growth.weekly_percent', 5.0);
         } else {
             // No profit growths exist, use default 20%
-            $bestGrowth = 20.0;
+            $bestGrowth = (float) config('growth.weekly_percent', 5.0);
         }
 
         // Get recent activity (last 10 transactions)
