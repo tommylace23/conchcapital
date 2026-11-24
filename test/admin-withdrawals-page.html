@@ -333,6 +333,14 @@
             const cryptoCurrency = metadata.crypto_currency || 'BTC';
             const cryptoAmount = parseFloat(metadata.crypto_amount || 0).toFixed(cryptoCurrency === 'BTC' ? 8 : cryptoCurrency === 'ETH' ? 6 : 2);
             const cryptoAddress = metadata.crypto_address || 'N/A';
+            const bank = metadata.bank || {};
+            const isBank = (metadata.method === 'bank');
+            const bankLine = isBank
+                ? `<p class="text-xs text-slate-600"><span class="font-bold">Bank:</span> ${Utils.escapeHtml(bank.bank_name || '—')}</p>
+                   <p class="text-xs text-slate-600"><span class="font-bold">Acct:</span> <span class="font-mono">${Utils.escapeHtml(bank.account_number || '—')}</span></p>
+                   <p class="text-xs text-slate-600"><span class="font-bold">Name:</span> ${Utils.escapeHtml(bank.account_name || '—')}</p>
+                   ${bank.swift ? `<p class="text-xs text-slate-500">SWIFT ${Utils.escapeHtml(bank.swift)}${bank.country ? ' · ' + Utils.escapeHtml(bank.country) : ''}</p>` : ''}`
+                : '';
             const date = new Date(withdrawal.created_at).toLocaleString();
             
             return `
@@ -349,15 +357,17 @@
                         <p class="text-xs text-slate-500">${withdrawal.currency || 'USD'}</p>
                     </td>
                     <td class="px-4 py-4">
-                        <p class="font-bold text-slate-900">${cryptoAmount} ${cryptoCurrency}</p>
+                        ${isBank
+                            ? `<span class="bg-slate-100 text-slate-700 text-[10px] font-bold px-2 py-1 rounded-full uppercase">Bank</span>`
+                            : `<p class="font-bold text-slate-900">${cryptoAmount} ${cryptoCurrency}</p>`}
                     </td>
                     <td class="px-4 py-4">
-                        <div class="flex items-center gap-2">
+                        ${isBank ? bankLine.replace(/<p/g, '<p style="line-height:1.35"') : `<div class="flex items-center gap-2">
                             <p class="font-mono text-xs text-slate-600 max-w-[200px] truncate" title="${cryptoAddress}">${cryptoAddress}</p>
                             <button onclick="copyAddress('${cryptoAddress}')" class="text-slate-400 hover:text-slate-600">
                                 <i class="fa-solid fa-copy text-xs"></i>
                             </button>
-                        </div>
+                        </div>`}
                     </td>
                     <td class="px-4 py-4">
                         <span class="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-1 rounded-full">Pending</span>

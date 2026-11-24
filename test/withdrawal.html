@@ -63,7 +63,25 @@
 
         <div class="bg-white rounded-xl lg:rounded-2xl border border-gray-200 shadow-sm p-4 lg:p-8 space-y-6 lg:space-y-8">
             
-            <!-- Crypto Currency Selection -->
+            <!-- Withdrawal Method -->
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 lg:mb-4">Withdraw To</label>
+                <div class="grid grid-cols-2 gap-3">
+                    <button type="button" id="methodBank" class="method-btn p-3 lg:p-4 rounded-xl border-2 border-[#10B981] bg-green-50 text-left transition">
+                        <i class="fa-solid fa-building-columns text-lg text-[#10B981] mb-1"></i>
+                        <p class="text-sm font-bold text-gray-900">Bank Account</p>
+                        <p class="text-xs text-gray-500">Paid in USD</p>
+                    </button>
+                    <button type="button" id="methodCrypto" class="method-btn p-3 lg:p-4 rounded-xl border-2 border-gray-200 hover:bg-gray-50 text-left transition">
+                        <i class="fa-brands fa-bitcoin text-lg text-[#F7931A] mb-1"></i>
+                        <p class="text-sm font-bold text-gray-900">Crypto</p>
+                        <p class="text-xs text-gray-500">BTC, ETH or USDT</p>
+                    </button>
+                </div>
+            </div>
+
+            <div id="cryptoBlock" class="hidden space-y-6 lg:space-y-8">
+                        <!-- Crypto Currency Selection -->
             <div>
                 <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 lg:mb-4">Select Currency</label>
                 <div class="grid grid-cols-3 gap-2 lg:gap-4">
@@ -94,6 +112,34 @@
                     </button>
                 </div>
                 <p class="mt-2 text-xs text-gray-400">Make sure this address is correct. Withdrawals cannot be reversed.</p>
+            </div>
+            </div>
+
+            <!-- Bank account details -->
+            <div id="bankBlock" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Account Name</label>
+                        <input type="text" id="bankAccountName" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-real outline-none text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Account Number</label>
+                        <input type="text" id="bankAccountNumber" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-real outline-none text-sm mono">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Bank Name</label>
+                        <input type="text" id="bankName" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-real outline-none text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">SWIFT / BIC</label>
+                        <input type="text" id="bankSwift" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-real outline-none text-sm mono uppercase">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Country</label>
+                        <input type="text" id="bankCountry" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-real outline-none text-sm">
+                    </div>
+                </div>
+                <p class="text-xs text-gray-400">Bank withdrawals settle in USD. Ensure the account details match the account holder's name.</p>
             </div>
         
             <!-- Withdrawal Amount -->
@@ -193,6 +239,30 @@
 <script>
     let availableBalance = 0;
     let selectedCurrency = 'BTC';
+    let withdrawalMethod = 'bank';
+
+    function setWithdrawalMethod(method) {
+        withdrawalMethod = method;
+        const bankBtn = document.getElementById('methodBank');
+        const cryptoBtn = document.getElementById('methodCrypto');
+        const bankBlock = document.getElementById('bankBlock');
+        const cryptoBlock = document.getElementById('cryptoBlock');
+
+        const active = 'method-btn p-3 lg:p-4 rounded-xl border-2 border-[#10B981] bg-green-50 text-left transition';
+        const idle = 'method-btn p-3 lg:p-4 rounded-xl border-2 border-gray-200 hover:bg-gray-50 text-left transition';
+
+        if (method === 'bank') {
+            bankBtn.className = active; cryptoBtn.className = idle;
+            bankBlock.classList.remove('hidden'); cryptoBlock.classList.add('hidden');
+        } else {
+            cryptoBtn.className = active; bankBtn.className = idle;
+            cryptoBlock.classList.remove('hidden'); bankBlock.classList.add('hidden');
+        }
+    }
+
+    document.getElementById('methodBank')?.addEventListener('click', () => setWithdrawalMethod('bank'));
+    document.getElementById('methodCrypto')?.addEventListener('click', () => setWithdrawalMethod('crypto'));
+    document.addEventListener('DOMContentLoaded', () => setWithdrawalMethod('bank'));
     let exchangeRates = {
         'BTC': 70000.00,
         'USDT': 1.00,
@@ -293,23 +363,36 @@
             return;
         }
 
-        if (!address) {
-            Utils?.showToast?.('Please enter a withdrawal address', 'error');
-            return;
-        }
+        const bank = {
+            account_name: document.getElementById('bankAccountName')?.value.trim() || '',
+            account_number: document.getElementById('bankAccountNumber')?.value.trim() || '',
+            bank_name: document.getElementById('bankName')?.value.trim() || '',
+            swift: document.getElementById('bankSwift')?.value.trim() || '',
+            country: document.getElementById('bankCountry')?.value.trim() || ''
+        };
 
-        // Basic address validation
-        if (selectedCurrency === 'BTC' && !address.match(/^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,62}$/)) {
-            Utils?.showToast?.('Please enter a valid Bitcoin address', 'error');
-            return;
-        }
-        if (selectedCurrency === 'ETH' && !address.match(/^0x[a-fA-F0-9]{40}$/)) {
-            Utils?.showToast?.('Please enter a valid Ethereum address', 'error');
-            return;
-        }
-        if (selectedCurrency === 'USDT' && !address.match(/^0x[a-fA-F0-9]{40}$/)) {
-            Utils?.showToast?.('Please enter a valid USDT address', 'error');
-            return;
+        if (withdrawalMethod === 'bank') {
+            if (!bank.account_name || !bank.account_number || !bank.bank_name) {
+                Utils?.showToast?.('Enter the account name, account number and bank name', 'error');
+                return;
+            }
+        } else {
+            if (!address) {
+                Utils?.showToast?.('Please enter a withdrawal address', 'error');
+                return;
+            }
+            if (selectedCurrency === 'BTC' && !address.match(/^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,62}$/)) {
+                Utils?.showToast?.('Please enter a valid Bitcoin address', 'error');
+                return;
+            }
+            if (selectedCurrency === 'ETH' && !address.match(/^0x[a-fA-F0-9]{40}$/)) {
+                Utils?.showToast?.('Please enter a valid Ethereum address', 'error');
+                return;
+            }
+            if (selectedCurrency === 'USDT' && !address.match(/^0x[a-fA-F0-9]{40}$/)) {
+                Utils?.showToast?.('Please enter a valid USDT address', 'error');
+                return;
+            }
         }
 
         const originalText = withdrawBtn.textContent;
@@ -325,15 +408,20 @@
             const data = {
                 amount: amount,
                 currency: 'USD',
+                method: withdrawalMethod,
                 description: descriptionInput.value || null,
-                metadata: {
+                metadata: withdrawalMethod === 'crypto' ? {
                     crypto_currency: selectedCurrency,
                     crypto_address: address,
                     crypto_amount: netCrypto,
                     transaction_fee: fee,
                     exchange_rate: rate
-                }
+                } : {}
             };
+
+            if (withdrawalMethod === 'bank') {
+                data.bank = bank;
+            }
 
             const response = await API.user.withdrawal(data);
             

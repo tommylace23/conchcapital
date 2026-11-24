@@ -74,6 +74,12 @@ class TransactionController extends Controller
             'method' => 'nullable|in:crypto,bank',
             'description' => 'nullable|string|max:500',
             'metadata' => 'nullable|array',
+            'bank' => 'nullable|array',
+            'bank.account_name' => 'nullable|string|max:120',
+            'bank.account_number' => 'nullable|string|max:40',
+            'bank.bank_name' => 'nullable|string|max:120',
+            'bank.swift' => 'nullable|string|max:20',
+            'bank.country' => 'nullable|string|max:60',
         ]);
 
         // Check if account is frozen
@@ -206,6 +212,13 @@ class TransactionController extends Controller
             'currency' => 'nullable|string|size:3',
             'description' => 'nullable|string|max:500',
             'metadata' => 'nullable|array',
+            'method' => 'nullable|in:crypto,bank',
+            'bank' => 'nullable|array',
+            'bank.account_name' => 'nullable|string|max:120',
+            'bank.account_number' => 'nullable|string|max:40',
+            'bank.bank_name' => 'nullable|string|max:120',
+            'bank.swift' => 'nullable|string|max:20',
+            'bank.country' => 'nullable|string|max:60',
         ]);
 
         // Check if account is frozen
@@ -222,7 +235,30 @@ class TransactionController extends Controller
             ], 422);
         }
 
-        return DB::transaction(function () use ($user, $validated) {
+        $method = $validated['method'] ?? 'crypto';
+
+        if ($method === 'bank') {
+            $bank = $validated['bank'] ?? [];
+            foreach (['account_name', 'account_number', 'bank_name'] as $field) {
+                if (empty($bank[$field])) {
+                    return response()->json([
+                        'message' => 'Bank transfers require the account name, account number and bank name.',
+                    ], 422);
+                }
+            }
+        } elseif (empty($validated['metadata']['crypto_address'] ?? null)) {
+            return response()->json(['message' => 'A crypto address is required.'], 422);
+        }
+
+        return DB::transaction(function () use ($user, $validated, $method) {
+            $metadata = $validated['metadata'] ?? [];
+            $metadata['method'] = $method;
+
+            if ($method === 'bank') {
+                $metadata['bank'] = $validated['bank'];
+                $metadata['channel'] = 'bank_transfer';
+            }
+
             // Create transaction
             $transaction = Transaction::create([
                 'user_id' => $user->id,
@@ -231,9 +267,9 @@ class TransactionController extends Controller
                 'amount' => $validated['amount'],
                 'currency' => $validated['currency'] ?? 'USD',
                 'status' => 'pending', // Withdrawals need approval/processing
-                'description' => $validated['description'] ?? 'Withdrawal',
+                'description' => $validated['description'] ?? ($method === 'bank' ? 'Bank transfer withdrawal' : 'Withdrawal'),
                 'reference' => 'WD-' . strtoupper(uniqid()),
-                'metadata' => $validated['metadata'] ?? [],
+                'metadata' => $metadata,
             ]);
 
             // Deduct from balance (even if pending, reserve the funds)
