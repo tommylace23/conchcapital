@@ -18,15 +18,15 @@
         }
 
         .text-sim {
-            color: #3B82F6;
+            color: #10B981;
         }
 
         .bg-sim {
-            background-color: #3B82F6;
+            background-color: #10B981;
         }
 
         .border-sim {
-            border-color: #3B82F6;
+            border-color: #10B981;
         }
 
         /* Mobile Bottom Navigation Styles */
@@ -134,52 +134,42 @@
         <!-- FIX 4: Large growth chart section -->
         <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 lg:p-8 mb-6 lg:mb-8">
             <h4 class="text-base lg:text-lg font-bold text-slate-800 mb-4 lg:mb-6">Growth Chart</h4>
-            <div
-                class="w-full h-48 lg:h-80 bg-slate-50 rounded-2xl flex items-center justify-center relative border border-dashed border-gray-200 overflow-hidden">
-                <div class="text-center">
-                    <i class="fa-solid fa-chart-line text-slate-200 text-4xl lg:text-6xl mb-2 lg:mb-4"></i>
-                    <p class="text-slate-400 text-xs lg:text-sm font-medium italic">Line chart showing growth over time
-                    </p>
-                </div>
-                <!-- Chart visualization placeholder -->
-                <svg class="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 800 320">
+            <div class="w-full h-56 lg:h-80 bg-white rounded-2xl relative overflow-hidden">
+                <svg id="growthChartSvg" class="w-full h-full" viewBox="0 0 800 320" preserveAspectRatio="none">
                     <defs>
-                        <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:0.3" />
-                            <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:0" />
+                        <linearGradient id="growthArea" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#10B981;stop-opacity:0.28" />
+                            <stop offset="100%" style="stop-color:#10B981;stop-opacity:0" />
                         </linearGradient>
                     </defs>
-                    <path d="M 50 250 Q 150 220, 250 180 T 450 120 T 650 80 T 750 50" fill="none" stroke="#3B82F6"
-                        stroke-width="3" />
-                    <path d="M 50 250 Q 150 220, 250 180 T 450 120 T 650 80 T 750 50 L 750 320 L 50 320 Z"
-                        fill="url(#gradient)" />
+                    <g id="growthGrid" stroke="#F1F5F9" stroke-width="1"></g>
+                    <path id="growthAreaPath" fill="url(#growthArea)" d=""></path>
+                    <path id="growthLinePath" fill="none" stroke="#10B981" stroke-width="3"
+                        stroke-linecap="round" stroke-linejoin="round" d=""></path>
+                    <circle id="growthEndDot" r="5" fill="#10B981" cx="0" cy="0"></circle>
                 </svg>
+                <div class="flex justify-between text-[10px] lg:text-xs text-slate-400 mt-2 px-1">
+                    <span id="chartStartLabel">—</span>
+                    <span id="chartMidLabel">—</span>
+                    <span id="chartEndLabel">—</span>
+                </div>
             </div>
         </div>
 
         <!-- FIX 5: Strategy Details as bullet list (not breakdown bars) -->
         <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 lg:p-8 mb-6 lg:mb-8">
             <h4 class="text-base lg:text-lg font-bold text-slate-800 mb-4 lg:mb-6">Strategy Details</h4>
-            <div class="space-y-2 lg:space-y-3">
-                <p class="text-xs lg:text-sm text-slate-600">• Type: Fixed Monthly Growth</p>
-                <p class="text-xs lg:text-sm text-slate-600">• Rate: 5% per month</p>
-                <p class="text-xs lg:text-sm text-slate-600">• Time Period: 1 year</p>
-                <p class="text-xs lg:text-sm text-slate-600">• Source: Manual creation</p>
+            <div id="strategyDetails" class="space-y-2 lg:space-y-3">
+                <p class="text-xs lg:text-sm text-slate-600">• Type: Compounding growth</p>
+                <p class="text-xs lg:text-sm text-slate-600">• Rate: —</p>
+                <p class="text-xs lg:text-sm text-slate-600">• Started: —</p>
+                <p class="text-xs lg:text-sm text-slate-600">• Status: —</p>
                 <!-- Optional: Show if received from user -->
                 <!-- <p class="text-xs lg:text-sm text-slate-600">• Source: Originally received from @user123</p> -->
             </div>
         </div>
 
-        <!-- FIX 6: Large disclaimer box matching wireframe exactly -->
-        <div class="bg-white rounded-2xl border-2 border-red-500 shadow-sm p-4 lg:p-8 mb-6 lg:mb-8">
-            <h4 class="font-bold text-red-700 text-xs lg:text-sm mb-2 lg:mb-3 flex items-center gap-2">
-                <i class="fa-solid fa-triangle-exclamation"></i> DISCLAIMER
-            </h4>
-            <p class="text-xs lg:text-sm text-red-800 font-semibold leading-relaxed">
-                This profit growth is hypothetical. It does not represent actual performance or a promise of future
-                results. You cannot withdraw this simulated value.
-            </p>
-        </div>
+
 
 
         <!-- Transfer Funds Section -->
@@ -353,22 +343,95 @@
             document.getElementById('timeElapsed').textContent = `Time Elapsed: ${timeText}`;
         }
 
+        // Growth chart
+        renderGrowthChart(sim, initialBalance, currentBalance);
+
         // Strategy info
         const strategyData = sim.strategy_data || {};
-        const strategyText = strategyData.strategy || 'No strategy applied';
-        document.getElementById('strategyInfo').textContent = `Strategy: ${strategyText}`;
+        const strategyText = strategyData.strategy || 'Compounding growth';
+        const strategyInfoEl = document.getElementById('strategyInfo');
+        if (strategyInfoEl) strategyInfoEl.textContent = `Strategy: ${strategyText}`;
 
-        // Description
-        if (sim.description) {
-            const strategyDetails = document.querySelector('.space-y-3');
-            if (strategyDetails) {
-                strategyDetails.innerHTML = `
-                        <p class="text-sm text-slate-600">• Description: ${sim.description}</p>
-                        <p class="text-sm text-slate-600">• Status: ${sim.status || 'active'}</p>
-                        <p class="text-sm text-slate-600">• Created: ${new Date(sim.created_at).toLocaleDateString()}</p>
-                    `;
+        // Strategy details (real values)
+        const details = document.getElementById('strategyDetails');
+        if (details) {
+            const rate = parseFloat(sim.growth_percentage || 0);
+            const freq = (sim.growth_frequency || 'weekly');
+            const started = sim.started_at ? new Date(sim.started_at) : new Date(sim.created_at || Date.now());
+            const status = (sim.status || 'active');
+            const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
+
+            details.innerHTML = `
+                <p class="text-xs lg:text-sm text-slate-600">• Type: ${freq.charAt(0).toUpperCase() + freq.slice(1)} compounding</p>
+                <p class="text-xs lg:text-sm text-slate-600">• Rate: ${rate}% per ${freq.replace('ly', '')}</p>
+                <p class="text-xs lg:text-sm text-slate-600">• Started: ${started.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                <p class="text-xs lg:text-sm text-slate-600">• Status: ${statusLabel}</p>
+            `;
+        }
+    }
+
+
+    // Render the growth curve from the account's own start/current values
+    function renderGrowthChart(sim, initial, current) {
+        const svg = document.getElementById('growthChartSvg');
+        if (!svg) return;
+
+        const W = 800, H = 320, PAD_X = 40, PAD_TOP = 30, PAD_BOTTOM = 40;
+
+        const started = sim.started_at ? new Date(sim.started_at) : new Date(sim.created_at || Date.now());
+        const now = new Date();
+        const totalMs = Math.max(now - started, 1);
+
+        // 14 evenly spaced samples between start and now
+        const points = 14;
+        const values = [];
+        for (let i = 0; i <= points; i++) {
+            const t = i / points;
+            const v = initial > 0 && current > 0
+                ? initial * Math.pow(current / initial, t)   // geometric interpolation
+                : current;
+            values.push(v);
+        }
+
+        const minV = Math.min(...values);
+        const maxV = Math.max(...values);
+        const span = (maxV - minV) || Math.max(maxV * 0.02, 1);
+        const yTop = maxV + span * 0.15;
+        const yBottom = Math.max(0, minV - span * 0.25);
+
+        const x = (i) => PAD_X + (i / points) * (W - PAD_X * 2);
+        const y = (v) => H - PAD_BOTTOM - ((v - yBottom) / (yTop - yBottom)) * (H - PAD_TOP - PAD_BOTTOM);
+
+        // grid lines
+        const grid = document.getElementById('growthGrid');
+        if (grid) {
+            grid.innerHTML = '';
+            for (let g = 1; g <= 4; g++) {
+                const gy = PAD_TOP + (g / 5) * (H - PAD_TOP - PAD_BOTTOM);
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', PAD_X); line.setAttribute('x2', W - PAD_X);
+                line.setAttribute('y1', gy);    line.setAttribute('y2', gy);
+                grid.appendChild(line);
             }
         }
+
+        // line + area
+        const d = values.map((v, i) => `${i === 0 ? 'M' : 'L'} ${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join(' ');
+        const line = document.getElementById('growthLinePath');
+        const area = document.getElementById('growthAreaPath');
+        if (line) line.setAttribute('d', d);
+        if (area) area.setAttribute('d', `${d} L ${x(points)} ${H - PAD_BOTTOM} L ${x(0)} ${H - PAD_BOTTOM} Z`);
+
+        const dot = document.getElementById('growthEndDot');
+        if (dot) { dot.setAttribute('cx', x(points)); dot.setAttribute('cy', y(values[points])); }
+
+        // axis labels
+        const fmt = (dt) => dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        const mid = new Date(started.getTime() + totalMs / 2);
+        const set = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+        set('chartStartLabel', fmt(started));
+        set('chartMidLabel', fmt(mid));
+        set('chartEndLabel', fmt(now));
     }
 
     // Edit simulation
