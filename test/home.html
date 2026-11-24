@@ -249,7 +249,7 @@
                         <div class="grid grid-cols-2 gap-4">
                             <div class="h-16 bg-slate-50 rounded-xl p-3 border border-slate-100">
                                 <span class="text-[10px] text-[#6B7280] uppercase font-bold">Daily Growth</span>
-                                <p class="text-[#10B981] font-bold">0.71%</p>
+                                <p class="text-[#10B981] font-bold">0.70%</p>
                             </div>
                             <div class="h-16 bg-slate-50 rounded-xl p-3 border border-slate-100">
                                 <span class="text-[10px] text-[#6B7280] uppercase font-bold">Real Balance</span>
@@ -542,7 +542,7 @@
                                     <span class="text-xs font-bold text-[#10B981] uppercase tracking-wider">Daily Growth</span>
                                     <i class="fa-solid fa-chart-line text-[#10B981]"></i>
                                 </div>
-                                <p class="text-3xl font-black text-[#0F172A]">0.71%</p>
+                                <p class="text-3xl font-black text-[#0F172A]">0.70%</p>
                                 <p class="text-xs text-[#6B7280] mt-1">Compounded daily on your balance</p>
                             </div>
                             <div class="bg-[#3B82F6]/5 border border-[#3B82F6]/20 rounded-2xl p-6">
@@ -719,7 +719,7 @@
                     </button>
                     <div class="faq-answer hidden px-6 pb-5">
                         <p class="text-[#6B7280] leading-relaxed">
-                            Profit growth accounts automatically earn returns through our intelligent growth calculation system. Your funds grow at a rate of <strong class="text-[#10B981]">0.71% daily</strong>, which compounds to approximately <strong class="text-[#10B981]">5% weekly</strong>. Growth is calculated automatically every day, and you can track your progress in real-time through your dashboard.
+                            Profit growth accounts automatically earn returns through our intelligent growth calculation system. Your funds grow at a rate of <strong class="text-[#10B981]">0.70% daily</strong>, which compounds to approximately <strong class="text-[#10B981]">5% weekly</strong>. Growth is calculated automatically every day, and you can track your progress in real-time through your dashboard.
                         </p>
                     </div>
                 </div>
@@ -814,10 +814,10 @@
                     </button>
                     <div class="faq-answer hidden px-6 pb-5">
                         <p class="text-[#6B7280] leading-relaxed mb-3">
-                            Growth is calculated using <strong class="text-[#10B981]">compound interest</strong> at a rate of <strong class="text-[#10B981]">0.71% per day</strong>. This means:
+                            Growth is calculated using <strong class="text-[#10B981]">compound interest</strong> at a rate of <strong class="text-[#10B981]">0.70% per day</strong>. This means:
                         </p>
                         <ul class="list-disc list-inside text-[#6B7280] space-y-2 ml-4">
-                            <li>Each day, your balance grows by 0.71%</li>
+                            <li>Each day, your balance grows by 0.70%</li>
                             <li>The growth compounds daily (you earn growth on your previous day's balance plus growth)</li>
                             <li>After 7 days, this compounds to approximately 5% total growth</li>
                             <li>Calculations happen automatically every day</li>
@@ -839,7 +839,7 @@
                             When you transfer funds to a profit growth account, they are locked for 7 days. During this period:
                         </p>
                         <ul class="list-disc list-inside text-[#6B7280] space-y-2 ml-4">
-                            <li>Your funds earn daily growth at 0.71% per day</li>
+                            <li>Your funds earn daily growth at 0.70% per day</li>
                             <li>You cannot withdraw the locked funds until the period ends</li>
                             <li>You can still view your balance and see it growing in real-time</li>
                             <li>After 7 days, the lock automatically releases and funds become available for withdrawal</li>
@@ -884,7 +884,7 @@
                     </button>
                     <div class="faq-answer hidden px-6 pb-5">
                         <p class="text-[#6B7280] leading-relaxed mb-3">
-                            Profit growth accounts are designed to grow your funds through automatic calculations. The growth rate is fixed at 0.71% daily (5% weekly), and calculations are transparent and automated.
+                            Profit growth accounts are designed to grow your funds through automatic calculations. The growth rate is fixed at 0.70% daily (5% weekly), and calculations are transparent and automated.
                         </p>
                         <p class="text-[#6B7280] leading-relaxed">
                             However, as with any investment platform, it's important to understand that all investments carry inherent risks. You should only invest funds that you can afford to use for growth purposes. Always do your own research and invest responsibly.
@@ -927,7 +927,7 @@
                         </p>
                         <ul class="list-disc list-inside text-[#6B7280] space-y-2 ml-4">
                             <li>Your funds are automatically unlocked</li>
-                            <li>Growth continues at 0.71% daily on your full balance (including all previous growth)</li>
+                            <li>Growth continues at 0.70% daily on your full balance (including all previous growth)</li>
                             <li>You can withdraw funds from your profit growth account back to your Real Wallet</li>
                             <li>You can make another deposit (subject to the weekly limit)</li>
                             <li>All future growth compounds on your total balance</li>
@@ -1226,8 +1226,8 @@
             const depositInput = document.getElementById('depositAmount');
             if (!depositInput) return;
 
-            // Calculate growth based on 0.71% daily (5% weekly)
-            const DAILY_GROWTH_RATE = 5.0 / 7 / 100; // 0.714% daily (5% weekly)
+            // Calculate growth based on 0.70% daily (5% weekly)
+            const DAILY_GROWTH_RATE = Math.pow(1 + 0.05, 1 / 7) - 1; // 0.699% daily compounding to exactly 5% weekly
             const WEEKLY_GROWTH_RATE = 0.05; // 5%
 
             function calculateGrowth(principal, days) {

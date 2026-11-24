@@ -735,7 +735,7 @@ class AdminController extends Controller
             if ($isWeeklyDefault) {
                 // Standard weekly growth: apply the daily rate to ALL funds (current_balance)
                 // This applies to both user transfers and admin deposits
-                $dailyGrowthPercentage = $weeklyRate / 7;
+                $dailyGrowthPercentage = \App\Support\GrowthRate::dailyPercent($weeklyRate);
                 
                 // Calculate growth on full current balance (all funds grow daily)
                 $growthAmount = $oldBalance * ($dailyGrowthPercentage / 100);
@@ -754,7 +754,7 @@ class AdminController extends Controller
             } elseif ($isLocked && $pg->locked_amount > 0) {
                 // During 7-day lock period for other percentages: calculate incremental daily growth
                 $totalGrowthPercentage = $pg->growth_percentage;
-                $dailyGrowthPercentage = $totalGrowthPercentage / 7;
+                $dailyGrowthPercentage = \App\Support\GrowthRate::dailyPercent((float) $totalGrowthPercentage);
                 
                 // Calculate growth on locked amount
                 $growthAmount = $pg->locked_amount * ($dailyGrowthPercentage / 100);
@@ -1490,7 +1490,7 @@ public function checkDepositStatus(Request $request, $id)
 
             // Standard weekly growth: calculate expected growth
             if (abs((float) $pg->growth_percentage - (float) config('growth.weekly_percent', 5.0)) < 0.01 && $pg->growth_frequency === 'weekly') {
-                $dailyRate = (float) config('growth.weekly_percent', 5.0) / 7;
+                $dailyRate = \App\Support\GrowthRate::dailyPercent();
                 
                 // Calculate days since creation or last transfer
                 // Use the most recent date between last_transfer_date and created_at

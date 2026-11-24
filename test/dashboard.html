@@ -459,7 +459,7 @@
                         <h3 class="text-base lg:text-lg font-bold text-slate-800">Your Growth Potential</h3>
                         <p id="projectionBasis" class="text-xs text-slate-600 mt-1">Calculating your projection…</p>
                     </div>
-                    <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full uppercase tracking-widest self-start">0.71% daily</span>
+                    <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full uppercase tracking-widest self-start">0.70% daily</span>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3 mt-4">
@@ -473,7 +473,7 @@
                     </div>
                 </div>
 
-                <p class="text-[10px] text-slate-500 mt-3">Projection assumes daily compounding at 0.71% on your profit growth balance. Illustrative only — not a guarantee.</p>
+                <p class="text-[10px] text-slate-500 mt-3">Projection assumes daily compounding at 0.70% on your profit growth balance. Illustrative only — not a guarantee.</p>
             </div>
 
             <!-- Portfolio allocation + relationship manager -->
@@ -645,7 +645,7 @@
                         <p class="text-xs text-amber-800 leading-relaxed">
                             <strong>Funds will be locked for 7 days</strong> after transfer while they grow. During this
                             period, you cannot withdraw these funds. Growth will be calculated daily (5% weekly =
-                            ~0.714% per day). You can only make one transfer per week.
+                            ~0.70% per day). You can only make one transfer per week.
                         </p>
                     </div>
                 </div>
@@ -1972,7 +1972,7 @@
             const basisEl = document.getElementById('projectionBasis');
             if (!basisEl) return;
 
-            const DAILY_RATE = 5.0 / 7 / 100; // 0.714% per day derived from 5% weekly
+            const DAILY_RATE = Math.pow(1 + 0.05, 1 / 7) - 1; // 0.699% per day compounding to exactly 5% weekly
 
             function fmt(n) {
                 return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });

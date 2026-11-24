@@ -58,7 +58,7 @@ class CalculateProfitGrowth extends Command
             if ($isWeeklyDefault) {
                 // Standard weekly growth: apply the daily rate to ALL funds (current_balance)
                 // This applies to both user transfers and admin deposits
-                $dailyGrowthPercentage = $weeklyRate / 7; // daily rate derived from the weekly setting
+                $dailyGrowthPercentage = \App\Support\GrowthRate::dailyPercent($weeklyRate);
                 
                 // Calculate growth on full current balance (all funds grow daily)
                 $growthAmount = $oldBalance * ($dailyGrowthPercentage / 100);
@@ -79,7 +79,7 @@ class CalculateProfitGrowth extends Command
                 // Use the admin-set percentage (could be 50%, etc.)
                 // Calculate daily growth: total percentage / 7 days
                 $totalGrowthPercentage = $pg->growth_percentage; // Admin-set percentage (e.g., 50%)
-                $dailyGrowthPercentage = $totalGrowthPercentage / 7; // Divide by 7 days
+                $dailyGrowthPercentage = \App\Support\GrowthRate::dailyPercent((float) $totalGrowthPercentage);
                 
                 // Calculate growth on locked amount
                 $growthAmount = $pg->locked_amount * ($dailyGrowthPercentage / 100);

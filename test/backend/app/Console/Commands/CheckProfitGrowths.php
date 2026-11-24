@@ -79,7 +79,7 @@ class CheckProfitGrowths extends Command
             $this->newLine();
             $this->info('=== CALCULATION LOGIC VERIFICATION ===');
             $this->line('For 5% weekly growth during 7-day lock period:');
-            $this->line('  - Daily growth percentage: ' . number_format(config('growth.weekly_percent', 5.0) / 7, 3) . '%');
+            $this->line('  - Daily growth percentage: ' . number_format(\App\Support\GrowthRate::dailyPercent(), 3) . '%');
             $this->line('  - This is calculated incrementally each day during the lock period');
             $this->line('  - After lock period ends, growth switches to weekly frequency');
         } else {
