@@ -1258,7 +1258,7 @@
                     activeProfitGrowths.forEach(pg => {
                         const option = document.createElement('option');
                         option.value = pg.id;
-                        const growthPercentage = pg.growth_percentage || pg.growth_rate || 20.0; // Default to 20% if not set
+                        const growthPercentage = pg.growth_percentage || pg.growth_rate || 5.0; // Default to 5% if not set
                         const growthFrequency = pg.growth_frequency || pg.frequency || 'weekly'; // Default to weekly if not set
                         option.textContent = `${pg.name || 'Unnamed'} (${growthPercentage}% ${growthFrequency})`;
                         option.dataset.percentage = growthPercentage;

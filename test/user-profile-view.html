@@ -450,9 +450,9 @@
                     bestGrowthElement.textContent = `${bestGrowth.toFixed(2)}%`;
                     console.log('Set best growth to:', `${bestGrowth.toFixed(2)}%`);
                 } else {
-                    // If 0, null, or NaN, show default 20%
-                    bestGrowthElement.textContent = '20.00%';
-                    console.log('Set best growth to default: 20.00%');
+                    // If 0, null, or NaN, show the platform default (5% weekly)
+                    bestGrowthElement.textContent = '5.00%';
+                    console.log('Set best growth to default: 5.00%');
                 }
             } else {
                 console.error('bestGrowthElement not found in DOM');
