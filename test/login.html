@@ -113,21 +113,36 @@
                 </div>
                 <a href="home.html" class="text-2xl font-bold text-white tracking-tight">Conch<span class="text-[#10B981]">Capital</span></a>
             </div>
-            <h1 class="text-4xl font-bold text-white mb-6 leading-tight">Master the Markets with Precision.</h1>
-            <p class="text-slate-400 text-lg mb-10 leading-relaxed">
-                Join a community of thousands mastering real-world investment strategies with professional-grade tools.
+            <h1 class="text-4xl font-bold text-white mb-4 leading-tight">Welcome back to your portfolio.</h1>
+            <p class="text-slate-400 text-lg mb-8 leading-relaxed">
+                Sign in to track your growth, move funds and manage withdrawals.
             </p>
-            
-            <div class="grid grid-cols-2 gap-4 text-left">
-                <div class="p-4 rounded-xl bg-[#1E293B]/40 border border-slate-700/50">
-                    <i class="fa-solid fa-chart-line text-[#3B82F6] mb-2 block text-xl"></i>
-                    <h3 class="text-white font-semibold text-sm">Portfolio Lab</h3>
-                    <p class="text-slate-500 text-xs">Advanced strategy development</p>
+
+            <!-- Proof strip -->
+            <div class="grid grid-cols-3 gap-3 mb-8 text-center">
+                <div class="p-3 rounded-xl bg-[#1E293B]/40 border border-slate-700/50">
+                    <p class="text-xl font-black text-[#10B981]">5%</p>
+                    <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Weekly</p>
                 </div>
-                <div class="p-4 rounded-xl bg-[#1E293B]/40 border border-slate-700/50">
-                    <i class="fa-solid fa-graduation-cap text-[#10B981] mb-2 block text-xl"></i>
-                    <h3 class="text-white font-semibold text-sm">Expert Curriculum</h3>
-                    <p class="text-slate-500 text-xs">Guided investment paths</p>
+                <div class="p-3 rounded-xl bg-[#1E293B]/40 border border-slate-700/50">
+                    <p class="text-xl font-black text-white">44k+</p>
+                    <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Clients</p>
+                </div>
+                <div class="p-3 rounded-xl bg-[#1E293B]/40 border border-slate-700/50">
+                    <p class="text-xl font-black text-white">4.8</p>
+                    <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Rated</p>
+                </div>
+            </div>
+
+            <!-- Review -->
+            <div class="p-5 rounded-xl bg-[#1E293B]/40 border border-slate-700/50 text-left">
+                <div class="text-amber-400 text-xs mb-2">
+                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                </div>
+                <p class="text-slate-300 text-sm leading-relaxed mb-3">&ldquo;Withdrawals landed in under three hours, every time. That consistency is why I stayed.&rdquo;</p>
+                <div class="flex items-center gap-2.5">
+                    <img src="assets/images/reviews/kareem-c.jpg" alt="" class="w-7 h-7 rounded-full object-cover border border-slate-600">
+                    <p class="text-xs text-slate-400">Kareem C. · Boston, MA</p>
                 </div>
             </div>
         </div>
@@ -195,7 +210,7 @@
                     <div class="input-group">
                         <div class="flex justify-between items-center mb-2">
                             <label for="password" class="block text-sm font-semibold text-slate-700 transition-colors">Password</label>
-                            <a href="#" data-route="forgotPassword" class="text-xs font-semibold text-[#3B82F6] hover:text-[#3B82F6]/80 transition-colors">Forgot password?</a>
+                            <a href="#" data-route="forgotPassword" class="text-xs font-semibold text-[#10B981] hover:text-[#059669] transition-colors">Forgot password?</a>
                         </div>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
@@ -203,6 +218,9 @@
                             </span>
                             <input type="password" id="password" name="password" placeholder="••••••••" required
                                 class="block w-full pl-11 pr-12 py-3 bg-[#F9FAFB] border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-[#10B981]/20 focus:border-[#10B981] transition-all outline-none">
+                            <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 px-3 text-slate-400 hover:text-slate-700">
+                                <i class="fa-regular fa-eye text-sm"></i>
+                            </button>
                             <button type="button" data-toggle-password="password" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 hover:text-slate-600 transition-colors">
                                 <i class="fa-regular fa-eye text-sm"></i>
                             </button>
@@ -261,13 +279,27 @@
                 <div class="mt-8 text-center">
                     <p class="text-sm text-slate-500">
                         Don't have an account? 
-                        <a href="#" data-route="register" class="font-bold text-[#3B82F6] hover:text-[#3B82F6]/80 transition-colors underline-offset-4 hover:underline">Create Account</a>
+                        <a href="#" data-route="register" class="font-bold text-[#10B981] hover:text-[#059669] transition-colors underline-offset-4 hover:underline">Create Account</a>
                     </p>
+                </div>
+
+                <div class="mt-6 pt-6 border-t border-slate-100 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <div class="flex -space-x-2">
+                            <img src="assets/images/reviews/kiara-o.jpg" alt="" class="w-7 h-7 rounded-full border-2 border-white object-cover">
+                            <img src="assets/images/reviews/kendra-f.jpg" alt="" class="w-7 h-7 rounded-full border-2 border-white object-cover">
+                            <img src="assets/images/reviews/sean-t.jpg" alt="" class="w-7 h-7 rounded-full border-2 border-white object-cover">
+                        </div>
+                        <p class="text-xs text-slate-500">Trusted by 44,000+ clients</p>
+                    </div>
+                    <div class="flex items-center gap-1 text-amber-400 text-xs">
+                        <i class="fa-solid fa-star"></i><span class="text-slate-500 font-bold ml-1">4.8</span>
+                    </div>
                 </div>
             </div>
 
             <p class="mt-8 text-center text-xs text-slate-400 px-6">
-                By signing in, you agree to our <a href="#" data-route="termsOfService" class="text-[#3B82F6] hover:text-[#3B82F6]/80 hover:underline transition-colors">Terms of Service</a> and <a href="#" data-route="privacyPolicy" class="text-[#3B82F6] hover:text-[#3B82F6]/80 hover:underline transition-colors">Privacy Policy</a>.
+                By signing in, you agree to our <a href="#" data-route="termsOfService" class="text-[#10B981] hover:text-[#059669] hover:underline transition-colors">Terms of Service</a> and <a href="#" data-route="privacyPolicy" class="text-[#10B981] hover:text-[#059669] hover:underline transition-colors">Privacy Policy</a>.
             </p>
         </div>
     </div>
@@ -347,6 +379,15 @@
                 passwordInput.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
             }
         }
+
+        // Show / hide password
+        document.getElementById('togglePassword')?.addEventListener('click', function () {
+            const input = document.getElementById('password');
+            if (!input) return;
+            const show = input.type === 'password';
+            input.type = show ? 'text' : 'password';
+            this.innerHTML = '<i class="fa-regular ' + (show ? 'fa-eye-slash' : 'fa-eye') + ' text-sm"></i>';
+        });
 
         let rememberDevice = false;
 
