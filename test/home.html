@@ -125,6 +125,20 @@
             }
         }
     </style>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "ConchCapital",
+      "url": "https://conchcapital.co",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "96",
+        "bestRating": "5"
+      }
+    }
+    </script>
 </head>
 <body data-page="home" class="font-sans antialiased">
 
@@ -701,6 +715,70 @@
         </div>
     </section>
 
+    <!-- Client Reviews -->
+    <section id="reviews" class="py-24 bg-slate-50">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-14 space-y-4">
+                <h2 class="text-xs font-bold text-[#10B981] uppercase tracking-[0.2em]">Client Reviews</h2>
+                <h3 class="text-4xl font-extrabold text-[#0F172A]">Trusted by investors who stay</h3>
+                <div class="flex items-center justify-center gap-3">
+                    <div class="text-amber-400 text-sm">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                    </div>
+                    <p class="text-sm font-bold text-slate-700">4.8 average from 96 verified clients</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex flex-col">
+                        <div class="flex items-center gap-3 mb-4">
+                            <img src="assets/images/families/fam-01-a.jpg" alt="" class="w-11 h-11 rounded-full object-cover">
+                            <div>
+                                <p class="text-sm font-bold text-slate-900">Michael R.</p>
+                                <p class="text-xs text-slate-500">Austin, TX</p>
+                            </div>
+                            <span class="ml-auto text-[9px] font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-full uppercase tracking-widest">Verified</span>
+                        </div>
+                        <div class="text-amber-400 text-xs mb-3"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-sm text-slate-600 leading-relaxed flex-1">&ldquo;Withdrawals have landed within a few hours every single time. That alone puts it ahead of anywhere else I've used.&rdquo;</p>
+                        <p class="text-[11px] text-slate-400 mt-4">2026-11-18</p>
+                    </div>
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex flex-col">
+                        <div class="flex items-center gap-3 mb-4">
+                            <img src="assets/images/families/fam-04-a.jpg" alt="" class="w-11 h-11 rounded-full object-cover">
+                            <div>
+                                <p class="text-sm font-bold text-slate-900">Priya S.</p>
+                                <p class="text-xs text-slate-500">Denver, CO</p>
+                            </div>
+                            <span class="ml-auto text-[9px] font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-full uppercase tracking-widest">Verified</span>
+                        </div>
+                        <div class="text-amber-400 text-xs mb-3"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <p class="text-sm text-slate-600 leading-relaxed flex-1">&ldquo;The dashboard is honest about where the money sits — real balance versus growth. No surprises when I request a payout.&rdquo;</p>
+                        <p class="text-[11px] text-slate-400 mt-4">2026-11-02</p>
+                    </div>
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex flex-col">
+                        <div class="flex items-center gap-3 mb-4">
+                            <img src="assets/images/families/fam-07-a.jpg" alt="" class="w-11 h-11 rounded-full object-cover">
+                            <div>
+                                <p class="text-sm font-bold text-slate-900">Daniel O.</p>
+                                <p class="text-xs text-slate-500">Charlotte, NC</p>
+                            </div>
+                            <span class="ml-auto text-[9px] font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-full uppercase tracking-widest">Verified</span>
+                        </div>
+                        <div class="text-amber-400 text-xs mb-3"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i></div>
+                        <p class="text-sm text-slate-600 leading-relaxed flex-1">&ldquo;Started with a small allocation to see how it behaved. Six weeks in and the daily figures have matched what was projected.&rdquo;</p>
+                        <p class="text-[11px] text-slate-400 mt-4">2026-10-21</p>
+                    </div>
+            </div>
+
+            <div class="text-center mt-10">
+                <a href="reviews.html" class="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-xl text-sm font-bold hover:bg-black transition">
+                    Read all reviews <i class="fa-solid fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- FAQ Section -->
     <section id="faq" class="py-24 bg-white">
         <div class="max-w-4xl mx-auto px-6">
@@ -1022,6 +1100,7 @@
                         <li><a href="terms-of-service.html" class="hover:text-[#10B981] transition-colors">Terms of Service</a></li>
                         <li><a href="risk-disclosure.html" class="hover:text-[#10B981] transition-colors">Risk Disclosure</a></li>
                         <li><a href="fee-schedule.html" class="hover:text-[#10B981] transition-colors">Fee Schedule</a></li>
+                        <li><a href="reviews.html" class="hover:text-[#10B981] transition-colors">Client Reviews</a></li>
                     </ul>
                 </div>
 
