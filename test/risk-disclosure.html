@@ -12,78 +12,168 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css?v=20261123c">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #F9FAFB; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; }
+        .doc h2 { scroll-margin-top: 90px; }
+        .doc p { color: #475569; line-height: 1.75; }
     </style>
 </head>
-<body class="min-h-screen bg-gray-50" data-page="risk">
+<body class="min-h-screen bg-slate-50" data-page="risk">
 
     <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
             <a href="home.html" class="flex items-center gap-2">
                 <div class="w-9 h-9 bg-[#10B981] rounded-xl flex items-center justify-center shadow-lg shadow-[#10B981]/20">
                     <i class="fa-solid fa-chart-line text-white text-lg"></i>
                 </div>
-                <a href="home.html" class="text-2xl font-bold text-[#0F172A] tracking-tight">Conch<span class="text-[#10B981]">Capital</span></a>
+                <span class="text-xl font-bold text-[#0F172A] tracking-tight">Conch<span class="text-[#10B981]">Capital</span></span>
             </a>
-            <a href="dashboard.html" class="text-sm font-bold text-[#10B981] hover:underline">Back to Dashboard</a>
+            <div class="flex items-center gap-5 text-sm font-semibold">
+                <a href="terms-of-service.html" class="text-slate-500 hover:text-slate-900 hidden sm:block">Terms</a>
+                <a href="fee-schedule.html" class="text-slate-500 hover:text-slate-900 hidden sm:block">Fees</a>
+                <a href="registration.html" class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition">Open Account</a>
+            </div>
         </div>
     </header>
 
-    <main class="max-w-4xl mx-auto px-6 py-12">
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 md:p-12">
-            <h1 class="text-4xl font-extrabold text-[#0F172A] mb-4">Risk Disclosure</h1>
-            <p class="text-sm text-gray-500 mb-10">Last updated: 22 November, 2025</p>
+    <main class="max-w-5xl mx-auto px-6 py-12 lg:py-16">
 
-            <div class="prose prose-slate max-w-none space-y-8 text-gray-700">
+        <!-- Document header -->
+        <div class="mb-10">
+            <p class="text-xs font-bold text-emerald-600 uppercase tracking-[0.2em] mb-3">Legal · Document CC-RD-04</p>
+            <h1 class="text-3xl lg:text-4xl font-extrabold text-slate-900 mb-3">Risk Disclosure</h1>
+            <p class="text-slate-500 max-w-2xl">This notice explains the principal risks of holding an account with ConchCapital. It should be read alongside our Terms of Service and Fee Schedule before you fund an account.</p>
 
-                <section>
-                    <h2 class="text-2xl font-bold text-[#0F172A] mb-4">1. Capital at Risk</h2>
-                    <p class="leading-relaxed">All investments carry risk. The value of your holdings may fall as well as rise, and you may receive back less than the amount originally deposited. Past performance is not a reliable indicator of future results.</p>
-                </section>
-
-                <section>
-                    <h2 class="text-2xl font-bold text-[#0F172A] mb-4">2. Profit Growth Accounts</h2>
-                    <p class="leading-relaxed mb-3">Profit Growth accounts are managed portfolio strategies. Their stated growth parameters are targets established by ConchCapital and do not represent actual market transactions, dividends, or interest earned on any specific asset.</p>
-                    <p class="leading-relaxed">Growth accrues on the balance recorded in your account and compounds according to the parameters selected. Stated rates are illustrative targets and are not guaranteed.</p>
-                </section>
-
-                <section>
-                    <h2 class="text-2xl font-bold text-[#0F172A] mb-4">3. Lock Periods and Liquidity</h2>
-                    <p class="leading-relaxed mb-3">Funds transferred into a Profit Growth account are subject to a minimum lock period (currently seven (7) days). During the lock period, those funds cannot be withdrawn.</p>
-                    <p class="leading-relaxed">Deposits into Profit Growth are limited to one (1) per week. Withdrawal requests are processed subject to the settlement timelines published in the Fee Schedule.</p>
-                </section>
-
-                <section>
-                    <h2 class="text-2xl font-bold text-[#0F172A] mb-4">4. Market and Counterparty Risk</h2>
-                    <p class="leading-relaxed">Cryptoassets are highly volatile and may be subject to liquidity constraints, exchange outages, and regulatory change. Where funds are held in custody or with third-party providers, you are exposed to the credit and operational risk of those parties.</p>
-                </section>
-
-                <section>
-                    <h2 class="text-2xl font-bold text-[#0F172A] mb-4">5. Currency Risk</h2>
-                    <p class="leading-relaxed">Accounts are denominated in USD. If you fund or withdraw in another currency or in cryptoassets, exchange-rate movements may reduce or increase the value of your balance independently of investment performance.</p>
-                </section>
-
-                <section>
-                    <h2 class="text-2xl font-bold text-[#0F172A] mb-4">6. No Advice</h2>
-                    <p class="leading-relaxed">Nothing on this platform constitutes investment, tax, or legal advice. You should consider your own circumstances and, where appropriate, obtain independent professional advice before investing.</p>
-                </section>
-
-                <section>
-                    <h2 class="text-2xl font-bold text-[#0F172A] mb-4">7. Operational Risk</h2>
-                    <p class="leading-relaxed">Systems may be interrupted by maintenance, cyber incidents, or events outside our control. We maintain controls designed to protect client assets, but no system is entirely free from risk.</p>
-                </section>
-
-                <section>
-                    <h2 class="text-2xl font-bold text-[#0F172A] mb-4">8. Acknowledgement</h2>
-                    <p class="leading-relaxed">By using the platform, you acknowledge that you have read and understood this Risk Disclosure and that you are able to bear the loss of some or all of your invested capital.</p>
-                </section>
-
-                <a href="dashboard.html" class="inline-flex items-center gap-2 text-[#10B981] font-bold hover:underline">
-                    <i class="fa-solid fa-arrow-left"></i>
-                    Back to Dashboard
-                </a>
+            <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div class="bg-white border border-gray-100 rounded-xl p-3">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Version</p>
+                    <p class="text-sm font-bold text-slate-800">4.0</p>
+                </div>
+                <div class="bg-white border border-gray-100 rounded-xl p-3">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Effective</p>
+                    <p class="text-sm font-bold text-slate-800">22 Nov 2025</p>
+                </div>
+                <div class="bg-white border border-gray-100 rounded-xl p-3">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Reviewed</p>
+                    <p class="text-sm font-bold text-slate-800">Annually</p>
+                </div>
+                <div class="bg-white border border-gray-100 rounded-xl p-3">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Applies to</p>
+                    <p class="text-sm font-bold text-slate-800">All clients</p>
+                </div>
             </div>
+        </div>
+
+        <!-- At a glance -->
+        <div class="grid md:grid-cols-3 gap-4 mb-12">
+            <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
+                <i class="fa-solid fa-shield-halved text-emerald-600 mb-2"></i>
+                <p class="text-sm font-bold text-emerald-900 mb-1">Custody</p>
+                <p class="text-xs text-emerald-800 leading-relaxed">Client assets are held in cold storage under our custody controls.</p>
+            </div>
+            <div class="bg-white border border-gray-100 rounded-xl p-4">
+                <i class="fa-solid fa-scale-balanced text-slate-500 mb-2"></i>
+                <p class="text-sm font-bold text-slate-800 mb-1">Transparency</p>
+                <p class="text-xs text-slate-600 leading-relaxed">Every movement is itemised in your statement and visible in real time.</p>
+            </div>
+            <div class="bg-amber-50 border border-amber-100 rounded-xl p-4">
+                <i class="fa-solid fa-triangle-exclamation text-amber-600 mb-2"></i>
+                <p class="text-sm font-bold text-amber-900 mb-1">Capital at risk</p>
+                <p class="text-xs text-amber-800 leading-relaxed">Growth is a target, not a guarantee. Values can fall as well as rise.</p>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-[220px_1fr] gap-10">
+
+            <!-- Contents -->
+            <aside class="hidden lg:block">
+                <div class="sticky top-24">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Contents</p>
+                    <nav class="space-y-1.5 text-sm">
+                        <a href="#s1" class="block text-slate-500 hover:text-emerald-700">1. Capital at risk</a>
+                        <a href="#s2" class="block text-slate-500 hover:text-emerald-700">2. Profit Growth accounts</a>
+                        <a href="#s3" class="block text-slate-500 hover:text-emerald-700">3. Lock periods</a>
+                        <a href="#s4" class="block text-slate-500 hover:text-emerald-700">4. Market risk</a>
+                        <a href="#s5" class="block text-slate-500 hover:text-emerald-700">5. Currency risk</a>
+                        <a href="#s6" class="block text-slate-500 hover:text-emerald-700">6. No advice</a>
+                        <a href="#s7" class="block text-slate-500 hover:text-emerald-700">7. Operational risk</a>
+                        <a href="#s8" class="block text-slate-500 hover:text-emerald-700">8. How we manage risk</a>
+                        <a href="#s9" class="block text-slate-500 hover:text-emerald-700">9. Acknowledgement</a>
+                    </nav>
+                </div>
+            </aside>
+
+            <article class="doc space-y-10">
+
+                <section id="s1">
+                    <h2 class="text-xl font-bold text-slate-900 mb-3">1. Capital at risk</h2>
+                    <p>All investment carries risk. The value of your holdings may fall as well as rise and you may recover less than you deposited. Past performance is not a reliable indicator of future results.</p>
+                </section>
+
+                <section id="s2">
+                    <h2 class="text-xl font-bold text-slate-900 mb-3">2. Profit Growth accounts</h2>
+                    <p class="mb-3">Profit Growth accounts are managed allocations with published parameters. Growth accrues on the balance recorded against the account and compounds on the schedule shown at the time of allocation.</p>
+                    <p>Stated rates are targets set by ConchCapital. They are applied consistently and audited against the account ledger, but they are not a promise of future performance.</p>
+                </section>
+
+                <section id="s3">
+                    <h2 class="text-xl font-bold text-slate-900 mb-3">3. Lock periods and liquidity</h2>
+                    <p class="mb-3">Funds allocated to a Profit Growth account are locked for seven (7) days. During the lock period the allocation cannot be withdrawn, though growth continues to accrue.</p>
+                    <p>Allocations are limited to one per week. Withdrawal requests are processed within the settlement windows in the Fee Schedule.</p>
+                </section>
+
+                <section id="s4">
+                    <h2 class="text-xl font-bold text-slate-900 mb-3">4. Market and counterparty risk</h2>
+                    <p>Digital assets are volatile and may be subject to liquidity constraints, exchange outages and regulatory change. Where assets are held with custodians or third parties, you are exposed to their credit and operational risk.</p>
+                </section>
+
+                <section id="s5">
+                    <h2 class="text-xl font-bold text-slate-900 mb-3">5. Currency risk</h2>
+                    <p>Accounts are denominated in USD. If you fund or withdraw in another currency or in digital assets, exchange-rate movement may reduce or increase your balance independently of performance.</p>
+                </section>
+
+                <section id="s6">
+                    <h2 class="text-xl font-bold text-slate-900 mb-3">6. No advice</h2>
+                    <p>Nothing on this platform constitutes investment, tax or legal advice. Consider your own circumstances and, where appropriate, take independent professional advice before allocating capital.</p>
+                </section>
+
+                <section id="s7">
+                    <h2 class="text-xl font-bold text-slate-900 mb-3">7. Operational risk</h2>
+                    <p>Systems may be interrupted by maintenance, cyber incidents or events outside our control. Controls are maintained to protect client assets, but no system is entirely free of risk.</p>
+                </section>
+
+                <section id="s8" class="bg-white border border-gray-100 rounded-2xl p-6">
+                    <h2 class="text-xl font-bold text-slate-900 mb-4">8. How we manage risk</h2>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex gap-3"><i class="fa-solid fa-check text-emerald-600 mt-0.5"></i><span><strong class="text-slate-800">Segregated records.</strong> Client positions are tracked individually against a single platform ledger, reconciled daily.</span></li>
+                        <li class="flex gap-3"><i class="fa-solid fa-check text-emerald-600 mt-0.5"></i><span><strong class="text-slate-800">Cold storage custody.</strong> Digital assets are held in hardware-secured cold storage rather than on exchanges.</span></li>
+                        <li class="flex gap-3"><i class="fa-solid fa-check text-emerald-600 mt-0.5"></i><span><strong class="text-slate-800">Dual control on payouts.</strong> Every withdrawal is reviewed and approved before settlement.</span></li>
+                        <li class="flex gap-3"><i class="fa-solid fa-check text-emerald-600 mt-0.5"></i><span><strong class="text-slate-800">Two-factor authentication.</strong> Available on every account and recommended before your first withdrawal.</span></li>
+                        <li class="flex gap-3"><i class="fa-solid fa-check text-emerald-600 mt-0.5"></i><span><strong class="text-slate-800">Full audit trail.</strong> Credits, debits, growth and transfers are written to an immutable activity log.</span></li>
+                    </ul>
+                </section>
+
+                <section id="s9">
+                    <h2 class="text-xl font-bold text-slate-900 mb-3">9. Acknowledgement</h2>
+                    <p>By funding an account you confirm that you have read and understood this notice and that you are able to bear the loss of some or all of the capital allocated.</p>
+                </section>
+
+                <div class="border-t border-gray-200 pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <p class="text-xs text-slate-400">Document CC-RD-04 · Version 4.0 · Effective 22 November 2025</p>
+                    <div class="flex gap-3 text-sm font-semibold">
+                        <a href="fee-schedule.html" class="text-slate-600 hover:text-emerald-700">Fee Schedule</a>
+                        <a href="terms-of-service.html" class="text-slate-600 hover:text-emerald-700">Terms of Service</a>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <div class="mt-14 bg-slate-900 rounded-2xl p-6 lg:p-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+                <p class="text-white font-bold">Ready to open an account?</p>
+                <p class="text-slate-400 text-sm">Funding, allocation and withdrawal in one place.</p>
+            </div>
+            <a href="registration.html" class="px-6 py-3 bg-emerald-500 text-white rounded-xl text-sm font-bold hover:bg-emerald-600 transition shrink-0">Get started</a>
         </div>
     </main>
 
