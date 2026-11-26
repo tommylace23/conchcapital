@@ -43,7 +43,7 @@
             <i class="fa-solid fa-money-bill-transfer text-sm"></i>
             <span class="text-sm font-medium">Credits</span>
         </a>
-        <a href="#" data-route="adminFreezes" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+        <a href="#" data-route="adminFrozenList" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
             <i class="fa-solid fa-snowflake text-sm"></i>
             <span class="text-sm font-medium">Freezes</span>
         </a>
@@ -1009,7 +1009,7 @@
             console.error('No user ID found. URL:', window.location.href);
             return;
         }
-        window.location.href = `/admin-freeze.html?user_id=${userId}`;
+        window.location.href = `admin-freeze.html?user_id=${userId}`;
     }
 
     // Credit user
@@ -1022,7 +1022,7 @@
             console.error('No user ID found. URL:', window.location.href);
             return;
         }
-        window.location.href = `/admin-credit-funds-page.html?user_id=${userId}`;
+        window.location.href = `admin-credit-funds-page.html?user_id=${userId}`;
     }
 
     // Withdraw funds for user
@@ -1035,7 +1035,7 @@
             console.error('No user ID found. URL:', window.location.href);
             return;
         }
-        window.location.href = `/admin-withdraw-funds-page.html?user_id=${userId}`;
+        window.location.href = `admin-withdraw-funds-page.html?user_id=${userId}`;
     }
 
     // Delete profit growth (admin can delete any user's profit growth)

@@ -42,7 +42,7 @@
             <i class="fa-solid fa-money-bill-transfer text-sm"></i>
             <span class="text-sm font-medium">Credits</span>
         </a>
-        <a href="#" data-route="adminFreezes" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
+        <a href="#" data-route="adminFrozenList" class="flex items-center space-x-3 p-3 hover:bg-slate-900 hover:text-white rounded-xl transition">
             <i class="fa-solid fa-snowflake text-sm"></i>
             <span class="text-sm font-medium">Freezes</span>
         </a>
@@ -58,13 +58,13 @@
 <main class="ml-64 flex-1 p-8">
     
     <!-- FIX 1: Added Back to User Detail link -->
-    <a href="#" data-route="adminUserDetail" class="inline-flex items-center text-sm text-gray-500 hover:text-gray-800 transition mb-6">
+    <a id="backLink" href="admin-user-detail.html" class="inline-flex items-center text-sm text-gray-500 hover:text-gray-800 transition mb-6">
         <i class="fa-solid fa-arrow-left mr-2"></i> Back to User Detail
     </a>
     
     <!-- FIX 2: Updated heading -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-        <h1 class="text-2xl font-black text-slate-900">Freeze Account: @john123</h1>
+        <h1 id="freezeHeading" class="text-2xl font-black text-slate-900">Freeze Account</h1>
     </div>
 
     <div class="grid lg:grid-cols-3 gap-8">
@@ -77,11 +77,11 @@
                             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                             <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
                         </span>
-                        <p class="text-sm font-bold text-green-800 uppercase">Current Status: Active</p>
+                        <p id="freezeStatus" class="text-sm font-bold text-green-800 uppercase">Current Status: Active</p>
                     </div>
                 </div>
 
-                <form class="p-8 space-y-8">
+                <form id="freezeForm" class="p-8 space-y-8">
                     <!-- FIX 3: Updated Activity Restrictions to match wireframe exactly -->
                     <div>
                         <div class="flex justify-between items-center mb-4">
@@ -131,7 +131,7 @@
                     <div class="grid md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Reason</label>
-                            <select class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-sm">
+                            <select id="freezeReason" class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-sm">
                                 <option>Select Reason</option>
                                 <option>Suspicious Activity</option>
                                 <option>KYC/AML Review</option>
@@ -154,7 +154,7 @@
 
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Note/Description (Required)</label>
-                        <textarea rows="4" placeholder="Provide details about why this account is being frozen..." 
+                        <textarea id="freezeNote" rows="4" placeholder="Provide details about why this account is being frozen..." 
                             class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none text-sm"></textarea>
                     </div>
 
@@ -253,5 +253,54 @@
 <script src="js/modals.js?v=20261123c"></script>
 <script src="js/routes.js?v=20261123c"></script>
 <script src="js/main.js?v=20261123c"></script>
+
+<script>
+    (function () {
+        const params = new URLSearchParams(location.search);
+        const userId = params.get('user_id');
+        const heading = document.getElementById('freezeHeading');
+        const status = document.getElementById('freezeStatus');
+        const back = document.getElementById('backLink');
+        const form = document.getElementById('freezeForm');
+
+        if (back && userId) back.href = 'admin-user-detail.html?user_id=' + userId;
+
+        if (!userId) {
+            if (heading) heading.textContent = 'Freeze Account — no user selected';
+            return;
+        }
+
+        // Load the user
+        API.admin.getUser(userId).then((res) => {
+            const u = (res && res.user) || res || {};
+            const name = u.display_name || u.name || u.username || ('#' + userId);
+            if (heading) heading.textContent = 'Freeze Account: @' + (u.username || userId);
+            if (status) status.textContent = 'Current Status: ' + (u.is_frozen ? 'Frozen' : 'Active');
+        }).catch((e) => {
+            console.error('Failed to load user', e);
+            if (heading) heading.textContent = 'Freeze Account — user not found';
+        });
+
+        form?.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const reason = document.getElementById('freezeReason')?.value || '';
+            const note = document.getElementById('freezeNote')?.value.trim() || '';
+
+            if (!reason || reason === 'Select Reason') { Utils?.showToast?.('Select a reason', 'error'); return; }
+            if (!note) { Utils?.showToast?.('A note is required', 'error'); return; }
+
+            const btn = form.querySelector('button[type="submit"]');
+            if (btn) btn.disabled = true;
+            try {
+                await API.admin.freezeAccount(userId, { reason: reason + ' — ' + note });
+                Utils?.showToast?.('Account frozen', 'success');
+                setTimeout(() => { location.href = 'admin-user-detail.html?user_id=' + userId; }, 800);
+            } catch (err) {
+                Utils?.showToast?.(err.message || 'Failed to freeze', 'error');
+                if (btn) btn.disabled = false;
+            }
+        });
+    })();
+</script>
 </body>
 </html>
