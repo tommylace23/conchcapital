@@ -17,23 +17,34 @@
         .input-focus:focus { outline: none; border-color: #10B981; ring: 2px; ring-color: #10B981; }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-6" data-page="register">
+<body class="min-h-screen bg-slate-50" data-page="register">
 
-    <div class="w-full max-w-[500px] bg-white rounded-[12px] shadow-sm border border-gray-100 p-8 md:p-10">
-        
-        <div class="mb-8">
+    <header class="bg-white border-b border-gray-200">
+        <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="home.html" class="flex items-center gap-2">
+                <div class="w-9 h-9 bg-[#10B981] rounded-xl flex items-center justify-center shadow-lg shadow-[#10B981]/20">
+                    <i class="fa-solid fa-chart-line text-white text-lg"></i>
+                </div>
+                <span class="text-xl font-bold text-slate-800">Conch<span class="text-[#10B981]">Capital</span></span>
+            </a>
+            <a href="#" data-route="login" class="text-sm font-bold text-slate-500 hover:text-slate-900">Sign in</a>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 lg:px-6 py-8 lg:py-14 grid lg:grid-cols-[1fr_380px] gap-8 items-start">
+
+    <div class="w-full bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+
+        <div class="mb-6">
             <h1 class="text-[24px] font-bold text-[#111827]">Create Your Account</h1>
             <p class="text-sm text-gray-500 mt-1">Join a professional investment platform and start building your portfolio today.</p>
         </div>
 
-        <div class="mb-8 bg-[#EFF6FF] border border-[#BFDBFE] rounded-lg p-4 flex gap-3">
-            <div class="text-[#3B82F6] mt-0.5">
-                <i class="fa-solid fa-circle-info text-lg"></i>
-            </div>
-            <p class="text-sm text-[#1E40AF] leading-relaxed">
-                <span class="font-bold">Important:</span> This platform manages two distinct portfolio types: 
-                <span class="font-bold">real funds</span> (withdrawable capital) and 
-                <span class="font-bold text-[#2563EB]">profit growth funds</span> (growth accounts for portfolio expansion).
+        <div class="mb-6 bg-slate-50 border border-gray-200 rounded-xl p-4 flex gap-3">
+            <i class="fa-solid fa-shield-halved text-slate-400 mt-0.5"></i>
+            <p class="text-xs text-slate-600 leading-relaxed">
+                Your account holds two balances: <span class="font-bold text-slate-800">real funds</span> (withdrawable at any time) and
+                <span class="font-bold text-slate-800">profit growth</span> (compounding allocations). Both are visible in your dashboard from day one.
             </p>
         </div>
 
@@ -48,14 +59,28 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-semibold text-[#111827] mb-1.5">Password *</label>
-                    <input type="password" name="password" id="password" placeholder="••••••••" required
-                        class="w-full px-4 py-2.5 rounded-[8px] border border-[#E5E7EB] text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#10B981] focus:ring-1 focus:ring-[#10B981] transition">
-                    <p class="text-xs text-gray-500 mt-1">Min 8 chars, 1 uppercase, 1 number</p>
+                    <div class="relative">
+                        <input type="password" name="password" id="password" placeholder="••••••••" required
+                            class="w-full px-4 pr-11 py-2.5 rounded-[8px] border border-[#E5E7EB] text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#10B981] focus:ring-1 focus:ring-[#10B981] transition">
+                        <button type="button" data-toggle="password" class="absolute inset-y-0 right-0 px-3 text-gray-400 hover:text-gray-700">
+                            <i class="fa-regular fa-eye text-sm"></i>
+                        </button>
+                    </div>
+                    <div class="mt-1.5 h-1 w-full bg-gray-100 rounded-full overflow-hidden">
+                        <div id="pwStrength" class="h-full w-0 bg-gray-300 transition-all"></div>
+                    </div>
+                    <p id="pwHint" class="text-xs text-gray-500 mt-1">Min 8 chars, 1 uppercase, 1 number</p>
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-[#111827] mb-1.5">Confirm Password *</label>
-                    <input type="password" name="password_confirmation" id="password_confirmation" placeholder="••••••••" required
-                        class="w-full px-4 py-2.5 rounded-[8px] border border-[#E5E7EB] text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#10B981] focus:ring-1 focus:ring-[#10B981] transition">
+                    <div class="relative">
+                        <input type="password" name="password_confirmation" id="password_confirmation" placeholder="••••••••" required
+                            class="w-full px-4 pr-11 py-2.5 rounded-[8px] border border-[#E5E7EB] text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#10B981] focus:ring-1 focus:ring-[#10B981] transition">
+                        <button type="button" data-toggle="password_confirmation" class="absolute inset-y-0 right-0 px-3 text-gray-400 hover:text-gray-700">
+                            <i class="fa-regular fa-eye text-sm"></i>
+                        </button>
+                    </div>
+                    <p id="confirmHint" class="text-xs text-gray-500 mt-1">&nbsp;</p>
                 </div>
             </div>
 
@@ -104,6 +129,51 @@
         </div>
     </div>
 
+    <!-- Value panel -->
+    <aside class="space-y-4 lg:sticky lg:top-8">
+
+        <div class="bg-slate-900 rounded-2xl p-6 text-white">
+            <p class="text-[10px] font-bold text-emerald-400 uppercase tracking-[0.2em] mb-2">Why clients join</p>
+            <h2 class="text-xl font-bold mb-4 leading-snug">5% weekly growth.<br>Withdraw after 7 days.</h2>
+            <ul class="space-y-2.5 text-sm text-slate-300">
+                <li class="flex gap-2"><i class="fa-solid fa-check text-emerald-400 mt-0.5 text-xs"></i> Growth credited every day, automatically</li>
+                <li class="flex gap-2"><i class="fa-solid fa-check text-emerald-400 mt-0.5 text-xs"></i> No minimum balance to open</li>
+                <li class="flex gap-2"><i class="fa-solid fa-check text-emerald-400 mt-0.5 text-xs"></i> Assets held in cold storage</li>
+                <li class="flex gap-2"><i class="fa-solid fa-check text-emerald-400 mt-0.5 text-xs"></i> Two-factor authentication available</li>
+            </ul>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+            <div class="flex items-center gap-2 mb-3">
+                <div class="text-amber-400 text-xs">
+                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                </div>
+                <p class="text-xs font-bold text-slate-700">4.8 from 96 clients</p>
+            </div>
+            <p class="text-sm text-slate-600 leading-relaxed mb-4">&ldquo;Withdrawals landed in under three hours, every time. That consistency is why I stayed.&rdquo;</p>
+            <div class="flex items-center gap-3">
+                <div class="flex -space-x-2">
+                    <img src="assets/images/reviews/kareem-c.jpg" alt="" class="w-8 h-8 rounded-full border-2 border-white object-cover">
+                    <img src="assets/images/reviews/kiara-o.jpg" alt="" class="w-8 h-8 rounded-full border-2 border-white object-cover">
+                    <img src="assets/images/reviews/kendra-f.jpg" alt="" class="w-8 h-8 rounded-full border-2 border-white object-cover">
+                    <img src="assets/images/reviews/hannah-p.jpg" alt="" class="w-8 h-8 rounded-full border-2 border-white object-cover">
+                </div>
+                <p class="text-[11px] text-slate-500">Kareem C. · Boston, MA</p>
+            </div>
+            <a href="reviews.html" class="inline-block mt-4 text-xs font-bold text-emerald-600 hover:underline">Read all reviews →</a>
+        </div>
+
+        <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 flex items-start gap-3">
+            <i class="fa-solid fa-gift text-emerald-600 mt-0.5"></i>
+            <div>
+                <p class="text-sm font-bold text-emerald-900">Invited by a friend?</p>
+                <p class="text-xs text-emerald-800 leading-relaxed">Enter their referral code in the form and your bonus is credited the moment you register.</p>
+            </div>
+        </div>
+    </aside>
+
+    </main>
+
     <script src="js/config.js?v=20261123c"></script>
     <script src="js/utils.js?v=20261123c"></script>
     <script src="js/api.js?v=20261123c"></script>
@@ -117,6 +187,50 @@
             const submitBtn = document.getElementById('submitBtn');
             const passwordInput = document.getElementById('password');
             const passwordConfirmInput = document.getElementById('password_confirmation');
+
+            // Show / hide password
+            document.querySelectorAll('[data-toggle]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const input = document.getElementById(btn.dataset.toggle);
+                    if (!input) return;
+                    const show = input.type === 'password';
+                    input.type = show ? 'text' : 'password';
+                    btn.innerHTML = `<i class="fa-regular ${show ? 'fa-eye-slash' : 'fa-eye'} text-sm"></i>`;
+                });
+            });
+
+            // Password strength
+            const strengthBar = document.getElementById('pwStrength');
+            const pwHint = document.getElementById('pwHint');
+            passwordInput.addEventListener('input', () => {
+                const v = passwordInput.value;
+                let score = 0;
+                if (v.length >= 8) score++;
+                if (/[A-Z]/.test(v)) score++;
+                if (/[0-9]/.test(v)) score++;
+                if (/[^A-Za-z0-9]/.test(v)) score++;
+
+                const map = [
+                    ['w-0 bg-gray-300', 'Min 8 chars, 1 uppercase, 1 number', 'text-gray-500'],
+                    ['w-1/4 bg-red-400', 'Weak password', 'text-red-600'],
+                    ['w-2/4 bg-amber-400', 'Fair password', 'text-amber-600'],
+                    ['w-3/4 bg-lime-500', 'Good password', 'text-lime-600'],
+                    ['w-full bg-emerald-500', 'Strong password', 'text-emerald-600']
+                ];
+                const [w, text, colour] = map[v.length === 0 ? 0 : Math.min(score, 4)];
+                strengthBar.className = `h-full transition-all ${w}`;
+                pwHint.textContent = text;
+                pwHint.className = `text-xs mt-1 ${colour}`;
+            });
+
+            // Confirm match feedback
+            const confirmHint = document.getElementById('confirmHint');
+            passwordConfirmInput.addEventListener('input', () => {
+                if (!passwordConfirmInput.value) { confirmHint.textContent = '\u00a0'; confirmHint.className = 'text-xs text-gray-500 mt-1'; return; }
+                const match = passwordConfirmInput.value === passwordInput.value;
+                confirmHint.textContent = match ? 'Passwords match' : 'Passwords do not match';
+                confirmHint.className = `text-xs mt-1 ${match ? 'text-emerald-600' : 'text-red-600'}`;
+            });
 
             // Prefill referral code from ?ref=CODE and show a hint
             const refInput = document.getElementById('referral_code');
