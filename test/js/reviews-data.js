@@ -81,13 +81,13 @@ window.REVIEWS = [
   "slug": "winston-q"
  },
  {
-  "name": "Kavita R.",
+  "name": "Kate R.",
   "gender": "f",
   "city": "Chicago, IL",
   "stars": 5,
   "date": "2026-10-23",
   "quote": "Everything is itemised — fees, growth, balance history. Nothing buried.",
-  "slug": "kavita-r"
+  "slug": "kate-r"
  },
  {
   "name": "Michael I.",
@@ -486,13 +486,13 @@ window.REVIEWS = [
   "slug": "stefan-e"
  },
  {
-  "name": "Rohan S.",
+  "name": "Richard S.",
   "gender": "m",
   "city": "Nashville, TN",
   "stars": 5,
   "date": "2026-02-11",
   "quote": "Third allocation this year. The daily compounding is doing the work.",
-  "slug": "rohan-s"
+  "slug": "richard-s"
  },
  {
   "name": "Renee K.",
@@ -558,22 +558,22 @@ window.REVIEWS = [
   "slug": "darren-w"
  },
  {
-  "name": "Sanjay Z.",
+  "name": "Simon Z.",
   "gender": "m",
   "city": "London, UK",
   "stars": 5,
   "date": "2025-12-23",
   "quote": "Support answered within the hour when my transfer reference was wrong. Sorted without drama.",
-  "slug": "sanjay-z"
+  "slug": "simon-z"
  },
  {
-  "name": "Asha A.",
+  "name": "Alice A.",
   "gender": "f",
   "city": "Phoenix, AZ",
   "stars": 5,
   "date": "2025-12-17",
   "quote": "Withdrawals have landed within a few hours every single time. That alone puts it ahead of anywhere else I've used.",
-  "slug": "asha-a"
+  "slug": "alice-a"
  },
  {
   "name": "Fabian S.",
@@ -603,13 +603,13 @@ window.REVIEWS = [
   "slug": "grace-p"
  },
  {
-  "name": "Priya N.",
+  "name": "Phoebe N.",
   "gender": "f",
   "city": "Tampa, FL",
   "stars": 5,
   "date": "2025-10-23",
   "quote": "I check the growth figure every morning. Four months in and it has not missed a day.",
-  "slug": "priya-n"
+  "slug": "phoebe-n"
  },
  {
   "name": "Keshawn N.",
@@ -621,13 +621,13 @@ window.REVIEWS = [
   "slug": "keshawn-n"
  },
  {
-  "name": "Anjali B.",
+  "name": "Anna B.",
   "gender": "f",
   "city": "Toronto, ON",
   "stars": 5,
   "date": "2025-10-13",
   "quote": "Support answered within the hour when my transfer reference was wrong. Sorted without drama.",
-  "slug": "anjali-b"
+  "slug": "anna-b"
  },
  {
   "name": "Kayla C.",
@@ -810,13 +810,13 @@ window.REVIEWS = [
   "slug": "luis-q"
  },
  {
-  "name": "Ravi J.",
+  "name": "Robert J.",
   "gender": "m",
   "city": "Houston, TX",
   "stars": 5,
   "date": "2025-06-29",
   "quote": "Straightforward interface. Would like a mobile app, but the browser version works fine.",
-  "slug": "ravi-j"
+  "slug": "robert-j"
  },
  {
   "name": "Ricardo T.",
