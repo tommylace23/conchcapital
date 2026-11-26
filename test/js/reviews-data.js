@@ -5,7 +5,7 @@ window.REVIEWS = [
   "city": "Boston, MA",
   "stars": 5,
   "date": "2026-11-22",
-  "quote": "I like that the balance is split between withdrawable cash and growth. It stops me from dipping into it.",
+  "quote": "Support fixed a mismatched reference without a fuss.",
   "slug": "kareem-c"
  },
  {
@@ -13,8 +13,8 @@ window.REVIEWS = [
   "gender": "f",
   "city": "Seattle, WA",
   "stars": 5,
-  "date": "2026-11-22",
-  "quote": "Onboarding was quick and the identity checks were painless.",
+  "date": "2026-11-21",
+  "quote": "I like that I can withdraw a portion without closing the whole position.",
   "slug": "kiara-o"
  },
  {
@@ -23,7 +23,7 @@ window.REVIEWS = [
   "city": "Manchester, UK",
   "stars": 5,
   "date": "2026-11-18",
-  "quote": "Second withdrawal this month, both settled inside the stated window. No chasing required.",
+  "quote": "I have moved friends onto it, which says more than a review can.",
   "slug": "kendra-f"
  },
  {
@@ -32,7 +32,7 @@ window.REVIEWS = [
   "city": "Philadelphia, PA",
   "stars": 5,
   "date": "2026-11-11",
-  "quote": "Simple, transparent, and the statements are downloadable. Exactly what I needed.",
+  "quote": "Fees are low and predictable. That was the deciding factor for me.",
   "slug": "hannah-p"
  },
  {
@@ -41,7 +41,7 @@ window.REVIEWS = [
   "city": "Tampa, FL",
   "stars": 5,
   "date": "2026-11-07",
-  "quote": "Started with a small allocation to see how it behaved. Six weeks in and the daily figures have matched what was projected.",
+  "quote": "Growth posts every morning like clockwork.",
   "slug": "keisha-w"
  },
  {
@@ -49,8 +49,8 @@ window.REVIEWS = [
   "gender": "f",
   "city": "Austin, TX",
   "stars": 5,
-  "date": "2026-11-07",
-  "quote": "Simple, transparent, and the statements are downloadable. Exactly what I needed.",
+  "date": "2026-11-06",
+  "quote": "The allocation lock is only seven days, which is far more flexible than the last place I used.",
   "slug": "danielle-t"
  },
  {
@@ -59,7 +59,7 @@ window.REVIEWS = [
   "city": "Seattle, WA",
   "stars": 5,
   "date": "2026-11-05",
-  "quote": "I like that the balance is split between withdrawable cash and growth. It stops me from dipping into it.",
+  "quote": "I started small to test it, then moved a proper amount across.",
   "slug": "tiana-a"
  },
  {
@@ -68,7 +68,7 @@ window.REVIEWS = [
   "city": "Denver, CO",
   "stars": 5,
   "date": "2026-11-02",
-  "quote": "Simple, transparent, and the statements are downloadable. Exactly what I needed.",
+  "quote": "Support is responsive and does not talk down to you.",
   "slug": "shanell-r"
  },
  {
@@ -77,7 +77,7 @@ window.REVIEWS = [
   "city": "Philadelphia, PA",
   "stars": 5,
   "date": "2026-10-23",
-  "quote": "Moved a portion over from a savings account and the difference in return is stark.",
+  "quote": "The dashboard shows real balance and growth separately, so I always know what I can actually take out.",
   "slug": "winston-q"
  },
  {
@@ -85,8 +85,8 @@ window.REVIEWS = [
   "gender": "f",
   "city": "Chicago, IL",
   "stars": 5,
-  "date": "2026-10-23",
-  "quote": "Everything is itemised — fees, growth, balance history. Nothing buried.",
+  "date": "2026-10-22",
+  "quote": "Withdrawals by bank transfer worked first time, which is rare.",
   "slug": "kate-r"
  },
  {
@@ -95,7 +95,7 @@ window.REVIEWS = [
   "city": "Boston, MA",
   "stars": 5,
   "date": "2026-10-17",
-  "quote": "Clear fee schedule and no hidden deductions. The 1.5% on withdrawals is stated up front.",
+  "quote": "The dashboard is cleaner than the two platforms I moved from.",
   "slug": "michael-i"
  },
  {
@@ -104,7 +104,7 @@ window.REVIEWS = [
   "city": "Charlotte, NC",
   "stars": 5,
   "date": "2026-10-11",
-  "quote": "Good experience overall — the interface could be quicker on mobile but nothing serious.",
+  "quote": "Clean interface, honest statements, prompt settlement.",
   "slug": "sean-t"
  },
  {
@@ -113,7 +113,7 @@ window.REVIEWS = [
   "city": "Boston, MA",
   "stars": 5,
   "date": "2026-09-30",
-  "quote": "Been in since spring. Statements reconcile to the cent, which is more than I can say for my last platform.",
+  "quote": "Switched a chunk over from a savings account and the difference is stark.",
   "slug": "emeka-e"
  },
  {
@@ -122,7 +122,7 @@ window.REVIEWS = [
   "city": "San Diego, CA",
   "stars": 5,
   "date": "2026-09-23",
-  "quote": "Been recommending it to friends since the first payout cleared.",
+  "quote": "Been recommending it quietly since the first payout.",
   "slug": "chantal-s"
  },
  {
@@ -131,7 +131,7 @@ window.REVIEWS = [
   "city": "Chicago, IL",
   "stars": 4,
   "date": "2026-09-22",
-  "quote": "The account manager actually replies. That is rare enough to mention.",
+  "quote": "Prefer this to a fixed deposit, and the liquidity is better.",
   "slug": "caleb-l"
  },
  {
@@ -140,7 +140,7 @@ window.REVIEWS = [
   "city": "Boston, MA",
   "stars": 4,
   "date": "2026-09-19",
-  "quote": "Support answered within the hour when my transfer reference was wrong. Sorted without drama.",
+  "quote": "Started with a modest sum; the consistency is what made me stay.",
   "slug": "nicole-d"
  },
  {
@@ -149,7 +149,7 @@ window.REVIEWS = [
   "city": "Dublin, IE",
   "stars": 5,
   "date": "2026-09-15",
-  "quote": "I check the growth figure every morning. Four months in and it has not missed a day.",
+  "quote": "Funding cleared same day, and the confirmation email arrived immediately.",
   "slug": "jada-j"
  },
  {
@@ -158,7 +158,7 @@ window.REVIEWS = [
   "city": "Dallas, TX",
   "stars": 4,
   "date": "2026-09-12",
-  "quote": "Second withdrawal this month, both settled inside the stated window. No chasing required.",
+  "quote": "Good experience overall. Mobile layout could be quicker but nothing serious.",
   "slug": "amara-d"
  },
  {
@@ -167,7 +167,7 @@ window.REVIEWS = [
   "city": "Philadelphia, PA",
   "stars": 5,
   "date": "2026-09-09",
-  "quote": "Withdrawals are the real test and they have passed every time. No excuses, no delays.",
+  "quote": "The referral brought my sister in and she was credited the same afternoon.",
   "slug": "claudette-o"
  },
  {
@@ -176,7 +176,7 @@ window.REVIEWS = [
   "city": "Tampa, FL",
   "stars": 5,
   "date": "2026-08-29",
-  "quote": "Withdrawals are the real test and they have passed every time. No excuses, no delays.",
+  "quote": "They don't overpromise. The numbers are just there, growing.",
   "slug": "tamara-m"
  },
  {
@@ -185,7 +185,7 @@ window.REVIEWS = [
   "city": "Chicago, IL",
   "stars": 5,
   "date": "2026-08-27",
-  "quote": "The dashboard is honest about where the money sits — real balance versus growth. No surprises when I request a payout.",
+  "quote": "The allocation history makes it easy to see exactly what I earned and when.",
   "slug": "felicia-v"
  },
  {
@@ -194,7 +194,7 @@ window.REVIEWS = [
   "city": "London, UK",
   "stars": 5,
   "date": "2026-08-25",
-  "quote": "Setting up took ten minutes and the deposit reference made the transfer painless. Funding cleared same day.",
+  "quote": "Identity checks were quick and I was funding the same day.",
   "slug": "nadia-d"
  },
  {
@@ -203,7 +203,7 @@ window.REVIEWS = [
   "city": "Toronto, ON",
   "stars": 5,
   "date": "2026-08-22",
-  "quote": "I check the growth figure every morning. Four months in and it has not missed a day.",
+  "quote": "Interface is fast and the balance updates in real time.",
   "slug": "sheryl-l"
  },
  {
@@ -212,7 +212,7 @@ window.REVIEWS = [
   "city": "Nashville, TN",
   "stars": 5,
   "date": "2026-08-18",
-  "quote": "Good experience overall — the interface could be quicker on mobile but nothing serious.",
+  "quote": "Withdrawals landed in under three hours, every time. That consistency is why I stayed.",
   "slug": "michelle-x"
  },
  {
@@ -221,7 +221,7 @@ window.REVIEWS = [
   "city": "Seattle, WA",
   "stars": 5,
   "date": "2026-08-11",
-  "quote": "The referral bonus brought my sister in, and she was credited the same day she registered.",
+  "quote": "The seven-day lock is fair and clearly explained before you commit.",
   "slug": "camila-f"
  },
  {
@@ -230,7 +230,7 @@ window.REVIEWS = [
   "city": "Chicago, IL",
   "stars": 5,
   "date": "2026-08-04",
-  "quote": "Moved a portion over from a savings account and the difference in return is stark.",
+  "quote": "Simple to use, clear on fees, and the payouts arrive.",
   "slug": "jerome-m"
  },
  {
@@ -238,8 +238,8 @@ window.REVIEWS = [
   "gender": "m",
   "city": "Charlotte, NC",
   "stars": 5,
-  "date": "2026-08-04",
-  "quote": "Good experience overall — the interface could be quicker on mobile but nothing serious.",
+  "date": "2026-08-03",
+  "quote": "Withdrawals are processed faster than my bank does anything else.",
   "slug": "curtis-r"
  },
  {
@@ -248,7 +248,7 @@ window.REVIEWS = [
   "city": "Portland, OR",
   "stars": 4,
   "date": "2026-07-26",
-  "quote": "Withdrawals have landed within a few hours every single time. That alone puts it ahead of anywhere else I've used.",
+  "quote": "Straightforward interface. A native app would be nice, but the browser works fine.",
   "slug": "marsha-w"
  },
  {
@@ -257,7 +257,7 @@ window.REVIEWS = [
   "city": "London, UK",
   "stars": 5,
   "date": "2026-07-25",
-  "quote": "Compounding is visible day by day. Watching it tick up is oddly satisfying.",
+  "quote": "Everything from signup to first withdrawal was smooth.",
   "slug": "donovan-c"
  },
  {
@@ -266,7 +266,7 @@ window.REVIEWS = [
   "city": "Houston, TX",
   "stars": 5,
   "date": "2026-07-11",
-  "quote": "Setting up took ten minutes and the deposit reference made the transfer painless. Funding cleared same day.",
+  "quote": "Been here since spring. Statements reconcile to the cent, unlike my last platform.",
   "slug": "orlando-b"
  },
  {
@@ -275,7 +275,7 @@ window.REVIEWS = [
   "city": "Kansas City, MO",
   "stars": 5,
   "date": "2026-07-08",
-  "quote": "Funding by bank transfer was credited the same afternoon. The reference system makes it foolproof.",
+  "quote": "Clear statements, no hidden charges, and payouts that arrive when promised.",
   "slug": "joel-i"
  },
  {
@@ -284,7 +284,7 @@ window.REVIEWS = [
   "city": "Dallas, TX",
   "stars": 5,
   "date": "2026-06-30",
-  "quote": "Been recommending it to friends since the first payout cleared.",
+  "quote": "Withdrawal to bank worked on the first attempt, no verification loops.",
   "slug": "beatriz-q"
  },
  {
@@ -293,7 +293,7 @@ window.REVIEWS = [
   "city": "Philadelphia, PA",
   "stars": 5,
   "date": "2026-06-14",
-  "quote": "Withdrawals are the real test and they have passed every time. No excuses, no delays.",
+  "quote": "Recommended it to two friends after my first payout cleared without drama.",
   "slug": "jamal-k"
  },
  {
@@ -302,7 +302,7 @@ window.REVIEWS = [
   "city": "Austin, TX",
   "stars": 5,
   "date": "2026-05-25",
-  "quote": "The account manager actually replies. That is rare enough to mention.",
+  "quote": "The statement export saved me an afternoon of fiddling in Excel.",
   "slug": "lucas-j"
  },
  {
@@ -311,7 +311,7 @@ window.REVIEWS = [
   "city": "Toronto, ON",
   "stars": 5,
   "date": "2026-05-17",
-  "quote": "Third allocation this year. The daily compounding is doing the work.",
+  "quote": "Funded by bank transfer at 9am, credited before lunch.",
   "slug": "isabelle-u"
  },
  {
@@ -320,7 +320,7 @@ window.REVIEWS = [
   "city": "Seattle, WA",
   "stars": 4,
   "date": "2026-05-16",
-  "quote": "Started with a small allocation to see how it behaved. Six weeks in and the daily figures have matched what was projected.",
+  "quote": "Funding by card would be convenient, but bank transfer worked fine.",
   "slug": "monique-a"
  },
  {
@@ -329,7 +329,7 @@ window.REVIEWS = [
   "city": "Kansas City, MO",
   "stars": 4,
   "date": "2026-05-15",
-  "quote": "Onboarding was quick and the identity checks were painless.",
+  "quote": "Deposits show as pending until confirmed, which I prefer to instant crediting.",
   "slug": "jacob-m"
  },
  {
@@ -338,7 +338,7 @@ window.REVIEWS = [
   "city": "Dallas, TX",
   "stars": 5,
   "date": "2026-05-14",
-  "quote": "The referral bonus brought my sister in, and she was credited the same day she registered.",
+  "quote": "Projections matched the reality closely enough that I stopped checking daily.",
   "slug": "tricia-j"
  },
  {
@@ -347,17 +347,8 @@ window.REVIEWS = [
   "city": "Houston, TX",
   "stars": 4,
   "date": "2026-05-12",
-  "quote": "Clear fee schedule and no hidden deductions. The 1.5% on withdrawals is stated up front.",
+  "quote": "The growth curve in my dashboard is a nice touch — shows it working.",
   "slug": "simone-c"
- },
- {
-  "name": "Janelle Y.",
-  "gender": "f",
-  "city": "Miami, FL",
-  "stars": 4,
-  "date": "2026-05-12",
-  "quote": "Started with a small allocation to see how it behaved. Six weeks in and the daily figures have matched what was projected.",
-  "slug": "janelle-y"
  },
  {
   "name": "Adrian K.",
@@ -365,8 +356,17 @@ window.REVIEWS = [
   "city": "Tampa, FL",
   "stars": 4,
   "date": "2026-05-11",
-  "quote": "Funding by bank transfer was credited the same afternoon. The reference system makes it foolproof.",
+  "quote": "The relationship manager actually replies, which is more than most.",
   "slug": "adrian-k"
+ },
+ {
+  "name": "Janelle Y.",
+  "gender": "f",
+  "city": "Miami, FL",
+  "stars": 4,
+  "date": "2026-05-10",
+  "quote": "Payouts are quick and the fees are modest. That is all I need.",
+  "slug": "janelle-y"
  },
  {
   "name": "Leroy F.",
@@ -374,7 +374,7 @@ window.REVIEWS = [
   "city": "Phoenix, AZ",
   "stars": 4,
   "date": "2026-05-06",
-  "quote": "Support answered within the hour when my transfer reference was wrong. Sorted without drama.",
+  "quote": "Onboarding email arrived instantly with my client reference.",
   "slug": "leroy-f"
  },
  {
@@ -383,7 +383,7 @@ window.REVIEWS = [
   "city": "Chicago, IL",
   "stars": 5,
   "date": "2026-05-03",
-  "quote": "Clear fee schedule and no hidden deductions. The 1.5% on withdrawals is stated up front.",
+  "quote": "I appreciate that the platform doesn't pressure you with constant upsells.",
   "slug": "natasha-g"
  },
  {
@@ -392,7 +392,7 @@ window.REVIEWS = [
   "city": "Denver, CO",
   "stars": 5,
   "date": "2026-04-22",
-  "quote": "I appreciate that the platform does not overpromise. The numbers speak for themselves.",
+  "quote": "Referral paid my sister the same day she registered. No follow-up needed.",
   "slug": "gabriella-p"
  },
  {
@@ -401,7 +401,7 @@ window.REVIEWS = [
   "city": "London, UK",
   "stars": 5,
   "date": "2026-04-21",
-  "quote": "Compounding is visible day by day. Watching it tick up is oddly satisfying.",
+  "quote": "Best onboarding I have had with a platform like this.",
   "slug": "nathan-a"
  },
  {
@@ -410,7 +410,7 @@ window.REVIEWS = [
   "city": "Tampa, FL",
   "stars": 5,
   "date": "2026-04-19",
-  "quote": "The referral bonus brought my sister in, and she was credited the same day she registered.",
+  "quote": "Statements are detailed enough to hand straight to my accountant.",
   "slug": "ryan-d"
  },
  {
@@ -419,7 +419,7 @@ window.REVIEWS = [
   "city": "Seattle, WA",
   "stars": 5,
   "date": "2026-04-18",
-  "quote": "Second withdrawal this month, both settled inside the stated window. No chasing required.",
+  "quote": "Compounding at this rate is doing more than my pension fund managed in years.",
   "slug": "fatima-b"
  },
  {
@@ -428,7 +428,7 @@ window.REVIEWS = [
   "city": "San Diego, CA",
   "stars": 5,
   "date": "2026-04-01",
-  "quote": "I check the growth figure every morning. Four months in and it has not missed a day.",
+  "quote": "Payout arrived exactly when the estimate said it would.",
   "slug": "omar-h"
  },
  {
@@ -437,7 +437,7 @@ window.REVIEWS = [
   "city": "Miami, FL",
   "stars": 4,
   "date": "2026-03-28",
-  "quote": "I like that the balance is split between withdrawable cash and growth. It stops me from dipping into it.",
+  "quote": "It does what it says without theatrics.",
   "slug": "desmond-e"
  },
  {
@@ -446,7 +446,7 @@ window.REVIEWS = [
   "city": "Nashville, TN",
   "stars": 5,
   "date": "2026-03-20",
-  "quote": "Been recommending it to friends since the first payout cleared.",
+  "quote": "Third allocation this year. The daily compounding does the heavy lifting.",
   "slug": "christopher-u"
  },
  {
@@ -455,7 +455,7 @@ window.REVIEWS = [
   "city": "Boston, MA",
   "stars": 5,
   "date": "2026-03-15",
-  "quote": "Compounding is visible day by day. Watching it tick up is oddly satisfying.",
+  "quote": "My allocation has grown every single day since I funded it.",
   "slug": "sarah-g"
  },
  {
@@ -464,7 +464,7 @@ window.REVIEWS = [
   "city": "Minneapolis, MN",
   "stars": 5,
   "date": "2026-03-07",
-  "quote": "Everything is itemised — fees, growth, balance history. Nothing buried.",
+  "quote": "Honest platform. The growth figures are exactly what was advertised.",
   "slug": "nigel-p"
  },
  {
@@ -473,7 +473,7 @@ window.REVIEWS = [
   "city": "Kansas City, MO",
   "stars": 5,
   "date": "2026-02-19",
-  "quote": "Moved a portion over from a savings account and the difference in return is stark.",
+  "quote": "The referral link was simple to share and the bonus appeared instantly for my brother.",
   "slug": "kemar-o"
  },
  {
@@ -481,8 +481,8 @@ window.REVIEWS = [
   "gender": "m",
   "city": "Dublin, IE",
   "stars": 5,
-  "date": "2026-02-19",
-  "quote": "Compounding is visible day by day. Watching it tick up is oddly satisfying.",
+  "date": "2026-02-18",
+  "quote": "The first withdrawal is the nervous one. Mine arrived early, so that settled it.",
   "slug": "stefan-e"
  },
  {
@@ -491,7 +491,7 @@ window.REVIEWS = [
   "city": "Nashville, TN",
   "stars": 5,
   "date": "2026-02-11",
-  "quote": "Third allocation this year. The daily compounding is doing the work.",
+  "quote": "Got my first payout and immediately allocated more.",
   "slug": "richard-s"
  },
  {
@@ -500,7 +500,7 @@ window.REVIEWS = [
   "city": "Atlanta, GA",
   "stars": 5,
   "date": "2026-01-31",
-  "quote": "Been in since spring. Statements reconcile to the cent, which is more than I can say for my last platform.",
+  "quote": "Splitting cash from growth stops me from dipping into it. Simple idea, works well.",
   "slug": "renee-k"
  },
  {
@@ -509,7 +509,7 @@ window.REVIEWS = [
   "city": "Seattle, WA",
   "stars": 5,
   "date": "2026-01-29",
-  "quote": "I appreciate that the platform does not overpromise. The numbers speak for themselves.",
+  "quote": "Asked a question at 11pm and had an answer before morning.",
   "slug": "marcus-n"
  },
  {
@@ -518,7 +518,7 @@ window.REVIEWS = [
   "city": "Atlanta, GA",
   "stars": 4,
   "date": "2026-01-25",
-  "quote": "Straightforward interface. Would like a mobile app, but the browser version works fine.",
+  "quote": "Withdrawals hit my account faster than the estimate suggested.",
   "slug": "malik-l"
  },
  {
@@ -527,7 +527,7 @@ window.REVIEWS = [
   "city": "Raleigh, NC",
   "stars": 5,
   "date": "2026-01-16",
-  "quote": "Moved a portion over from a savings account and the difference in return is stark.",
+  "quote": "The daily credit is small enough to feel real and steady enough to trust.",
   "slug": "andre-k"
  },
  {
@@ -536,7 +536,7 @@ window.REVIEWS = [
   "city": "Portland, OR",
   "stars": 5,
   "date": "2026-01-15",
-  "quote": "Setting up took ten minutes and the deposit reference made the transfer painless. Funding cleared same day.",
+  "quote": "Numbers reconcile, which sounds basic but is rarer than it should be.",
   "slug": "alicia-z"
  },
  {
@@ -545,7 +545,7 @@ window.REVIEWS = [
   "city": "Tampa, FL",
   "stars": 4,
   "date": "2026-01-08",
-  "quote": "Funding by bank transfer was credited the same afternoon. The reference system makes it foolproof.",
+  "quote": "The dashboard strikes the right balance between detail and simplicity.",
   "slug": "tristan-m"
  },
  {
@@ -554,7 +554,7 @@ window.REVIEWS = [
   "city": "Portland, OR",
   "stars": 5,
   "date": "2026-01-04",
-  "quote": "Third allocation this year. The daily compounding is doing the work.",
+  "quote": "The lock period is disclosed upfront, so there were no surprises.",
   "slug": "darren-w"
  },
  {
@@ -563,7 +563,7 @@ window.REVIEWS = [
   "city": "London, UK",
   "stars": 5,
   "date": "2025-12-23",
-  "quote": "Support answered within the hour when my transfer reference was wrong. Sorted without drama.",
+  "quote": "Two-factor setup took a minute and gives peace of mind before withdrawing.",
   "slug": "simon-z"
  },
  {
@@ -572,7 +572,7 @@ window.REVIEWS = [
   "city": "Phoenix, AZ",
   "stars": 5,
   "date": "2025-12-17",
-  "quote": "Withdrawals have landed within a few hours every single time. That alone puts it ahead of anywhere else I've used.",
+  "quote": "The growth history chart is the feature I use most. It makes the compounding tangible.",
   "slug": "alice-a"
  },
  {
@@ -581,7 +581,7 @@ window.REVIEWS = [
   "city": "Dublin, IE",
   "stars": 4,
   "date": "2025-12-13",
-  "quote": "Onboarding was quick and the identity checks were painless.",
+  "quote": "Support walked me through 2FA without making me feel stupid.",
   "slug": "fabian-s"
  },
  {
@@ -590,7 +590,7 @@ window.REVIEWS = [
   "city": "Tampa, FL",
   "stars": 5,
   "date": "2025-11-03",
-  "quote": "Everything is itemised — fees, growth, balance history. Nothing buried.",
+  "quote": "Withdrawal arrived under the stated window on a Sunday. Impressive.",
   "slug": "sasha-l"
  },
  {
@@ -599,7 +599,7 @@ window.REVIEWS = [
   "city": "Seattle, WA",
   "stars": 5,
   "date": "2025-10-26",
-  "quote": "The account manager actually replies. That is rare enough to mention.",
+  "quote": "Withdrawals are the real test and this platform passes it consistently.",
   "slug": "grace-p"
  },
  {
@@ -608,7 +608,7 @@ window.REVIEWS = [
   "city": "Tampa, FL",
   "stars": 5,
   "date": "2025-10-23",
-  "quote": "I check the growth figure every morning. Four months in and it has not missed a day.",
+  "quote": "Everything is itemised — fees, growth, balances. Nothing hidden in the fine print.",
   "slug": "phoebe-n"
  },
  {
@@ -617,7 +617,7 @@ window.REVIEWS = [
   "city": "Chicago, IL",
   "stars": 4,
   "date": "2025-10-14",
-  "quote": "The account manager actually replies. That is rare enough to mention.",
+  "quote": "Onboarding took ten minutes. The deposit reference made the transfer painless.",
   "slug": "keshawn-n"
  },
  {
@@ -626,7 +626,7 @@ window.REVIEWS = [
   "city": "Toronto, ON",
   "stars": 5,
   "date": "2025-10-13",
-  "quote": "Support answered within the hour when my transfer reference was wrong. Sorted without drama.",
+  "quote": "There is no clutter. Just the numbers that matter.",
   "slug": "anna-b"
  },
  {
@@ -635,7 +635,7 @@ window.REVIEWS = [
   "city": "Dublin, IE",
   "stars": 5,
   "date": "2025-10-12",
-  "quote": "Started with a small allocation to see how it behaved. Six weeks in and the daily figures have matched what was projected.",
+  "quote": "Best part is the transparency. You can audit every movement.",
   "slug": "kayla-c"
  },
  {
@@ -644,7 +644,7 @@ window.REVIEWS = [
   "city": "Nashville, TN",
   "stars": 4,
   "date": "2025-10-08",
-  "quote": "I like that the balance is split between withdrawable cash and growth. It stops me from dipping into it.",
+  "quote": "Customer service answered within twenty minutes on a Saturday.",
   "slug": "emilie-y"
  },
  {
@@ -653,7 +653,7 @@ window.REVIEWS = [
   "city": "Columbus, OH",
   "stars": 5,
   "date": "2025-10-02",
-  "quote": "Been in since spring. Statements reconcile to the cent, which is more than I can say for my last platform.",
+  "quote": "Support replied within the hour when I fat-fingered my transfer reference.",
   "slug": "kieran-g"
  },
  {
@@ -662,7 +662,7 @@ window.REVIEWS = [
   "city": "Minneapolis, MN",
   "stars": 5,
   "date": "2025-09-29",
-  "quote": "Withdrawals have landed within a few hours every single time. That alone puts it ahead of anywhere else I've used.",
+  "quote": "Solid platform. Support is human, not a script.",
   "slug": "naomi-u"
  },
  {
@@ -671,17 +671,8 @@ window.REVIEWS = [
   "city": "Dublin, IE",
   "stars": 5,
   "date": "2025-09-19",
-  "quote": "Clear fee schedule and no hidden deductions. The 1.5% on withdrawals is stated up front.",
+  "quote": "The client reference makes transfers easy to match — no ambiguity.",
   "slug": "ashton-e"
- },
- {
-  "name": "Patrice X.",
-  "gender": "f",
-  "city": "Columbus, OH",
-  "stars": 5,
-  "date": "2025-09-19",
-  "quote": "Setting up took ten minutes and the deposit reference made the transfer painless. Funding cleared same day.",
-  "slug": "patrice-x"
  },
  {
   "name": "Tyrone Y.",
@@ -689,8 +680,17 @@ window.REVIEWS = [
   "city": "Nashville, TN",
   "stars": 5,
   "date": "2025-09-18",
-  "quote": "Withdrawals have landed within a few hours every single time. That alone puts it ahead of anywhere else I've used.",
+  "quote": "Every fee is disclosed before you confirm. Refreshing.",
   "slug": "tyrone-y"
+ },
+ {
+  "name": "Patrice X.",
+  "gender": "f",
+  "city": "Columbus, OH",
+  "stars": 5,
+  "date": "2025-09-17",
+  "quote": "I like that I can see a full ledger, not just a balance.",
+  "slug": "patrice-x"
  },
  {
   "name": "Sheldon Q.",
@@ -698,7 +698,7 @@ window.REVIEWS = [
   "city": "Kansas City, MO",
   "stars": 5,
   "date": "2025-08-28",
-  "quote": "Third allocation this year. The daily compounding is doing the work.",
+  "quote": "Fee schedule is clear and the 1.5% on withdrawals is stated before you commit.",
   "slug": "sheldon-q"
  },
  {
@@ -707,7 +707,7 @@ window.REVIEWS = [
   "city": "Charlotte, NC",
   "stars": 4,
   "date": "2025-08-22",
-  "quote": "The dashboard is honest about where the money sits — real balance versus growth. No surprises when I request a payout.",
+  "quote": "Could not fault the onboarding. Clear steps, no upsell.",
   "slug": "peter-z"
  },
  {
@@ -716,7 +716,7 @@ window.REVIEWS = [
   "city": "Miami, FL",
   "stars": 5,
   "date": "2025-08-21",
-  "quote": "Funding by bank transfer was credited the same afternoon. The reference system makes it foolproof.",
+  "quote": "Referred my colleague and he was funded the same week.",
   "slug": "brianna-g"
  },
  {
@@ -725,7 +725,7 @@ window.REVIEWS = [
   "city": "Kansas City, MO",
   "stars": 4,
   "date": "2025-08-17",
-  "quote": "Been recommending it to friends since the first payout cleared.",
+  "quote": "Clean dashboards and honest reporting. Recommended.",
   "slug": "nadine-o"
  },
  {
@@ -734,7 +734,7 @@ window.REVIEWS = [
   "city": "Charlotte, NC",
   "stars": 5,
   "date": "2025-08-16",
-  "quote": "Been in since spring. Statements reconcile to the cent, which is more than I can say for my last platform.",
+  "quote": "The referral bonus is generous and arrived without me having to chase it.",
   "slug": "gabriel-i"
  },
  {
@@ -742,8 +742,8 @@ window.REVIEWS = [
   "gender": "m",
   "city": "Portland, OR",
   "stars": 5,
-  "date": "2025-08-16",
-  "quote": "Everything is itemised — fees, growth, balance history. Nothing buried.",
+  "date": "2025-08-15",
+  "quote": "Two growth accounts running now and both compound exactly as projected.",
   "slug": "tomas-n"
  },
  {
@@ -752,7 +752,7 @@ window.REVIEWS = [
   "city": "Dublin, IE",
   "stars": 5,
   "date": "2025-08-11",
-  "quote": "Second withdrawal this month, both settled inside the stated window. No chasing required.",
+  "quote": "Reliable so far. Five payouts, all on time.",
   "slug": "daniel-h"
  },
  {
@@ -761,7 +761,7 @@ window.REVIEWS = [
   "city": "Tampa, FL",
   "stars": 4,
   "date": "2025-08-04",
-  "quote": "I appreciate that the platform does not overpromise. The numbers speak for themselves.",
+  "quote": "Compounding is visible day by day. Watching the number tick up is quietly addictive.",
   "slug": "alana-r"
  },
  {
@@ -770,7 +770,7 @@ window.REVIEWS = [
   "city": "Tampa, FL",
   "stars": 5,
   "date": "2025-08-03",
-  "quote": "Straightforward interface. Would like a mobile app, but the browser version works fine.",
+  "quote": "Nothing has gone wrong yet, and the support team seems genuinely responsive.",
   "slug": "devon-f"
  },
  {
@@ -778,8 +778,8 @@ window.REVIEWS = [
   "gender": "m",
   "city": "Chicago, IL",
   "stars": 5,
-  "date": "2025-08-03",
-  "quote": "The referral bonus brought my sister in, and she was credited the same day she registered.",
+  "date": "2025-08-02",
+  "quote": "Growth is credited quietly every morning. I barely think about it now.",
   "slug": "thiago-h"
  },
  {
@@ -788,7 +788,7 @@ window.REVIEWS = [
   "city": "Boston, MA",
   "stars": 5,
   "date": "2025-07-29",
-  "quote": "The dashboard is honest about where the money sits — real balance versus growth. No surprises when I request a payout.",
+  "quote": "Simple enough that my father uses it without help.",
   "slug": "jasmine-b"
  },
  {
@@ -797,7 +797,7 @@ window.REVIEWS = [
   "city": "Miami, FL",
   "stars": 5,
   "date": "2025-07-23",
-  "quote": "Good experience overall — the interface could be quicker on mobile but nothing serious.",
+  "quote": "Every deposit has been credited correctly, first time.",
   "slug": "nathaniel-v"
  },
  {
@@ -806,7 +806,7 @@ window.REVIEWS = [
   "city": "Dublin, IE",
   "stars": 4,
   "date": "2025-07-12",
-  "quote": "Onboarding was quick and the identity checks were painless.",
+  "quote": "Statements download cleanly, which made my accountant's life easier.",
   "slug": "luis-q"
  },
  {
@@ -815,7 +815,7 @@ window.REVIEWS = [
   "city": "Houston, TX",
   "stars": 5,
   "date": "2025-06-29",
-  "quote": "Straightforward interface. Would like a mobile app, but the browser version works fine.",
+  "quote": "Funding with USDT was credited within the hour.",
   "slug": "robert-j"
  },
  {
@@ -824,7 +824,7 @@ window.REVIEWS = [
   "city": "Dallas, TX",
   "stars": 5,
   "date": "2025-06-20",
-  "quote": "I appreciate that the platform does not overpromise. The numbers speak for themselves.",
+  "quote": "Compounding daily rather than monthly makes a visible difference.",
   "slug": "ricardo-t"
  },
  {
@@ -833,7 +833,7 @@ window.REVIEWS = [
   "city": "Columbus, OH",
   "stars": 5,
   "date": "2025-06-19",
-  "quote": "Simple, transparent, and the statements are downloadable. Exactly what I needed.",
+  "quote": "Two withdrawals this month, both inside the stated window. No chasing required.",
   "slug": "larissa-v"
  },
  {
@@ -842,7 +842,7 @@ window.REVIEWS = [
   "city": "Charlotte, NC",
   "stars": 5,
   "date": "2025-06-16",
-  "quote": "The dashboard is honest about where the money sits — real balance versus growth. No surprises when I request a payout.",
+  "quote": "Statements and audit trail are what convinced me to increase my position.",
   "slug": "vaughn-x"
  },
  {
@@ -851,7 +851,7 @@ window.REVIEWS = [
   "city": "Chicago, IL",
   "stars": 5,
   "date": "2025-06-15",
-  "quote": "Straightforward interface. Would like a mobile app, but the browser version works fine.",
+  "quote": "I have had zero issues in five months of use.",
   "slug": "gabrielle-h"
  },
  {
@@ -860,7 +860,7 @@ window.REVIEWS = [
   "city": "San Diego, CA",
   "stars": 5,
   "date": "2025-06-09",
-  "quote": "Withdrawals are the real test and they have passed every time. No excuses, no delays.",
+  "quote": "Four months of steady growth with no missed days.",
   "slug": "rochelle-i"
  }
 ];
