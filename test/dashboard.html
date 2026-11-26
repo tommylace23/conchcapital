@@ -561,7 +561,6 @@
                             <p id="dashRmTitle" class="text-xs text-slate-500 mb-3">—</p>
                             <div class="space-y-1.5 text-xs">
                                 <p><i class="fa-solid fa-envelope text-slate-400 mr-2"></i><a id="dashRmEmail" class="text-emerald-600 font-semibold hover:underline" href="#">—</a></p>
-                                <p><i class="fa-solid fa-phone text-slate-400 mr-2"></i><span id="dashRmPhone" class="text-slate-700">—</span></p>
                             </div>
                         </div>
                     </div>
@@ -2074,7 +2073,6 @@
                     const nameEl = document.getElementById('dashRmName');
                     if (nameEl) nameEl.textContent = rm.name || '—';
                     document.getElementById('dashRmTitle').textContent = rm.title || '—';
-                    document.getElementById('dashRmPhone').textContent = rm.phone || '—';
 
                     const emailEl = document.getElementById('dashRmEmail');
                     if (emailEl && rm.email) { emailEl.textContent = rm.email; emailEl.href = 'mailto:' + rm.email; }

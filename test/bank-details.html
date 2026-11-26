@@ -109,7 +109,6 @@
                 </div>
                 <div class="space-y-2 text-sm">
                     <p><i class="fa-solid fa-envelope text-slate-400 mr-2"></i><a id="rmEmail" class="text-emerald-600 font-semibold hover:underline" href="#">—</a></p>
-                    <p><i class="fa-solid fa-phone text-slate-400 mr-2"></i><span id="rmPhone" class="text-slate-700">—</span></p>
                 </div>
             </div>
 
@@ -154,7 +153,6 @@
 
                 set('rmName', data.relationship_manager.name);
                 set('rmTitle', data.relationship_manager.title);
-                set('rmPhone', data.relationship_manager.phone);
 
                 const rmEmail = document.getElementById('rmEmail');
                 if (rmEmail) { rmEmail.textContent = data.relationship_manager.email; rmEmail.href = 'mailto:' + data.relationship_manager.email; }
