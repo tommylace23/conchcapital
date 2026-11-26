@@ -33,6 +33,11 @@ document.addEventListener('DOMContentLoaded', function() {
         guardAdminPage();
     }
 
+    // Social proof toasts on the landing page
+    if (page === 'home') {
+        startDepositToasts();
+    }
+
     // Account completion nudges (email verification, 2FA)
     if (page === 'dashboard' || page === 'profile') {
         initAccountNudges();
