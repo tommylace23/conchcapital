@@ -917,11 +917,30 @@ let depositToastTimer = null;
 function startDepositToasts() {
     if (depositToastTimer) return;
 
-    const names = ['Michael B.', 'Sarah K.', 'Daniel O.', 'Priya R.', 'Tomás L.', 'Grace A.',
-        'Emeka N.', 'Hannah W.', 'Luis M.', 'Fatima S.', 'Peter D.', 'Amara J.'];
+    // 500 English-speaking client names (js/deposit-names.js), shown masked
+    const pool = (Array.isArray(window.DEPOSIT_NAMES) && window.DEPOSIT_NAMES.length)
+        ? window.DEPOSIT_NAMES
+        : ['Michael Bennett', 'Sarah Wilson', 'Daniel Foster', 'Grace Morgan', 'Peter Lawson'];
+
+    const mask = (full) => {
+        const parts = String(full).trim().split(/\s+/);
+        const first = parts[0];
+        const last = parts[parts.length - 1] || '';
+        return last ? `${first} ${last.charAt(0).toUpperCase()}.` : first;
+    };
+
+    let lastName = null;
 
     const showNext = () => {
-        const name = names[Math.floor(Math.random() * names.length)];
+        let picked = pool[Math.floor(Math.random() * pool.length)];
+        if (pool.length > 1) {
+            let guard = 0;
+            while (picked === lastName && guard++ < 5) {
+                picked = pool[Math.floor(Math.random() * pool.length)];
+            }
+        }
+        lastName = picked;
+        const name = mask(picked);
         const amount = (Math.floor(Math.random() * 46) + 4) * 500; // $2,000 – $24,500
         const host = document.createElement('div');
         host.style.cssText = 'position:fixed;left:16px;bottom:16px;z-index:9998;max-width:300px;' +
